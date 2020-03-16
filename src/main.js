@@ -10,6 +10,7 @@ import '@/icons' // icon
 import '@/style/common.scss'
 import { Lazyload } from 'vant'
 import defaultSettings from '@/settings'
+import wx from 'weixin-js-sdk'
 
 /**
  * If you don't want to use mock-server
@@ -30,6 +31,7 @@ FastClick.attach(document.body)
 
 // options 为可选参数，无则不传
 Vue.use(Lazyload)
+Vue.use(wx)
 
 Vue.component('svg-icon', SvgIcon)
 

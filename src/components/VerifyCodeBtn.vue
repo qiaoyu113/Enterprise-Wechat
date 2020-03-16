@@ -1,10 +1,12 @@
 <template>
-  <van-button class="verify-btn"
-              @click="btnClick"
-              size="mini"
-              type="primary"
-              :disabled="!!codeRestTime">
-    {{codeRestTime ? `${codeRestTime}S` : '发送验证码'}}
+  <van-button
+    class="verify-btn"
+    size="mini"
+    type="primary"
+    :disabled="!!codeRestTime"
+    @click="btnClick"
+  >
+    {{ codeRestTime ? `${codeRestTime}S` : '发送验证码' }}
   </van-button>
 </template>
 <script>
@@ -24,13 +26,13 @@ export default {
       default: 30
     }
   },
-  data () {
+  data() {
     return {
       codeRestTime: 0
     }
   },
   methods: {
-    btnClick () {
+    btnClick() {
       this.codeRestTime = this.restTime
       let timer = setInterval(() => {
         --this.codeRestTime

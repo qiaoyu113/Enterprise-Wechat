@@ -1,30 +1,36 @@
 <template>
   <div class="container">
     <div class="list-wrap">
-      <vo-pages :data="list"
-                @pullingUp="pullingUp"
-                @pullingDown="pullingDown"
-                :loadedAll="loadedAll">
+      <vo-pages
+        :data="list"
+        :loaded-all="loadedAll"
+        @pullingUp="pullingUp"
+        @pullingDown="pullingDown"
+      >
         <ul class="article-list">
-          <li class="article"
-              v-for="article in list"
-              :key="article.id">
+          <li
+            v-for="article in list"
+            :key="article.id"
+            class="article"
+          >
             <div class="left">
-              <img v-lazy="article.imageUri"
-                   alt="thumb" />
+              <img
+                v-lazy="article.imageUri"
+                alt="thumb"
+              >
             </div>
             <div class="right">
               <p>{{ article.title }}</p>
               <p class="more-info">
                 <span class="author">作者：{{ article.author }}</span>
-                <span class="time">发布时间：{{article.displayTimeFormart}}</span>
+                <span class="time">发布时间：{{ article.displayTimeFormart }}</span>
               </p>
             </div>
           </li>
         </ul>
       </vo-pages>
     </div>
-    <footer-tabbar/>
+    <footer-tabbar />
   </div>
 </template>
 <script>
@@ -36,7 +42,13 @@ import VoPages from 'vo-pages'
 import 'vo-pages/lib/vo-pages.css'
 export default {
   name: 'Article',
-  data () {
+  components: {
+    [Tabbar.name]: Tabbar,
+    [TabbarItem.name]: TabbarItem,
+    VoPages,
+    FooterTabbar
+  },
+  data() {
     return {
       active: 1,
       list: [],
@@ -45,26 +57,20 @@ export default {
       loadedAll: false
     }
   },
-  mounted () {
+  mounted() {
     this.getList()
   },
-  components: {
-    [Tabbar.name]: Tabbar,
-    [TabbarItem.name]: TabbarItem,
-    VoPages,
-    FooterTabbar
-  },
   methods: {
-    pullingDown () {
+    pullingDown() {
       this.beforePullDown = false
       this.page = 1
       this.getList(false)
     },
-    pullingUp () {
+    pullingUp() {
       this.page += 1
       this.getList()
     },
-    async getList (loadMore = true) {
+    async getList(loadMore = true) {
       const data = {
         page: this.page
       }

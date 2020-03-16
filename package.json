@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint",
+    "lint": "vue-cli-service lint --ext .js,.vue src --fix",
     "svgo": "svgo -f src/icons/svg --config=src/icons/svgo.yml"
   },
   "dependencies": {
@@ -19,7 +19,8 @@
     "vo-pages": "^1.0.8",
     "vue": "^2.6.10",
     "vue-router": "^3.0.3",
-    "vuex": "3.1.0"
+    "vuex": "3.1.0",
+    "weixin-js-sdk": "^1.4.0-test"
   },
   "devDependencies": {
     "@babel/register": "^7.6.2",

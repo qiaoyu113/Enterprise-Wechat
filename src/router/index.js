@@ -87,7 +87,7 @@ myRouter.beforeEach((to, from, next) => {
   next()
 })
 
-export function resetRouter () {
+export function resetRouter() {
   myRouter.replace('/login')
 }
 

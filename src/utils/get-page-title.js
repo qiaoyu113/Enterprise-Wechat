@@ -2,7 +2,7 @@ import defaultSettings from '@/settings'
 
 const title = defaultSettings.title || '梧桐OSS运维平台'
 
-export default function getPageTitle (pageTitle) {
+export default function getPageTitle(pageTitle) {
   if (pageTitle) {
     return `${pageTitle} - ${title}`
   }

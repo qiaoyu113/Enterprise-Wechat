@@ -17,17 +17,17 @@ export default {
   },
   mutations: {
 
-    [LOGIN] (state, data) {
+    [LOGIN](state, data) {
       let userToken = data.data
       state.token = userToken
       setToken(userToken)
     },
 
-    [SetUserData] (state, userData = {}) {
+    [SetUserData](state, userData = {}) {
       state.user = userData
       localStorage.setItem(USER_DATA, JSON.stringify(userData))
     },
-    [LOGOUT] (state) {
+    [LOGOUT](state) {
       state.user = null
       state.token = null
       removeToken()
@@ -37,7 +37,7 @@ export default {
 
   },
   actions: {
-    async login (state, data) {
+    async login(state, data) {
       console.log(state, data)
       try {
         let res = await login({
@@ -57,10 +57,11 @@ export default {
           })
         }, 1500)
       } catch (error) {
+        console.log(error)
       }
     },
     // get user info
-    getInfo ({ commit, state }) {
+    getInfo({ commit, state }) {
       return new Promise((resolve, reject) => {
         getInfo(state.token).then(response => {
           const { data } = response
@@ -78,10 +79,10 @@ export default {
     }
   },
   getters: {
-    token (state) {
+    token(state) {
       return state.token
     },
-    user (state) {
+    user(state) {
       return state.user
     }
   }

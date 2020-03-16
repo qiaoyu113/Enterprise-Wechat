@@ -2,49 +2,54 @@
   <div class="container">
     <div class="banner">
       <van-swipe :autoplay="3000">
-        <van-swipe-item v-for="(image, index) in images"
-                        :key="index">
-          <img v-lazy="image" />
+        <van-swipe-item v-for="(image, index) in images" :key="index">
+          <img v-lazy="image">
         </van-swipe-item>
       </van-swipe>
     </div>
     <div class="now-value">
-      <span>当前数值{{$store.state.test.number}}</span>
+      <span>当前数值{{ $store.state.test.number }}</span>
       <div>
-        <van-button type="info"
-                    @click="add"
-                    :loading="loading"
-                    size="small">异步+1</van-button>
-        <van-button type="primary"
-                    size="small"
-                    @click="addOne">+1</van-button>
+        <van-button type="info" :loading="loading" size="small" @click="add">
+          异步+1
+        </van-button>
+        <van-button type="primary" size="small" @click="addOne">
+          +1
+        </van-button>
       </div>
     </div>
     <div class="icon-list">
-      <svg-icon v-for="icon in iconList"
-                :key="icon"
-                class="icon"
-                :icon-class="icon" />
+      <svg-icon v-for="icon in iconList" :key="icon" class="icon" :icon-class="icon" />
     </div>
     <div class="buttons">
-      <van-button type="warning"
-                  @click="logout">退出登录</van-button>
+      <van-button type="warning" @click="logout">
+        退出登录
+      </van-button>
       <router-link to="/404">
-        <svg-icon icon-class="404" />前往404页面</router-link>
+        <svg-icon icon-class="404" />前往404页面
+      </router-link>
     </div>
     <footer-tabbar />
   </div>
 </template>
 
 <script>
-import { Button, Tabbar, TabbarItem, Swipe, SwipeItem } from 'vant'
-import { mapActions, mapMutations, mapState } from 'vuex' // createNamespacedHelpers
-import FooterTabbar from 'components/FooterTabbar'
+import { Button, Tabbar, TabbarItem, Swipe, SwipeItem } from 'vant';
+import { mapActions, mapMutations, mapState } from 'vuex'; // createNamespacedHelpers
+import FooterTabbar from 'components/FooterTabbar';
 // const { mapActions } = createNamespacedHelpers('test') // 可使用这种方式直接获得test模板
 
 export default {
-  name: 'home',
-  data () {
+  name: 'Home',
+  components: {
+    [Button.name]: Button,
+    [Tabbar.name]: Tabbar,
+    [TabbarItem.name]: TabbarItem,
+    [Swipe.name]: Swipe,
+    [SwipeItem.name]: SwipeItem,
+    FooterTabbar
+  },
+  data() {
     return {
       value: 1,
       images: [
@@ -65,33 +70,20 @@ export default {
         'user',
         '404'
       ]
-    }
-  },
-  components: {
-    [Button.name]: Button,
-    [Tabbar.name]: Tabbar,
-    [TabbarItem.name]: TabbarItem,
-    [Swipe.name]: Swipe,
-    [SwipeItem.name]: SwipeItem,
-    FooterTabbar
+    };
   },
   computed: {
     ...mapState({
       loading: state => state['@@loading'].effects['test/onePlusAsync']
     })
   },
-  mounted () {
-    let a1 = [1, 2]
-    let a2 = [3]
-    let a3 = [4, 5]
-    console.log([...a1, ...a2, ...a3])
-  },
+  mounted() {},
   methods: {
-    add () {
-      this.onePlusAsync(this.value)
+    add() {
+      this.onePlusAsync(this.value);
     },
-    addOne () {
-      this.onePlus(1)
+    addOne() {
+      this.onePlus(1);
     },
     // ...mapActions('home', ['initData', 'plusPage', 'initPage']),
     ...mapActions({
@@ -102,10 +94,10 @@ export default {
       logout: 'user/LOGOUT'
     })
   }
-}
+};
 </script>
 <style lang="scss" scoped>
-.container{
+.container {
   height: auto;
   width: 100%;
   padding-bottom: 50px;
