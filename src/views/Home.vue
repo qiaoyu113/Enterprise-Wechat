@@ -24,8 +24,7 @@
       <svg-icon v-for="icon in iconList"
                 :key="icon"
                 class="icon"
-                :icon-class="icon"
-                @click="goRoute"/>
+                :icon-class="icon" />
     </div>
     <div class="buttons">
       <van-button type="warning"
@@ -81,15 +80,18 @@ export default {
       loading: state => state['@@loading'].effects['test/onePlusAsync']
     })
   },
+  mounted () {
+    let a1 = [1, 2]
+    let a2 = [3]
+    let a3 = [4, 5]
+    console.log([...a1, ...a2, ...a3])
+  },
   methods: {
     add () {
       this.onePlusAsync(this.value)
     },
     addOne () {
       this.onePlus(1)
-    },
-    goRoute () {
-      this.$router.replace({ name: '404' })
     },
     // ...mapActions('home', ['initData', 'plusPage', 'initPage']),
     ...mapActions({

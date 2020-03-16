@@ -9,7 +9,7 @@
       <van-field placeholder="手机号码" v-model="phoneNumber" left-icon="phone-o" :error-message="phoneNumberError" />
       <!-- eye -->
       <van-field v-if="loginWay==='password'" placeholder="登录密码" v-model="password" left-icon="lock" :type="passwordType">
-        <van-icon slot="right-icon" @click="switchPasswordType" :name="passwordIcon"/>
+         <van-icon slot="right-icon" @click="switchPasswordType" :name="passwordIcon"/>
       </van-field>
       <van-field v-else placeholder="短信验证码" v-model="password" left-icon="comment-o" type="text">
         <VerifyCodeBtn slot="button" @sendVerifyCode="sendVerifyCode" />
@@ -26,15 +26,15 @@
 </template>
 <script>
 import { login } from '@/api/user'
-import { Field, Icon, Button, Toast } from 'vant'
-import { mapActions } from 'vuex'
+import { Field, Icon, Button } from 'vant'
+// import { mapActions } from 'vuex'
 import VerifyCodeBtn from '@/components/VerifyCodeBtn'
 export default {
   name: 'Login',
   data () {
     return {
-      phoneNumber: 'wt_admin',
-      password: '123',
+      phoneNumber: '13216698987',
+      password: '123456',
       code: '',
       loginWay: 'password',
       passwordType: 'password',
@@ -60,30 +60,14 @@ export default {
         username: this.phoneNumber,
         password: this.password
       }).then(res => {
-        if (res.data.data.flag) {
-          Toast({
-            message: '登录成功',
-            position: 'middle',
-            duration: 1500
-          })
-          console.log(this.$route.path)
-          const data = {
-            phoneNumber: this.phoneNumber,
-            password: this.password,
-            $router: this.$router,
-            $route: this.$route
-          }
-          this.login(data)
-        } else {
-          Toast.fail(res.data.data.msg)
-        }
+        console.log(111, res)
       }).catch(err => {
         console.log(err)
       })
-    },
-    ...mapActions({
-      login: 'user/login'
-    })
+    }
+    // ...mapActions({
+    //   login: 'user/login'
+    // })
   },
   computed: {
     loginWayObj: function () {
@@ -151,4 +135,5 @@ export default {
       color: #333;
     }
   }
+
 </style>

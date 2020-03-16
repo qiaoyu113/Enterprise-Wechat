@@ -5,7 +5,7 @@
                 @pullingUp="pullingUp"
                 @pullingDown="pullingDown"
                 :loadedAll="loadedAll">
-        <ul class="article-lisgt">
+        <ul class="article-list">
           <li class="article"
               v-for="article in list"
               :key="article.id">

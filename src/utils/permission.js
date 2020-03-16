@@ -1,6 +1,6 @@
 import router from '@/router'
-// import store from '@/store'
-// import { Notify } from 'vant'
+import store from '@/store'
+import { Notify } from 'vant'
 import { getToken } from '@/utils/auth' // get token from cookie
 import getPageTitle from '@/utils/get-page-title'
 
@@ -19,21 +19,21 @@ router.beforeEach(async (to, from, next) => {
       next({ path: '/' })
     } else {
       // 获取用户信息
-      // const hasGetUserInfo = store.getters.userData && store.getters.userData.name
-      // if (hasGetUserInfo) {
-      next()
-      // } else {
-      //   try {
-      //     // get user info
-      //     await store.dispatch('user/getInfo')
-      //     next()
-      //   } catch (error) {
-      //     // 清除用户信息，退出登录，跳转登录页
-      //     store.commit('user/LOGOUT')
-      //     Notify.error(error || 'Has Error')
-      //     next(`/login?redirect=${to.path}`)
-      //   }
-      // }
+      const hasGetUserInfo = store.getters.userData && store.getters.userData.name
+      if (hasGetUserInfo) {
+        next()
+      } else {
+        try {
+          // get user info
+          await store.dispatch('user/getInfo')
+          next()
+        } catch (error) {
+          // 清除用户信息，退出登录，跳转登录页
+          store.commit('user/LOGOUT')
+          Notify.error(error || 'Has Error')
+          next(`/login?redirect=${to.path}`)
+        }
+      }
     }
   } else {
     /* has no token */

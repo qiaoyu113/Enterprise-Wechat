@@ -38,6 +38,7 @@ export default {
   },
   actions: {
     async login (state, data) {
+      console.log(state, data)
       try {
         let res = await login({
           phoneNumber: data.phoneNumber,
