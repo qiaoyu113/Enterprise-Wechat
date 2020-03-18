@@ -4,18 +4,39 @@
     :safe-area-inset-bottom="true"
   >
     <van-tabbar-item
-      icon="home-o"
+      icon="aim"
       replace
       to="/"
     >
-      首页
+      线索
+    </van-tabbar-item>
+    <van-tabbar-item
+      icon="manager-o"
+      replace
+      to="/driver"
+    >
+      司机
     </van-tabbar-item>
     <van-tabbar-item
       icon="orders-o"
       replace
-      to="/article"
+      to="/order"
     >
-      文章
+      订单
+    </van-tabbar-item>
+    <van-tabbar-item
+      icon="logistics"
+      replace
+      to="/line"
+    >
+      线路
+    </van-tabbar-item>
+    <van-tabbar-item
+      icon="setting-o"
+      replace
+      to="/setting"
+    >
+      工具
     </van-tabbar-item>
   </van-tabbar>
 </template>

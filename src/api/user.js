@@ -2,7 +2,7 @@ import request from '@/utils/request'
 
 export function login(data) {
   return request({
-    url: 'api/auth/bss/getToken',
+    url: '/api/auth/v1/jwt/crop/getCorpWechatToken',
     method: 'post',
     data
   })

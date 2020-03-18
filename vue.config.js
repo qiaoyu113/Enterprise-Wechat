@@ -3,7 +3,7 @@ const CompressionWebpackPlugin = require('compression-webpack-plugin')
 const UglifyjsWebpackPlugin = require('uglifyjs-webpack-plugin')
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer')
 const port = process.env.port || process.env.npm_config_port || 8888
-const cdnDomian = './web' // cdn域名，如果有cdn修改成对应的cdn
+const cdnDomian = './' // cdn域名，如果有cdn修改成对应的cdn
 const name = '梧桐OSS运维平台' // page title
 const IS_PRODUCTION = process.env.NODE_ENV === 'production'
 const cdn = {

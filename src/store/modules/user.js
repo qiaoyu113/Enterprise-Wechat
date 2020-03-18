@@ -1,4 +1,5 @@
-import { login, getInfo } from 'api/user'
+// import { login, getInfo } from 'api/user'
+import { login } from 'api/user'
 import { Toast } from 'vant'
 import { getToken, setToken, removeToken } from '@/utils/auth'
 import { resetRouter } from '@/router'
@@ -13,10 +14,10 @@ export default {
   namespaced: true,
   state: {
     token: getToken() || '',
-    user: JSON.parse(localStorage.getItem(USER_DATA) || null)
+    user: JSON.parse(localStorage.getItem(USER_DATA) || null),
+    loginStatus: localStorage.getItem('LoginStatusKey') || 0
   },
   mutations: {
-
     [LOGIN](state, data) {
       let userToken = data.data
       state.token = userToken
@@ -38,7 +39,6 @@ export default {
   },
   actions: {
     async login(state, data) {
-      console.log(state, data)
       try {
         let res = await login({
           phoneNumber: data.phoneNumber,
@@ -63,18 +63,19 @@ export default {
     // get user info
     getInfo({ commit, state }) {
       return new Promise((resolve, reject) => {
-        getInfo(state.token).then(response => {
-          const { data } = response
+        // getInfo(state.token).then(response => {
+        //   const { data } = response
 
-          if (!data) {
-            // eslint-disable-next-line
-            reject('Verification failed, please Login again.')
-          }
-          commit(SetUserData, data)
-          resolve(data)
-        }).catch(error => {
-          reject(error)
-        })
+        //   if (!data) {
+        //     // eslint-disable-next-line
+        //     reject('Verification failed, please Login again.')
+        //   }
+        console.log('getInfo')
+        commit(SetUserData, 'wt_admin')
+        resolve('data')
+        // }).catch(error => {
+        //   reject(error)
+        // })
       })
     }
   },

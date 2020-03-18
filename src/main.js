@@ -23,7 +23,6 @@ import wx from 'weixin-js-sdk'
 import { mockXHR } from '../mock'
 
 if (process.env.NODE_ENV === 'production') {
-  // console.log(1)
   mockXHR()
 }
 
