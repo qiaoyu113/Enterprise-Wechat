@@ -57,6 +57,9 @@ service.interceptors.response.use(
         type: 'error',
         duration: 5 * 1000
       })
+      localStorage.removeItem('token')
+      localStorage.removeItem('code')
+      location.reload()
       // 50008:非法的token; 50012:其他货主端登录了;  40101:Token 过期了;
       if (res.code === 50008 || res.code === 50012 || res.code === 40101) {
         // to re-login

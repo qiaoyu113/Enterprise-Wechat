@@ -123,7 +123,7 @@ export default {
             let loginUrl = localStorage.getItem('loginUrl')
             if (loginUrl) {
               localStorage.removeItem('loginUrl')
-              this.$router.push({ path: loginUrl })
+              this.$router.replace({ path: loginUrl })
               // window.location.reload = loginUrl
             } else {
               this.$router.replace({ path: '/' })

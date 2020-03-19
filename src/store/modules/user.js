@@ -70,7 +70,6 @@ export default {
         //     // eslint-disable-next-line
         //     reject('Verification failed, please Login again.')
         //   }
-        console.log('getInfo')
         commit(SetUserData, 'wt_admin')
         resolve('data')
         // }).catch(error => {

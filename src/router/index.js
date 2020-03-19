@@ -1,20 +1,10 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-// import Home from 'views/Home.vue'
 import store from '@/store'
 
 Vue.use(Router)
 
 let routes = [
-  // {
-  //   path: '/',
-  //   name: 'clue',
-  //   component: Clue,
-  //   meta: {
-  //     title: '首页',
-  //     keepAlive: true
-  //   }
-  // },
   {
     path: '/404',
     name: '404',

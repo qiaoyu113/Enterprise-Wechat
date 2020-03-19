@@ -8,6 +8,16 @@ export default [
       // auth: true,
       keepAlive: true
     }
+  },
+  {
+    path: '/cluedetail',
+    name: 'cluedetail',
+    component: () => import('views/clue/ClueDetail.vue'),
+    meta: {
+      title: '线索详情',
+      // auth: true,
+      keepAlive: true
+    }
   }
 ]
 
