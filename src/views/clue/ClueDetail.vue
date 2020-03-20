@@ -1,5 +1,5 @@
 <template>
-  <div class="clue">
+  <div class="clueDetail">
     <div class="list-wrap">
       <vo-pages
         :data="[]"
@@ -23,7 +23,7 @@
             </van-cell-group>
           </van-tab>
         </van-tabs>
-        <van-button type="info" block class="btn" @click="check">
+        <van-button round type="info" block class="btn" @click="check">
           操作
         </van-button>
         <van-action-sheet v-model="show" :actions="actions" @select="onSelect" />
@@ -119,7 +119,7 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-.clue{
+.clueDetail{
     p{
     margin-block-start: 0;
     margin-block-end: 0;
@@ -135,9 +135,9 @@ export default {
     }
 
     .btn{
-        width:100%;
-        position: fixed;
-        bottom: 0;
+    width:90%;
+    margin: auto;
+    margin-top:3rem;
     }
 
     .article-list {

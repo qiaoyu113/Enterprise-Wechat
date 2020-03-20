@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="driver">
     <div class="list-wrap">
       <van-tabs v-model="listQuery.state" color="#3986CB" @click="getList">
         <van-tab title="面试">
@@ -131,6 +131,7 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
+.driver{
 p{
   margin-block-start: 0;
   margin-block-end: 0;
@@ -210,5 +211,6 @@ p{
     color:#666;
     font-size: 14px;
   }
+}
 }
 </style>

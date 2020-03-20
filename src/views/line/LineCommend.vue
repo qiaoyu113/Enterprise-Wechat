@@ -11,10 +11,10 @@
         <div v-for="item in list" :key="item.type" class="lineList" @click="goDetail(item.id)">
           <div class="lineListTop">
             <div class="name">
-              123123
+              线路名称
             </div>
             <div class="info">
-              123
+              线路简介
             </div>
           </div>
           <div class="lineListBottom">

@@ -33,8 +33,8 @@
             </van-cell-group>
           </van-tab>
         </van-tabs>
-        <van-button type="info" block class="btn" @click="pushSendLink">
-          发送此连接
+        <van-button round type="info" block class="btn" @click="pushSendLink">
+          发送此线路
         </van-button>
       </vo-pages>
     </div>
@@ -237,10 +237,9 @@ p{
 }
 
 .btn{
-    width:100%;
-    transform: translate3d(0,0,0);
-    position: fixed;
-    bottom: 0;
+    width:90%;
+    margin: auto;
+    margin-top:3rem;
 }
 
 .article-list {

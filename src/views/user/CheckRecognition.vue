@@ -23,7 +23,7 @@
             </van-cell-group>
           </van-tab>
         </van-tabs>
-        <van-button type="info" block class="btn" @click="check">
+        <van-button round type="info" block class="btn" @click="check">
           确认匹配
         </van-button>
       </vo-pages>
@@ -118,25 +118,9 @@ export default {
 }
 
 .btn{
-    width:100%;
-    transform: translate3d(0,0,0);
-    position: fixed;
-    bottom: 0;
-    padding-bottom: env(safe-area-inset-bottom);
-}
-
-.btn::after{
-    position: absolute;
-    box-sizing: border-box;
-    content: ' ';
-    pointer-events: none;
-    top: -50%;
-    right: -50%;
-    bottom: -50%;
-    left: -50%;
-    border: 0 solid #ebedf0;
-    -webkit-transform: scale(.5);
-    transform: scale(.5);
+    width:90%;
+    margin: auto;
+    margin-top:3rem;
 }
 
 .article-list {
