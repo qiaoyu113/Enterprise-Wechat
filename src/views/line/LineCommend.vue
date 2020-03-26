@@ -1,5 +1,6 @@
 <template>
   <div class="linecommend">
+    <SearchItem @searchData="searchFunction"></SearchItem>
     <div class="list-wrap">
       <vo-pages
         :data="[]"
@@ -8,6 +9,7 @@
         @pullingUp="pullingUp"
         @pullingDown="pullingDown"
       >
+        <div class="placeholder"></div>
         <div v-for="item in list" :key="item.type" class="lineList" @click="goDetail(item.id)">
           <div class="lineListTop">
             <div class="name">
@@ -27,7 +29,9 @@
 </template>
 <script>
 import { Tabbar, TabbarItem, Toast, Tab, Tabs, Cell, CellGroup } from 'vant'
+import { selectLineTask } from '@/api/line'
 import VoPages from 'vo-pages'
+import SearchItem from 'components/SearchItem'
 import 'vo-pages/lib/vo-pages.css'
 export default {
   name: 'Linecommend',
@@ -39,13 +43,18 @@ export default {
     [Tabs.name]: Tabs,
     [Cell.name]: Cell,
     [CellGroup.name]: CellGroup,
-    VoPages
+    VoPages,
+    SearchItem
   },
   data() {
     return {
       listQuery: {
-        state: 0,
-        page: 1
+        'carType': '',
+        'cargoType': '',
+        'city': '',
+        'key': 'string',
+        'limit': '20',
+        'page': 1
       },
       active: 1,
       list: [],
@@ -61,7 +70,7 @@ export default {
     }
   },
   mounted() {
-    this.getList()
+    // this.getList()
   },
   methods: {
     pullingDown() {
@@ -73,37 +82,33 @@ export default {
       this.listQuery.page += 1
       this.getList()
     },
+    searchFunction(data) {
+      console.log(data)
+      this.listQuery.page = 1
+      this.getList()
+    },
     async getList(loadMore = true) {
-    //   customerDetail({
-    //     custClueId: 201910231017
-    //   }).then((res) => {
-    //     if (res.data.success) {
-    //       console.log(res.data.data)
-    //       this.detail = res.data.data
-    //     }
-    //   })
-      let lists = [
-        {
-          fieldEn: 'field_2',
-          fieldName: '外线销售姓名',
-          type: 'single_line_text',
-          notes: '',
-          value: '石晓光'
-        }
-      ]
-      this.total = lists.length
-      const newList = lists.map(item => {
-        return item
+      selectLineTask(this.listQuery).then((res) => {
+        // if (res.data.success) {
+        //   console.log(res.data.data)
+        //   let lists = res.data.data
+        //   this.total = lists.length
+        //   const newList = lists.map(item => {
+        //     return item
+        //   })
+        //   if (loadMore) {
+        //     this.list = this.list.concat(newList)
+        //   } else {
+        //     this.list = newList
+        //   }
+        //   if (!this.beforePullDown) {
+        //     this.beforePullDown = true
+        //   }
+        //   this.loadedAll = this.total <= this.list.length
+        // }
+      }).catch((err) => {
+        console.log(err)
       })
-      if (loadMore) {
-        this.list = this.list.concat(newList)
-      } else {
-        this.list = newList
-      }
-      if (!this.beforePullDown) {
-        this.beforePullDown = true
-      }
-      this.loadedAll = this.total <= this.list.length
     },
     goDetail(id) {
       this.$router.push({ path: '/linedetail', query: { id: id }})
@@ -228,6 +233,10 @@ export default {
             color:#666;
             font-size: 14px;
         }
+    }
+    .placeholder{
+      width:100%;
+      height:1.6rem;
     }
 }
 </style>

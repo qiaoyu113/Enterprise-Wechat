@@ -8,29 +8,59 @@
       >
         <van-tabs v-model="listQuery.state" color="#3986CB" sticky>
           <van-tab title="基本">
+            <h2 class="van-doc-demo-block__title">
+              基本信息
+            </h2>
             <van-cell-group>
               <van-cell v-for="item in detail" :key="item.type" :title="item.fieldName" :value="item.value" />
             </van-cell-group>
+            <p v-if="follow.length === 0" class="noMore">
+              暂无信息
+            </p>
           </van-tab>
           <van-tab title="配送">
+            <h2 class="van-doc-demo-block__title">
+              配送信息
+            </h2>
             <van-cell-group>
               <van-cell v-for="item in follow" :key="item.type" :title="item.fieldName" :value="item.value" />
             </van-cell-group>
+            <p v-if="follow.length === 0" class="noMore">
+              暂无信息
+            </p>
           </van-tab>
           <van-tab title="关键">
+            <h2 class="van-doc-demo-block__title">
+              关键信息
+            </h2>
             <van-cell-group>
-              <van-cell v-for="item in action" :key="item.type" :title="item.fieldName" :value="item.value" />
+              <van-cell v-for="item in follow" :key="item.type" :title="item.fieldName" :value="item.value" />
             </van-cell-group>
+            <p v-if="follow.length === 0" class="noMore">
+              暂无信息
+            </p>
           </van-tab>
           <van-tab title="标书">
+            <h2 class="van-doc-demo-block__title">
+              标书信息
+            </h2>
             <van-cell-group>
-              <van-cell v-for="item in action" :key="item.type" :title="item.fieldName" :value="item.value" />
+              <van-cell v-for="item in follow" :key="item.type" :title="item.fieldName" :value="item.value" />
             </van-cell-group>
+            <p v-if="follow.length === 0" class="noMore">
+              暂无信息
+            </p>
           </van-tab>
           <van-tab title="记录">
+            <h2 class="van-doc-demo-block__title">
+              记录信息
+            </h2>
             <van-cell-group>
-              <van-cell v-for="item in action" :key="item.type" :title="item.fieldName" :value="item.value" />
+              <van-cell v-for="item in follow" :key="item.type" :title="item.fieldName" :value="item.value" />
             </van-cell-group>
+            <p v-if="follow.length === 0" class="noMore">
+              暂无信息
+            </p>
           </van-tab>
         </van-tabs>
         <van-button round type="info" block class="btn" @click="pushSendLink">
@@ -222,6 +252,22 @@ export default {
 </script>
 <style lang="scss" scoped>
 .linedetail{
+  .van-doc-demo-block__title{
+    margin: 0;
+    text-align: center;
+    padding: 16px;
+    color: #4D86C6;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 16px;
+    background-color: #f7f8fa;
+  }
+  .noMore{
+    width: 100%;
+    text-align: center;
+    height:5rem;
+    line-height: 6rem;
+  }
 p{
   margin-block-start: 0;
   margin-block-end: 0;
@@ -239,7 +285,7 @@ p{
 .btn{
     width:90%;
     margin: auto;
-    margin-top:3rem;
+    margin-top:1rem;
 }
 
 .article-list {

@@ -90,114 +90,114 @@ export default {
     }
   },
   mounted() {
-    const wx = window.wx;
+    // const wx = window.wx;
     // this.getList()
-    wx.config({
-      beta: true,
-      debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
-      appId: 'ww1350e9d33db61819', // 必填，企业号的唯一标识，此处填写企业号corpid
-      timestamp: 1584529830, // 必填，生成签名的时间戳
-      nonceStr: '6xABWDk2tJGMDqB3', // 必填，生成签名的随机串
-      signature: '23d17bad21f8f7809ec72dc63e3079a0e7cab760', // 必填，签名，见附录1
-      jsApiList: ['agentConfig', 'sendChatMessage', 'getCurExternalContact'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
-    });
-    wx.ready(function() {
-      // 开启企业微信debug模式wx.config里的debug为true
-      wx.checkJsApi({
-        jsApiList: [
-          'agentConfig',
-          'sendChatMessage',
-          'getCurExternalContact'
-        ],
-        success: function(res) {
-          wx.agentConfig({
-            corpid: 'ww1350e9d33db61819', // 必填，企业微信的corpid，必须与当前登录的企业一致
-            agentid: '1000013', // 必填，企业微信的应用id （e.g. 1000247）
-            timestamp: 1584529872, // 必填，生成签名的时间戳
-            nonceStr: '78yFxktUYuKnvwSo', // 必填，生成签名的随机串
-            signature: '1c6e582e3b7942258fbdf8351d8135898051af62', // 必填，签名，见附录1
-            jsApiList: ['sendChatMessage', 'getCurExternalContact'], // 必填
-            success: function(res) {
-              console.log('success', res)
-              wx.invoke('getCurExternalContact', {
-              }, function(res) {
-                if (res.err_msg === 'getCurExternalContact:ok') {
-                  console.log(res.userId) // 返回当前外部联系人userId
-                } else {
-                  // 错误处理
-                }
-              });
-              wx.invoke('sendChatMessage', {
-                msgtype: 'text', // 消息类型，必填
-                text: {
-                  content: '测试' // 文本内容
-                },
-                image:
-                  {
-                    mediaid: '2TLVdgtYCwWc3BXOlAErsdp93e7IKfqA__9OYWVOtNEA_ex0lGEK3cxC1yze78X09' // 图片的素材id
-                  },
-                video:
-                  {
-                    mediaid: '' // 视频的素材id
-                  },
-                file:
-                  {
-                    mediaid: '' // 文件的素材id
-                  },
-                news:
-                  {
-                    link: 'www.baidu.com', // H5消息页面url 必填
-                    title: '百度', // H5消息标题
-                    desc: '百度', // H5消息摘要
-                    imgUrl: 'https://upload.jianshu.io/users/upload_avatars/10311999/16dbb33b-6d2d-47c9-9d6a-fbadccc67e85.png?imageMogr2/auto-orient/strip|imageView2/1/w/96/h/96/format/webp' // H5消息封面图片URL
-                  }
-              }, function(res) {
-                console.log('测试1通过')
-                wx.invoke('sendChatMessage', {
-                  msgtype: 'text', // 消息类型，必填
-                  text: {
-                    content: '测试22222' // 文本内容
-                  },
-                  image:
-                  {
-                    mediaid: '2TLVdgtYCwWc3BXOlAErsdp93e7IKfqA__9OYWVOtNEA_ex0lGEK3cxC1yze78X09' // 图片的素材id
-                  },
-                  video:
-                  {
-                    mediaid: '' // 视频的素材id
-                  },
-                  file:
-                  {
-                    mediaid: '' // 文件的素材id
-                  },
-                  news:
-                  {
-                    link: 'www.baidu.com', // H5消息页面url 必填
-                    title: '百度', // H5消息标题
-                    desc: '百度', // H5消息摘要
-                    imgUrl: 'https://upload.jianshu.io/users/upload_avatars/10311999/16dbb33b-6d2d-47c9-9d6a-fbadccc67e85.png?imageMogr2/auto-orient/strip|imageView2/1/w/96/h/96/format/webp' // H5消息封面图片URL
-                  }
-                }, function(res) {
-                  console.log('测试2通过')
-                })
-              })
-            },
-            fail: function(res) {
-              console.log('err', res)
-              if (res.errMsg.indexOf('is not a function') > -1) {
-                alert('<i class="weui-icon-warn">版本过低请升级</i>')
-              }
-            }
-          });
-        },
-        fail: function(res) {
-          alert('版本过低请升级');
-        }
-      });
-    });
-    wx.error(function(res) {
-      console.log(res);
-    });
+    // wx.config({
+    //   beta: true,
+    //   debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+    //   appId: 'ww1350e9d33db61819', // 必填，企业号的唯一标识，此处填写企业号corpid
+    //   timestamp: 1584529830, // 必填，生成签名的时间戳
+    //   nonceStr: '6xABWDk2tJGMDqB3', // 必填，生成签名的随机串
+    //   signature: '23d17bad21f8f7809ec72dc63e3079a0e7cab760', // 必填，签名，见附录1
+    //   jsApiList: ['agentConfig', 'sendChatMessage', 'getCurExternalContact'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+    // });
+    // wx.ready(function() {
+    //   // 开启企业微信debug模式wx.config里的debug为true
+    //   wx.checkJsApi({
+    //     jsApiList: [
+    //       'agentConfig',
+    //       'sendChatMessage',
+    //       'getCurExternalContact'
+    //     ],
+    //     success: function(res) {
+    //       wx.agentConfig({
+    //         corpid: 'ww1350e9d33db61819', // 必填，企业微信的corpid，必须与当前登录的企业一致
+    //         agentid: '1000013', // 必填，企业微信的应用id （e.g. 1000247）
+    //         timestamp: 1584529872, // 必填，生成签名的时间戳
+    //         nonceStr: '78yFxktUYuKnvwSo', // 必填，生成签名的随机串
+    //         signature: '1c6e582e3b7942258fbdf8351d8135898051af62', // 必填，签名，见附录1
+    //         jsApiList: ['sendChatMessage', 'getCurExternalContact'], // 必填
+    //         success: function(res) {
+    //           console.log('success', res)
+    //           wx.invoke('getCurExternalContact', {
+    //           }, function(res) {
+    //             if (res.err_msg === 'getCurExternalContact:ok') {
+    //               console.log(res.userId) // 返回当前外部联系人userId
+    //             } else {
+    //               // 错误处理
+    //             }
+    //           });
+    //           wx.invoke('sendChatMessage', {
+    //             msgtype: 'text', // 消息类型，必填
+    //             text: {
+    //               content: '测试' // 文本内容
+    //             },
+    //             image:
+    //               {
+    //                 mediaid: '2TLVdgtYCwWc3BXOlAErsdp93e7IKfqA__9OYWVOtNEA_ex0lGEK3cxC1yze78X09' // 图片的素材id
+    //               },
+    //             video:
+    //               {
+    //                 mediaid: '' // 视频的素材id
+    //               },
+    //             file:
+    //               {
+    //                 mediaid: '' // 文件的素材id
+    //               },
+    //             news:
+    //               {
+    //                 link: 'www.baidu.com', // H5消息页面url 必填
+    //                 title: '百度', // H5消息标题
+    //                 desc: '百度', // H5消息摘要
+    //                 imgUrl: 'https://upload.jianshu.io/users/upload_avatars/10311999/16dbb33b-6d2d-47c9-9d6a-fbadccc67e85.png?imageMogr2/auto-orient/strip|imageView2/1/w/96/h/96/format/webp' // H5消息封面图片URL
+    //               }
+    //           }, function(res) {
+    //             console.log('测试1通过')
+    //             wx.invoke('sendChatMessage', {
+    //               msgtype: 'text', // 消息类型，必填
+    //               text: {
+    //                 content: '测试22222' // 文本内容
+    //               },
+    //               image:
+    //               {
+    //                 mediaid: '2TLVdgtYCwWc3BXOlAErsdp93e7IKfqA__9OYWVOtNEA_ex0lGEK3cxC1yze78X09' // 图片的素材id
+    //               },
+    //               video:
+    //               {
+    //                 mediaid: '' // 视频的素材id
+    //               },
+    //               file:
+    //               {
+    //                 mediaid: '' // 文件的素材id
+    //               },
+    //               news:
+    //               {
+    //                 link: 'www.baidu.com', // H5消息页面url 必填
+    //                 title: '百度', // H5消息标题
+    //                 desc: '百度', // H5消息摘要
+    //                 imgUrl: 'https://upload.jianshu.io/users/upload_avatars/10311999/16dbb33b-6d2d-47c9-9d6a-fbadccc67e85.png?imageMogr2/auto-orient/strip|imageView2/1/w/96/h/96/format/webp' // H5消息封面图片URL
+    //               }
+    //             }, function(res) {
+    //               console.log('测试2通过')
+    //             })
+    //           })
+    //         },
+    //         fail: function(res) {
+    //           console.log('err', res)
+    //           if (res.errMsg.indexOf('is not a function') > -1) {
+    //             alert('<i class="weui-icon-warn">版本过低请升级</i>')
+    //           }
+    //         }
+    //       });
+    //     },
+    //     fail: function(res) {
+    //       alert('版本过低请升级');
+    //     }
+    //   });
+    // });
+    // wx.error(function(res) {
+    //   console.log(res);
+    // });
   },
   methods: {
     pullingDown() {

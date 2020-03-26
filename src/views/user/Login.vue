@@ -19,6 +19,7 @@ import { login } from '@/api/user';
 import { Field, Icon, Button, Toast, Loading } from 'vant';
 // import wx from 'weixin-js-sdk';
 import { mapActions } from 'vuex'
+// const wx = window.wx;
 export default {
   name: 'Login',
   components: {
@@ -40,6 +41,9 @@ export default {
   },
   created: function() {
     this.getCode()
+    // window.localStorage.setItem('token', '123')
+    // window.localStorage.setItem('code', '123')
+    // window.localStorage.setItem('SetUserData', 'token')
   },
   mounted() {
     // wx.config({

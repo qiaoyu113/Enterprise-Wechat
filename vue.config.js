@@ -23,7 +23,6 @@ const externals = {
   'vue-router': 'VueRouter',
   vuex: 'Vuex',
   axios: 'axios',
-  jWeixin: 'jWeixin',
   'js-cookie': 'Cookies'
 }
 
