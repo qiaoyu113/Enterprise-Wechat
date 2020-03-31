@@ -6,9 +6,9 @@ import { getToken } from '@/utils/auth'
 let url = 'http://firmiana-bss.yunniao.cn/'
 if (window.location.host !== 'firmiana-bss.yunniao.cn') {
   // if (location.host !== 'http://firmiana-open-api.d2.ynimg.cn:8888/') {
-  url = 'http://firmiana-bss.m1.yunniao.cn/'
+  //   url = 'http://firmiana-bss.m1.yunniao.cn/'
   // } else {
-  // url = 'http://firmiana-open-api-d2.yunniao.cn/'
+  url = 'http://firmiana-open-api-d2.yunniao.cn/'
   // }
 }
 

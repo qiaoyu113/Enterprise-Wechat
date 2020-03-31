@@ -20,7 +20,7 @@
 </template>
 <script>
 import { Tabbar, TabbarItem, Toast, Tab, Tabs, Loading } from 'vant'
-import { getCorpSignature, getAgentSignature } from '@/api/user'
+import { getCorpSignature, getAgentSignature, externalUserId } from '@/api/user'
 import VoPages from 'vo-pages'
 import 'vo-pages/lib/vo-pages.css'
 const wx = window.wx;
@@ -111,16 +111,30 @@ export default {
                         wx.invoke('getCurExternalContact', {
                         }, function(res) {
                           if (res.err_msg === 'getCurExternalContact:ok') {
-                            console.log(res.userId) // 返回当前外部联系人userId
-                            const state = 1;
-                            if (state === 1) {
-                              // 无法识别
-                              that.$router.replace({ path: '/unrecognition' })
-                            } else if (state === 2) {
-                              that.$router.replace({ path: '/clueDetail' })
-                            } else {
-                              that.$router.replace({ path: '/driverDetail' })
-                            }
+                            // console.log('userId', res.userId) // 返回当前外部联系人userId
+                            localStorage.setItem('externalUserId', res.userId)
+                            externalUserId(
+                              res.userId
+                            ).then((res) => {
+                              if (res.data.success) {
+                                if (res.data.data.matchSuccess) {
+                                  // 1是司机，2是线索
+                                  const state = res.data.data.driverType;
+                                  const driverId = res.data.data.driverId;
+                                  if (state === 1) {
+                                    that.$router.replace({ path: '/driverDetail', query: { driverId: driverId }})
+                                  } else if (state === 2) {
+                                    that.$router.replace({ path: '/clueDetail', query: { clueId: driverId }})
+                                  } else {
+                                    // 无法识别
+                                    that.$router.replace({ path: '/unrecognition' })
+                                  }
+                                } else {
+                                  // 无法识别
+                                  that.$router.replace({ path: '/unrecognition' })
+                                }
+                              }
+                            })
                           } else {
                             // 错误处理
                             this.btnShow = true;

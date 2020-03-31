@@ -41,13 +41,13 @@ const createLoadingPlugin = ({
 
     store.subscribeAction({
       before: action => {
-        console.log(`before action ${action.type}`)
+        // console.log(`before action ${action.type}`)
         if (shouldEffect(action, includes, excludes)) {
           store.commit({ type: namespace + '/SHOW', payload: action.type })
         }
       },
       after: action => {
-        console.log(`after action ${action.type}`)
+        // console.log(`after action ${action.type}`)
         if (shouldEffect(action, includes, excludes)) {
           store.commit({ type: namespace + '/HIDE', payload: action.type })
         }

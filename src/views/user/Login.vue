@@ -41,8 +41,8 @@ export default {
   },
   created: function() {
     this.getCode()
-    // window.localStorage.setItem('token', '123')
-    // window.localStorage.setItem('code', '123')
+    // window.localStorage.setItem('token', 'eyJhbGciOiJIUzI1NiJ9.eyJwcm9maWxlIjoiZDIiLCJ1c2VySWQiOiIzNyIsInVzZXJuYW1lIjoid3RfYWRtaW4iLCJ0eXBlIjoiMyIsImJ1c2lQZXJtaXNzaW9uIjoiMCwxIiwiZXhwIjoxNTg1NzM0Mjc5fQ.jSBEkPA9chqLSI5g9MSYAiegEyUI5MHmBte_fL89lf8')
+    // window.localStorage.setItem('code', '1234')
     // window.localStorage.setItem('SetUserData', 'token')
   },
   mounted() {
@@ -78,8 +78,6 @@ export default {
     getCode() {
       var code = this.getUrlParam('code')
       if (code == null || code === '') {
-        // localStorage.setItem('token', 123)
-        // this.$router.replace({ path: '/' })
         this.linkGetCode()
       } else {
         const token = localStorage.getItem('token')
@@ -116,7 +114,6 @@ export default {
     handleLogin(code) {
       login({
         code: code,
-        // code: '123',
         state: '',
         agentId: '1000013'
       })

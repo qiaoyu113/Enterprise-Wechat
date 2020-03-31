@@ -24,6 +24,46 @@ export function getCorpSignature(data) {
   })
 }
 
+export function externalUserId(data) {
+  return request({
+    url: '/api/driver/driver/match/driver/externalUserId',
+    method: 'post',
+    data
+  })
+}
+
+export function marchPhone(data) {
+  return request({
+    url: '/api/driver/driver/match/driver/phone',
+    method: 'post',
+    data
+  })
+}
+
+export function driverDetail(data) {
+  return request({
+    url: '/api/driver/driver/detail',
+    method: 'post',
+    data
+  })
+}
+
+export function clueDetail(data) {
+  return request({
+    url: '/api/driver/driver/clue/bss/clueInfo',
+    method: 'get',
+    params: data
+  })
+}
+
+export function clueLog(data) {
+  return request({
+    url: '/api/driver/driver/clue/log/list',
+    method: 'get',
+    params: data
+  })
+}
+
 export function getInfo(token) {
   return request({
     url: '/user/info',

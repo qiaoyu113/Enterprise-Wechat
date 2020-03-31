@@ -49,8 +49,8 @@
   </div>
 </template>
 <script>
-import { Tabbar, TabbarItem, Toast, Tab, Tabs, Cell, CellGroup, Button } from 'vant'
-// import { customerDetail } from '@/api/user'
+import { Tabbar, TabbarItem, Toast, Tab, Tabs, Cell, CellGroup, Button, Dialog } from 'vant'
+import { matchConfirm, driverDetail, clueDetail, clueLog } from '@/api/user'
 import VoPages from 'vo-pages'
 import 'vo-pages/lib/vo-pages.css'
 // import wx from 'jWeixin';
@@ -59,6 +59,7 @@ export default {
   components: {
     [Tabbar.name]: Tabbar,
     [TabbarItem.name]: TabbarItem,
+    [Dialog.name]: Dialog,
     [Toast.name]: Toast,
     [Tab.name]: Tab,
     [Tabs.name]: Tabs,
@@ -78,43 +79,69 @@ export default {
       action: [],
       total: 0,
       page: 1,
-      loadedAll: false
+      loadedAll: false,
+      driverId: '',
+      driverType: '',
+      driverDetail: '',
+      clueDetail: ''
     }
   },
   mounted() {
-    this.getDetail()
+    let driverId = this.$route.query.driverId;
+    this.driverId = driverId;
+    let driverType = this.$route.query.driverType;
+    this.driverType = driverType;
+    const externalUserId = localStorage.getItem('externalUserId')
+    if (driverId && externalUserId && driverType) {
+      this.getDetail(driverId, externalUserId, driverType)
+    } else {
+      Dialog.alert({
+        message: '匹配不到用户'
+      }).then(() => {
+        this.$router.replace({ path: '/' })
+      });
+    }
   },
   methods: {
-    getDetail() {
-    //   customerDetail({
-    //     custClueId: 201910231017
-    //   }).then((res) => {
-    //     if (res.data.success) {
-    //       console.log(res.data.data)
-    //       this.detail = res.data.data
-    //     }
-    //   })
-      this.detail = [
-        {
-          fieldEn: 'field_2',
-          fieldName: '外线销售姓名',
-          type: 'single_line_text',
-          notes: '',
-          value: '石晓光'
+    check(driverId, externalUserId, driverType) {
+      matchConfirm({
+        'driverId': driverId,
+        'driverType': driverType,
+        'externalUserId': externalUserId
+      }).then((res) => {
+        if (res.data.success) {
+          this.$router.replace({ path: '/linecommend' })
         }
-      ]
+      })
     },
-    check() {
-    //   this.$router.push({ path: '/linedetail', query: { id: '123' }})
-      this.$router.replace({ path: '/linecommend' })
-    //   customerDetail({
-    //     custClueId: 201910231017
-    //   }).then((res) => {
-    //     if (res.data.success) {
-    //       console.log(res.data.data)
-    //       this.detail = res.data.data
-    //     }
-    //   })
+    getDetail(driverId, externalUserId, driverType) {
+      if (driverType === 1) {
+        driverDetail({
+          driverId: driverId
+        }).then((res) => {
+          if (res.data.success) {
+            console.log(res.data.data)
+            this.driverDetail = res.data.data
+          }
+        })
+      } else {
+        clueDetail({
+          clueId: driverId
+        }).then((res) => {
+          if (res.data.success) {
+            console.log(res.data.data)
+            this.clueDetail = res.data.data
+          }
+        })
+        clueLog({
+          clueId: driverId
+        }).then((res) => {
+          if (res.data.success) {
+            console.log(res.data.data)
+            this.clueLog = res.data.data
+          }
+        })
+      }
     }
   }
 }
