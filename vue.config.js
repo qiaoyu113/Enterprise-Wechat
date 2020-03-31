@@ -32,7 +32,7 @@ function resolve(dir) {
 
 module.exports = {
   publicPath: IS_PRODUCTION ? cdnDomian : './',
-  outputDir: 'dist',
+  outputDir: 'web',
   assetsDir: 'static',
   lintOnSave: process.env.NODE_ENV === 'development',
   productionSourceMap: false,
