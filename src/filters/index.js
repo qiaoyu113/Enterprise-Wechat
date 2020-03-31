@@ -69,7 +69,6 @@ export function NumFormat(value) {
 
 /* 过滤是否为空 */
 export function DataIsNull(value) {
-  console.log(1111, value)
   if (value === 0) {
     return value
   }
