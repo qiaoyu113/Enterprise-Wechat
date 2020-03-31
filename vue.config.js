@@ -145,7 +145,7 @@ module.exports = {
         }
       )
     if (IS_PRODUCTION) {
-      config.plugin('analyzer').use(BundleAnalyzerPlugin)
+      // config.plugin('analyzer').use(BundleAnalyzerPlugin)
       config.plugin('html').tap(args => {
         args[0].cdn = cdn
         console.log('args', args)
