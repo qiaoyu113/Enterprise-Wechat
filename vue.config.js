@@ -69,7 +69,10 @@ module.exports = {
         'api': resolve('src/api'), // 接口
         'utils': resolve('src/utils'), // 通用功能
         'assets': resolve('src/assets'), // 静态资源
-        'style': resolve('src/style') // 通用样式
+        'router': resolve('src/router'), // 路由
+        'style': resolve('src/style'), // 通用样式
+        'store': resolve('src/store'), // vuex
+        'filters': resolve('src/filters') // 过滤器
       }
     }
   },
