@@ -1,7 +1,7 @@
 <template>
-  <div class="clueDetail">
+  <div class="driverDetail">
     <div class="list-wrap">
-      <van-tabs v-model="listQuery.state" color="#3986CB" sticky>
+      <van-tabs color="#3986CB" sticky>
         <van-tab title="基本">
           <van-cell-group v-if="JSON.stringify(detail) != '{}'">
             <h2 class="van-doc-demo-block__title">
@@ -163,7 +163,14 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-.clueDetail{
+.driverDetail{
+
+  .noMore{
+    width: 100%;
+    text-align: center;
+    height:5rem;
+    line-height: 6rem;
+  }
     p{
     margin-block-start: 0;
     margin-block-end: 0;
@@ -180,8 +187,7 @@ export default {
 
     .btn{
     width:90%;
-    margin: auto;
-    margin-top:3rem;
+    margin: 1rem auto;
     }
 
     .article-list {
@@ -250,5 +256,16 @@ export default {
         font-size: 14px;
     }
     }
+
+  .van-doc-demo-block__title{
+    margin: 0;
+    text-align: center;
+    padding: 16px;
+    color: #4D86C6;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 16px;
+    background-color: #f7f8fa;
+  }
 }
 </style>
