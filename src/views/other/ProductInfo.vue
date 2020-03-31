@@ -9,7 +9,7 @@
           产品{{ index + 1 }}
         </p>
         <img style="margin-top:0.4rem;" :src="item.mediaUrl" alt="">
-        <p>{{ item.mediaDesc }}</p>
+        <!-- <p>{{ item.mediaDesc }}</p> -->
       </van-radio>
     </van-radio-group>
     <van-button round type="info" block class="btn" @click="sendCustmer">
@@ -72,6 +72,11 @@ export default {
       let that = this;
       const hostName = window.location.href
       let index = this.radio
+      console.log(index)
+      if (index === '') {
+        Toast.fail('请选择一个产品')
+        return false;
+      }
       getCorpSignature({
         url: hostName
       }).then((res) => {
@@ -110,21 +115,23 @@ export default {
                       jsApiList: ['sendChatMessage', 'getCurExternalContact'], // 必填
                       success: function(res) {
                         wx.invoke('sendChatMessage', {
-                          msgtype: 'text', // 消息类型，必填
-                          text: {
-                            content: that.productList[index].mediaDesc // 文本内容
-                          }
-                        }, function(res) {
-                          console.log('发送消息回调', res)
-                          wx.invoke('sendChatMessage', {
-                            msgtype: 'image', // 消息类型，必填
-                            image:
+                          msgtype: 'image', // 消息类型，必填
+                          image:
                             {
                               mediaid: that.productList[index].mediaId // 图片的素材id
                             }
-                          }, function(res) {
-                            console.log('发送图片回调', res)
-                          })
+                        }, function(res) {
+                          console.log('发送图片回调', res)
+                          // // localStorage.setItem('mediaid', JSON.stringify(res))
+                          // wx.invoke('sendChatMessage', {
+                          //   msgtype: 'text', // 消息类型，必填
+                          //   text: {
+                          //     content: that.productList[index].mediaDesc // 文本内容
+                          //   }
+                          // }, function(res) {
+                          //   console.log('发送消息回调', res)
+                          //   // localStorage.setItem('text', JSON.stringify(res))
+                          // })
                         })
                       },
                       fail: function(res) {
@@ -151,7 +158,7 @@ export default {
   }
 }
 </script>
-<style lang="scss" scoped>
+<style lang="scss">
 .ProductInfo{
   width: 100%;
   text-align: center;
@@ -198,20 +205,20 @@ export default {
     padding: 16px;
     color: #4D86C6;
     font-weight: normal;
-    font-size: 14px;
-    line-height: 16px;
+    font-size: 16px;
+    line-height: 20px;
     background-color: #f7f8fa;
   }
   .productBox{
-    padding: 0.6rem;
+    padding: 0.3rem 0.6rem;
     box-sizing: border-box;
-  }
-  .van-radio__label{
-    width: 100%;
   }
   .btn{
     width: 88%;
     margin:0 auto 1rem;
+  }
+  .van-radio__label{
+    width: 100% !important;
   }
 }
 </style>

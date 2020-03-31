@@ -7,13 +7,13 @@
             基本信息
           </h2>
           <van-cell-group>
-            <van-cell title="货主" :value="detail.customerName" />
-            <van-cell title="城市" :value="detail.cityName" />
-            <van-cell title="线路名称" :value="detail.lineName" />
-            <van-cell title="货物类型" :value="detail.cargoType" />
-            <van-cell title="收货人类型" :value="detail.receiverType" />
-            <van-cell title="车型" :value="detail.carTypeName" />
-            <van-cell title="仓位置" :value="detail.warehouse" />
+            <van-cell title="货主" :value="detail.customerName | DataIsNull" />
+            <van-cell title="城市" :value="detail.cityName | DataIsNull" />
+            <van-cell title="线路名称" :value="detail.lineName | DataIsNull" />
+            <van-cell title="货物类型" :value="detail.cargoType | DataIsNull" />
+            <van-cell title="收货人类型" :value="detail.receiverType | DataIsNull" />
+            <van-cell title="车型" :value="detail.carTypeName | DataIsNull" />
+            <van-cell title="仓位置" :value="detail.warehouse | DataIsNull" />
             <van-cell title="配送区域是否固定" :value=" detail.distributionSites === 2 ? '否' : '是'" />
             <van-cell title="是否需要返仓" :value=" detail.returnWarehouse === 2 ? '否' : '是'" />
             <van-cell title="是否需要搬运" :value=" detail.carry === 2 ? '否' : '是'" />
@@ -22,19 +22,19 @@
             <van-cell title="货主单趟最低报价" :value=" detail.preLowestQuotations === 2 ? '否' : '是'" />
             <van-cell title="预估单趟费用(元)(含油耗、过路、过桥)" :value=" detail.monthlyFuelConsumption === 2 ? '否' : '是'" />
             <van-cell title="单趟去油净收入" :value="Number(detail.preLowestQuotations) - Number(detail.monthlyFuelConsumption) ? Number(detail.preLowestQuotations) - Number(detail.monthlyFuelConsumption) : 0" />
-            <van-cell v-if="detail.incomeSettlementMethod === 2" title="油卡结算(%)" :value=" detail.fuelRatio" />
-            <van-cell v-if="detail.incomeSettlementMethod === 2" title="线路区域" :value=" detail.provinceAreaName + detail.cityAreaName + detail.countyAreaName" />
-            <van-cell v-if="detail.incomeSettlementMethod === 2" title="具体区域范围" :value=" detail.districtArea " />
-            <van-cell title="线路编号" :value="detail.lineId" />
-            <van-cell title="线路入池原因" :value="detail.occurReasonName" />
-            <van-cell title="可上车数" :value="detail.deployNum" />
-            <van-cell title="线路稳定性" :value="detail.stabilityRateName" />
-            <van-cell title="账期" :value="detail.billingCycle" />
-            <van-cell title="创建线路难度" :value="detail.handlingDifficultyDegreeName" />
-            <van-cell title="备注信息" :value="detail.remark" />
-            <van-cell title="线路类型" :value="detail.distinguishedTypeName" />
-            <van-cell v-if="detail.waitDirveValidityDuration > 0" title="线路失效截止时间" :value=" detail.waitDirveValidity" />
-            <van-cell v-if="detail.waitDirveValidityDuration > 0" title="等待上车有效期(天)" :value=" detail.waitDirveValidityDuration" />
+            <van-cell v-if="detail.incomeSettlementMethod === 2" title="油卡结算(%)" :value=" detail.fuelRatio | DataIsNull" />
+            <van-cell v-if="detail.incomeSettlementMethod === 2" title="线路区域" :value=" (detail.provinceAreaName + detail.cityAreaName + detail.countyAreaName) | DataIsNull" />
+            <van-cell v-if="detail.incomeSettlementMethod === 2" title="具体区域范围" :value=" detail.districtArea | DataIsNull" />
+            <van-cell title="线路编号" :value="detail.lineId | DataIsNull" />
+            <van-cell title="线路入池原因" :value="detail.occurReasonName | DataIsNull" />
+            <van-cell title="可上车数" :value="detail.deployNum | DataIsNull" />
+            <van-cell title="线路稳定性" :value="detail.stabilityRateName | DataIsNull" />
+            <van-cell title="账期" :value="detail.billingCycle | DataIsNull" />
+            <van-cell title="创建线路难度" :value="detail.handlingDifficultyDegreeName | DataIsNull" />
+            <van-cell title="备注信息" :value="detail.remark | DataIsNull" />
+            <van-cell title="线路类型" :value="detail.distinguishedTypeName | DataIsNull" />
+            <van-cell v-if="detail.waitDirveValidityDuration > 0" title="线路失效截止时间" :value=" detail.waitDirveValidity | DataIsNull" />
+            <van-cell v-if="detail.waitDirveValidityDuration > 0" title="等待上车有效期(天)" :value=" detail.waitDirveValidityDuration | DataIsNull" />
             <van-cell title="首岗是否有人跟车" :value=" detail.firstNeededFollow === 2 ? '否' : '是'" />
           </van-cell-group>
           <p v-if="!detail.lineName" class="noMore">
@@ -46,15 +46,15 @@
             配送信息
           </h2>
           <van-cell-group>
-            <van-cell title="预计每日平均配送点位数" :value="detail.deliveryNum" />
-            <van-cell title="预计每日平均总里程(公里)" :value="detail.distance" />
-            <van-cell title="预计月出车天数" :value="detail.month" />
+            <van-cell title="预计每日平均配送点位数" :value="detail.deliveryNum | DataIsNull" />
+            <van-cell title="预计每日平均总里程(公里)" :value="detail.distance | DataIsNull" />
+            <van-cell title="预计月出车天数" :value="detail.month | DataIsNull" />
             <van-cell v-for="item in detail.lineDeliveryInfoFORMS" :key="item.id" title="预计日工作时间">
               {{ item.workingTimeStart }}~{{ item.workingTimeEnd }}
             </van-cell>
-            <van-cell title="预计每日货物总体积(立方米)" :value="detail.volume" />
-            <van-cell title="预计单件货物重量(kg)" :value="detail.singleCargoWeightName" />
-            <van-cell title="每日配送趟数" :value="detail.dayNumName" />
+            <van-cell title="预计每日货物总体积(立方米)" :value="detail.volume | DataIsNull" />
+            <van-cell title="预计单件货物重量(kg)" :value="detail.singleCargoWeightName | DataIsNull" />
+            <van-cell title="每日配送趟数" :value="detail.dayNumName | DataIsNull" />
           </van-cell-group>
           <p v-if="!detail.deliveryNum" class="noMore">
             暂无信息
@@ -65,9 +65,9 @@
             关键信息
           </h2>
           <van-cell-group>
-            <van-cell title="每日总里程（公里）" :value="detail.distance" />
-            <van-cell title="预计月收入" :value="monthlyTransaction" />
-            <van-cell title="配送总时长" :value="timeDiff" />
+            <van-cell title="每日总里程（公里）" :value="detail.distance | DataIsNull" />
+            <van-cell title="预计月收入" :value="monthlyTransaction | DataIsNull" />
+            <van-cell title="配送总时长" :value="timeDiff | DataIsNull" />
           </van-cell-group>
           <p v-if="!detail.distance" class="noMore">
             暂无信息
@@ -96,7 +96,7 @@
           </p>
         </van-tab>
       </van-tabs>
-      <van-button round type="info" block class="btn" @click="pushSendLink">
+      <van-button round type="info" block class="btn" :disabled="disable" @click="pushSendLink">
         发送此线路
       </van-button>
       <div v-if="backBtn" class="backBtn" @click="goLine">
@@ -135,6 +135,7 @@ export default {
       active: 1,
       detail: {},
       clueDetail: [],
+      disable: false,
       logList: [],
       follow: [],
       action: [],
@@ -189,12 +190,16 @@ export default {
       })
     },
     pushSendLink() {
+      Toast.loading({
+        message: '正在生产二维码...',
+        forbidClick: true
+      });
       const hostName = window.location.href
       let that = this;
+      that.disable = true;
       getMediaIdOfLineDetail({
         lineId: that.lineId,
-        // busiType: that.detail.busiType
-        busiType: 0
+        busiType: that.detail.busiType
       }).then((res) => {
         if (res.data.success) {
           let mediaidNew = res.data.data;
@@ -242,6 +247,8 @@ export default {
                             mediaid: mediaidNew // 图片的素材id
                           }
                             }, function(res) {
+                              Toast.clear();
+                              that.disable = false;
                               let lineIdNeedBack = { lineId: that.lineId, timeDiff: that.timeDiff, monthlyTransaction: that.monthlyTransaction }
                               localStorage.setItem('lineIdNeedBack', JSON.stringify(lineIdNeedBack))
                             })

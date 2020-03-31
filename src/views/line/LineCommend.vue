@@ -65,7 +65,7 @@ export default {
       total: 0,
       page: 1,
       show: false,
-      // beforePullDown: false,
+      beforePullDown: false,
       actions: [
         { name: '产品介绍', color: '#3F8AF2' },
         { name: '推荐线路', color: '#3F8AF2' }
@@ -140,7 +140,7 @@ export default {
                                   if (lineIdNeedBack.lineId) {
                                     localStorage.removeItem('lineIdNeedBack')
                                     that.$destroy(true)
-                                    that.$router.replace({ path: '/linedetail', query: { id: lineIdNeedBack.lineId, timeDiff: lineIdNeedBack.timeDiff, monthlyTransaction: lineIdNeedBack.monthlyTransaction, backBtn: 1 }})
+                                    that.$router.push({ path: '/linedetail', query: { id: lineIdNeedBack.lineId, timeDiff: lineIdNeedBack.timeDiff, monthlyTransaction: lineIdNeedBack.monthlyTransaction, backBtn: 1 }})
                                   }
                                 } else {
                                   that.getList()
@@ -221,7 +221,7 @@ export default {
           if (!this.beforePullDown) {
             this.beforePullDown = true
           }
-          if (this.list.length === this.total && this.list.length < 4) {
+          if (this.list.length === this.total || this.list.length < 4) {
             this.loadedAll = true
           } else {
             this.loadedAll = false

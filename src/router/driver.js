@@ -8,6 +8,15 @@ export default [
       // auth: true,
       keepAlive: true
     }
+  }, {
+    path: '/driverdetail',
+    name: 'driverdetail',
+    component: () => import('views/driver/DriverDetail.vue'),
+    meta: {
+      title: '司机详情',
+      // auth: true,
+      keepAlive: true
+    }
   }
 ]
 

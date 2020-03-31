@@ -40,6 +40,14 @@ export function marchPhone(data) {
   })
 }
 
+export function matchConfirm(data) {
+  return request({
+    url: '/api/driver/driver/match/driver/phone/confirm',
+    method: 'post',
+    data
+  })
+}
+
 export function driverDetail(data) {
   return request({
     url: '/api/driver/driver/detail',
@@ -59,6 +67,22 @@ export function clueDetail(data) {
 export function clueLog(data) {
   return request({
     url: '/api/driver/driver/clue/log/list',
+    method: 'get',
+    params: data
+  })
+}
+
+export function queryOrdersByDriverId(data) {
+  return request({
+    url: '/api/driver/driver/queryOrdersByDriverId',
+    method: 'get',
+    params: data
+  })
+}
+
+export function relatedLineInformation(data) {
+  return request({
+    url: '/api/driver/driver/relatedLineInformation',
     method: 'get',
     params: data
   })
