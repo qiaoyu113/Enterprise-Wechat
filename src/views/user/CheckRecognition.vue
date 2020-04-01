@@ -202,12 +202,22 @@ export default {
       })
     },
     getDetail(driverId, externalUserId, driverType) {
+      Toast.loading({
+        duration: 0, // 持续展示 toast
+        forbidClick: true, // 禁用背景点击
+        loadingType: 'spinner',
+        message: '加载中...'
+      });
       if (driverType === 1) {
         driverDetail({
           driverId: driverId
         }).then((res) => {
           if (res.data.success) {
+            Toast.clear();
             this.detail = res.data.data
+          } else {
+            Toast.clear();
+            Toast.fail(res.data.errorMsg);
           }
         })
         queryOrdersByDriverId({
@@ -215,6 +225,9 @@ export default {
         }).then((res) => {
           if (res.data.success) {
             this.orderList = res.data.data;
+          } else {
+            Toast.clear();
+            Toast.fail(res.data.errorMsg);
           }
         })
         relatedLineInformation({
@@ -222,6 +235,9 @@ export default {
         }).then((res) => {
           if (res.data.success) {
             this.lineList = res.data.data.lineTenderInformationVOS;
+          } else {
+            Toast.clear();
+            Toast.fail(res.data.errorMsg);
           }
         })
         // getRecord({
@@ -234,6 +250,9 @@ export default {
           if (res.data.success) {
             console.log(res.data.data)
             this.detail = res.data.data
+          } else {
+            Toast.clear();
+            Toast.fail(res.data.errorMsg);
           }
         })
         clueLog({
@@ -241,6 +260,9 @@ export default {
         }).then((res) => {
           if (res.data.success) {
             this.clueLog = res.data.data
+          } else {
+            Toast.clear();
+            Toast.fail(res.data.errorMsg);
           }
         })
       }
