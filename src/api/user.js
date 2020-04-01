@@ -51,8 +51,8 @@ export function matchConfirm(data) {
 export function driverDetail(data) {
   return request({
     url: '/api/driver/driver/detail',
-    method: 'post',
-    data
+    method: 'get',
+    params: data
   })
 }
 
