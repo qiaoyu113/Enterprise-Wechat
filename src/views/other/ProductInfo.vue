@@ -72,7 +72,6 @@ export default {
       let that = this;
       const hostName = window.location.href
       let index = this.radio
-      console.log(index)
       if (index === '') {
         Toast.fail('请选择一个产品')
         return false;
@@ -121,7 +120,7 @@ export default {
                               mediaid: that.productList[index].mediaId // 图片的素材id
                             }
                         }, function(res) {
-                          console.log('发送图片回调', res)
+                          // console.log('发送图片回调', res)
                           // // localStorage.setItem('mediaid', JSON.stringify(res))
                           // wx.invoke('sendChatMessage', {
                           //   msgtype: 'text', // 消息类型，必填

@@ -117,7 +117,6 @@ export default {
                   }).then((res) => {
                     if (res.data.success) {
                       const agentData = res.data.data
-                      console.log('agentData', agentData)
                       wx.agentConfig({
                         corpid: agentData.corpId, // 必填，企业微信的corpid，必须与当前登录的企业一致
                         agentid: agentData.agentId, // 必填，企业微信的应用id （e.g. 1000247）

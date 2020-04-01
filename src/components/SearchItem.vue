@@ -169,7 +169,6 @@ export default {
       this.cargoValCode = ''
     },
     onSearch(val) {
-      console.log(val)
       this.showBox = true;
     },
     onConfirm(value) {

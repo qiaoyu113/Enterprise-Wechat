@@ -98,7 +98,6 @@ export default {
         clueId: driverId
       }).then((res) => {
         if (res.data.success) {
-          console.log(res.data.data)
           this.detail = res.data.data
         }
       })

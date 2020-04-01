@@ -173,7 +173,6 @@ export default {
     let driverType = this.$route.query.driverType;
     this.driverType = driverType;
     const externalUserId = localStorage.getItem('externalUserId')
-    alert(externalUserId)
     if (driverId && externalUserId && driverType) {
       this.getDetail(driverId, externalUserId, driverType)
     } else {
@@ -249,7 +248,6 @@ export default {
           clueId: driverId
         }).then((res) => {
           if (res.data.success) {
-            console.log(res.data.data)
             this.detail = res.data.data
           } else {
             Toast.clear();

@@ -91,14 +91,12 @@ export default {
                 'getCurExternalContact'
               ],
               success: function(res) {
-                console.log('checkJsApi', res)
                 getAgentSignature({
                   agentId: that.GLOBAL.agentId,
                   url: hostName
                 }).then((res) => {
                   if (res.data.success) {
                     const agentData = res.data.data
-                    console.log('agentData', agentData)
                     wx.agentConfig({
                       corpid: agentData.corpId, // 必填，企业微信的corpid，必须与当前登录的企业一致
                       agentid: agentData.agentId, // 必填，企业微信的应用id （e.g. 1000247）
@@ -107,7 +105,6 @@ export default {
                       signature: agentData.signature, // 必填，签名，见附录1
                       jsApiList: ['sendChatMessage', 'getCurExternalContact'], // 必填
                       success: function(res) {
-                        console.log('success', res)
                         wx.invoke('getCurExternalContact', {
                         }, function(res) {
                           if (res.err_msg === 'getCurExternalContact:ok') {

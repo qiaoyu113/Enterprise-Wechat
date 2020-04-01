@@ -151,7 +151,6 @@ module.exports = {
       // config.plugin('analyzer').use(BundleAnalyzerPlugin)
       config.plugin('html').tap(args => {
         args[0].cdn = cdn
-        console.log('args', args)
         return args
       })
       config.externals(externals)
