@@ -92,6 +92,7 @@ export default {
               ],
               success: function(res) {
                 console.log('checkJsApi', res)
+                alert('getAgentSignature' + that.GLOBAL.agentId)
                 getAgentSignature({
                   agentId: that.GLOBAL.agentId,
                   url: hostName
