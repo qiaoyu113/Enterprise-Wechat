@@ -11,6 +11,7 @@ import '@/style/common.scss'
 import { Lazyload } from 'vant'
 import defaultSettings from '@/settings'
 import * as filters from '@/filters'
+import global_ from 'components/Global'
 
 /**
  * If you don't want to use mock-server
@@ -45,6 +46,8 @@ Object.keys(filters).forEach(key => {
 })
 
 Vue.config.productionTip = false
+
+Vue.prototype.GLOBAL = global_
 
 new Vue({
   router,

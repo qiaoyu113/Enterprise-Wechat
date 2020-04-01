@@ -48,7 +48,7 @@
 </template>
 <script>
 import { Tabbar, TabbarItem, Toast, Tab, Tabs } from 'vant'
-import { fetchList } from '@/api/clue'
+// import { fetchList } from '@/api/clue'
 import FooterTabbar from '@/components/FooterTabbar'
 import VoPages from 'vo-pages'
 import 'vo-pages/lib/vo-pages.css'
@@ -210,24 +210,23 @@ export default {
       this.getList()
     },
     async getList(loadMore = true) {
-      fetchList(this.listQuery).then(result => {
-        console.log(result)
-        this.total = result.data.data.length
-        const newList = result.data.data.map(item => {
-          return item
-        })
-        if (loadMore) {
-          this.list = this.list.concat(newList)
-        } else {
-          this.list = newList
-        }
-        if (!this.beforePullDown) {
-          this.beforePullDown = true
-        }
-        this.loadedAll = this.total <= this.list.length
-      }).catch(error => {
-        Toast.error(error)
-      })
+      // fetchList(this.listQuery).then(result => {
+      // console.log(result)
+      // letresult.data.data = []
+      this.total = 0
+      const newList = []
+      if (loadMore) {
+        this.list = this.list.concat(newList)
+      } else {
+        this.list = newList
+      }
+      if (!this.beforePullDown) {
+        this.beforePullDown = true
+      }
+      this.loadedAll = this.total <= this.list.length
+      // }).catch(error => {
+      //   Toast.error(error)
+      // })
     }
   }
 }

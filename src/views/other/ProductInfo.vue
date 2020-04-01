@@ -101,7 +101,7 @@ export default {
               ],
               success: function(res) {
                 getAgentSignature({
-                  agentId: '1000013',
+                  agentId: this.GLOBAL.agentId,
                   url: hostName
                 }).then((res) => {
                   if (res.data.success) {

@@ -92,7 +92,7 @@ export default {
     },
     linkGetCode() {
       var local = window.location.href
-      window.location.href = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=ww1350e9d33db61819&redirect_uri=' + encodeURIComponent(local) + '&response_type=code&scope=snsapi_base&agentid=1000013&state=state#wechat_redirect'
+      window.location.href = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=ww1350e9d33db61819&redirect_uri=' + encodeURIComponent(local) + '&response_type=code&scope=snsapi_base&agentid=' + this.GLOBAL.agentId + '&state=state#wechat_redirect'
     },
     reLinkGetCode() {
       localStorage.removeItem('code');
@@ -115,7 +115,7 @@ export default {
       login({
         code: code,
         state: '',
-        agentId: '1000013'
+        agentId: this.GLOBAL.agentId
       })
         .then(res => {
           if (res.data.success) {

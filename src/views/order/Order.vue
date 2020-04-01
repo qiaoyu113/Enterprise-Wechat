@@ -8,7 +8,7 @@
         </van-tab>
         <van-tab title="已成交">
         </van-tab>
-        <van-tab title="已经">
+        <van-tab title="未跑">
         </van-tab>
         <van-tab title="在跑">
         </van-tab>
