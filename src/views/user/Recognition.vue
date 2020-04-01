@@ -112,7 +112,6 @@ export default {
                         }, function(res) {
                           if (res.err_msg === 'getCurExternalContact:ok') {
                             // console.log('userId', res.userId) // 返回当前外部联系人userId
-                            alert(res.userId.toString())
                             localStorage.setItem('externalUserId', res.userId.toString())
                             externalUserId({
                               externalUserId: res.userId
@@ -207,8 +206,6 @@ export default {
                 })
               },
               fail: function(res) {
-                alert(that.GLOBAL.agentId)
-                alert(JSON.stringify(res))
                 alert('版本过低请升级2');
               }
             });
