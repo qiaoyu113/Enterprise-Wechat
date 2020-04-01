@@ -173,6 +173,7 @@ export default {
     let driverType = this.$route.query.driverType;
     this.driverType = driverType;
     const externalUserId = localStorage.getItem('externalUserId')
+    alert(externalUserId)
     if (driverId && externalUserId && driverType) {
       this.getDetail(driverId, externalUserId, driverType)
     } else {
