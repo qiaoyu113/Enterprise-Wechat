@@ -206,7 +206,7 @@ export default {
                 })
               },
               fail: function(res) {
-                alert(res)
+                alert(JSON.stringify(res))
                 alert('版本过低请升级2');
               }
             });
