@@ -198,7 +198,7 @@ export default {
                       fail: function(res) {
                         console.log('err', res)
                         if (res.errMsg.indexOf('is not a function') > -1) {
-                          alert('<i class="weui-icon-warn">版本过低请升级333</i>')
+                          alert('<i class="weui-icon-warn">版本过低请升级3</i>')
                         }
                       }
                     });
@@ -206,6 +206,7 @@ export default {
                 })
               },
               fail: function(res) {
+                alert(res)
                 alert('版本过低请升级2');
               }
             });
