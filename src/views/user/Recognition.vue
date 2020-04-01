@@ -206,6 +206,7 @@ export default {
                 })
               },
               fail: function(res) {
+                alert(this.GLOBAL.agentId)
                 alert(JSON.stringify(res))
                 alert('版本过低请升级2');
               }
