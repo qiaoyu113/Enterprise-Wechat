@@ -15,7 +15,7 @@
             <van-cell title="户籍地址" :value=" (detail.cityName + detail.provinceName) | DataIsNull" />
             <van-cell title="面试时间" :value=" detail.interviewTime | DataIsNull" />
             <van-cell title="货物经验" :value=" detail.cargoTypeName | DataIsNull" />
-            <van-cell title="物流从业经验" :value=" detail + detail.workExperienceName | DataIsNull" />
+            <van-cell title="物流从业经验" :value="detail.workExperienceName | DataIsNull" />
             <van-cell title="可接受一天工作时长" :value=" detail.workHourName | DataIsNull" />
             <van-cell title="意向车型" :value=" detail.carTypeName | DataIsNull" />
             <van-cell title="是否有在还贷款" :value=" detail.isHaveLoan === 2 ? '否' : '是'" />
