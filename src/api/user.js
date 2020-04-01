@@ -27,8 +27,8 @@ export function getCorpSignature(data) {
 export function externalUserId(data) {
   return request({
     url: '/api/driver/driver/match/driver/externalUserId',
-    method: 'post',
-    data
+    method: 'get',
+    params: data
   })
 }
 

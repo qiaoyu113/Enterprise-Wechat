@@ -114,9 +114,9 @@ export default {
                             // console.log('userId', res.userId) // 返回当前外部联系人userId
                             alert(res.userId.toString())
                             localStorage.setItem('externalUserId', res.userId.toString())
-                            externalUserId(
-                              res.userId
-                            ).then((res) => {
+                            externalUserId({
+                              externalUserId: res.userId
+                            }).then((res) => {
                               if (res.data.success) {
                                 if (res.data.data.matchSuccess) {
                                   // 1是司机，2是线索
