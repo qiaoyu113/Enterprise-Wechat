@@ -93,7 +93,7 @@ export default {
               success: function(res) {
                 console.log('checkJsApi', res)
                 getAgentSignature({
-                  agentId: this.GLOBAL.agentId,
+                  agentId: that.GLOBAL.agentId,
                   url: hostName
                 }).then((res) => {
                   if (res.data.success) {
