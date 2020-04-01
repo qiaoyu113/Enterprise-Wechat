@@ -112,7 +112,7 @@ export default {
                         }, function(res) {
                           if (res.err_msg === 'getCurExternalContact:ok') {
                             // console.log('userId', res.userId) // 返回当前外部联系人userId
-                            localStorage.setItem('externalUserId', res.userId)
+                            localStorage.setItem('externalUserId', toString(res.userId))
                             externalUserId(
                               res.userId
                             ).then((res) => {
