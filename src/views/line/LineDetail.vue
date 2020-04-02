@@ -14,13 +14,13 @@
             <van-cell title="收货人类型" :value="detail.receiverType | DataIsNull" />
             <van-cell title="车型" :value="detail.carTypeName | DataIsNull" />
             <van-cell title="仓位置" :value="detail.warehouse | DataIsNull" />
-            <van-cell title="配送区域是否固定" :value=" detail.distributionSites === 2 ? '否' : '是'" />
-            <van-cell title="是否需要返仓" :value=" detail.returnWarehouse === 2 ? '否' : '是'" />
-            <van-cell title="是否需要搬运" :value=" detail.carry === 2 ? '否' : '是'" />
-            <van-cell title="是否需要回单" :value=" detail.returnBill === 2 ? '否' : '是'" />
+            <van-cell title="配送区域是否固定" :value=" detail.distributionSites ? (detail.distributionSites === 2 ? '否' : '是') : '暂无数据'" />
+            <van-cell title="是否需要返仓" :value=" detail.returnWarehouse ? (detail.returnWarehouse === 2 ? '否' : '是') : '暂无数据'" />
+            <van-cell title="是否需要搬运" :value=" detail.carry ? (detail.carry === 2 ? '否' : '是') : '暂无数据'" />
+            <van-cell title="是否需要回单" :value=" detail.returnBill ? (detail.returnBill === 2 ? '否' : '是') : '暂无数据'" />
             <van-cell title="收入结算方式" :value=" detail.incomeSettlementMethodName" />
-            <van-cell v-if="detail.incomeSettlementMethod === 1" title="货主单趟最低报价" :value=" detail.preLowestQuotations === 2 ? '否' : '是'" />
-            <van-cell v-if="detail.incomeSettlementMethod === 1" title="预估单趟费用(元)(含油耗、过路、过桥)" :value=" detail.monthlyFuelConsumption === 2 ? '否' : '是'" />
+            <van-cell v-if="detail.incomeSettlementMethod === 1" title="货主单趟最低报价" :value=" detail.preLowestQuotations ? (detail.preLowestQuotations === 2 ? '否' : '是') : '暂无数据'" />
+            <van-cell v-if="detail.incomeSettlementMethod === 1" title="预估单趟费用(元)(含油耗、过路、过桥)" :value=" detail.monthlyFuelConsumption ? (detail.monthlyFuelConsumption === 2 ? '否' : '是') : '暂无数据'" />
             <van-cell v-if="detail.incomeSettlementMethod === 1" title="单趟去油净收入" :value="Number(detail.preLowestQuotations) - Number(detail.monthlyFuelConsumption) ? Number(detail.preLowestQuotations) - Number(detail.monthlyFuelConsumption) : 0" />
             <van-cell v-if="detail.incomeSettlementMethod === 2" title="预计货主月报价" :value=" detail.preLowestQuotations | NumFormat" />
             <van-cell v-if="detail.incomeSettlementMethod === 2" title="预估月费用(元)(含油耗、过路、过桥)" :value=" detail.monthlyFuelConsumption | NumFormat" />
@@ -38,7 +38,7 @@
             <van-cell title="线路类型" :value="detail.distinguishedTypeName | DataIsNull" />
             <van-cell v-if="detail.waitDirveValidityDuration > 0" title="线路失效截止时间" :value=" detail.waitDirveValidity | DataIsNull" />
             <van-cell v-if="detail.waitDirveValidityDuration > 0" title="等待上车有效期(天)" :value=" detail.waitDirveValidityDuration | DataIsNull" />
-            <van-cell title="首岗是否有人跟车" :value=" detail.firstNeededFollow === 2 ? '否' : '是'" />
+            <van-cell title="首岗是否有人跟车" :value="detail.firstNeededFollow ? (detail.firstNeededFollow === 2 ? '否' : '是') : '暂无数据'" />
           </van-cell-group>
           <p v-if="!detail.lineName" class="noMore">
             暂无信息

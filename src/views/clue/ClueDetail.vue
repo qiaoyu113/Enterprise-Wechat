@@ -11,8 +11,8 @@
             <van-cell title="联系电话" :value="detail.phone" />
             <van-cell title="来源渠道" :value="detail.sourceTypeName" />
             <van-cell title="工作城市" :value="detail.workCityName" />
-            <van-cell title="是否能邀约面试" :value=" detail.invited === 2 ? '否' : '是'" />
-            <van-cell title="是否添加微信" :value=" detail.isAddWechat === 2 ? '否' : '是'" />
+            <van-cell title="是否能邀约面试" :value=" detail.invited ? (detail.invited === 2 ? '否' : '是') : '暂无数据'" />
+            <van-cell title="是否添加微信" :value=" detail.isAddWechat ? (detail.isAddWechat === 2 ? '否' : '是') : '暂无数据'" />
           </van-cell-group>
           <p v-if="JSON.stringify(detail) == '{}'" class="noMore">
             暂无信息
