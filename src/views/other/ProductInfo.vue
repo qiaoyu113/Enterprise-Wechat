@@ -76,6 +76,10 @@ export default {
         Toast.fail('请选择一个产品')
         return false;
       }
+      Toast.loading({
+        message: '正在发送产品...',
+        forbidClick: true
+      });
       getCorpSignature({
         url: hostName
       }).then((res) => {
@@ -120,6 +124,8 @@ export default {
                               mediaid: that.productList[index].mediaId // 图片的素材id
                             }
                         }, function(res) {
+                          Toast.clear();
+                          Toast.success('发送成功')
                           // console.log('发送图片回调', res)
                           // // localStorage.setItem('mediaid', JSON.stringify(res))
                           // wx.invoke('sendChatMessage', {

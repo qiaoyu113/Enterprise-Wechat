@@ -105,7 +105,8 @@ export default {
                       signature: agentData.signature, // 必填，签名，见附录1
                       jsApiList: ['sendChatMessage', 'getCurExternalContact'], // 必填
                       success: function(res) {
-                        console.log(res)
+                        console.log(111, res)
+                        alert(res)
                         wx.invoke('getCurExternalContact', {
                         }, function(res) {
                           console.log(res)
