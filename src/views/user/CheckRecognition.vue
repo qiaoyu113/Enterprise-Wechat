@@ -12,29 +12,29 @@
             <van-cell title="联系电话" :value="detail.phone | DataIsNull" />
             <van-cell title="司机编号" :value="detail.driverId | DataIsNull" />
             <van-cell title="工作城市" :value="detail.workCityName | DataIsNull" />
-            <van-cell title="户籍地址" :value=" detail.cityName + detail.provinceName | DataIsNull" />
+            <van-cell title="户籍地址" :value=" detail.cityName | DataIsNull + detail.provinceName" />
             <van-cell title="面试时间" :value=" detail.interviewTime | DataIsNull" />
             <van-cell title="货物经验" :value=" detail.cargoTypeName | DataIsNull" />
             <van-cell title="物流从业经验" :value="detail.workExperienceName | DataIsNull" />
             <van-cell title="可接受一天工作时长" :value=" detail.workHourName | DataIsNull" />
             <van-cell title="意向车型" :value=" detail.carTypeName | DataIsNull" />
-            <van-cell title="是否有在还贷款" :value=" detail.isHaveLoan === 2 ? '否' : '是'" />
+            <van-cell title="是否有在还贷款" :value=" detail.isHaveLoan ? (detail.isHaveLoan === 2 ? '否' : '是') : '暂无数据'" />
             <van-cell title="期望月收入" :value=" detail.expMonthlyIncomeName | DataIsNull" />
             <van-cell title="司机年龄" :value=" detail.age | DataIsNull" />
             <van-cell title="可接受首付范围" :value=" detail.acceptPayRangeName | DataIsNull" />
             <van-cell title="现居住地址" :value=" detail.address | DataIsNull" />
             <van-cell title="之前在哪工作" :value=" detail.whereWorked | DataIsNull" />
             <van-cell title="来源渠道" :value=" detail.sourceName | DataIsNull" />
-            <van-cell title="征信是否通过" :value="detail.isCreditPass === 2 ? '否' : '是'" />
-            <van-cell title="是否跟车" :value="detail.isPay === 2 ? '否' : '是'" />
+            <van-cell title="征信是否通过" :value=" detail.isCreditPass ? (detail.isCreditPass === 2 ? '否' : '是') : '暂无数据'" />
+            <van-cell title="是否跟车" :value="detail.isPay ? (detail.isPay === 2 ? '否' : '是') : '暂无数据'" />
             <van-cell title="意向金缴纳日期" :value=" detail.payDate | DataIsNull" />
             <van-cell title="上岗时间" :value=" detail.goToWorkTime | DataIsNull" />
             <van-cell title="平均月收入" :value=" detail.monthlyIncome | DataIsNull" />
             <van-cell title="户口类型" :value=" detail.accountType | DataIsNull" />
             <van-cell title="家里几个孩子" :value=" detail.childrenNum | DataIsNull" />
             <van-cell title="孩子的平均年龄" :value=" detail.childrenAge | DataIsNull" />
-            <van-cell title="是否有货车" :value="detail.isHaveCar === 2 ? '否' : '是'" />
-            <van-cell title="征信是否通过" :value="detail.isCreditPass === 2 ? '否' : '是'" />
+            <van-cell title="是否有货车" :value="detail.isHaveCar ? (detail.isHaveCar === 2 ? '否' : '是') : '暂无数据'" />
+            <van-cell title="征信是否通过" :value="detail.isCreditPass ? (detail.isCreditPass === 2 ? '否' : '是') : '暂无数据'" />
           </van-cell-group>
           <p v-if="JSON.stringify(detail) == '{}'" class="noMore">
             暂无信息
