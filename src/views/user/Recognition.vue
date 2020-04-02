@@ -106,7 +106,7 @@ export default {
                       jsApiList: ['sendChatMessage', 'getCurExternalContact'], // 必填
                       success: function(res) {
                         console.log(111, res)
-                        alert(res)
+                        alert(res.errMsg)
                         wx.invoke('getCurExternalContact', {
                         }, function(res) {
                           console.log(res)
@@ -124,7 +124,7 @@ export default {
                                   if (state === 1) {
                                     that.$router.replace({ path: '/driverDetail', query: { driverId: driverId }})
                                   } else if (state === 2) {
-                                    that.$router.replace({ path: '/clueDetail', query: { clueId: driverId }})
+                                    that.$router.replace({ path: '/cluedetail', query: { clueId: driverId }})
                                   } else {
                                     // 无法识别
                                     that.$router.replace({ path: '/unrecognition' })
