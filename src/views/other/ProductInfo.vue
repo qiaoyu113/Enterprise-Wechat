@@ -142,8 +142,6 @@ export default {
                           //   // localStorage.setItem('text', JSON.stringify(res))
                           // })
                         })
-                        alert(777)
-                        Toast.clear();
                       },
                       fail: function(res) {
                         console.log('err', res)
