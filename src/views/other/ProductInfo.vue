@@ -94,15 +94,13 @@ export default {
             timestamp: Number(data.timestamp), // 必填，生成签名的时间戳
             nonceStr: data.nonceStr, // 必填，生成签名的随机串
             signature: data.signature, // 必填，签名，见附录1
-            jsApiList: ['agentConfig'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+            jsApiList: ['agentConfig', 'sendChatMessage', 'getCurExternalContact'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
           });
           wx.ready(function() {
             // 开启企业微信debug模式wx.config里的debug为true
             wx.checkJsApi({
               jsApiList: [
-                'agentConfig',
-                'sendChatMessage',
-                'getCurExternalContact'
+                'agentConfig'
               ],
               success: function(res) {
                 getAgentSignature({
@@ -120,12 +118,12 @@ export default {
                       signature: agentData.signature, // 必填，签名，见附录1
                       jsApiList: ['sendChatMessage', 'getCurExternalContact'], // 必填
                       success: function(res) {
-                        alert(that.productList[index].mediaId)
+                        let id = that.productList[index].mediaId
                         wx.invoke('sendChatMessage', {
                           msgtype: 'image', // 消息类型，必填
                           image:
                             {
-                              mediaid: that.productList[index].mediaId // 图片的素材id
+                              mediaid: id // 图片的素材id
                             }
                         }, function(res) {
                           Toast.clear();
@@ -143,7 +141,6 @@ export default {
                           //   // localStorage.setItem('text', JSON.stringify(res))
                           // })
                         })
-                        alert(4444)
                       },
                       fail: function(res) {
                         alert(3333)
