@@ -127,7 +127,7 @@ export default {
                             }
                         }, function(res) {
                           Toast.clear();
-                          Toast.success('')
+                          Toast.success(res)
                           that.disable = false;
                           console.log('发送图片回调', res)
                           // // localStorage.setItem('mediaid', JSON.stringify(res))
@@ -146,6 +146,7 @@ export default {
                         console.log('err', res)
                         that.disable = false;
                         Toast.clear();
+                        Toast.fail(res)
                         if (res.errMsg.indexOf('is not a function') > -1) {
                           alert('<i class="weui-icon-warn">版本过低请升级</i>')
                         }
