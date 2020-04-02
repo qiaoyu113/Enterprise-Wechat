@@ -88,21 +88,21 @@ export default {
     }
   },
   mounted() {
-    let driverId = this.$route.query.driverId;
-    this.clueId = driverId;
-    this.getDetail(driverId)
+    let clueId = this.$route.query.clueId;
+    this.clueId = clueId;
+    this.getDetail(clueId)
   },
   methods: {
-    getDetail(driverId) {
+    getDetail(clueId) {
       clueDetail({
-        clueId: driverId
+        clueId: clueId
       }).then((res) => {
         if (res.data.success) {
           this.detail = res.data.data
         }
       })
       clueLog({
-        clueId: driverId
+        clueId: clueId
       }).then((res) => {
         if (res.data.success) {
           this.clueLog = res.data.data
