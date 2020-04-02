@@ -111,6 +111,7 @@ export default {
                 }).then((res) => {
                   if (res.data.success) {
                     const agentData = res.data.data
+                    alert(111)
                     wx.agentConfig({
                       corpid: agentData.corpId, // 必填，企业微信的corpid，必须与当前登录的企业一致
                       agentid: agentData.agentId, // 必填，企业微信的应用id （e.g. 1000247）
@@ -119,6 +120,7 @@ export default {
                       signature: agentData.signature, // 必填，签名，见附录1
                       jsApiList: ['sendChatMessage', 'getCurExternalContact'], // 必填
                       success: function(res) {
+                        alert(222)
                         wx.invoke('sendChatMessage', {
                           msgtype: 'image', // 消息类型，必填
                           image:
@@ -127,7 +129,7 @@ export default {
                             }
                         }, function(res) {
                           Toast.clear();
-                          Toast.success(JSON.stringify(res))
+                          alert(JSON.stringify(res))
                           that.disable = false;
                           console.log('发送图片回调', res)
                           // // localStorage.setItem('mediaid', JSON.stringify(res))

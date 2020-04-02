@@ -7,13 +7,13 @@
             <h2 class="van-doc-demo-block__title">
               基本信息
             </h2>
-            <van-cell title="姓名" :value="detail.name" />
-            <van-cell title="联系电话" :value="detail.phone" />
-            <van-cell title="来源渠道" :value="detail.sourceTypeName" />
-            <van-cell title="工作城市" :value="detail.workCityName" />
+            <van-cell title="姓名" :value="detail.name | DataIsNull" />
+            <van-cell title="联系电话" :value="detail.phone | DataIsNull" />
+            <van-cell title="来源渠道" :value="detail.sourceTypeName | DataIsNull" />
+            <van-cell title="工作城市" :value="detail.workCityName | DataIsNull" />
             <van-cell title="是否能邀约面试" :value=" detail.invited ? (detail.invited === 2 ? '否' : '是') : '暂无数据'" />
             <van-cell title="是否添加微信" :value=" detail.isAddWechat ? (detail.isAddWechat === 2 ? '否' : '是') : '暂无数据'" />
-            <van-cell title="工作城市" :value="detail.workCityName" />
+            <van-cell title="备注" :value="detail.remark | DataIsNull" />
           </van-cell-group>
           <p v-if="JSON.stringify(detail) == '{}'" class="noMore">
             暂无信息
@@ -24,8 +24,8 @@
             <h2 class="van-doc-demo-block__title">
               跟进信息
             </h2>
-            <van-cell title="跟进方式" :value="detail.wayName" />
-            <van-cell title="跟进情况" :value="detail.situation" />
+            <van-cell title="跟进方式" :value="detail.wayName | DataIsNull" />
+            <van-cell title="跟进情况" :value="detail.situation | DataIsNull" />
           </van-cell-group>
           <p v-if="JSON.stringify(detail) == '{}'" class="noMore">
             暂无信息

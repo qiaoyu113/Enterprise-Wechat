@@ -77,7 +77,7 @@ export default {
               //   // 无法识别
               //   Toast.fail('暂未匹配到客户信息');
               // }
-              this.$router.replace({ path: '/checkrecognition', query: { driverId: driverId, driverType: driverType }})
+              that.$router.replace({ path: '/checkrecognition', query: { driverId: driverId, driverType: driverType }})
             } else {
               // 无法识别
               Toast.fail('暂未匹配到客户信息');
@@ -148,7 +148,7 @@ export default {
                                     //   // 无法识别
                                     //   Toast.fail('暂未匹配到客户信息');
                                     // }
-                                    this.$router.replace({ path: '/checkrecognition', query: { driverId: driverId }})
+                                    that.$router.replace({ path: '/checkrecognition', query: { driverId: driverId }})
                                   } else {
                                   // 无法识别
                                     Toast.fail('暂未匹配到客户信息');
