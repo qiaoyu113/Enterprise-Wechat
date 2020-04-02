@@ -112,8 +112,6 @@ export default {
       }
     },
     handleLogin(code) {
-      alert(window.location.host)
-      alert(this.GLOBAL.agentId)
       login({
         code: code,
         state: '',

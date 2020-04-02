@@ -2,7 +2,7 @@
 let agentId = '1000016';
 let url = window.location.host
 if (url !== 'firmiana-wechat.yunniao.cn') {
-  if (url !== 'firmiana-open-api.m1.ynimg.cn') {
+  if (url !== 'firmiana-wechat.m1.yunniao.cn') {
     // url = 'http://firmiana-wechat.m1.yunniao.cn/'
     agentId = '1000015'
   } else {
