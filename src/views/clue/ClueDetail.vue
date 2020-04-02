@@ -1,7 +1,7 @@
 <template>
   <div class="clueDetail">
     <div class="list-wrap">
-      <van-tabs v-model="listQuery.state" color="#3986CB" sticky>
+      <van-tabs color="#3986CB" sticky>
         <van-tab title="基本">
           <van-cell-group v-if="JSON.stringify(detail) != '{}'">
             <h2 class="van-doc-demo-block__title">

@@ -12,7 +12,7 @@
         <!-- <p>{{ item.mediaDesc }}</p> -->
       </van-radio>
     </van-radio-group>
-    <van-button round type="info" block class="btn" @click="sendCustmer">
+    <van-button round type="info" block class="btn" :disabled="disable" @click="sendCustmer">
       发送给客户
     </van-button>
   </div>
@@ -46,7 +46,8 @@ export default {
       total: 0,
       page: 1,
       phone: '',
-      show: false
+      show: false,
+      disable: false
     }
   },
   mounted() {
@@ -80,6 +81,7 @@ export default {
         message: '正在发送产品...',
         forbidClick: true
       });
+      that.disable = true;
       getCorpSignature({
         url: hostName
       }).then((res) => {
@@ -126,7 +128,9 @@ export default {
                         }, function(res) {
                           Toast.clear();
                           Toast.success('发送成功')
-                          // console.log('发送图片回调', res)
+                          that.disable = false;
+                          alert(JSON.stringify(res))
+                          console.log('发送图片回调', res)
                           // // localStorage.setItem('mediaid', JSON.stringify(res))
                           // wx.invoke('sendChatMessage', {
                           //   msgtype: 'text', // 消息类型，必填
@@ -141,6 +145,8 @@ export default {
                       },
                       fail: function(res) {
                         console.log('err', res)
+                        that.disable = false;
+                        Toast.clear();
                         if (res.errMsg.indexOf('is not a function') > -1) {
                           alert('<i class="weui-icon-warn">版本过低请升级</i>')
                         }
