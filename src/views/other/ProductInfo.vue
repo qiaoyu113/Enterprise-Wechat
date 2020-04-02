@@ -126,6 +126,7 @@ export default {
                               mediaid: id // 图片的素材id
                             }
                         }, function(res) {
+                          alert(666)
                           Toast.clear();
                           alert(JSON.stringify(res))
                           that.disable = false;
@@ -141,9 +142,10 @@ export default {
                           //   // localStorage.setItem('text', JSON.stringify(res))
                           // })
                         })
+                        alert(777)
+                        Toast.clear();
                       },
                       fail: function(res) {
-                        alert(3333)
                         console.log('err', res)
                         that.disable = false;
                         Toast.clear();
