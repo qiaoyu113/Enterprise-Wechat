@@ -126,7 +126,7 @@ export default {
                             }
                         }, function(res) {
                           Toast.clear();
-                          window.close()
+                          wx.closeWindow()
                           // Toast.success('')
                           that.disable = false;
                           console.log('发送图片回调', res)
