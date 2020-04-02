@@ -8,7 +8,6 @@ export function selectLineTask(data) {
   })
 }
 
-/* 线路详情 */
 export function getLineDetail(data) {
   return request({
     url: '/api/line/line/task/detail',
@@ -17,7 +16,6 @@ export function getLineDetail(data) {
   })
 }
 
-/* 线路详情 */
 export function listByLineId(data) {
   return request({
     url: '/api/bss/v1/bss/tender/listByLineId',
@@ -26,7 +24,6 @@ export function listByLineId(data) {
   })
 }
 
-/* 线路详情 */
 export function loglist(data) {
   return request({
     url: '/api/line/line/task/log/list',
@@ -35,11 +32,19 @@ export function loglist(data) {
   })
 }
 
-/* 线路详情 */
 export function getMediaIdOfLineDetail(data) {
   return request({
     url: '/api/line/v1/wechat/corp/getMediaIdOfLineDetail',
     method: 'get',
     params: data
+  })
+}
+
+/* 二维码 */
+export function getWxaCodeUnlimit(data) {
+  return request({
+    url: '/api/core/v1/wechat/getWxaCodeUnlimit',
+    method: 'post',
+    data
   })
 }

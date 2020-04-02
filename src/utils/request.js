@@ -4,11 +4,12 @@ import store from '@/store'
 import { getToken } from '@/utils/auth'
 
 let url = 'http://firmiana-wechat.yunniao.cn/'
-if (window.location.host !== 'http://firmiana-wechat.yunniao.cn/') {
-  if (location.host !== 'http://firmiana-open-api.d2.ynimg.cn/') {
+if (window.location.host !== 'firmiana-wechat.yunniao.cn') {
+  if (window.location.host !== 'firmiana-open-api-d2.yunniao.cn') {
     url = 'http://firmiana-wechat.m1.yunniao.cn/'
   } else {
     url = 'http://firmiana-open-api-d2.yunniao.cn/'
+    // url = 'http://firmiana-wechat.m1.yunniao.cn/'
   }
 }
 

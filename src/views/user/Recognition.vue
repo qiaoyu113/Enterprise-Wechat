@@ -105,8 +105,10 @@ export default {
                       signature: agentData.signature, // 必填，签名，见附录1
                       jsApiList: ['sendChatMessage', 'getCurExternalContact'], // 必填
                       success: function(res) {
+                        console.log(res)
                         wx.invoke('getCurExternalContact', {
                         }, function(res) {
+                          console.log(res)
                           if (res.err_msg === 'getCurExternalContact:ok') {
                             // console.log('userId', res.userId) // 返回当前外部联系人userId
                             localStorage.setItem('externalUserId', res.userId.toString())
@@ -134,63 +136,10 @@ export default {
                             })
                           } else {
                             // 错误处理
-                            this.btnShow = true;
+                            that.btnShow = true;
+                            alert('外部联系人识别失败')
                           }
                         });
-                        // wx.invoke('sendChatMessage', {
-                        //   msgtype: 'text', // 消息类型，必填
-                        //   text: {
-                        //     content: '测试' // 文本内容
-                        //   },
-                        //   image:
-                        //   {
-                        //     mediaid: '2TLVdgtYCwWc3BXOlAErsdp93e7IKfqA__9OYWVOtNEA_ex0lGEK3cxC1yze78X09' // 图片的素材id
-                        //   },
-                        //   video:
-                        //   {
-                        //     mediaid: '' // 视频的素材id
-                        //   },
-                        //   file:
-                        //   {
-                        //     mediaid: '' // 文件的素材id
-                        //   },
-                        //   news:
-                        //   {
-                        //     link: 'www.baidu.com', // H5消息页面url 必填
-                        //     title: '百度', // H5消息标题
-                        //     desc: '百度', // H5消息摘要
-                        //     imgUrl: 'https://upload.jianshu.io/users/upload_avatars/10311999/16dbb33b-6d2d-47c9-9d6a-fbadccc67e85.png?imageMogr2/auto-orient/strip|imageView2/1/w/96/h/96/format/webp' // H5消息封面图片URL
-                        //   }
-                        // }, function(res) {
-                        //   console.log('测试1通过')
-                        //   wx.invoke('sendChatMessage', {
-                        //     msgtype: 'text', // 消息类型，必填
-                        //     text: {
-                        //       content: '测试22222' // 文本内容
-                        //     },
-                        //     image:
-                        //     {
-                        //       mediaid: '2TLVdgtYCwWc3BXOlAErsdp93e7IKfqA__9OYWVOtNEA_ex0lGEK3cxC1yze78X09' // 图片的素材id
-                        //     },
-                        //     video:
-                        //     {
-                        //       mediaid: '' // 视频的素材id
-                        //     },
-                        //     file:
-                        //     {
-                        //       mediaid: '' // 文件的素材id
-                        //     },
-                        //     news:
-                        //     {
-                        //       link: 'www.baidu.com', // H5消息页面url 必填
-                        //       title: '百度', // H5消息标题
-                        //       desc: '百度', // H5消息摘要
-                        //       imgUrl: 'https://upload.jianshu.io/users/upload_avatars/10311999/16dbb33b-6d2d-47c9-9d6a-fbadccc67e85.png?imageMogr2/auto-orient/strip|imageView2/1/w/96/h/96/format/webp' // H5消息封面图片URL
-                        //     }
-                        //   }, function(res) {
-                        //     console.log('测试2通过')
-                        //   })
-                        // })
                       },
                       fail: function(res) {
                         console.log('err', res)
