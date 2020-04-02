@@ -119,18 +119,19 @@ export default {
                       jsApiList: ['sendChatMessage', 'getCurExternalContact'], // 必填
                       success: function(res) {
                         let id = that.productList[index].mediaId
-                        wx.invoke('sendChatMessage', {
-                          msgtype: 'image', // 消息类型，必填
-                          image:
+                        setTimeout(() => {
+                          wx.invoke('sendChatMessage', {
+                            msgtype: 'image', // 消息类型，必填
+                            image:
                             {
                               mediaid: id // 图片的素材id
                             }
-                        }, function(res) {
-                          alert(666)
-                          Toast.clear();
-                          alert(JSON.stringify(res))
-                          that.disable = false;
-                          console.log('发送图片回调', res)
+                          }, function(res) {
+                            alert(666)
+                            Toast.clear();
+                            alert(JSON.stringify(res))
+                            that.disable = false;
+                            console.log('发送图片回调', res)
                           // // localStorage.setItem('mediaid', JSON.stringify(res))
                           // wx.invoke('sendChatMessage', {
                           //   msgtype: 'text', // 消息类型，必填
@@ -141,7 +142,8 @@ export default {
                           //   console.log('发送消息回调', res)
                           //   // localStorage.setItem('text', JSON.stringify(res))
                           // })
-                        })
+                          })
+                        }, 500)
                       },
                       fail: function(res) {
                         console.log('err', res)
