@@ -126,7 +126,8 @@ export default {
                             }
                         }, function(res) {
                           Toast.clear();
-                          Toast.success('')
+                          window.close()
+                          // Toast.success('')
                           that.disable = false;
                           console.log('发送图片回调', res)
                           // // localStorage.setItem('mediaid', JSON.stringify(res))
