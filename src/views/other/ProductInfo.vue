@@ -109,7 +109,6 @@ export default {
                 }).then((res) => {
                   if (res.data.success) {
                     const agentData = res.data.data
-                    alert(111)
                     wx.agentConfig({
                       corpid: agentData.corpId, // 必填，企业微信的corpid，必须与当前登录的企业一致
                       agentid: agentData.agentId, // 必填，企业微信的应用id （e.g. 1000247）
@@ -119,19 +118,16 @@ export default {
                       jsApiList: ['sendChatMessage', 'getCurExternalContact'], // 必填
                       success: function(res) {
                         let id = that.productList[index].mediaId
-                        setTimeout(() => {
-                          wx.invoke('sendChatMessage', {
-                            msgtype: 'image', // 消息类型，必填
-                            image:
+                        wx.invoke('sendChatMessage', {
+                          msgtype: 'image', // 消息类型，必填
+                          image:
                             {
                               mediaid: id // 图片的素材id
                             }
-                          }, function(res) {
-                            alert(666)
-                            Toast.clear();
-                            alert(JSON.stringify(res))
-                            that.disable = false;
-                            console.log('发送图片回调', res)
+                        }, function(res) {
+                          Toast.clear();
+                          that.disable = false;
+                          console.log('发送图片回调', res)
                           // // localStorage.setItem('mediaid', JSON.stringify(res))
                           // wx.invoke('sendChatMessage', {
                           //   msgtype: 'text', // 消息类型，必填
@@ -142,8 +138,9 @@ export default {
                           //   console.log('发送消息回调', res)
                           //   // localStorage.setItem('text', JSON.stringify(res))
                           // })
-                          })
-                        }, 500)
+                        })
+                        Toast.clear();
+                        that.disable = false;
                       },
                       fail: function(res) {
                         console.log('err', res)
