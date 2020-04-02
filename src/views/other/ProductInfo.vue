@@ -126,16 +126,9 @@ export default {
                               mediaid: that.productList[index].mediaId // 图片的素材id
                             }
                         }, function(res) {
-                          if (res.err_code === 0) {
-                            Toast.clear();
-                            Toast.success('发送成功')
-                            that.disable = false;
-                          } else {
-                            Toast.clear();
-                            Toast.success('发送取消')
-                            that.disable = false;
-                          }
-
+                          Toast.clear();
+                          Toast.success('')
+                          that.disable = false;
                           console.log('发送图片回调', res)
                           // // localStorage.setItem('mediaid', JSON.stringify(res))
                           // wx.invoke('sendChatMessage', {

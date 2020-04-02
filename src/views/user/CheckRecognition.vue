@@ -1,7 +1,7 @@
 <template>
   <div class="checkrecognition">
     <div class="list-wrap">
-      <van-tabs v-model="listQuery.state" color="#3986CB" sticky>
+      <van-tabs color="#3986CB" sticky>
         <van-tab v-if="driverType === 1" title="基本">
           <van-cell-group v-if="JSON.stringify(detail) != '{}'">
             <h2 class="van-doc-demo-block__title">
@@ -202,6 +202,7 @@ export default {
       })
     },
     getDetail(driverId, externalUserId, driverType) {
+      let that = this;
       Toast.loading({
         duration: 0, // 持续展示 toast
         forbidClick: true, // 禁用背景点击
@@ -214,7 +215,7 @@ export default {
         }).then((res) => {
           if (res.data.success) {
             Toast.clear();
-            this.detail = res.data.data
+            that.detail = res.data.data
           } else {
             Toast.clear();
             Toast.fail(res.data.errorMsg);
@@ -224,7 +225,7 @@ export default {
           driverId: driverId
         }).then((res) => {
           if (res.data.success) {
-            this.orderList = res.data.data;
+            that.orderList = res.data.data;
           } else {
             Toast.clear();
             Toast.fail(res.data.errorMsg);
@@ -234,7 +235,7 @@ export default {
           driverId: driverId
         }).then((res) => {
           if (res.data.success) {
-            this.lineList = res.data.data.lineTenderInformationVOS;
+            that.lineList = res.data.data.lineTenderInformationVOS;
           } else {
             Toast.clear();
             Toast.fail(res.data.errorMsg);
@@ -248,7 +249,8 @@ export default {
           clueId: driverId
         }).then((res) => {
           if (res.data.success) {
-            this.detail = res.data.data
+            that.detail = res.data.data
+            Toast.clear();
           } else {
             Toast.clear();
             Toast.fail(res.data.errorMsg);
@@ -258,7 +260,8 @@ export default {
           clueId: driverId
         }).then((res) => {
           if (res.data.success) {
-            this.clueLog = res.data.data
+            that.clueLog = res.data.data
+            Toast.clear();
           } else {
             Toast.clear();
             Toast.fail(res.data.errorMsg);
