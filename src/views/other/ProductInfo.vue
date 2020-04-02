@@ -129,16 +129,9 @@ export default {
                           // Toast.success('')
                           that.disable = false;
                           console.log('发送图片回调', res)
-                          // // localStorage.setItem('mediaid', JSON.stringify(res))
-                          // wx.invoke('sendChatMessage', {
-                          //   msgtype: 'text', // 消息类型，必填
-                          //   text: {
-                          //     content: that.productList[index].mediaDesc // 文本内容
-                          //   }
-                          // }, function(res) {
-                          //   console.log('发送消息回调', res)
-                          //   // localStorage.setItem('text', JSON.stringify(res))
-                          // })
+                          if (res.err_msg === 'sendChatMessage:permission denied') {
+                            Toast.fail('暂无功能权限')
+                          }
                         })
                         Toast.clear();
                         that.disable = false;

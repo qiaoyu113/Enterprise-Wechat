@@ -251,6 +251,9 @@ export default {
                           }
                             }, function(res) {
                               Toast.clear();
+                              if (res.err_msg === 'sendChatMessage:permission denied') {
+                                Toast.fail('暂无功能权限')
+                              }
                               that.disable = false;
                               let lineIdNeedBack = { lineId: that.lineId, timeDiff: that.timeDiff, monthlyTransaction: that.monthlyTransaction }
                               localStorage.setItem('lineIdNeedBack', JSON.stringify(lineIdNeedBack))
