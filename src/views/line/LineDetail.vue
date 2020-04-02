@@ -1,80 +1,118 @@
 <template>
   <div class="linedetail">
     <div class="list-wrap">
-      <vo-pages
-        :data="[]"
-        :loaded-all="loadedAll"
-        :no-data-hint="false"
-      >
-        <van-tabs v-model="listQuery.state" color="#3986CB" sticky>
-          <van-tab title="基本">
-            <h2 class="van-doc-demo-block__title">
-              基本信息
-            </h2>
-            <van-cell-group>
-              <van-cell v-for="item in detail" :key="item.type" :title="item.fieldName" :value="item.value" />
-            </van-cell-group>
-            <p v-if="follow.length === 0" class="noMore">
-              暂无信息
-            </p>
-          </van-tab>
-          <van-tab title="配送">
-            <h2 class="van-doc-demo-block__title">
-              配送信息
-            </h2>
-            <van-cell-group>
-              <van-cell v-for="item in follow" :key="item.type" :title="item.fieldName" :value="item.value" />
-            </van-cell-group>
-            <p v-if="follow.length === 0" class="noMore">
-              暂无信息
-            </p>
-          </van-tab>
-          <van-tab title="关键">
-            <h2 class="van-doc-demo-block__title">
-              关键信息
-            </h2>
-            <van-cell-group>
-              <van-cell v-for="item in follow" :key="item.type" :title="item.fieldName" :value="item.value" />
-            </van-cell-group>
-            <p v-if="follow.length === 0" class="noMore">
-              暂无信息
-            </p>
-          </van-tab>
-          <van-tab title="标书">
-            <h2 class="van-doc-demo-block__title">
-              标书信息
-            </h2>
-            <van-cell-group>
-              <van-cell v-for="item in follow" :key="item.type" :title="item.fieldName" :value="item.value" />
-            </van-cell-group>
-            <p v-if="follow.length === 0" class="noMore">
-              暂无信息
-            </p>
-          </van-tab>
-          <van-tab title="记录">
-            <h2 class="van-doc-demo-block__title">
-              记录信息
-            </h2>
-            <van-cell-group>
-              <van-cell v-for="item in follow" :key="item.type" :title="item.fieldName" :value="item.value" />
-            </van-cell-group>
-            <p v-if="follow.length === 0" class="noMore">
-              暂无信息
-            </p>
-          </van-tab>
-        </van-tabs>
-        <van-button round type="info" block class="btn" @click="pushSendLink">
-          发送此线路
-        </van-button>
-      </vo-pages>
+      <van-tabs v-model="listQuery.state" color="#3986CB" sticky>
+        <van-tab title="基本">
+          <h2 class="van-doc-demo-block__title">
+            基本信息
+          </h2>
+          <van-cell-group>
+            <van-cell title="货主" :value="detail.customerName | DataIsNull" />
+            <van-cell title="城市" :value="detail.cityName | DataIsNull" />
+            <van-cell title="线路名称" :value="detail.lineName | DataIsNull" />
+            <van-cell title="货物类型" :value="detail.cargoType | DataIsNull" />
+            <van-cell title="收货人类型" :value="detail.receiverType | DataIsNull" />
+            <van-cell title="车型" :value="detail.carTypeName | DataIsNull" />
+            <van-cell title="仓位置" :value="detail.warehouse | DataIsNull" />
+            <van-cell title="配送区域是否固定" :value=" detail.distributionSites ? (detail.distributionSites === 2 ? '否' : '是') : '暂无数据'" />
+            <van-cell title="是否需要返仓" :value=" detail.returnWarehouse ? (detail.returnWarehouse === 2 ? '否' : '是') : '暂无数据'" />
+            <van-cell title="是否需要搬运" :value=" detail.carry ? (detail.carry === 2 ? '否' : '是') : '暂无数据'" />
+            <van-cell title="是否需要回单" :value=" detail.returnBill ? (detail.returnBill === 2 ? '否' : '是') : '暂无数据'" />
+            <van-cell title="收入结算方式" :value=" detail.incomeSettlementMethodName" />
+            <van-cell v-if="detail.incomeSettlementMethod === 1" title="货主单趟最低报价" :value="detail.preLowestQuotations | NumFormat" />
+            <van-cell v-if="detail.incomeSettlementMethod === 1" title="预估单趟费用(元)(含油耗、过路、过桥)" :value=" detail.monthlyFuelConsumption | NumFormat" />
+            <van-cell v-if="detail.incomeSettlementMethod === 1" title="单趟去油净收入" :value="Number(detail.preLowestQuotations) - Number(detail.monthlyFuelConsumption) ? Number(detail.preLowestQuotations) - Number(detail.monthlyFuelConsumption) : 0" />
+            <van-cell v-if="detail.incomeSettlementMethod === 2" title="预计货主月报价" :value=" detail.preLowestQuotations | NumFormat" />
+            <van-cell v-if="detail.incomeSettlementMethod === 2" title="预估月费用(元)(含油耗、过路、过桥)" :value=" detail.monthlyFuelConsumption | NumFormat" />
+            <van-cell v-if="detail.incomeSettlementMethod === 2" title="预计去油净收入" :value=" Number(detail.preLowestQuotations) - Number(detail.monthlyFuelConsumption) ? Number(detail.preLowestQuotations) - Number(detail.monthlyFuelConsumption) : 0 | NumFormat" />
+            <van-cell title="油卡结算(%)" :value=" detail.fuelRatio | DataIsNull" />
+            <van-cell title="线路区域" :value=" (detail.provinceAreaName + detail.cityAreaName + detail.countyAreaName) | DataIsNull" />
+            <van-cell title="具体区域范围" :value=" detail.districtArea | DataIsNull" />
+            <van-cell title="线路编号" :value="detail.lineId | DataIsNull" />
+            <van-cell title="线路入池原因" :value="detail.occurReasonName | DataIsNull" />
+            <van-cell title="可上车数" :value="detail.deployNum | DataIsNull" />
+            <van-cell title="线路稳定性" :value="detail.stabilityRateName | DataIsNull" />
+            <van-cell title="账期" :value="detail.billingCycle | DataIsNull" />
+            <van-cell title="创建线路难度" :value="detail.handlingDifficultyDegreeName | DataIsNull" />
+            <van-cell title="备注信息" :value="detail.remark | DataIsNull" />
+            <van-cell title="线路类型" :value="detail.distinguishedTypeName | DataIsNull" />
+            <van-cell v-if="detail.waitDirveValidityDuration > 0" title="线路失效截止时间" :value=" detail.waitDirveValidity | DataIsNull" />
+            <van-cell v-if="detail.waitDirveValidityDuration > 0" title="等待上车有效期(天)" :value=" detail.waitDirveValidityDuration | DataIsNull" />
+            <van-cell title="首岗是否有人跟车" :value="detail.firstNeededFollow ? (detail.firstNeededFollow === 2 ? '否' : '是') : '暂无数据'" />
+          </van-cell-group>
+          <p v-if="!detail.lineName" class="noMore">
+            暂无信息
+          </p>
+        </van-tab>
+        <van-tab title="配送">
+          <h2 class="van-doc-demo-block__title">
+            配送信息
+          </h2>
+          <van-cell-group>
+            <van-cell title="预计每日平均配送点位数" :value="detail.deliveryNum | DataIsNull" />
+            <van-cell title="预计每日平均总里程(公里)" :value="detail.distance | DataIsNull" />
+            <van-cell title="预计月出车天数" :value="detail.month | DataIsNull" />
+            <van-cell v-for="item in detail.lineDeliveryInfoFORMS" :key="item.id" title="预计日工作时间">
+              {{ item.workingTimeStart }}~{{ item.workingTimeEnd }}
+            </van-cell>
+            <van-cell title="预计每日货物总体积(立方米)" :value="detail.volume | DataIsNull" />
+            <van-cell title="预计单件货物重量(kg)" :value="detail.singleCargoWeightName | DataIsNull" />
+            <van-cell title="每日配送趟数" :value="detail.dayNumName | DataIsNull" />
+          </van-cell-group>
+          <p v-if="!detail.deliveryNum" class="noMore">
+            暂无信息
+          </p>
+        </van-tab>
+        <van-tab title="关键">
+          <h2 class="van-doc-demo-block__title">
+            关键信息
+          </h2>
+          <van-cell-group>
+            <van-cell title="每日总里程（公里）" :value="detail.distance | DataIsNull" />
+            <van-cell title="预计月收入" :value="monthlyTransaction | DataIsNull" />
+            <van-cell title="配送总时长" :value="timeDiff | DataIsNull" />
+          </van-cell-group>
+          <p v-if="!detail.distance" class="noMore">
+            暂无信息
+          </p>
+        </van-tab>
+        <van-tab title="标书">
+          <h2 class="van-doc-demo-block__title">
+            标书信息
+          </h2>
+          <van-cell-group>
+            <van-cell v-for="item in clueDetail" :key="item.customerName" :title="item.cityName" :value="item.lineName" />
+          </van-cell-group>
+          <p v-if="clueDetail.length === 0" class="noMore">
+            暂无信息
+          </p>
+        </van-tab>
+        <van-tab title="记录">
+          <h2 class="van-doc-demo-block__title">
+            记录信息
+          </h2>
+          <van-cell-group>
+            <van-cell v-for="item in logList" :key="item.operType" :title="item.operType" :value="'(' + item.createrName + ')' + item.createDate" />
+          </van-cell-group>
+          <p v-if="logList.length === 0" class="noMore">
+            暂无信息
+          </p>
+        </van-tab>
+      </van-tabs>
+      <van-button round type="info" block class="btn" :disabled="disable" @click="pushSendLink">
+        发送此线路
+      </van-button>
+      <div v-if="backBtn" class="backBtn" @click="goLine">
+        <van-icon name="home-o" />
+      </div>
     </div>
   </div>
 </template>
 <script>
-import { Tabbar, TabbarItem, Toast, Tab, Tabs, Cell, CellGroup, Button } from 'vant'
-// import { customerDetail } from '@/api/user'
+import { Tabbar, TabbarItem, Toast, Tab, Tabs, Cell, CellGroup, Button, Icon } from 'vant'
+import { getLineDetail, listByLineId, loglist, getMediaIdOfLineDetail } from '@/api/line'
 import { getCorpSignature, getAgentSignature } from '@/api/user'
-import VoPages from 'vo-pages'
+// import VoPages from 'vo-pages'
 import 'vo-pages/lib/vo-pages.css'
 const wx = window.wx;
 export default {
@@ -83,20 +121,25 @@ export default {
     [Tabbar.name]: Tabbar,
     [TabbarItem.name]: TabbarItem,
     [Toast.name]: Toast,
+    [Icon.name]: Icon,
     [Tab.name]: Tab,
     [Tabs.name]: Tabs,
     [Cell.name]: Cell,
     [CellGroup.name]: CellGroup,
-    [Button.name]: Button,
-    VoPages
+    [Button.name]: Button
+    // VoPages
   },
   data() {
     return {
+      lineId: '',
       listQuery: {
         state: 0
       },
       active: 1,
-      detail: [],
+      detail: {},
+      clueDetail: [],
+      disable: false,
+      logList: [],
       follow: [],
       action: [],
       total: 0,
@@ -106,152 +149,160 @@ export default {
         { name: '产品介绍', color: '#3F8AF2' },
         { name: '推荐线路', color: '#3F8AF2' }
       ],
-      loadedAll: false
+      loadedAll: false,
+      backBtn: false,
+      timeDiff: '',
+      monthlyTransaction: ''
     }
   },
   mounted() {
-    this.getDetail()
+    let id = this.$route.query.id;
+    this.lineId = id;
+    this.timeDiff = this.$route.query.timeDiff
+    this.monthlyTransaction = this.$route.query.monthlyTransaction
+    this.backBtn = this.$route.query.backBtn
+    this.getDetail(id)
+  },
+  beforeRouteLeave(to, from, next) {
+    this.$destroy(true)
+    next(true);
   },
   methods: {
-    getDetail() {
-    //   customerDetail({
-    //     custClueId: 201910231017
-    //   }).then((res) => {
-    //     if (res.data.success) {
-    //       console.log(res.data.data)
-    //       this.detail = res.data.data
-    //     }
-    //   })
-      this.detail = [
-        {
-          fieldEn: 'field_2',
-          fieldName: '外线销售姓名',
-          type: 'single_line_text',
-          notes: '',
-          value: '石晓光'
-        }
-      ]
-    },
-    pushSendLink() {
-      const hostName = window.location.href
-      getCorpSignature({
-        url: hostName
-      }).then((res) => {
+    getDetail(id) {
+      let that = this;
+      getLineDetail({ lineId: id }).then((res) => {
         if (res.data.success) {
-          let data = res.data.data;
-          wx.config({
-            beta: true,
-            debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
-            appId: data.corpId, // 必填，企业号的唯一标识，此处填写企业号corpid
-            timestamp: Number(data.timestamp), // 必填，生成签名的时间戳
-            nonceStr: data.nonceStr, // 必填，生成签名的随机串
-            signature: data.signature, // 必填，签名，见附录1
-            jsApiList: ['agentConfig'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
-          });
-          wx.ready(function() {
-            // 开启企业微信debug模式wx.config里的debug为true
-            wx.checkJsApi({
-              jsApiList: [
-                'agentConfig',
-                'sendChatMessage',
-                'getCurExternalContact'
-              ],
-              success: function(res) {
-                getAgentSignature({
-                  agentId: '1000013',
-                  url: hostName
-                }).then((res) => {
-                  if (res.data.success) {
-                    const agentData = res.data.data
-                    wx.agentConfig({
-                      corpid: agentData.corpId, // 必填，企业微信的corpid，必须与当前登录的企业一致
-                      agentid: agentData.agentId, // 必填，企业微信的应用id （e.g. 1000247）
-                      timestamp: '' + agentData.timestamp, // 必填，生成签名的时间戳
-                      nonceStr: agentData.nonceStr, // 必填，生成签名的随机串
-                      signature: agentData.signature, // 必填，签名，见附录1
-                      jsApiList: ['sendChatMessage', 'getCurExternalContact'], // 必填
-                      success: function(res) {
-                        wx.invoke('sendChatMessage', {
-                          msgtype: 'text', // 消息类型，必填
-                          text: {
-                            content: '测试' // 文本内容
-                          },
-                          image:
-                          {
-                            mediaid: '2TLVdgtYCwWc3BXOlAErsdp93e7IKfqA__9OYWVOtNEA_ex0lGEK3cxC1yze78X09' // 图片的素材id
-                          },
-                          video:
-                          {
-                            mediaid: '' // 视频的素材id
-                          },
-                          file:
-                          {
-                            mediaid: '' // 文件的素材id
-                          },
-                          news:
-                          {
-                            link: 'www.baidu.com', // H5消息页面url 必填
-                            title: '百度', // H5消息标题
-                            desc: '百度', // H5消息摘要
-                            imgUrl: 'https://upload.jianshu.io/users/upload_avatars/10311999/16dbb33b-6d2d-47c9-9d6a-fbadccc67e85.png?imageMogr2/auto-orient/strip|imageView2/1/w/96/h/96/format/webp' // H5消息封面图片URL
-                          }
-                        }, function(res) {
-                          console.log('测试1通过', res)
-                          wx.invoke('sendChatMessage', {
-                            msgtype: 'text', // 消息类型，必填
-                            text: {
-                              content: '测试22222' // 文本内容
-                            },
-                            image:
-                            {
-                              mediaid: '2TLVdgtYCwWc3BXOlAErsdp93e7IKfqA__9OYWVOtNEA_ex0lGEK3cxC1yze78X09' // 图片的素材id
-                            },
-                            video:
-                            {
-                              mediaid: '' // 视频的素材id
-                            },
-                            file:
-                            {
-                              mediaid: '' // 文件的素材id
-                            },
-                            news:
-                            {
-                              link: 'www.baidu.com', // H5消息页面url 必填
-                              title: '百度', // H5消息标题
-                              desc: '百度', // H5消息摘要
-                              imgUrl: 'https://upload.jianshu.io/users/upload_avatars/10311999/16dbb33b-6d2d-47c9-9d6a-fbadccc67e85.png?imageMogr2/auto-orient/strip|imageView2/1/w/96/h/96/format/webp' // H5消息封面图片URL
-                            }
-                          }, function(res) {
-                            console.log('测试2通过', res)
-                          })
-                        })
-                      },
-                      fail: function(res) {
-                        console.log('err', res)
-                        if (res.errMsg.indexOf('is not a function') > -1) {
-                          alert('<i class="weui-icon-warn">版本过低请升级</i>')
-                        }
-                      }
-                    });
-                  }
-                })
-              },
-              fail: function(res) {
-                alert('版本过低请升级');
-              }
-            });
-          });
-          wx.error(function(res) {
-            console.log(res);
-          });
+          that.detail = res.data.data;
         }
       })
+      listByLineId({
+        page: 1,
+        limit: 100,
+        lineId: id
+      }).then((res) => {
+        if (res.data.success) {
+          that.clueDetail = res.data.data;
+        }
+      })
+      loglist({
+        lineId: id
+      }).then((res) => {
+        if (res.data.success) {
+          that.logList = res.data.data;
+        }
+      })
+    },
+    pushSendLink() {
+      Toast.loading({
+        message: '正在生产二维码...',
+        forbidClick: true
+      });
+      const hostName = window.location.href
+      let that = this;
+      that.disable = true;
+      getMediaIdOfLineDetail({
+        lineId: that.lineId,
+        busiType: that.detail.busiType
+      }).then((res) => {
+        if (res.data.success) {
+          let mediaidNew = res.data.data;
+          getCorpSignature({
+            url: hostName
+          }).then((res) => {
+            if (res.data.success) {
+              let data = res.data.data;
+              wx.config({
+                beta: true,
+                debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+                appId: data.corpId, // 必填，企业号的唯一标识，此处填写企业号corpid
+                timestamp: Number(data.timestamp), // 必填，生成签名的时间戳
+                nonceStr: data.nonceStr, // 必填，生成签名的随机串
+                signature: data.signature, // 必填，签名，见附录1
+                jsApiList: ['agentConfig'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+              });
+              wx.ready(function() {
+                // 开启企业微信debug模式wx.config里的debug为true
+                wx.checkJsApi({
+                  jsApiList: [
+                    'agentConfig',
+                    'sendChatMessage',
+                    'getCurExternalContact'
+                  ],
+                  success: function(res) {
+                    getAgentSignature({
+                      agentId: that.GLOBAL.agentId,
+                      url: hostName
+                    }).then((res) => {
+                      if (res.data.success) {
+                        const agentData = res.data.data
+                        wx.agentConfig({
+                          corpid: agentData.corpId, // 必填，企业微信的corpid，必须与当前登录的企业一致
+                          agentid: agentData.agentId, // 必填，企业微信的应用id （e.g. 1000247）
+                          timestamp: '' + agentData.timestamp, // 必填，生成签名的时间戳
+                          nonceStr: agentData.nonceStr, // 必填，生成签名的随机串
+                          signature: agentData.signature, // 必填，签名，见附录1
+                          jsApiList: ['sendChatMessage', 'getCurExternalContact'], // 必填
+                          success: function(res) {
+                            wx.invoke('sendChatMessage', {
+                              msgtype: 'image', // 消息类型，必填
+                              image:
+                          {
+                            mediaid: mediaidNew // 图片的素材id
+                          }
+                            }, function(res) {
+                              Toast.clear();
+                              if (res.err_msg === 'sendChatMessage:permission denied') {
+                                Toast.fail('暂无功能权限')
+                              }
+                              that.disable = false;
+                              let lineIdNeedBack = { lineId: that.lineId, timeDiff: that.timeDiff, monthlyTransaction: that.monthlyTransaction }
+                              localStorage.setItem('lineIdNeedBack', JSON.stringify(lineIdNeedBack))
+                            })
+                          },
+                          fail: function(res) {
+                            console.log('err', res)
+                            if (res.errMsg.indexOf('is not a function') > -1) {
+                              alert('<i class="weui-icon-warn">版本过低请升级</i>')
+                            }
+                          }
+                        });
+                      }
+                    })
+                  },
+                  fail: function(res) {
+                    alert('版本过低请升级');
+                  }
+                });
+              });
+              wx.error(function(res) {
+                console.log(res);
+              });
+            }
+          })
+        }
+      })
+    },
+    goLine() {
+      this.$router.replace({ path: '/linecommend' })
     }
   }
 }
 </script>
 <style lang="scss" scoped>
 .linedetail{
+  .backBtn{
+    width:1rem;
+    height: 1rem;
+    position: fixed;
+    right: 1rem;
+    bottom: 1.6rem;
+    background:#4D86C6;
+    border-radius: 100%;
+    text-align: center;
+    line-height: 1.2rem;
+    font-size: 16px;
+    color:#fff;
+  }
   .van-doc-demo-block__title{
     margin: 0;
     text-align: center;
@@ -278,14 +329,13 @@ p{
   background: #f5f5f5;
   .list-wrap{
     height: calc(100% - 50px);
-    overflow-y: hidden;
+    overflow-y: scroll;
   }
 }
 
 .btn{
     width:90%;
-    margin: auto;
-    margin-top:1rem;
+    margin:1rem auto;
 }
 
 .article-list {

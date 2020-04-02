@@ -16,6 +16,7 @@
           <van-picker
             show-toolbar
             :columns="columns"
+            value-key="code"
             @cancel="showPicker = false"
             @confirm="onConfirm"
           />
@@ -33,6 +34,7 @@
           <van-picker
             show-toolbar
             :columns="columns2"
+            value-key="code"
             @cancel="showPicker2 = false"
             @confirm="onConfirm2"
           />
@@ -50,6 +52,7 @@
           <van-picker
             show-toolbar
             :columns="columns3"
+            value-key="code"
             @cancel="showPicker3 = false"
             @confirm="onConfirm3"
           />
@@ -81,19 +84,23 @@ export default {
   },
   data() {
     return {
-      columns: ['杭州', '宁波', '温州', '嘉兴', '湖州'],
-      columns2: ['2', '3', '4', '5', '6'],
-      columns3: ['w', '3', 'e', 'r', 't'],
+      columns: [],
+      columns2: [],
+      columns3: [],
       showBox: false,
       value: '',
       showPicker: false,
       showPicker2: false,
       showPicker3: false,
       lineVal: '',
+      lineValCode: '',
       carVal: '',
+      carValCode: '',
       cargoVal: '',
+      cargoValCode: '',
       optionsCity: [],
-      optionsCar: []
+      optionsCar: [],
+      optionsCargo: []
     }
   },
   mounted() {
@@ -111,7 +118,7 @@ export default {
           code: '全部',
           codeVal: ''
         })
-        that.optionsCity = arr;
+        that.columns3 = arr;
       }).catch(err => {
         Toast.fail(err);
       })
@@ -124,7 +131,7 @@ export default {
           code: '全部',
           codeVal: ''
         })
-        that.optionsCar = arr;
+        that.columns2 = arr;
       }).catch(err => {
         Toast.fail(err);
       })
@@ -137,7 +144,7 @@ export default {
           code: '全部',
           codeVal: ''
         })
-        that.optionsCar = arr;
+        that.columns = arr;
       }).catch(err => {
         Toast.fail(err);
       })
@@ -146,32 +153,37 @@ export default {
       this.showBox = false;
       let data = {
         findVal: this.value,
-        lineVal: this.lineVal,
-        carVal: this.carVal,
-        cargoVal: this.cargoVal
+        lineVal: this.lineValCode,
+        carVal: this.carValCode,
+        cargoVal: this.cargoValCode
       }
       this.$emit('searchData', data)
     },
     remove() {
       this.value = ''
       this.lineVal = ''
+      this.lineValCode = ''
       this.carVal = ''
+      this.carValCode = ''
       this.cargoVal = ''
+      this.cargoValCode = ''
     },
     onSearch(val) {
-      console.log(val)
       this.showBox = true;
     },
     onConfirm(value) {
-      this.cargoVal = value;
+      this.cargoVal = value.code;
+      this.cargoValCode = value.codeVal;
       this.showPicker = false;
     },
     onConfirm2(value) {
-      this.carVal = value;
+      this.carVal = value.code;
+      this.carValCode = value.codeVal;
       this.showPicker2 = false;
     },
     onConfirm3(value) {
-      this.lineVal = value;
+      this.lineVal = value.code;
+      this.lineValCode = value.codeVal;
       this.showPicker3 = false;
     }
   }

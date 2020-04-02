@@ -41,8 +41,8 @@ export default {
   },
   created: function() {
     this.getCode()
-    // window.localStorage.setItem('token', '123')
-    // window.localStorage.setItem('code', '123')
+    // window.localStorage.setItem('token', 'eyJhbGciOiJIUzI1NiJ9.eyJwcm9maWxlIjoiZDIiLCJ1c2VySWQiOiIzNyIsInVzZXJuYW1lIjoid3RfYWRtaW4iLCJ0eXBlIjoiMyIsImJ1c2lQZXJtaXNzaW9uIjoiMCwxIiwiZXhwIjoxNTg1NzM0Mjc5fQ.jSBEkPA9chqLSI5g9MSYAiegEyUI5MHmBte_fL89lf8')
+    // window.localStorage.setItem('code', '1234')
     // window.localStorage.setItem('SetUserData', 'token')
   },
   mounted() {
@@ -78,8 +78,6 @@ export default {
     getCode() {
       var code = this.getUrlParam('code')
       if (code == null || code === '') {
-        // localStorage.setItem('token', 123)
-        // this.$router.replace({ path: '/' })
         this.linkGetCode()
       } else {
         const token = localStorage.getItem('token')
@@ -94,7 +92,7 @@ export default {
     },
     linkGetCode() {
       var local = window.location.href
-      window.location.href = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=ww1350e9d33db61819&redirect_uri=' + encodeURIComponent(local) + '&response_type=code&scope=snsapi_base&agentid=1000013&state=state#wechat_redirect'
+      window.location.href = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=ww1350e9d33db61819&redirect_uri=' + encodeURIComponent(local) + '&response_type=code&scope=snsapi_base&agentid=' + this.GLOBAL.agentId + '&state=state#wechat_redirect'
     },
     reLinkGetCode() {
       localStorage.removeItem('code');
@@ -116,9 +114,8 @@ export default {
     handleLogin(code) {
       login({
         code: code,
-        // code: '123',
         state: '',
-        agentId: '1000013'
+        agentId: this.GLOBAL.agentId
       })
         .then(res => {
           if (res.data.success) {

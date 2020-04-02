@@ -3,20 +3,21 @@
     <SearchItem @searchData="searchFunction"></SearchItem>
     <div class="list-wrap">
       <vo-pages
-        :data="[]"
+        :data="list"
         :loaded-all="loadedAll"
-        :no-data-hint="false"
         @pullingUp="pullingUp"
         @pullingDown="pullingDown"
       >
         <div class="placeholder"></div>
-        <div v-for="item in list" :key="item.type" class="lineList" @click="goDetail(item.id)">
+        <div v-for="item in list" :key="item.type" class="lineList" @click="goDetail(item.lineId, item.timeDiff, item.monthlyTransaction)">
           <div class="lineListTop">
             <div class="name">
-              线路名称
+              {{ item.lineName }}<van-tag plain type="primary" size="small" style="margin-left: 0.3rem;">
+                {{ item.lineRankName }}
+              </van-tag>
             </div>
             <div class="info">
-              线路简介
+              {{ item.cargoType }}/{{ item.carTypeName }}
             </div>
           </div>
           <div class="lineListBottom">
@@ -28,11 +29,13 @@
   </div>
 </template>
 <script>
-import { Tabbar, TabbarItem, Toast, Tab, Tabs, Cell, CellGroup } from 'vant'
+import { Tabbar, TabbarItem, Toast, Tab, Tabs, Cell, CellGroup, Tag } from 'vant'
 import { selectLineTask } from '@/api/line'
+import { getCorpSignature, getAgentSignature } from '@/api/user'
 import VoPages from 'vo-pages'
 import SearchItem from 'components/SearchItem'
 import 'vo-pages/lib/vo-pages.css'
+const wx = window.wx;
 export default {
   name: 'Linecommend',
   components: {
@@ -41,6 +44,7 @@ export default {
     [Toast.name]: Toast,
     [Tab.name]: Tab,
     [Tabs.name]: Tabs,
+    [Tag.name]: Tag,
     [Cell.name]: Cell,
     [CellGroup.name]: CellGroup,
     VoPages,
@@ -52,7 +56,7 @@ export default {
         'carType': '',
         'cargoType': '',
         'city': '',
-        'key': 'string',
+        'key': '',
         'limit': '20',
         'page': 1
       },
@@ -70,9 +74,108 @@ export default {
     }
   },
   mounted() {
-    // this.getList()
+    let externalUserIdOld = localStorage.getItem('externalUserId')
+    if (externalUserIdOld) {
+      this.getUserConfig(true, externalUserIdOld);
+    } else {
+      this.getUserConfig(false, externalUserIdOld);
+      this.getList()
+    }
   },
   methods: {
+    getUserConfig(type, externalUserIdOld) {
+      let that = this;
+      const hostName = window.location.href
+      getCorpSignature({
+        url: hostName
+      }).then((res) => {
+        if (res.data.success) {
+          let data = res.data.data;
+          wx.config({
+            beta: true,
+            debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+            appId: data.corpId, // 必填，企业号的唯一标识，此处填写企业号corpid
+            timestamp: Number(data.timestamp), // 必填，生成签名的时间戳
+            nonceStr: data.nonceStr, // 必填，生成签名的随机串
+            signature: data.signature, // 必填，签名，见附录1
+            jsApiList: ['agentConfig'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+          });
+          wx.ready(function() {
+            // 开启企业微信debug模式wx.config里的debug为true
+            wx.checkJsApi({
+              jsApiList: [
+                'agentConfig',
+                'sendChatMessage',
+                'getCurExternalContact'
+              ],
+              success: function(res) {
+                getAgentSignature({
+                  agentId: that.GLOBAL.agentId,
+                  url: hostName
+                }).then((res) => {
+                  if (res.data.success) {
+                    const agentData = res.data.data
+                    wx.agentConfig({
+                      corpid: agentData.corpId, // 必填，企业微信的corpid，必须与当前登录的企业一致
+                      agentid: agentData.agentId, // 必填，企业微信的应用id （e.g. 1000247）
+                      timestamp: '' + agentData.timestamp, // 必填，生成签名的时间戳
+                      nonceStr: agentData.nonceStr, // 必填，生成签名的随机串
+                      signature: agentData.signature, // 必填，签名，见附录1
+                      jsApiList: ['sendChatMessage', 'getCurExternalContact'], // 必填
+                      success: function(res) {
+                        wx.invoke('getCurExternalContact', {
+                        }, function(res) {
+                          if (res.err_msg === 'getCurExternalContact:ok') {
+                            // console.log('userId', res.userId) // 返回当前外部联系人userId
+                            localStorage.setItem('externalUserId', res.userId)
+                            let externalUserId = res.userId
+                            if (type) {
+                              if (externalUserId === externalUserIdOld) {
+                                let lineIdNeedBack = localStorage.getItem('lineIdNeedBack')
+                                if (lineIdNeedBack) {
+                                  lineIdNeedBack = JSON.parse(lineIdNeedBack)
+                                  if (lineIdNeedBack.lineId) {
+                                    localStorage.removeItem('lineIdNeedBack')
+                                    that.$destroy(true)
+                                    that.$router.push({ path: '/linedetail', query: { id: lineIdNeedBack.lineId, timeDiff: lineIdNeedBack.timeDiff, monthlyTransaction: lineIdNeedBack.monthlyTransaction, backBtn: 1 }})
+                                  }
+                                } else {
+                                  that.getList()
+                                }
+                              } else {
+                                localStorage.removeItem('lineIdNeedBack')
+                                that.getList()
+                              }
+                            } else {
+                              localStorage.removeItem('lineIdNeedBack')
+                            }
+                          } else {
+                            // 错误处理
+                            this.btnShow = true;
+                          }
+                        });
+                      },
+                      fail: function(res) {
+                        // console.log('err', res)
+                        if (res.errMsg.indexOf('is not a function') > -1) {
+                          alert('<i class="weui-icon-warn">版本过低请升级333</i>')
+                        }
+                      }
+                    });
+                  }
+                })
+              },
+              fail: function(res) {
+                alert('版本过低请升级2');
+              }
+            });
+          });
+          wx.error(function(res) {
+            console.log(res);
+          });
+        }
+      })
+    },
     pullingDown() {
       this.beforePullDown = false
       this.listQuery.page = 1
@@ -83,43 +186,55 @@ export default {
       this.getList()
     },
     searchFunction(data) {
-      console.log(data)
+      this.listQuery.carType = data.carVal
+      this.listQuery.cargoType = data.cargoVal
+      this.listQuery.city = data.lineVal
+      this.listQuery.key = data.findVal
       this.listQuery.page = 1
-      this.getList()
+      this.list = [];
+      this.pullingDown()
     },
-    async getList(loadMore = true) {
+    getList(loadMore = true) {
+      Toast.loading({
+        duration: 0, // 持续展示 toast
+        forbidClick: true, // 禁用背景点击
+        loadingType: 'spinner',
+        message: '加载中...'
+      });
       selectLineTask(this.listQuery).then((res) => {
-        // if (res.data.success) {
-        //   console.log(res.data.data)
-        //   let lists = res.data.data
-        //   this.total = lists.length
-        //   const newList = lists.map(item => {
-        //     return item
-        //   })
-        //   if (loadMore) {
-        //     this.list = this.list.concat(newList)
-        //   } else {
-        //     this.list = newList
-        //   }
-        //   if (!this.beforePullDown) {
-        //     this.beforePullDown = true
-        //   }
-        //   this.loadedAll = this.total <= this.list.length
-        // }
+        if (res.data.success) {
+          Toast.clear();
+          let lists = res.data.data
+          this.total = res.data.page.total
+          // const newList = lists.map(item => {
+          //   return item
+          // })
+          if (loadMore) {
+            this.list = this.list.concat(lists)
+          } else {
+            this.list = lists
+          }
+          if (!this.beforePullDown) {
+            this.beforePullDown = true
+          }
+          if (this.list.length === this.total || this.list.length < 4) {
+            this.loadedAll = true
+          } else {
+            this.loadedAll = false
+          }
+        } else {
+          Toast.clear();
+          this.loadedAll = true;
+          Toast.fail(res.data.errorMsg);
+        }
       }).catch((err) => {
-        console.log(err)
+        Toast.clear();
+        Toast.fail(err);
+        this.loadedAll = true;
       })
     },
-    goDetail(id) {
-      this.$router.push({ path: '/linedetail', query: { id: id }})
-    //   customerDetail({
-    //     custClueId: 201910231017
-    //   }).then((res) => {
-    //     if (res.data.success) {
-    //       console.log(res.data.data)
-    //       this.detail = res.data.data
-    //     }
-    //   })
+    goDetail(id, timeDiff, monthlyTransaction) {
+      this.$router.push({ path: '/linedetail', query: { id: id, timeDiff: timeDiff, monthlyTransaction: monthlyTransaction }})
     }
   }
 }
@@ -127,6 +242,14 @@ export default {
 <style lang="scss" scope>
 .linecommend{
     background: #f7f8fa;
+    height: 100%;
+    width: 100%;
+    .list-wrap{
+        height: 100%;
+        // overflow-y: hidden;
+        // padding:0.5rem 0.3rem;
+        // box-sizing: border-box;
+    }
     .lineList{
         width:100%;
         border-radius: 1.2rem;
@@ -155,17 +278,6 @@ export default {
     p{
         margin-block-start: 0;
         margin-block-end: 0;
-    }
-    .container{
-        height: 100%;
-        width: 100%;
-        background: #f5f5f5;
-        .list-wrap{
-            height: calc(100% - 50px);
-            overflow-y: hidden;
-            padding:0.5rem 0.3rem;
-            box-sizing: border-box;
-        }
     }
 
     .article-list {

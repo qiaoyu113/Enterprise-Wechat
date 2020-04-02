@@ -8,7 +8,7 @@
         </van-tab>
         <van-tab title="已成交">
         </van-tab>
-        <van-tab title="已经">
+        <van-tab title="未跑">
         </van-tab>
         <van-tab title="在跑">
         </van-tab>
@@ -108,7 +108,6 @@ export default {
     },
     async getList(loadMore = true) {
       fetchList(this.listQuery).then(result => {
-        console.log(result)
         this.total = result.data.total
         const newList = result.data.items.map(article => {
           article.displayTimeFormart = dayjs(article.display_time).format('YYYY-MM-DD')

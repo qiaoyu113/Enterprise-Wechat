@@ -17,3 +17,12 @@ export function dictionary(data) {
     params: data
   })
 }
+
+/* 产品介绍 */
+export function productIntroduce(data) {
+  return request({
+    url: '/api/product/product/enterprise-weChat/patcher/product-introduce',
+    method: 'get',
+    params: data
+  })
+}
