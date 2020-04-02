@@ -120,7 +120,7 @@ export default {
                       signature: agentData.signature, // 必填，签名，见附录1
                       jsApiList: ['sendChatMessage', 'getCurExternalContact'], // 必填
                       success: function(res) {
-                        alert(222)
+                        alert(that.productList[index].mediaId)
                         wx.invoke('sendChatMessage', {
                           msgtype: 'image', // 消息类型，必填
                           image:
@@ -143,8 +143,10 @@ export default {
                           //   // localStorage.setItem('text', JSON.stringify(res))
                           // })
                         })
+                        alert(4444)
                       },
                       fail: function(res) {
+                        alert(3333)
                         console.log('err', res)
                         that.disable = false;
                         Toast.clear();
