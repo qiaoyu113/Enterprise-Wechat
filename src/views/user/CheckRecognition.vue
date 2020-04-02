@@ -217,6 +217,12 @@ export default {
           if (res.data.success) {
             Toast.clear();
             that.detail = res.data.data
+            if (this.detail.accountType === 1) {
+              this.detail.accountType = '城镇户口'
+            }
+            if (this.detail.accountType === 2) {
+              this.detail.accountType = '农村户口'
+            }
           } else {
             Toast.clear();
             Toast.fail(res.data.errorMsg);
