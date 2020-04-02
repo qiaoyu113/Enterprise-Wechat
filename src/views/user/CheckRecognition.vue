@@ -58,13 +58,13 @@
           </p>
         </van-tab>
         <van-tab v-if="driverType === 1" title="订单">
-          <van-cell-group v-if="clueLog.length">
+          <van-cell-group v-if="orderList.length">
             <h2 class="van-doc-demo-block__title">
               订单信息
             </h2>
             <van-cell v-for="item in orderList" :key="item.type" title="订单编号" :value="item.orderId + '(' + item.stateName + ')'" />
           </van-cell-group>
-          <p v-if="!clueLog.length" class="noMore">
+          <p v-if="!orderList.length" class="noMore">
             暂无信息
           </p>
         </van-tab>
