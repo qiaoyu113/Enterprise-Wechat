@@ -75,6 +75,10 @@ export default {
   },
   mounted() {
     let externalUserIdOld = localStorage.getItem('externalUserId')
+    let city = localStorage.getItem('city')
+    if (city) {
+      localStorage.removeItem('token')
+    }
     if (externalUserIdOld) {
       this.getUserConfig(true, externalUserIdOld);
     } else {
