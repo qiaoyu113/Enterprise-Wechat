@@ -12,7 +12,7 @@
             <van-cell title="联系电话" :value="detail.phone | DataIsNull" />
             <van-cell title="司机编号" :value="detail.driverId | DataIsNull" />
             <van-cell title="工作城市" :value="detail.workCityName | DataIsNull" />
-            <van-cell title="户籍地址" :value=" detail.cityName | DataIsNull + detail.provinceName" />
+            <van-cell title="户籍地址" :value=" (detail.cityName + detail.provinceName) | DataIsNull" />
             <van-cell title="面试时间" :value=" detail.interviewTime | DataIsNull" />
             <van-cell title="货物经验" :value=" detail.cargoTypeName | DataIsNull" />
             <van-cell title="物流从业经验" :value="detail.workExperienceName | DataIsNull" />
