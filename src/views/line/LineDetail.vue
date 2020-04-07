@@ -267,6 +267,8 @@ export default {
                           }
                         });
                       }
+                      that.disable = false;
+                      Toast.clear();
                     })
                   },
                   fail: function(res) {
