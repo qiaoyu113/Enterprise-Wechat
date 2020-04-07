@@ -40,40 +40,18 @@ export default {
     };
   },
   created: function() {
+    /*
+      微信授权方法
+    */
     this.getCode()
+    /*
+    d2环境或微信授权不通时
+    */
     // window.localStorage.setItem('token', 'eyJhbGciOiJIUzI1NiJ9.eyJwcm9maWxlIjoiZDIiLCJ1c2VySWQiOiIzNyIsInVzZXJuYW1lIjoid3RfYWRtaW4iLCJ0eXBlIjoiMyIsImJ1c2lQZXJtaXNzaW9uIjoiMCwxIiwiZXhwIjoxNTg1NzM0Mjc5fQ.jSBEkPA9chqLSI5g9MSYAiegEyUI5MHmBte_fL89lf8')
     // window.localStorage.setItem('code', '1234')
     // window.localStorage.setItem('SetUserData', 'token')
   },
-  mounted() {
-    // wx.config({
-    //   debug: true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
-    //   appId: '', // 必填，企业号的唯一标识，此处填写企业号corpid
-    //   timestamp: '', // 必填，生成签名的时间戳
-    //   nonceStr: '', // 必填，生成签名的随机串
-    //   signature: '', // 必填，签名，见附录1
-    //   jsApiList: [] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
-    // });
-    // wx.ready(function() {
-    //   wx.openEnterpriseChat({
-    //     // 注意：userIds和externalUserIds至少选填一个，且userIds+externalUserIds总数不能超过2000。
-    //     userIds: 'zhangshan;lisi;wangwu', // 参与会话的企业成员列表，格式为userid1;userid2;...，用分号隔开。
-    //     externalUserIds: 'wmEAlECwAAHrbWYDOK5u3Bf13xlYDAAA;wmEAlECwAAHibWYDOK5u3Af13xlYDAAA', // 参与会话的外部联系人列表，格式为userId1;userId2;…，用分号隔开。
-    //     groupName: '讨论组', // 必填，会话名称。单聊时该参数传入空字符串""即可。
-    //     success: function(res) {
-    //     // 回调
-    //     },
-    //     fail: function(res) {
-    //       if (res.errMsg.indexOf('function not exist') > -1) {
-    //         alert('版本过低请升级')
-    //       }
-    //     }
-    //   });
-    // });
-    // wx.error(function(res) {
-    //   console.log(res);
-    // });
-  },
+  mounted() {},
   methods: {
     getCode() {
       var code = this.getUrlParam('code')
