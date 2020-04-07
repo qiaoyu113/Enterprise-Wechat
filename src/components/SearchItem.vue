@@ -52,7 +52,7 @@
           <van-picker
             show-toolbar
             :columns="columns3"
-            value-key="code"
+            value-key="name"
             @cancel="showPicker3 = false"
             @confirm="onConfirm3"
           />
@@ -70,7 +70,7 @@
 </template>
 <script>
 import { Toast, Search, Field, Popup, Picker, Button, Overlay } from 'vant'
-import { dictionary } from '@/api/common'
+import { dictionary, getCityAreaByCode } from '@/api/common'
 export default {
   name: 'SearchItem',
   components: {
@@ -93,7 +93,7 @@ export default {
       showPicker2: false,
       showPicker3: false,
       lineVal: '',
-      lineValCode: '',
+      lineValCode: '-99',
       carVal: '',
       carValCode: '',
       cargoVal: '',
@@ -109,15 +109,12 @@ export default {
   methods: {
     fetchData() {
       let that = this;
+      let cityCode = localStorage.getItem('city')
       // 工作城市
-      dictionary({
-        dictType: 'online_city'
+      getCityAreaByCode({
+        cityCode: cityCode
       }).then(res => {
         let arr = res.data.data;
-        arr.unshift({
-          code: '全部',
-          codeVal: ''
-        })
         that.columns3 = arr;
       }).catch(err => {
         Toast.fail(err);
@@ -162,7 +159,7 @@ export default {
     remove() {
       this.value = ''
       this.lineVal = ''
-      this.lineValCode = ''
+      this.lineValCode = '-99'
       this.carVal = ''
       this.carValCode = ''
       this.cargoVal = ''
@@ -182,8 +179,8 @@ export default {
       this.showPicker2 = false;
     },
     onConfirm3(value) {
-      this.lineVal = value.code;
-      this.lineValCode = value.codeVal;
+      this.lineVal = value.name;
+      this.lineValCode = value.code;
       this.showPicker3 = false;
     }
   }

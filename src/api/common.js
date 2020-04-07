@@ -9,6 +9,16 @@ export function upImgData(data) {
   })
 }
 
+/* POST /user/area/getCityAreaByCode
+根据父级城市code获取区县子列表 */
+export function getCityAreaByCode(data) {
+  return request({
+    url: '/api/base/user/area/getCityAreaByCode',
+    method: 'get',
+    params: data
+  })
+}
+
 /* 字典 */
 export function dictionary(data) {
   return request({

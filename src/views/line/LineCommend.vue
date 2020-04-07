@@ -55,7 +55,7 @@ export default {
       listQuery: {
         'carType': '',
         'cargoType': '',
-        'city': '',
+        'city': '-99',
         'key': '',
         'limit': '20',
         'page': 1
