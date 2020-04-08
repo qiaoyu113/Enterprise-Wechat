@@ -71,7 +71,7 @@
             操作
           </van-button>
         </van-tab>
-        <van-tab title="撮合">
+        <!-- <van-tab title="撮合">
           <van-cell-group v-if="matchModule">
             <h2 class="van-doc-demo-block__title">
               撮合信息
@@ -92,7 +92,7 @@
               设置司机接活意向
             </van-button>
           </div>
-        </van-tab>
+        </van-tab> -->
       </van-tabs>
       <van-action-sheet v-model="show" :actions="actions" @select="onSelect" />
     </div>
