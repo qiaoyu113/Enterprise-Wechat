@@ -25,14 +25,14 @@
             <van-cell v-if="detail.incomeSettlementMethod === 2" title="预计货主月报价" :value=" detail.preLowestQuotations | NumFormat" />
             <van-cell v-if="detail.incomeSettlementMethod === 2" title="预估月费用(元)(含油耗、过路、过桥)" :value=" detail.monthlyFuelConsumption | NumFormat" />
             <van-cell v-if="detail.incomeSettlementMethod === 2" title="预计去油净收入" :value=" Number(detail.preLowestQuotations) - Number(detail.monthlyFuelConsumption) ? Number(detail.preLowestQuotations) - Number(detail.monthlyFuelConsumption) : 0 | NumFormat" />
-            <van-cell title="油卡结算(%)" :value=" detail.fuelRatio | DataIsNull" />
+            <van-cell title="油卡结算(%)" :value=" detail.fuelRatio | DataIsNull + '%'" />
             <van-cell title="线路区域" :value=" (detail.provinceAreaName + detail.cityAreaName + detail.countyAreaName) | DataIsNull" />
             <van-cell title="具体区域范围" :value=" detail.districtArea | DataIsNull" />
             <van-cell title="线路编号" :value="detail.lineId | DataIsNull" />
             <van-cell title="线路入池原因" :value="detail.occurReasonName | DataIsNull" />
             <van-cell title="可上车数" :value="detail.deployNum | DataIsNull" />
             <van-cell title="线路稳定性" :value="detail.stabilityRateName | DataIsNull" />
-            <van-cell title="账期" :value="detail.billingCycle | DataIsNull" />
+            <van-cell title="账期" :value="detail.billingCycle | DataIsNull + '天'" />
             <van-cell title="创建线路难度" :value="detail.handlingDifficultyDegreeName | DataIsNull" />
             <van-cell title="备注信息" :value="detail.remark | DataIsNull" />
             <van-cell title="线路类型" :value="detail.distinguishedTypeName | DataIsNull" />

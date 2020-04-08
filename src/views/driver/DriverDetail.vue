@@ -39,6 +39,9 @@
           <p v-if="JSON.stringify(detail) == '{}'" class="noMore">
             暂无信息
           </p>
+          <van-button round type="info" block class="btn" @click="check">
+            操作
+          </van-button>
         </van-tab>
         <van-tab title="订单">
           <van-cell-group v-if="lineList.length">
@@ -50,6 +53,9 @@
           <p v-if="!lineList.length" class="noMore">
             暂无信息
           </p>
+          <van-button round type="info" block class="btn" @click="check">
+            操作
+          </van-button>
         </van-tab>
         <van-tab title="线路">
           <van-cell-group v-if="lineList.length">
@@ -61,11 +67,33 @@
           <p v-if="!lineList.length" class="noMore">
             暂无信息
           </p>
+          <van-button round type="info" block class="btn" @click="check">
+            操作
+          </van-button>
+        </van-tab>
+        <van-tab title="撮合">
+          <van-cell-group v-if="matchModule">
+            <h2 class="van-doc-demo-block__title">
+              撮合信息
+            </h2>
+          </van-cell-group>
+          <div v-if="!matchModule" class="match_box">
+            <img src="https://qizhiniao-dev.oss-cn-beijing.aliyuncs.com/img/998f5a4580604c4f8e798f98430cbe92" alt="">
+            <p class="hint_weight">
+              未设置接活意向
+            </p>
+            <p class="text_nomarl">
+              请根据司机需求设置接活意向
+            </p>
+            <p class="text_nomarl">
+              系统会根据意向智能推荐匹配线路
+            </p>
+            <van-button round type="info" block class="btn" @click="check">
+              设置司机接活意向
+            </van-button>
+          </div>
         </van-tab>
       </van-tabs>
-      <van-button round type="info" block class="btn" @click="check">
-        操作
-      </van-button>
       <van-action-sheet v-model="show" :actions="actions" @select="onSelect" />
     </div>
   </div>
@@ -102,6 +130,7 @@ export default {
       driverType: '1',
       detail: '',
       show: false,
+      matchModule: false,
       actions: [
         { name: '产品介绍', color: '#3F8AF2' },
         { name: '推荐线路', color: '#3F8AF2' }
@@ -170,7 +199,25 @@ export default {
 </script>
 <style lang="scss" scoped>
 .driverDetail{
-
+  .match_box{
+    width: 100%;
+    text-align: center;
+    padding:1rem 0;
+    box-sizing: border-box;
+    img{
+      width:3rem;
+      height: 3rem;
+    }
+    .hint_weight{
+      font-size: 16px;
+      font-weight: bold;
+      padding:0.8rem;
+      box-sizing: border-box;
+    }
+    .text_nomarl{
+      font-size: 14px;
+    }
+  }
   .noMore{
     width: 100%;
     text-align: center;
