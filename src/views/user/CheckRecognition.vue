@@ -197,7 +197,7 @@ export default {
           if (that.driverType === 1) {
             this.$router.replace({ path: '/driverdetail', query: { driverId: that.driverId }})
           } else {
-            this.$router.replace({ path: '/cluedetail', query: { driverId: that.driverId }})
+            this.$router.replace({ path: '/cluedetail', query: { clueId: that.driverId }})
           }
         }
       })
