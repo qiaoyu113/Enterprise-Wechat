@@ -1,40 +1,59 @@
 <template>
   <div class="clueDetail">
     <div class="list-wrap">
-      <vo-pages
-        :data="[]"
-        :loaded-all="loadedAll"
-        :no-data-hint="false"
-      >
-        <van-tabs v-model="listQuery.state" color="#3986CB" sticky>
-          <van-tab title="基本">
-            <van-cell-group>
-              <van-cell v-for="item in detail" :key="item.type" :title="item.fieldName" :value="item.value" />
-            </van-cell-group>
-          </van-tab>
-          <van-tab title="跟进">
-            <van-cell-group>
-              <van-cell v-for="item in follow" :key="item.type" :title="item.fieldName" :value="item.value" />
-            </van-cell-group>
-          </van-tab>
-          <van-tab title="行为">
-            <van-cell-group>
-              <van-cell v-for="item in action" :key="item.type" :title="item.fieldName" :value="item.value" />
-            </van-cell-group>
-          </van-tab>
-        </van-tabs>
-        <van-button round type="info" block class="btn" @click="check">
-          操作
-        </van-button>
-        <van-action-sheet v-model="show" :actions="actions" @select="onSelect" />
-      </vo-pages>
+      <van-tabs color="#3986CB" sticky>
+        <van-tab title="基本">
+          <van-cell-group v-if="JSON.stringify(detail) != '{}'">
+            <h2 class="van-doc-demo-block__title">
+              基本信息
+            </h2>
+            <van-cell title="姓名" :value="detail.name | DataIsNull" />
+            <van-cell title="联系电话" :value="detail.phone | DataIsNull" />
+            <van-cell title="来源渠道" :value="detail.sourceTypeName | DataIsNull" />
+            <van-cell title="工作城市" :value="detail.workCityName | DataIsNull" />
+            <van-cell title="是否能邀约面试" :value=" detail.invited ? (detail.invited === 2 ? '否' : '是') : '暂无数据'" />
+            <van-cell title="是否添加微信" :value=" detail.isAddWechat ? (detail.isAddWechat === 2 ? '否' : '是') : '暂无数据'" />
+            <van-cell title="备注" :value="detail.remark | DataIsNull" />
+          </van-cell-group>
+          <p v-if="JSON.stringify(detail) == '{}'" class="noMore">
+            暂无信息
+          </p>
+        </van-tab>
+        <van-tab title="跟进">
+          <van-cell-group v-if="JSON.stringify(detail) != '{}'">
+            <h2 class="van-doc-demo-block__title">
+              跟进信息
+            </h2>
+            <van-cell title="跟进方式" :value="detail.wayName | DataIsNull" />
+            <van-cell title="跟进情况" :value="detail.situation | DataIsNull" />
+          </van-cell-group>
+          <p v-if="JSON.stringify(detail) == '{}'" class="noMore">
+            暂无信息
+          </p>
+        </van-tab>
+        <van-tab title="行为">
+          <van-cell-group v-if="clueLog.length">
+            <h2 class="van-doc-demo-block__title">
+              行为信息
+            </h2>
+            <van-cell v-for="item in clueLog" :key="item.type" :title="item.operType" :value="'(' + item.creatorName + ')' + item.createDate" />
+          </van-cell-group>
+          <p v-if="!clueLog.length" class="noMore">
+            暂无信息
+          </p>
+        </van-tab>
+      </van-tabs>
+      <van-button round type="info" block class="btn" @click="check">
+        操作
+      </van-button>
+      <van-action-sheet v-model="show" :actions="actions" @select="onSelect" />
     </div>
   </div>
 </template>
 <script>
 import { Tabbar, TabbarItem, Toast, Tab, Tabs, Cell, CellGroup, Button, ActionSheet } from 'vant'
-// import { customerDetail } from '@/api/user'
-import VoPages from 'vo-pages'
+import { clueDetail, clueLog } from '@/api/user'
+// import VoPages from 'vo-pages'
 import 'vo-pages/lib/vo-pages.css'
 // import wx from 'jWeixin';
 export default {
@@ -48,20 +67,19 @@ export default {
     [Cell.name]: Cell,
     [CellGroup.name]: CellGroup,
     [Button.name]: Button,
-    [ActionSheet.name]: ActionSheet,
-    VoPages
+    [ActionSheet.name]: ActionSheet
   },
   data() {
     return {
-      listQuery: {
-        state: 0
-      },
-      active: 1,
-      detail: [],
-      follow: [],
-      action: [],
+      clueLog: [],
+      orderList: [],
+      lineList: [],
+      cost: [],
       total: 0,
       page: 1,
+      driverId: '',
+      driverType: '1',
+      detail: '',
       show: false,
       actions: [
         { name: '产品介绍', color: '#3F8AF2' },
@@ -71,27 +89,26 @@ export default {
     }
   },
   mounted() {
-    this.getDetail()
+    let clueId = this.$route.query.clueId;
+    this.clueId = clueId;
+    this.getDetail(clueId)
   },
   methods: {
-    getDetail() {
-    //   customerDetail({
-    //     custClueId: 201910231017
-    //   }).then((res) => {
-    //     if (res.data.success) {
-    //       console.log(res.data.data)
-    //       this.detail = res.data.data
-    //     }
-    //   })
-      this.detail = [
-        {
-          fieldEn: 'field_2',
-          fieldName: '外线销售姓名',
-          type: 'single_line_text',
-          notes: '',
-          value: '石晓光'
+    getDetail(clueId) {
+      clueDetail({
+        clueId: clueId
+      }).then((res) => {
+        if (res.data.success) {
+          this.detail = res.data.data
         }
-      ]
+      })
+      clueLog({
+        clueId: clueId
+      }).then((res) => {
+        if (res.data.success) {
+          this.clueLog = res.data.data
+        }
+      })
     },
     check() {
       this.show = true;
@@ -136,10 +153,15 @@ export default {
 
     .btn{
     width:90%;
-    margin: auto;
-    margin-top:3rem;
+    margin: 1rem auto;
     }
 
+  .noMore{
+    width: 100%;
+    text-align: center;
+    height:5rem;
+    line-height: 6rem;
+  }
     .article-list {
     width: 100%;
     height: auto;
@@ -206,5 +228,16 @@ export default {
         font-size: 14px;
     }
     }
+
+  .van-doc-demo-block__title{
+    margin: 0;
+    text-align: center;
+    padding: 16px;
+    color: #4D86C6;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 16px;
+    background-color: #f7f8fa;
+  }
 }
 </style>

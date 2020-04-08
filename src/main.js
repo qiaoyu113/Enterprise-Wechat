@@ -10,6 +10,8 @@ import '@/icons' // icon
 import '@/style/common.scss'
 import { Lazyload } from 'vant'
 import defaultSettings from '@/settings'
+import * as filters from '@/filters'
+import global_ from 'components/Global'
 
 /**
  * If you don't want to use mock-server
@@ -38,8 +40,14 @@ if (process.env.NODE_ENV === 'development' && defaultSettings.vconsole) {
   const my_console = new VConsole()
 }
 // var vConsole = new VConsole(option)
+// register global utility filters.
+Object.keys(filters).forEach(key => {
+  Vue.filter(key, filters[key])
+})
 
 Vue.config.productionTip = false
+
+Vue.prototype.GLOBAL = global_
 
 new Vue({
   router,

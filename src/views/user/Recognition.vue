@@ -20,7 +20,7 @@
 </template>
 <script>
 import { Tabbar, TabbarItem, Toast, Tab, Tabs, Loading } from 'vant'
-import { getCorpSignature, getAgentSignature } from '@/api/user'
+import { getCorpSignature, getAgentSignature, externalUserId } from '@/api/user'
 import VoPages from 'vo-pages'
 import 'vo-pages/lib/vo-pages.css'
 const wx = window.wx;
@@ -91,14 +91,12 @@ export default {
                 'getCurExternalContact'
               ],
               success: function(res) {
-                console.log('checkJsApi', res)
                 getAgentSignature({
-                  agentId: '1000013',
+                  agentId: that.GLOBAL.agentId,
                   url: hostName
                 }).then((res) => {
                   if (res.data.success) {
                     const agentData = res.data.data
-                    console.log('agentData', agentData)
                     wx.agentConfig({
                       corpid: agentData.corpId, // 必填，企业微信的corpid，必须与当前登录的企业一致
                       agentid: agentData.agentId, // 必填，企业微信的应用id （e.g. 1000247）
@@ -107,84 +105,45 @@ export default {
                       signature: agentData.signature, // 必填，签名，见附录1
                       jsApiList: ['sendChatMessage', 'getCurExternalContact'], // 必填
                       success: function(res) {
-                        console.log('success', res)
                         wx.invoke('getCurExternalContact', {
                         }, function(res) {
+                          console.log(res)
                           if (res.err_msg === 'getCurExternalContact:ok') {
-                            console.log(res.userId) // 返回当前外部联系人userId
-                            const state = 1;
-                            if (state === 1) {
-                              // 无法识别
-                              that.$router.replace({ path: '/unrecognition' })
-                            } else if (state === 2) {
-                              that.$router.replace({ path: '/clueDetail' })
-                            } else {
-                              that.$router.replace({ path: '/driverDetail' })
-                            }
+                            // console.log('userId', res.userId) // 返回当前外部联系人userId
+                            localStorage.setItem('externalUserId', res.userId.toString())
+                            externalUserId({
+                              externalUserId: res.userId
+                            }).then((res) => {
+                              if (res.data.success) {
+                                if (res.data.data.matchSuccess) {
+                                  // 1是司机，2是线索
+                                  const state = res.data.data.driverType;
+                                  const driverId = res.data.data.driverId;
+                                  if (state === 1) {
+                                    that.$router.replace({ path: '/driverDetail', query: { driverId: driverId }})
+                                  } else if (state === 2) {
+                                    that.$router.replace({ path: '/cluedetail', query: { clueId: driverId }})
+                                  } else {
+                                    // 无法识别
+                                    that.$router.replace({ path: '/unrecognition' })
+                                  }
+                                } else {
+                                  // 无法识别
+                                  that.$router.replace({ path: '/unrecognition' })
+                                }
+                              }
+                            })
                           } else {
                             // 错误处理
-                            this.btnShow = true;
+                            that.btnShow = true;
+                            alert('外部联系人识别失败')
                           }
                         });
-                        // wx.invoke('sendChatMessage', {
-                        //   msgtype: 'text', // 消息类型，必填
-                        //   text: {
-                        //     content: '测试' // 文本内容
-                        //   },
-                        //   image:
-                        //   {
-                        //     mediaid: '2TLVdgtYCwWc3BXOlAErsdp93e7IKfqA__9OYWVOtNEA_ex0lGEK3cxC1yze78X09' // 图片的素材id
-                        //   },
-                        //   video:
-                        //   {
-                        //     mediaid: '' // 视频的素材id
-                        //   },
-                        //   file:
-                        //   {
-                        //     mediaid: '' // 文件的素材id
-                        //   },
-                        //   news:
-                        //   {
-                        //     link: 'www.baidu.com', // H5消息页面url 必填
-                        //     title: '百度', // H5消息标题
-                        //     desc: '百度', // H5消息摘要
-                        //     imgUrl: 'https://upload.jianshu.io/users/upload_avatars/10311999/16dbb33b-6d2d-47c9-9d6a-fbadccc67e85.png?imageMogr2/auto-orient/strip|imageView2/1/w/96/h/96/format/webp' // H5消息封面图片URL
-                        //   }
-                        // }, function(res) {
-                        //   console.log('测试1通过')
-                        //   wx.invoke('sendChatMessage', {
-                        //     msgtype: 'text', // 消息类型，必填
-                        //     text: {
-                        //       content: '测试22222' // 文本内容
-                        //     },
-                        //     image:
-                        //     {
-                        //       mediaid: '2TLVdgtYCwWc3BXOlAErsdp93e7IKfqA__9OYWVOtNEA_ex0lGEK3cxC1yze78X09' // 图片的素材id
-                        //     },
-                        //     video:
-                        //     {
-                        //       mediaid: '' // 视频的素材id
-                        //     },
-                        //     file:
-                        //     {
-                        //       mediaid: '' // 文件的素材id
-                        //     },
-                        //     news:
-                        //     {
-                        //       link: 'www.baidu.com', // H5消息页面url 必填
-                        //       title: '百度', // H5消息标题
-                        //       desc: '百度', // H5消息摘要
-                        //       imgUrl: 'https://upload.jianshu.io/users/upload_avatars/10311999/16dbb33b-6d2d-47c9-9d6a-fbadccc67e85.png?imageMogr2/auto-orient/strip|imageView2/1/w/96/h/96/format/webp' // H5消息封面图片URL
-                        //     }
-                        //   }, function(res) {
-                        //     console.log('测试2通过')
-                        //   })
-                        // })
                       },
                       fail: function(res) {
                         console.log('err', res)
                         if (res.errMsg.indexOf('is not a function') > -1) {
-                          alert('<i class="weui-icon-warn">版本过低请升级333</i>')
+                          alert('<i class="weui-icon-warn">版本过低请升级3</i>')
                         }
                       }
                     });

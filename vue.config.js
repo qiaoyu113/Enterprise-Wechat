@@ -1,7 +1,7 @@
 const path = require('path')
 const CompressionWebpackPlugin = require('compression-webpack-plugin')
 const UglifyjsWebpackPlugin = require('uglifyjs-webpack-plugin')
-const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer')
+// const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer')
 const port = process.env.port || process.env.npm_config_port || 8888
 const cdnDomian = './' // cdn域名，如果有cdn修改成对应的cdn
 const name = '梧桐OSS运维平台' // page title
@@ -32,7 +32,7 @@ function resolve(dir) {
 
 module.exports = {
   publicPath: IS_PRODUCTION ? cdnDomian : './',
-  outputDir: 'dist',
+  outputDir: 'web',
   assetsDir: 'static',
   lintOnSave: process.env.NODE_ENV === 'development',
   productionSourceMap: false,
@@ -69,7 +69,10 @@ module.exports = {
         'api': resolve('src/api'), // 接口
         'utils': resolve('src/utils'), // 通用功能
         'assets': resolve('src/assets'), // 静态资源
-        'style': resolve('src/style') // 通用样式
+        'router': resolve('src/router'), // 路由
+        'style': resolve('src/style'), // 通用样式
+        'store': resolve('src/store'), // vuex
+        'filters': resolve('src/filters') // 过滤器
       }
     }
   },
@@ -145,10 +148,9 @@ module.exports = {
         }
       )
     if (IS_PRODUCTION) {
-      config.plugin('analyzer').use(BundleAnalyzerPlugin)
+      // config.plugin('analyzer').use(BundleAnalyzerPlugin)
       config.plugin('html').tap(args => {
         args[0].cdn = cdn
-        console.log('args', args)
         return args
       })
       config.externals(externals)
