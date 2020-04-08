@@ -56,6 +56,7 @@ export default {
         'carType': '',
         'cargoType': '',
         'city': '',
+        'county': '',
         'key': '',
         'limit': '20',
         'page': 1
@@ -75,6 +76,11 @@ export default {
   },
   mounted() {
     let externalUserIdOld = localStorage.getItem('externalUserId')
+    let city = localStorage.getItem('city')
+    this.listQuery.city = city
+    if (!city) {
+      localStorage.removeItem('token')
+    }
     if (externalUserIdOld) {
       this.getUserConfig(true, externalUserIdOld);
     } else {
@@ -188,9 +194,9 @@ export default {
     searchFunction(data) {
       this.listQuery.carType = data.carVal
       this.listQuery.cargoType = data.cargoVal
-      this.listQuery.city = data.lineVal
+      this.listQuery.county = data.lineVal
       this.listQuery.key = data.findVal
-      this.listQuery.page = 1
+      this.listQuery.page = 0
       this.list = [];
       this.pullingDown()
     },
