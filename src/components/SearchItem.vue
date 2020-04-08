@@ -93,7 +93,7 @@ export default {
       showPicker2: false,
       showPicker3: false,
       lineVal: '',
-      lineValCode: '-99',
+      lineValCode: '',
       carVal: '',
       carValCode: '',
       cargoVal: '',
@@ -159,7 +159,7 @@ export default {
     remove() {
       this.value = ''
       this.lineVal = ''
-      this.lineValCode = '-99'
+      this.lineValCode = ''
       this.carVal = ''
       this.carValCode = ''
       this.cargoVal = ''

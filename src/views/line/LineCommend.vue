@@ -56,7 +56,7 @@ export default {
         'carType': '',
         'cargoType': '',
         'city': '',
-        'county': '-99',
+        'county': '',
         'key': '',
         'limit': '20',
         'page': 1
