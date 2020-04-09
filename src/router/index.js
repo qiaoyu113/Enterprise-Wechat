@@ -19,7 +19,7 @@ let routes = [
     name: 'unauthority',
     component: () => import('views/Unauthority.vue'),
     meta: {
-      title: '云雀',
+      title: '朱雀',
       keepAlive: true
     }
   }
