@@ -60,7 +60,11 @@ service.interceptors.response.use(
       })
       localStorage.removeItem('token')
       localStorage.removeItem('code')
-      location.reload()
+      // location.reload()
+      let unauthorityUrl = window.location.href;
+      localStorage.setItem('unauthorityUrl', unauthorityUrl)
+      // location.href = '/unauthority'
+      location.replace('/unauthority')
       // 50008:非法的token; 50012:其他货主端登录了;  40101:Token 过期了;
       // if (res.code === 50008 || res.code === 50012 || res.code === 40101) {
       //   // to re-login
