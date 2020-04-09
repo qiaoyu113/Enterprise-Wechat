@@ -30,8 +30,7 @@ export default {
     reLogin() {
       let url = localStorage.getItem('unauthorityUrl')
       localStorage.removeItem('unauthorityUrl')
-      console.log(url)
-      location.href = url
+      location.replace(url)
     }
   }
 }
