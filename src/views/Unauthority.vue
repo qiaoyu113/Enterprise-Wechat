@@ -23,7 +23,7 @@ export default {
   name: 'Page404',
   computed: {
     message() {
-      return '您的账号暂时无权限访问，请联系管理员'
+      return '您的账号暂时无权限访问，请联系HRBP'
     }
   },
   methods: {
