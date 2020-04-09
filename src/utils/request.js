@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { Toast } from 'vant'
-import store from '@/store'
+// import store from '@/store'
 import { getToken } from '@/utils/auth'
 
 let url = 'http://firmiana-wechat.yunniao.cn/'
@@ -62,18 +62,18 @@ service.interceptors.response.use(
       localStorage.removeItem('code')
       location.reload()
       // 50008:非法的token; 50012:其他货主端登录了;  40101:Token 过期了;
-      if (res.code === 50008 || res.code === 50012 || res.code === 40101) {
-        // to re-login
-        Toast.confirm('您无权访问该功能，可以取消继续留在该页面，或者重新登录', '确定登出', {
-          confirmButtonText: '重新登录',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          store.dispatch('user/resetToken').then(() => {
-            location.reload()
-          })
-        })
-      }
+      // if (res.code === 50008 || res.code === 50012 || res.code === 40101) {
+      //   // to re-login
+      //   Toast.confirm('您无权访问该功能，可以取消继续留在该页面，或者重新登录', '确定登出', {
+      //     confirmButtonText: '重新登录',
+      //     cancelButtonText: '取消',
+      //     type: 'warning'
+      //   }).then(() => {
+      //     store.dispatch('user/resetToken').then(() => {
+      //       location.reload()
+      //     })
+      //   })
+      // }
       return Promise.reject(res.message)
     } else {
       return response

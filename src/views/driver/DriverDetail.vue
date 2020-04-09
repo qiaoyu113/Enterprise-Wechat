@@ -199,6 +199,8 @@ export default {
 </script>
 <style lang="scss" scoped>
 .driverDetail{
+  padding-bottom: 3.6rem;
+  box-sizing: border-box;
   .match_box{
     width: 100%;
     text-align: center;
@@ -239,8 +241,12 @@ export default {
     }
 
     .btn{
-    width:90%;
-    margin: 1rem auto;
+      width:90%;
+      margin: 1rem auto;
+      position: fixed;
+      bottom: .6rem;
+      left:0;
+      right:0;
     }
 
     .article-list {
