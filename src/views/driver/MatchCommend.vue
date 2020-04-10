@@ -1,0 +1,494 @@
+<template>
+  <div class="matchCommend">
+    <!-- <SearchItemMatch @searchData="searchFunction"></SearchItemMatch> -->
+    <div class="list-wrap">
+      <vo-pages
+        :data="list"
+        :loaded-all="loadedAll"
+        @pullingUp="pullingUp"
+        @pullingDown="pullingDown"
+      >
+        <div class="placeholder"></div>
+        <div v-for="item in list" :key="item.type" class="lineList" @click="goDetail(item.lineId, item.timeDiff, item.monthlyTransaction)">
+          <div class="lineListTop">
+            <div class="name">
+              <p>{{ item.lineName }} / {{ item.custom }}</p>
+              <p class="address">
+                {{ item.address }}
+              </p>
+              <div class="tagBox">
+                <van-tag round color="#81CA2A" type="success" size="medium">
+                  标签
+                </van-tag>
+                <van-tag round color="#E75E60" type="danger" size="medium">
+                  标签
+                </van-tag>
+              </div>
+              <div class="matchRate">
+                匹配度 <span>86%</span>
+              </div>
+              <div class="needCarBox">
+                <div class="needCarList">
+                  <div class="top">
+                    所需车型
+                  </div>
+                  <div class="bottom">
+                    <van-icon name="checked" size="28" color="#70C740" />
+                    <van-icon name="clear" size="28" color="#DC6857" />
+                  </div>
+                </div>
+                <div class="needCarList">
+                  <div class="top">
+                    货物类型
+                  </div>
+                  <div class="bottom">
+                    <van-icon name="checked" size="28" color="#70C740" />
+                    <van-icon name="clear" size="28" color="#DC6857" />
+                  </div>
+                </div>
+                <div class="needCarList">
+                  <div class="top">
+                    线路区域
+                  </div>
+                  <div class="bottom">
+                    <van-icon name="checked" size="28" color="#70C740" />
+                    <van-icon name="clear" size="28" color="#DC6857" />
+                  </div>
+                </div>
+                <div class="needCarList">
+                  <div class="top">
+                    装卸难度
+                  </div>
+                  <div class="bottom">
+                    <van-icon name="checked" size="28" color="#70C740" />
+                    <van-icon name="clear" size="28" color="#DC6857" />
+                  </div>
+                </div>
+                <div class="needCarList">
+                  <div class="top">
+                    出车时段
+                  </div>
+                  <div class="bottom">
+                    <van-icon name="checked" size="28" color="#70C740" />
+                    <van-icon name="clear" size="28" color="#DC6857" />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="lineListBottom">
+            <van-cell title="详情" is-link />
+          </div>
+        </div>
+      </vo-pages>
+    </div>
+  </div>
+</template>
+<script>
+import { Tabbar, TabbarItem, Toast, Tab, Tabs, Cell, CellGroup, Tag, Icon } from 'vant'
+import { selectLineTask } from '@/api/line'
+import { getCorpSignature, getAgentSignature } from '@/api/user'
+import VoPages from 'vo-pages'
+// import SearchItemMatch from 'components/SearchItemMatch'
+import 'vo-pages/lib/vo-pages.css'
+const wx = window.wx;
+export default {
+  name: 'Linecommend',
+  components: {
+    [Tabbar.name]: Tabbar,
+    [TabbarItem.name]: TabbarItem,
+    [Toast.name]: Toast,
+    [Icon.name]: Icon,
+    [Tab.name]: Tab,
+    [Tabs.name]: Tabs,
+    [Tag.name]: Tag,
+    [Cell.name]: Cell,
+    [CellGroup.name]: CellGroup,
+    VoPages
+    // SearchItemMatch
+  },
+  data() {
+    return {
+      listQuery: {
+        'carType': '',
+        'cargoType': '',
+        'city': '',
+        'county': '',
+        'key': '',
+        'limit': '20',
+        'page': 1
+      },
+      active: 1,
+      list: [],
+      total: 0,
+      page: 1,
+      show: false,
+      beforePullDown: false,
+      actions: [
+        { name: '产品介绍', color: '#3F8AF2' },
+        { name: '推荐线路', color: '#3F8AF2' }
+      ],
+      loadedAll: false
+    }
+  },
+  mounted() {
+    // let externalUserIdOld = localStorage.getItem('externalUserId')
+    // let city = localStorage.getItem('city')
+    // this.listQuery.city = city
+    // if (!city) {
+    //   localStorage.removeItem('token')
+    // }
+    // if (externalUserIdOld) {
+    //   this.getUserConfig(true, externalUserIdOld);
+    // } else {
+    //   this.getUserConfig(false, externalUserIdOld);
+    //   this.getList()
+    // }
+    this.list = [
+      {
+        lineName: '希杰物流（广州市）',
+        custom: '配送外包承运商',
+        address: '广东省佛山市南海区南海区',
+        type: [
+          {
+            name: '4.2米想活',
+            type: '1'
+          }
+        ]
+      }
+    ]
+    this.total = 1
+    if (!this.beforePullDown) {
+      this.beforePullDown = true
+    }
+    if (this.list.length === this.total || this.list.length < 4) {
+      this.loadedAll = true
+    } else {
+      this.loadedAll = false
+    }
+  },
+  methods: {
+    getUserConfig(type, externalUserIdOld) {
+      let that = this;
+      const hostName = window.location.href
+      getCorpSignature({
+        url: hostName
+      }).then((res) => {
+        if (res.data.success) {
+          let data = res.data.data;
+          wx.config({
+            beta: true,
+            debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+            appId: data.corpId, // 必填，企业号的唯一标识，此处填写企业号corpid
+            timestamp: Number(data.timestamp), // 必填，生成签名的时间戳
+            nonceStr: data.nonceStr, // 必填，生成签名的随机串
+            signature: data.signature, // 必填，签名，见附录1
+            jsApiList: ['agentConfig'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+          });
+          wx.ready(function() {
+            // 开启企业微信debug模式wx.config里的debug为true
+            wx.checkJsApi({
+              jsApiList: [
+                'agentConfig',
+                'sendChatMessage',
+                'getCurExternalContact'
+              ],
+              success: function(res) {
+                getAgentSignature({
+                  agentId: that.GLOBAL.agentId,
+                  url: hostName
+                }).then((res) => {
+                  if (res.data.success) {
+                    const agentData = res.data.data
+                    wx.agentConfig({
+                      corpid: agentData.corpId, // 必填，企业微信的corpid，必须与当前登录的企业一致
+                      agentid: agentData.agentId, // 必填，企业微信的应用id （e.g. 1000247）
+                      timestamp: '' + agentData.timestamp, // 必填，生成签名的时间戳
+                      nonceStr: agentData.nonceStr, // 必填，生成签名的随机串
+                      signature: agentData.signature, // 必填，签名，见附录1
+                      jsApiList: ['sendChatMessage', 'getCurExternalContact'], // 必填
+                      success: function(res) {
+                        wx.invoke('getCurExternalContact', {
+                        }, function(res) {
+                          if (res.err_msg === 'getCurExternalContact:ok') {
+                            // console.log('userId', res.userId) // 返回当前外部联系人userId
+                            localStorage.setItem('externalUserId', res.userId)
+                            let externalUserId = res.userId
+                            if (type) {
+                              if (externalUserId === externalUserIdOld) {
+                                let lineIdNeedBack = localStorage.getItem('lineIdNeedBack')
+                                if (lineIdNeedBack) {
+                                  lineIdNeedBack = JSON.parse(lineIdNeedBack)
+                                  if (lineIdNeedBack.lineId) {
+                                    localStorage.removeItem('lineIdNeedBack')
+                                    that.$destroy(true)
+                                    that.$router.push({ path: '/linedetail', query: { id: lineIdNeedBack.lineId, timeDiff: lineIdNeedBack.timeDiff, monthlyTransaction: lineIdNeedBack.monthlyTransaction, backBtn: 1 }})
+                                  }
+                                } else {
+                                  that.getList()
+                                }
+                              } else {
+                                localStorage.removeItem('lineIdNeedBack')
+                                that.getList()
+                              }
+                            } else {
+                              localStorage.removeItem('lineIdNeedBack')
+                            }
+                          } else {
+                            // 错误处理
+                            this.btnShow = true;
+                          }
+                        });
+                      },
+                      fail: function(res) {
+                        // console.log('err', res)
+                        if (res.errMsg.indexOf('is not a function') > -1) {
+                          alert('<i class="weui-icon-warn">版本过低请升级333</i>')
+                        }
+                      }
+                    });
+                  }
+                })
+              },
+              fail: function(res) {
+                alert('版本过低请升级2');
+              }
+            });
+          });
+          wx.error(function(res) {
+            console.log(res);
+          });
+        }
+      })
+    },
+    pullingDown() {
+      this.beforePullDown = false
+      this.listQuery.page = 1
+      this.getList(false)
+    },
+    pullingUp() {
+      this.listQuery.page += 1
+      this.getList()
+    },
+    searchFunction(data) {
+      this.listQuery.carType = data.carVal
+      this.listQuery.cargoType = data.cargoVal
+      this.listQuery.county = data.lineVal
+      this.listQuery.key = data.findVal
+      this.listQuery.page = 0
+      this.list = [];
+      this.pullingDown()
+    },
+    getList(loadMore = true) {
+      Toast.loading({
+        duration: 0, // 持续展示 toast
+        forbidClick: true, // 禁用背景点击
+        loadingType: 'spinner',
+        message: '加载中...'
+      });
+      selectLineTask(this.listQuery).then((res) => {
+        if (res.data.success) {
+          Toast.clear();
+          let lists = res.data.data
+          this.total = res.data.page.total
+          // const newList = lists.map(item => {
+          //   return item
+          // })
+          if (loadMore) {
+            this.list = this.list.concat(lists)
+          } else {
+            this.list = lists
+          }
+          if (!this.beforePullDown) {
+            this.beforePullDown = true
+          }
+          if (this.list.length === this.total || this.list.length < 4) {
+            this.loadedAll = true
+          } else {
+            this.loadedAll = false
+          }
+        } else {
+          Toast.clear();
+          this.loadedAll = true;
+          Toast.fail(res.data.errorMsg);
+        }
+      }).catch((err) => {
+        Toast.clear();
+        Toast.fail(err);
+        this.loadedAll = true;
+      })
+    },
+    goDetail(id, timeDiff, monthlyTransaction) {
+      this.$router.push({ path: '/linedetail', query: { id: id, timeDiff: timeDiff, monthlyTransaction: monthlyTransaction }})
+    }
+  }
+}
+</script>
+<style lang="scss" scope>
+.matchCommend{
+    background: #f7f8fa;
+    height: 100%;
+    width: 100%;
+    .list-wrap{
+        height: 100%;
+        // overflow-y: hidden;
+        // padding:0.5rem 0.3rem;
+        // box-sizing: border-box;
+    }
+    .lineList{
+        width:100%;
+        border-radius: 1.2rem;
+        padding: 0.3rem;
+        box-sizing: border-box;
+        overflow: hidden;
+        .lineListTop{
+            background:#fff;
+            padding:0.2rem 0;
+            box-sizing: border-box;
+            .info{
+                color:#333;
+                font-size:14px;
+                padding:0 0.42667rem 0.26rem;
+                box-sizing: border-box;
+            }
+            .name{
+                width:100%;
+                font-weight: 500;
+                padding:0.2rem 0.42667rem 0;
+                box-sizing: border-box;
+                font-size: 17px;
+                color: #000000;
+                .address{
+                    font-size: 14px;
+                    color: #000000;
+                    padding: 0.16rem 0;
+                    box-sizing: border-box;
+                    border-bottom: 1px solid #EEEBEB;
+                }
+            }
+            .tagBox{
+                width: 100%;
+                padding:0.26rem 0;
+                box-sizing: border-box;
+                border-bottom: 1px solid #EEEBEB;
+            }
+            .matchRate{
+                width: 100%;
+                padding:0.26rem 0;
+                box-sizing: border-box;
+                font-size: 17px;
+                color: #000000;
+                font-weight: 400;
+                border-bottom: 1px solid #EEEBEB;
+                span{
+                    font-size: 20px;
+                    color: #2F7DCD;
+                    font-weight: bold;
+                    float: right;
+                }
+            }
+            .needCarBox{
+                width:100%;
+                display: flex;
+                .needCarList{
+                    flex: 1;
+                    padding: 0.26rem 0 0;
+                    box-sizing: border-box;
+                    .top{
+                        width: 100%;
+                        text-align: center;
+                        font-size: 12px;
+                        color: #B2B2B2;
+                    }
+                    .bottom{
+                        width: 100%;
+                        padding: 0.26rem 0 0 0;
+                        box-sizing: border-box;
+                        text-align: center;
+                    }
+                }
+            }
+        }
+    }
+    p{
+        margin-block-start: 0;
+        margin-block-end: 0;
+    }
+
+    .article-list {
+        width: 100%;
+        height: auto;
+        box-sizing: border-box;
+        padding: 15px 15px 0;
+        .article {
+            display: flex;
+            width: 100%;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding: 10px 15px;
+            box-sizing: border-box;
+            background: #FFF;
+            border-radius: 5px;
+            box-shadow: 0 0 6px #e3e3e3;
+            .left {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            img {
+                width: 80px;
+                height: 80px;
+                border-radius: 50%;
+            }
+        }
+            .right {
+                padding-left: 15px;
+                box-sizing: border-box;
+                display: flex;
+                width: 235px;
+                height: 80px;
+                flex-direction: column;
+                align-items: flex-start;
+                justify-content: space-around;
+                p {
+                    width: 100%;
+                    line-height: 20px;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    white-space: nowrap;
+                    font-size: 16px;
+                }
+                .more-info{
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    font-size: 14px;
+                    color: #666;
+                }
+            }
+        }
+    }
+    .focus{
+        width:100%;
+        text-align: center;
+        padding-top: 1rem;
+        box-sizing: border-box;
+        img{
+            width: 60%;
+        }
+        p{
+            color:#666;
+            font-size: 14px;
+        }
+    }
+    .placeholder{
+      width:100%;
+      height:1.6rem;
+    }
+    .lineListBottom{
+        border-top: 1px solid #EEEBEB;
+        font-size: 14px;
+        color: #9B9B9B;
+    }
+}
+</style>

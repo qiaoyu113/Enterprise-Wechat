@@ -17,6 +17,15 @@ export default [
       // auth: true,
       keepAlive: true
     }
+  }, {
+    path: '/matchcommend',
+    name: 'matchcommend',
+    component: () => import('views/driver/MatchCommend.vue'),
+    meta: {
+      title: '促撮推荐',
+      // auth: true,
+      keepAlive: true
+    }
   }
 ]
 
