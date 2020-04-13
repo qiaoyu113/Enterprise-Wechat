@@ -47,9 +47,9 @@ export default {
     /*
     d2环境或微信授权不通时
     */
-    // window.localStorage.setItem('token', 'eyJhbGciOiJIUzI1NiJ9.eyJwcm9maWxlIjoiZDIiLCJ1c2VySWQiOiIzNyIsInVzZXJuYW1lIjoid3RfYWRtaW4iLCJ0eXBlIjoiMyIsImJ1c2lQZXJtaXNzaW9uIjoiMCwxIiwiZXhwIjoxNTg2NDg4NzM2fQ.sKHCb7IJMzQj4TrKaVtp0NkkHGVU9i9BoZrew7hJLjc')
-    // window.localStorage.setItem('code', '1234')
-    // window.localStorage.setItem('SetUserData', 'token')
+    window.localStorage.setItem('token', 'eyJhbGciOiJIUzI1NiJ9.eyJwcm9maWxlIjoiZDIiLCJ1c2VySWQiOiIzNyIsInVzZXJuYW1lIjoid3RfYWRtaW4iLCJ0eXBlIjoiMyIsImJ1c2lQZXJtaXNzaW9uIjoiMCwxIiwiZXhwIjoxNTg2NDg4NzM2fQ.sKHCb7IJMzQj4TrKaVtp0NkkHGVU9i9BoZrew7hJLjc')
+    window.localStorage.setItem('code', '1234')
+    window.localStorage.setItem('SetUserData', 'token')
   },
   mounted() {},
   methods: {
@@ -67,6 +67,7 @@ export default {
           this.handleLogin(code)
         }
       }
+      console.log('tag', '')
     },
     linkGetCode() {
       var local = window.location.href
