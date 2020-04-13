@@ -17,6 +17,26 @@ export default [
       // auth: true,
       keepAlive: true
     }
+  },
+  {
+    path: '/driverfollow',
+    name: 'DriverFollow',
+    component: () => import('views/driver/DriverFollow.vue'),
+    meta: {
+      title: '撮合跟进',
+      // auth: true,
+      keepAlive: true
+    }
+  },
+  {
+    path: '/driverfollowdetail',
+    name: 'DriverFollowDetail',
+    component: () => import('views/driver/DriverFollowDetail.vue'),
+    meta: {
+      title: '撮合跟进',
+      // auth: true,
+      keepAlive: true
+    }
   }
 ]
 
