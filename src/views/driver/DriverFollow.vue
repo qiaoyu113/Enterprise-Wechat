@@ -59,75 +59,82 @@
         finished-text="没有更多了"
         @load="getSelectList"
       >
-        <div v-for="item in list" :key="item" class="list-item">
+        <div v-for="item in list" :key="item.lineId" :title="item.lineId" class="list-item">
           <div class="list-top">
-            <h2>希杰物流/配送外包承运商</h2>
-            <p>广东省佛山市南海区南海区</p>
+            <h2>{{ item.customerName }}/{{ item.lineName }}</h2>
+            <p>{{ item.provinceAreaName+item.cityAreaName+item.countyAreaName+item.districtArea }}</p>
             <div class="list-tag">
-              <van-tag class="success-bg">
-                标签
+              <van-tag :class="item.carTypeMatch | setClass">
+                {{ item.carTypeName }}
               </van-tag>
-              <van-tag class="success-bg">
-                标签
+              <van-tag :class="item.cargoTypeColor | setClass">
+                {{ item.cargoTypeName }}
               </van-tag>
-              <van-tag class="success-bg">
-                标签
+              <van-tag :class="item.warehouseMatch | setClass">
+                [仓]{{ item.warehouse }}
               </van-tag>
-              <van-tag class="success-bg">
-                标签
+              <van-tag :class="item.countyAreaMatch | setClass">
+                [配]{{ item.warehouse }}
               </van-tag>
-              <van-tag class="danger-bg">
-                标签
+              <van-tag :class="item.handlingDifficultyDegreeColor | setClass">
+                {{ item.handlingDifficultyDegreeName }}
+              </van-tag>
+              <van-tag :class="item.timeMatch | setClass">
+                {{ item.handlingDifficultyDegreeName }}
               </van-tag>
             </div>
             <van-tag class="top-tag" type="warning">
-              张三
+              {{ item.lineSaleName }}
             </van-tag>
             <van-row class="tit" type="flex" justify="space-between">
               <van-col class="lt">
                 匹配度
               </van-col>
               <van-col class="rt">
-                85%
+                {{ item.suitability }}%
               </van-col>
             </van-row>
             <van-row class="list-type" justify="space-between" type="flex">
               <van-col>
-                <h5>所需类型</h5>
+                <h5>所需车型</h5>
                 <van-icon name="warning" class="danger" />
               </van-col>
               <van-col>
-                <h5>所需类型</h5>
+                <h5>货物类型</h5>
                 <van-icon name="checked" class="success" />
               </van-col>
               <van-col>
-                <h5>所需类型</h5>
+                <h5>到仓区域</h5>
                 <van-icon name="checked" class="success" />
               </van-col>
               <van-col>
-                <h5>所需类型</h5>
+                <h5>配送区域</h5>
                 <van-icon name="checked" class="success" />
               </van-col>
               <van-col>
-                <h5>所需类型</h5>
+                <h5>装卸难度</h5>
+                <van-icon name="checked" class="success" />
+              </van-col>
+              <van-col>
+                <h5>出车时段</h5>
                 <van-icon name="checked" class="success" />
               </van-col>
             </van-row>
             <van-row class="list-speed" type="flex" align="center">
               <van-col class="list-speed-lt">
-                看活
+                {{ item.lastHistoryStateName }}
               </van-col>
               <van-col class="list-speed-rt">
                 <div class="list-speed-top">
-                  已确认司机上岗
+                  {{ item.lastHistoryRemark }}
                 </div>
                 <div class="list-speed-time">
-                  2020-02-20 10:00:00
+                  {{ item.lastHistoryDate }}
                 </div>
               </van-col>
             </van-row>
           </div>
-          <van-cell title="详情" is-link class="list-bm" />
+          <van-cell title="详情" is-link class="list-bm" @click="goDetail(item)" />
         </div>
         <!-- <van-cell v-for="item in list" :key="item" :title="item" /> -->
       </van-list>
@@ -220,6 +227,11 @@ export default {
     [Cell.name]: Cell,
     [List.name]: List
   },
+  filters: {
+    setClass(key) {
+      return key === '1' ? 'success-bg' : 'danger-bg'
+    }
+  },
   data() {
     return {
       show: false,
@@ -240,22 +252,23 @@ export default {
     // this.getSelectList()
   },
   methods: {
-    onLoad() {
-      // fetchSomeThing().catch(() => {
-      //   this.error = true;
-      // })
+    goDetail(item) {
+      this.$router.push(`/driverfollowdetail/${item.lineId}`);
     },
     getSelectList() {
       getSelectList(this.form)
         .then(({ data }) => {
-          console.log(data)
           if (data.success) {
             // 请求成功
-            this.list.push(data);
+            this.list.push(...data.data);
           } else {
             this.error = true;
           }
-          this.finished = true;
+          if (data.data.length < this.form.limit) {
+            this.finished = true;
+          } else {
+            this.form.page++
+          }
         }).catch(() => {
           this.error = true;
         }).finally(() => {
@@ -263,8 +276,13 @@ export default {
         });
     },
     filterForm(val) {
-      this.form.value = val;
+      this.form.key = val;
       this.show = false;
+      this.list = [];
+      this.form.page = 1;
+      this.loading = true;
+      this.finished = false;
+      this.getSelectList();
     }
   }
 }
@@ -276,6 +294,7 @@ $success: #49CB15;
 $danger: #EC5F50;
 
 .DriverFollow{
+  padding-top: 42px;
   .van-button--primary{
     background-color: $success;
     border-color: $success;
@@ -296,7 +315,12 @@ $danger: #EC5F50;
     background-color: $danger;
   }
   .header{
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
     margin-bottom: 10px;
+    z-index: 100;
   }
   .header-tit{
     height: 32px;
@@ -318,6 +342,7 @@ $danger: #EC5F50;
     padding: 0 18px;
     .list-item{
       position: relative;
+      margin-bottom: 10px;
       background-color: #fff;
       border: 1px solid #D9D9D9;
       border-radius: 5px;
@@ -342,6 +367,7 @@ $danger: #EC5F50;
           border-bottom: 1px solid #EEEBEB;
           .van-tag{
             margin-right: 8px;
+            margin-bottom: 8px;
             padding: 0 12px;
             height: 18px;
             line-height: 18px;

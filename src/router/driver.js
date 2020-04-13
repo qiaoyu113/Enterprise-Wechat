@@ -29,11 +29,11 @@ export default [
     }
   },
   {
-    path: '/driverfollowdetail',
+    path: '/driverfollowdetail/:id',
     name: 'DriverFollowDetail',
     component: () => import('views/driver/DriverFollowDetail.vue'),
     meta: {
-      title: '撮合跟进'
+      title: '跟进详情'
     }
   }, {
     path: '/matchcommend',
