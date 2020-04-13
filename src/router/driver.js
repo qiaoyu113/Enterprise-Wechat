@@ -33,7 +33,14 @@ export default [
     name: 'DriverFollowDetail',
     component: () => import('views/driver/DriverFollowDetail.vue'),
     meta: {
-      title: '撮合跟进',
+      title: '撮合跟进'
+    }
+  }, {
+    path: '/matchcommend',
+    name: 'matchcommend',
+    component: () => import('views/driver/MatchCommend.vue'),
+    meta: {
+      title: '促撮推荐',
       // auth: true,
       keepAlive: true
     }

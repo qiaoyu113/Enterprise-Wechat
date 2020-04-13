@@ -13,6 +13,15 @@ let routes = [
       title: '404',
       keepAlive: true
     }
+  },
+  {
+    path: '/unauthority',
+    name: 'unauthority',
+    component: () => import('views/Unauthority.vue'),
+    meta: {
+      title: '云雀',
+      keepAlive: true
+    }
   }
 ]
 
