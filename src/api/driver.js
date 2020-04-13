@@ -7,3 +7,11 @@ export function driverDetail(data) {
     params: data
   })
 }
+
+export function judgingIntentionOfReceiving(data) {
+  return request({
+    url: '/api/driver/corp/driver/judgingIntentionOfReceiving',
+    method: 'post',
+    data
+  })
+}
