@@ -31,7 +31,6 @@ service.interceptors.request.use(
       config.headers['Authorization'] = getToken()
     }
     let cookieName = localStorage.getItem('developer')
-    console.log('developer', cookieName)
     if (cookieName) {
       JsCookie.set('developer', cookieName);
     } else {
