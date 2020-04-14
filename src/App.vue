@@ -39,6 +39,8 @@ export default {
 </script>
 
 <style lang="scss">
+html,body{ margin:0px; height:100%;}
+
 #app {
   font-family: "Avenir", Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;

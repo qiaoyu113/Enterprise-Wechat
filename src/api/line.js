@@ -48,3 +48,19 @@ export function getWxaCodeUnlimit(data) {
     data
   })
 }
+
+export function helpMatchIntelligent(data) {
+  return request({
+    url: '/api/bss/v1/bss/corp/helpMatchIntelligent/selectListByKey?jia=1',
+    method: 'post',
+    data
+  })
+}
+
+export function helpMatch(data) {
+  return request({
+    url: '/api/bss/v1/bss/corp/helpMatch/selectListByKey?jia=1',
+    method: 'post',
+    data
+  })
+}

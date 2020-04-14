@@ -40,6 +40,13 @@ export default {
     };
   },
   created: function() {
+    // window.location.href = '/login?developer=' + this.GLOBAL.developer
+    console.log(this.$route)
+    // window.zhuge.track('推文', {
+    //   '事件类型': '页面浏览',
+    //   '页面类别': '加入宣传',
+    //   '用户类型': '123'
+    // });
     /*
       微信授权方法
     */
@@ -89,6 +96,13 @@ export default {
         return null
       }
     },
+    getDeveloper(name) {
+      if (name === 'qiaoyu' || name === 'zhaowei' || name === 'liweishan') {
+        localStorage.setItem('developer', name)
+      } else {
+        localStorage.setItem('developer', 'qiaoyu')
+      }
+    },
     handleLogin(code) {
       login({
         code: code,
@@ -100,6 +114,7 @@ export default {
             Toast.success('授权成功');
             localStorage.setItem('token', res.data.data.token)
             localStorage.setItem('city', res.data.data.city)
+            this.getDeveloper(res.data.data.bssLoginName)
             let loginUrl = localStorage.getItem('loginUrl')
             if (loginUrl) {
               localStorage.removeItem('loginUrl')

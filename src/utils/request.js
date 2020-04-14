@@ -1,8 +1,8 @@
 import axios from 'axios'
 import { Toast } from 'vant'
 // import store from '@/store'
-import JsCookie from 'js-cookie'
 import { getToken } from '@/utils/auth'
+import JsCookie from 'js-cookie'
 
 let url = 'http://firmiana-wechat.yunniao.cn/'
 if (window.location.host !== 'firmiana-wechat.yunniao.cn') {
@@ -30,7 +30,12 @@ service.interceptors.request.use(
       // 让每个请求携带token-- ['X-Token']为自定义key 请根据实际情况自行修改
       config.headers['Authorization'] = getToken()
     }
-    JsCookie.set('developer', 'qiaoyu');
+    let cookieName = localStorage.getItem('developer')
+    if (cookieName) {
+      JsCookie.set('developer', cookieName);
+    } else {
+      JsCookie.set('developer', 'qiaoyu');
+    }
     return config
   },
   error => {

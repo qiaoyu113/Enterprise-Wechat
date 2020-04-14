@@ -21,7 +21,7 @@ export function getSelectList(data) {
 
 export function judgingIntentionOfReceiving(data) {
   return request({
-    url: '/api/driver/corp/driver/judgingIntentionOfReceiving',
+    url: '/api/driver/corp/driver/judgingIntentionOfReceiving?jia=1',
     method: 'post',
     data
   })
