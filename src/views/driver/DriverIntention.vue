@@ -2,8 +2,8 @@
   <div class="driverIntention">
     <div class="car-size">
       <span class="size-font">车型</span>
-      <div class="car-size-right" @click="showSheet">
-        <span v-text="carType"></span>
+      <div class="car-size-right" @click="showPicker = true">
+        <span v-text="carTypeText"></span>
         <van-icon name="arrow" />
       </div>
     </div>
@@ -14,12 +14,12 @@
         <template #input>
           <div class="check-box">
             <van-checkbox-group v-model="cargoType">
-              <van-checkbox name="a" icon-size="20px" checked-color="#6085b7">
-                方便食品
+              <van-checkbox v-for="item in dataCargoType" :key="item.codeVal" :name="item.codeVal" icon-size="20px" checked-color="#6085b7">
+                {{ item.code }}
               </van-checkbox>
-              <van-checkbox name="b" icon-size="20px" checked-color="#6085b7">
+              <!-- <van-checkbox name="b" icon-size="20px" checked-color="#6085b7">
                 食品
-              </van-checkbox>
+              </van-checkbox> -->
             </van-checkbox-group>
           </div>
         </template>
@@ -30,11 +30,8 @@
         <template #input>
           <div class="check-box">
             <van-checkbox-group v-model="arrivalArea">
-              <van-checkbox name="a" icon-size="20px" checked-color="#6085b7">
-                朝阳
-              </van-checkbox>
-              <van-checkbox name="b" icon-size="20px" checked-color="#6085b7">
-                海淀
+              <van-checkbox v-for="item in areaArray" :key="item.code" :name="item.code" icon-size="20px" checked-color="#6085b7">
+                {{ item.name }}
               </van-checkbox>
             </van-checkbox-group>
           </div>
@@ -46,11 +43,8 @@
         <template #input>
           <div class="check-box">
             <van-checkbox-group v-model="deliveryArea">
-              <van-checkbox name="a" icon-size="20px" checked-color="#6085b7">
-                朝阳
-              </van-checkbox>
-              <van-checkbox name="b" icon-size="20px" checked-color="#6085b7">
-                海淀
+              <van-checkbox v-for="item in areaArray" :key="item.code" :name="item.code" icon-size="20px" checked-color="#6085b7">
+                {{ item.name }}
               </van-checkbox>
             </van-checkbox-group>
           </div>
@@ -62,14 +56,8 @@
         <template #input>
           <div class="check-box">
             <van-checkbox-group v-model="handlingDifficultyDegree">
-              <van-checkbox name="a" icon-size="20px" checked-color="#6085b7">
-                无装卸
-              </van-checkbox>
-              <van-checkbox name="b" icon-size="20px" checked-color="#6085b7">
-                装卸1-3吨
-              </van-checkbox>
-              <van-checkbox name="c" icon-size="20px" checked-color="#6085b7">
-                装卸3吨以上
+              <van-checkbox v-for=" item in dataHandlingDifficultyDegree" :key="item.codeVal" :name="item.codeVal" icon-size="20px" checked-color="#6085b7">
+                {{ item.code }}
               </van-checkbox>
             </van-checkbox-group>
           </div>
@@ -81,29 +69,8 @@
         <template #input>
           <div class="check-box">
             <van-checkbox-group v-model="departureTime">
-              <van-checkbox name="a" icon-size="20px" checked-color="#6085b7">
-                00:00 - 03:00
-              </van-checkbox>
-              <van-checkbox name="b" icon-size="20px" checked-color="#6085b7">
-                03:00 - 06:00
-              </van-checkbox>
-              <van-checkbox name="c" icon-size="20px" checked-color="#6085b7">
-                06:00 - 09:00
-              </van-checkbox>
-              <van-checkbox name="d" icon-size="20px" checked-color="#6085b7">
-                09:00 - 12:00
-              </van-checkbox>
-              <van-checkbox name="e" icon-size="20px" checked-color="#6085b7">
-                12:00 - 15:00
-              </van-checkbox>
-              <van-checkbox name="f" icon-size="20px" checked-color="#6085b7">
-                15:00 - 18:00
-              </van-checkbox>
-              <van-checkbox name="g" icon-size="20px" checked-color="#6085b7">
-                18:00 - 21:00
-              </van-checkbox>
-              <van-checkbox name="h" icon-size="20px" checked-color="#6085b7">
-                21:00 - 00:00
+              <van-checkbox v-for="item in dataDepartureTime" :key="item.codeVal" :name="item.codeVal" icon-size="20px" checked-color="#6085b7">
+                {{ item.code }}
               </van-checkbox>
             </van-checkbox-group>
           </div>
@@ -113,73 +80,192 @@
         保存
       </van-button>
     </van-form>
-    <van-action-sheet
-      v-model="showAction"
-      :actions="actions"
-      :description="carText"
-      @select="carSelect"
-    />
+    <van-popup v-model="showPicker" position="bottom">
+      <van-picker
+        show-toolbar
+        :columns="carTypeArray"
+        @cancel="showPicker = false"
+        @confirm="onConfirm"
+      />
+    </van-popup>
   </div>
 </template>
 <script>
-import { Cell, CellGroup, Button, ActionSheet, Icon, Checkbox, CheckboxGroup, Form, Field } from 'vant';
-// import  dictionary  from '@/api/common.js'
+import { Toast, Cell, CellGroup, Button, Picker, Popup, Icon, Checkbox, CheckboxGroup, Form, Field } from 'vant';
+import { dictionary, getCityAreaByCode } from '@/api/common'
+import { saveIntentionOfReceiving, judgingIntentionOfReceiving } from '@/api/driver'
 export default {
   name: 'DriverIntention',
   components: {
+    [Toast.name]: Toast,
     [Cell.name]: Cell,
     [Field.name]: Field,
     [Form.name]: Form,
     [Icon.name]: Icon,
     [CellGroup.name]: CellGroup,
     [Button.name]: Button,
-    [ActionSheet.name]: ActionSheet,
+    [Popup.name]: Popup,
+    [Picker.name]: Picker,
     [Checkbox.name]: Checkbox,
     [CheckboxGroup.name]: CheckboxGroup
   },
   data() {
     return {
       driverId: '',
-      cargoType: ['a'],
-      arrivalArea: ['a'],
-      deliveryArea: ['a'],
-      handlingDifficultyDegree: ['a'],
-      departureTime: ['a'],
-      showAction: false,
-      carText: '请选择您的车型',
-      actions: [
-        { name: '4.2 箱货', color: '#07c160' },
-        { name: '4.8 箱货', color: '#07c160' },
-        { name: '5.4 箱货', color: '#07c160' }
-      ],
-      carType: '4.2箱货'
+      cargoType: [],
+      dataCargoType: [],
+      arrivalArea: [],
+      deliveryArea: [],
+      areaArray: [],
+      handlingDifficultyDegree: [],
+      dataHandlingDifficultyDegree: [],
+      departureTime: [],
+      dataDepartureTime: [],
+      carTypeText: '',
+      showPicker: false,
+      carTypeArray: [],
+      dataTypeCar: [],
+      flags: ''
     };
   },
   created() {
-    this.getDriverId()
+    this.getDriverId();
+  },
+  mounted() {
+    this.judgingDriver();
   },
   methods: {
-    getCityId() {
-
+    // 获取城市ID
+    async getCityId(res) {
+      let that = this;
+      let cityCode = localStorage.getItem('city');
+      // 区域参数
+      await getCityAreaByCode({
+        cityCode: cityCode
+      }).then(res => {
+        let arr = res.data.data;
+        that.areaArray = arr;
+      }).catch(err => {
+        Toast.fail(err);
+      });
+      // 意向车型
+      await dictionary({
+        dictType: 'Intentional_compartment'
+      }).then(res => {
+        let arr = res.data.data;
+        that.dataTypeCar = arr;
+        arr.forEach(ele => {
+          that.carTypeArray.push(ele.code)
+        });
+        that.carTypeText = this.carTypeArray[0]
+      }).catch(err => {
+        Toast.fail(err);
+      });
+      // 货物类型
+      await dictionary({
+        dictType: 'type_of_goods'
+      }).then(res => {
+        let arr = res.data.data;
+        that.dataCargoType = arr
+      }).catch(err => {
+        Toast.fail(err);
+      })
+      // 装卸难度
+      await dictionary({
+        dictType: 'handling_difficulty_degree'
+      }).then(res => {
+        let arr = res.data.data;
+        that.dataHandlingDifficultyDegree = arr;
+      }).catch(err => {
+        Toast.fail(err);
+      })
+      // 出车时段
+      await dictionary({
+        dictType: 'departure_time_interval'
+      }).then(res => {
+        let arr = res.data.data;
+        that.dataDepartureTime = arr
+      }).catch(err => {
+        Toast.fail(err);
+      })
+      if (res.data.data.flag) {
+        console.log('tagsss', that.dataDepartureTime)
+        that.dataTypeCar.forEach(ele => {
+          if (ele.code === res.data.data.carType) {
+            that.carTypeText = ele.code
+          }
+        })
+        that.dataCargoType.forEach(ele => {
+          res.data.data.cargoType.forEach(item => {
+            if (ele.code === item) {
+              that.cargoType.push(ele.codeVal)
+            }
+          })
+        })
+        that.areaArray.forEach(ele => {
+          res.data.data.arrivalArea.forEach(item => {
+            if (ele.name === item) {
+              that.arrivalArea.push(ele.code)
+            }
+          })
+          res.data.data.deliveryArea.forEach(item => {
+            if (ele.name === item) {
+              that.deliveryArea.push(ele.code)
+            }
+          })
+        })
+        that.dataHandlingDifficultyDegree.forEach(ele => {
+          res.data.data.handlingDifficultyDegree.forEach(item => {
+            if (ele.code === item) {
+              that.handlingDifficultyDegree.push(ele.codeVal)
+            }
+          })
+        })
+        that.dataDepartureTime.forEach(ele => {
+          res.data.data.departureTime.forEach(item => {
+            if (ele.code === item) {
+              that.departureTime.push(ele.codeVal)
+            }
+          })
+        })
+      }
     },
-    carSelect(item) {
-      this.carType = item.name
-      this.showAction = false;
-    },
-    showSheet() {
-      this.showAction = true;
-    },
+    // 意向保存
     btnSave(values) {
       values.driverId = this.driverId;
-      values.carType = this.carType;
+      this.dataTypeCar.forEach(ele => {
+        if (ele.code === this.carTypeText) {
+          values.carType = ele.codeVal;
+        }
+      })
       console.log('submit', values);
+      saveIntentionOfReceiving(values).then(res => {
+        console.log(res)
+        // this.$route.replce({ path: '/productinfo' })
+      }).catch(err => {
+        Toast.fail(err);
+      })
+    },
+    onConfirm(value) {
+      this.carTypeText = value;
+      this.showPicker = false;
+    },
+    judgingDriver() {
+      let that = this
+      this.driverId = '201910231017';
+      judgingIntentionOfReceiving({
+        driverId: this.driverId
+      }).then(res => {
+        that.flags = res.data.data;
+        that.getCityId(res);
+        console.log('tag', that.flags)
+      }).catch(err => {
+        Toast.fail(err);
+      })
     },
     getDriverId() {
-      this.driverId = '111';
+      this.driverId = '201910231017';
       // this.$route.query.driverId
-    },
-    getDictionary() {
-
     }
   }
 };
@@ -199,7 +285,7 @@ export default {
         border-bottom: 1px solid #d9d9d9;
     }
     .car-size{
-        padding: 8px 16px;
+        padding:8px 16px;
         box-sizing: border-box;
         display: flex;
         justify-content: space-between;
