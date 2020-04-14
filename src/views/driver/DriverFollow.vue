@@ -41,9 +41,9 @@
             上岗
           </van-button>
           <van-button
-            :type="form.key === 5 ? 'primary' : 'default'"
+            :type="form.key === '5' ? 'primary' : 'default'"
             size="small"
-            @click="filterForm(5)"
+            @click="filterForm('5')"
           >
             失败
           </van-button>
@@ -64,22 +64,22 @@
             <h2>{{ item.customerName }}/{{ item.lineName }}</h2>
             <p>{{ item.provinceAreaName+item.cityAreaName+item.countyAreaName+item.districtArea }}</p>
             <div class="list-tag">
-              <van-tag :class="item.carTypeMatch | setClass">
+              <van-tag :class="item.carTypeMatch | setClass('-bg')">
                 {{ item.carTypeName }}
               </van-tag>
-              <van-tag :class="item.cargoTypeColor | setClass">
+              <van-tag :class="item.cargoTypeMatch | setClass('-bg')">
                 {{ item.cargoTypeName }}
               </van-tag>
-              <van-tag :class="item.warehouseMatch | setClass">
+              <van-tag :class="item.warehouseMatch | setClass('-bg')">
                 [仓]{{ item.warehouse }}
               </van-tag>
-              <van-tag :class="item.countyAreaMatch | setClass">
+              <van-tag :class="item.countyAreaMatch | setClass('-bg')">
                 [配]{{ item.warehouse }}
               </van-tag>
-              <van-tag :class="item.handlingDifficultyDegreeColor | setClass">
+              <van-tag :class="item.handlingDifficultyDegreeMatch | setClass('-bg')">
                 {{ item.handlingDifficultyDegreeName }}
               </van-tag>
-              <van-tag :class="item.timeMatch | setClass">
+              <van-tag :class="item.timeMatch | setClass('-bg')">
                 {{ item.handlingDifficultyDegreeName }}
               </van-tag>
             </div>
@@ -97,27 +97,40 @@
             <van-row class="list-type" justify="space-between" type="flex">
               <van-col>
                 <h5>所需车型</h5>
-                <van-icon name="warning" class="danger" />
+                <van-icon
+                  :name="item.carTypeMatch | setType"
+                  :class="item.carTypeMatch | setClass"
+                />
               </van-col>
               <van-col>
                 <h5>货物类型</h5>
-                <van-icon name="checked" class="success" />
+                <van-icon
+                  :name="item.cargoTypeMatch | setType"
+                  :class="item.cargoTypeMatch | setClass"
+                />
               </van-col>
               <van-col>
                 <h5>到仓区域</h5>
-                <van-icon name="checked" class="success" />
+                <van-icon
+                  :name="item.cargoTypeMatch | setType"
+                />
               </van-col>
               <van-col>
                 <h5>配送区域</h5>
-                <van-icon name="checked" class="success" />
+                <van-icon
+                  :name="item.cargoTypeMatch | setType"
+                />
               </van-col>
               <van-col>
                 <h5>装卸难度</h5>
-                <van-icon name="checked" class="success" />
+                <van-icon
+                  :name="item.handlingDifficultyDegreeMatch | setType"
+                  :class="item.handlingDifficultyDegreeMatch | setClass"
+                />
               </van-col>
               <van-col>
                 <h5>出车时段</h5>
-                <van-icon name="checked" class="success" />
+                <van-icon name="checked" />
               </van-col>
             </van-row>
             <van-row class="list-speed" type="flex" align="center">
@@ -136,78 +149,7 @@
           </div>
           <van-cell title="详情" is-link class="list-bm" @click="goDetail(item)" />
         </div>
-        <!-- <van-cell v-for="item in list" :key="item" :title="item" /> -->
       </van-list>
-      <!-- <div class="list-item">
-        <div class="list-top">
-          <h2>希杰物流/配送外包承运商</h2>
-          <p>广东省佛山市南海区南海区</p>
-          <div class="list-tag">
-            <van-tag class="success-bg">
-              标签
-            </van-tag>
-            <van-tag class="success-bg">
-              标签
-            </van-tag>
-            <van-tag class="success-bg">
-              标签
-            </van-tag>
-            <van-tag class="success-bg">
-              标签
-            </van-tag>
-            <van-tag class="danger-bg">
-              标签
-            </van-tag>
-          </div>
-          <van-tag class="top-tag" type="warning">
-            张三
-          </van-tag>
-          <van-row class="tit" type="flex" justify="space-between">
-            <van-col class="lt">
-              匹配度
-            </van-col>
-            <van-col class="rt">
-              85%
-            </van-col>
-          </van-row>
-          <van-row class="list-type" justify="space-between" type="flex">
-            <van-col>
-              <h5>所需类型</h5>
-              <van-icon name="warning" class="danger" />
-            </van-col>
-            <van-col>
-              <h5>所需类型</h5>
-              <van-icon name="checked" class="success" />
-            </van-col>
-            <van-col>
-              <h5>所需类型</h5>
-              <van-icon name="checked" class="success" />
-            </van-col>
-            <van-col>
-              <h5>所需类型</h5>
-              <van-icon name="checked" class="success" />
-            </van-col>
-            <van-col>
-              <h5>所需类型</h5>
-              <van-icon name="checked" class="success" />
-            </van-col>
-          </van-row>
-          <van-row class="list-speed" type="flex" align="center">
-            <van-col class="list-speed-lt">
-              看活
-            </van-col>
-            <van-col class="list-speed-rt">
-              <div class="list-speed-top">
-                已确认司机上岗
-              </div>
-              <div class="list-speed-time">
-                2020-02-20 10:00:00
-              </div>
-            </van-col>
-          </van-row>
-        </div>
-        <van-cell title="详情" is-link class="list-bm" />
-      </div> -->
     </div>
   </div>
 </template>
@@ -228,8 +170,11 @@ export default {
     [List.name]: List
   },
   filters: {
-    setClass(key) {
-      return key === '1' ? 'success-bg' : 'danger-bg'
+    setClass(key, bg) {
+      return (key === '1' ? 'success' : 'danger') + (bg || '')
+    },
+    setType(key) {
+      return key === '1' ? 'checked' : 'warning'
     }
   },
   data() {
