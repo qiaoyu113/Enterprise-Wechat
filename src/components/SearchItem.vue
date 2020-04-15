@@ -115,7 +115,7 @@ export default {
         cityCode: cityCode
       }).then(res => {
         let arr = res.data.data;
-        console.log(arr, 'city')
+        that.columns3 = arr;
       }).catch(err => {
         Toast.fail(err);
       })
