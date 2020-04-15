@@ -18,6 +18,17 @@ export default [
       keepAlive: true
     }
   }, {
+
+    path: '/driverintention',
+    name: 'driverintention',
+    component: () => import('views/driver/DriverIntention.vue'),
+    meta: {
+      title: '司机接活意向'
+      // auth: true,
+      // keepAlive: true
+    }
+  },
+  {
     path: '/matchcommend',
     name: 'matchcommend',
     component: () => import('views/driver/MatchCommend.vue'),
