@@ -64,3 +64,11 @@ export function helpMatch(data) {
     data
   })
 }
+
+export function updateState(data) {
+  return request({
+    url: 'api/match/corp/match/updateState',
+    method: 'post',
+    data
+  })
+}
