@@ -9,7 +9,7 @@
         @pullingDown="pullingDown"
       >
         <div class="placeholder"></div>
-        <div v-for="item in list" :key="item.type" class="lineList" @click="goDetail(item.lineId, item.timeDiff, item.monthlyTransaction)">
+        <div v-for="item in list" :key="item.type" class="lineList" @click="goDetail(item.lineId, item.timeDiff, item.monthlyTransaction, item.driverId)">
           <div class="lineListTop">
             <div class="name">
               <p>{{ item.lineName }} / {{ item.customerName }}</p>
@@ -19,23 +19,23 @@
               <div class="tagBox">
                 <!--车类型-->
                 <van-tag round color="#81CA2A" type="success" size="medium">
-                  {{ item.carTypeName }}
+                  {{ item.driverCarType }}
                 </van-tag>
                 <!--货物类型-->
-                <van-tag round color="#81CA2A" type="success" size="medium">
-                  {{ item.cargoTypeName }}
+                <van-tag v-for=" items in item.cargoTypes " :key="items" round :color="items.matched ? '#81CA2A' : '#E75E60'" type="success" size="medium">
+                  {{ items.name }}
                 </van-tag>
                 <!--区域类型-->
-                <van-tag round color="#81CA2A" type="success" size="medium">
-                  {{ item.countyAreaName }}
+                <van-tag v-for=" items in item.warehouses " :key="items" round :color="items.matched ? '#81CA2A' : '#E75E60'" type="success" size="medium">
+                  {{ items.name }}
                 </van-tag>
                 <!--装卸类型-->
-                <van-tag round color="#E75E60" type="danger" size="medium">
-                  {{ item.handlingDifficultyDegreeName }}
+                <van-tag v-for=" items in item.handlingDifficultyDegree " :key="items" round :color="items.matched ? '#81CA2A' : '#E75E60'" type="success" size="medium">
+                  {{ items.name }}
                 </van-tag>
                 <!--时间-->
-                <van-tag v-for=" items in item.departure_time " :key="items" round color="#81CA2A" type="success" size="medium">
-                  {{ items }}
+                <van-tag v-for=" items in item.runningDurations " :key="items" round :color="items.matched ? '#81CA2A' : '#E75E60'" type="success" size="medium">
+                  {{ items.name }}
                 </van-tag>
               </div>
               <div class="matchRate">
@@ -141,6 +141,7 @@ export default {
       page: 1,
       show: false,
       beforePullDown: false,
+      driverId: '',
       actions: [
         { name: '产品介绍', color: '#3F8AF2' },
         { name: '推荐线路', color: '#3F8AF2' }
@@ -218,7 +219,7 @@ export default {
                                   if (lineIdNeedBack.lineId) {
                                     localStorage.removeItem('lineIdNeedBack')
                                     that.$destroy(true)
-                                    that.$router.push({ path: '/linedetail', query: { id: lineIdNeedBack.lineId, timeDiff: lineIdNeedBack.timeDiff, monthlyTransaction: lineIdNeedBack.monthlyTransaction, backBtn: 1 }})
+                                    that.$router.push({ path: '/linedetail', query: { id: lineIdNeedBack.lineId, timeDiff: lineIdNeedBack.timeDiff, monthlyTransaction: lineIdNeedBack.monthlyTransaction, backBtn: 1, driverId: lineIdNeedBack.driverId }})
                                   }
                                 } else {
                                   that.getList()
@@ -361,8 +362,8 @@ export default {
         })
       }
     },
-    goDetail(id, timeDiff, monthlyTransaction) {
-      this.$router.push({ path: '/linedetail', query: { id: id, timeDiff: timeDiff, monthlyTransaction: monthlyTransaction }})
+    goDetail(id, timeDiff, monthlyTransaction, driverId) {
+      this.$router.push({ path: '/linedetail', query: { id: id, timeDiff: timeDiff, monthlyTransaction: monthlyTransaction, driverId: driverId }})
     }
   }
 }
