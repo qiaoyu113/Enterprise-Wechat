@@ -12,8 +12,10 @@ if (url !== 'firmiana-wechat.yunniao.cn') {
   }
 }
 function buryPointFunction(eventNameVal, eventNameValCH, propertiesVal) {
-  gio('track', eventNameVal, propertiesVal);
-  window.zhuge.track(eventNameValCH, propertiesVal);
+  if (window.location.host === 'firmiana-wechat.yunniao.cn') {
+    gio('track', eventNameVal, propertiesVal);
+    window.zhuge.track(eventNameValCH, propertiesVal);
+  }
 }
 export default
 {
