@@ -56,7 +56,11 @@
             window.zhuge._init(b, x)
           }
         };
-        window.zhuge.load('62f60f4d7c4b42edbe7178b993c04090', { //配置应用的AppKey
+        let zhugeId = '62f60f4d7c4b42edbe7178b993c04090'
+        if (window.location.host === 'firmiana-wechat.yunniao.cn') {
+          zhugeId = '6195022a237c47258dee9f5e28825d84'
+        }
+        window.zhuge.load(zhugeId, { //配置应用的AppKey
           superProperty: { //全局的事件属性(选填)
             '应用名称': '朱雀'
           },

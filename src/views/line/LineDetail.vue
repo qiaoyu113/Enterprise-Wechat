@@ -110,7 +110,7 @@
 </template>
 <script>
 import { Tabbar, TabbarItem, Toast, Tab, Tabs, Cell, CellGroup, Button, Icon } from 'vant'
-import { getLineDetail, listByLineId, loglist, getMediaIdOfLineDetail } from '@/api/line'
+import { getLineDetail, listByLineId, loglist, getMediaIdOfLineDetail, updateState } from '@/api/line'
 import { getCorpSignature, getAgentSignature } from '@/api/user'
 // import VoPages from 'vo-pages'
 import 'vo-pages/lib/vo-pages.css'
@@ -152,11 +152,13 @@ export default {
       loadedAll: false,
       backBtn: false,
       timeDiff: '',
+      driverId: '',
       monthlyTransaction: ''
     }
   },
   mounted() {
     let id = this.$route.query.id;
+    this.driverId = this.$route.query.driverId;
     this.lineId = id;
     this.timeDiff = this.$route.query.timeDiff
     this.monthlyTransaction = this.$route.query.monthlyTransaction
@@ -203,6 +205,13 @@ export default {
       const hostName = window.location.href
       let that = this;
       that.disable = true;
+      updateState({
+        'driverId': that.driverId,
+        'lineId': that.lineId,
+        'remark': '',
+        'state': 1
+      }).then((res) => {
+      })
       getMediaIdOfLineDetail({
         lineId: that.lineId,
         busiType: that.detail.busiType
@@ -261,7 +270,7 @@ export default {
                                 Toast.fail('暂无功能权限')
                               }
                               that.disable = false;
-                              let lineIdNeedBack = { lineId: that.lineId, timeDiff: that.timeDiff, monthlyTransaction: that.monthlyTransaction }
+                              let lineIdNeedBack = { lineId: that.lineId, timeDiff: that.timeDiff, monthlyTransaction: that.monthlyTransaction, driverId: that.driverId }
                               localStorage.setItem('lineIdNeedBack', JSON.stringify(lineIdNeedBack))
                             })
                           },
