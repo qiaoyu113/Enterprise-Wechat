@@ -1,6 +1,14 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import store from '@/store'
+import JsCookie from 'js-cookie'
+
+let cookieName = localStorage.getItem('developer')
+if (cookieName) {
+  JsCookie.set('developer', cookieName);
+} else {
+  JsCookie.set('developer', 'qiaoyu');
+}
 
 Vue.use(Router)
 

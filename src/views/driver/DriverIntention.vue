@@ -1,8 +1,8 @@
 <template>
   <div class="driverIntention">
-    <div class="car-size">
+    <div class="car-size" @click="showPicker = true">
       <span class="size-font">车型</span>
-      <div class="car-size-right" @click="showPicker = true">
+      <div class="car-size-right">
         <span v-text="carTypeText"></span>
         <van-icon name="arrow" />
       </div>
@@ -17,9 +17,6 @@
               <van-checkbox v-for="item in dataCargoType" :key="item.codeVal" :name="item.codeVal" icon-size="20px" checked-color="#6085b7">
                 {{ item.code }}
               </van-checkbox>
-              <!-- <van-checkbox name="b" icon-size="20px" checked-color="#6085b7">
-                食品
-              </van-checkbox> -->
             </van-checkbox-group>
           </div>
         </template>
@@ -128,15 +125,12 @@ export default {
       flags: ''
     };
   },
-  created() {
-    this.getDriverId();
-  },
   mounted() {
-    this.judgingDriver();
+    this.getCityId();
   },
   methods: {
-    // 获取城市ID
-    async getCityId(res) {
+    // 获取城市ID与字典
+    async getCityId() {
       let that = this;
       let cityCode = localStorage.getItem('city');
       // 区域参数
@@ -188,47 +182,7 @@ export default {
       }).catch(err => {
         Toast.fail(err);
       })
-      if (res.data.data.flag) {
-        console.log('tagsss', that.dataDepartureTime)
-        that.dataTypeCar.forEach(ele => {
-          if (ele.code === res.data.data.carType) {
-            that.carTypeText = ele.code
-          }
-        })
-        that.dataCargoType.forEach(ele => {
-          res.data.data.cargoType.forEach(item => {
-            if (ele.code === item) {
-              that.cargoType.push(ele.codeVal)
-            }
-          })
-        })
-        that.areaArray.forEach(ele => {
-          res.data.data.arrivalArea.forEach(item => {
-            if (ele.name === item) {
-              that.arrivalArea.push(ele.code)
-            }
-          })
-          res.data.data.deliveryArea.forEach(item => {
-            if (ele.name === item) {
-              that.deliveryArea.push(ele.code)
-            }
-          })
-        })
-        that.dataHandlingDifficultyDegree.forEach(ele => {
-          res.data.data.handlingDifficultyDegree.forEach(item => {
-            if (ele.code === item) {
-              that.handlingDifficultyDegree.push(ele.codeVal)
-            }
-          })
-        })
-        that.dataDepartureTime.forEach(ele => {
-          res.data.data.departureTime.forEach(item => {
-            if (ele.code === item) {
-              that.departureTime.push(ele.codeVal)
-            }
-          })
-        })
-      }
+      this.getDriverId();
     },
     // 意向保存
     btnSave(values) {
@@ -238,10 +192,30 @@ export default {
           values.carType = ele.codeVal;
         }
       })
-      console.log('submit', values);
+      if (values.cargoType.length === 0) {
+        Toast('请选择货物类型');
+        return;
+      }
+      if (values.arrivalArea.length === 0) {
+        Toast('请选择到仓区域');
+        return;
+      }
+      if (values.deliveryArea.length === 0) {
+        Toast('请选择配送区域');
+        return;
+      }
+      if (values.handlingDifficultyDegree.length === 0) {
+        Toast('请选择装卸难度');
+        return;
+      }
+      if (values.departureTime.length === 0) {
+        Toast('请选择出车时段');
+        return;
+      }
       saveIntentionOfReceiving(values).then(res => {
-        console.log(res)
-        // this.$route.replce({ path: '/productinfo' })
+        if (res.data.data.flag) {
+          this.$router.back()
+        }
       }).catch(err => {
         Toast.fail(err);
       })
@@ -252,20 +226,60 @@ export default {
     },
     judgingDriver() {
       let that = this
-      this.driverId = '201910231017';
       judgingIntentionOfReceiving({
         driverId: this.driverId
       }).then(res => {
         that.flags = res.data.data;
-        that.getCityId(res);
-        console.log('tag', that.flags)
+        let carType = res.data.data.carType
+        let cargoType = res.data.data.cargoType
+        let arrivalArea = res.data.data.arrivalArea
+        let deliveryArea = res.data.data.deliveryArea
+        let handlingDifficultyDegree = res.data.data.handlingDifficultyDegree
+        let departureTime = res.data.data.departureTime
+        if (res.data.data.flag) {
+          that.carTypeText = carType
+          that.dataCargoType.forEach(ele => {
+            cargoType.forEach(item => {
+              if (ele.code === item) {
+                that.cargoType.push(ele.codeVal)
+              }
+            })
+          })
+          that.areaArray.forEach(ele => {
+            arrivalArea.forEach(item => {
+              if (ele.name === item) {
+                that.arrivalArea.push(ele.code)
+              }
+            })
+            deliveryArea.forEach(item => {
+              if (ele.name === item) {
+                that.deliveryArea.push(ele.code)
+              }
+            })
+          })
+          that.dataHandlingDifficultyDegree.forEach(ele => {
+            handlingDifficultyDegree.forEach(item => {
+              if (ele.code === item) {
+                that.handlingDifficultyDegree.push(ele.codeVal)
+              }
+            })
+          })
+          that.dataDepartureTime.forEach(ele => {
+            departureTime.forEach(item => {
+              if (ele.code === item) {
+                that.departureTime.push(ele.codeVal)
+              }
+            })
+          })
+        }
       }).catch(err => {
         Toast.fail(err);
       })
     },
     getDriverId() {
-      this.driverId = '201910231017';
-      // this.$route.query.driverId
+      this.driverId = this.$route.query.driverId;
+      // this.driverId = 201910231017;
+      this.judgingDriver()
     }
   }
 };

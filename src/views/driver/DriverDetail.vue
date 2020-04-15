@@ -2,7 +2,7 @@
   <div class="driverDetail">
     <div class="list-wrap">
       <van-tabs color="#3986CB" sticky>
-        <van-tab title="基本">
+        <van-tab title="基本" class="backgroundTab">
           <van-cell-group v-if="JSON.stringify(detail) != '{}'">
             <h2 class="van-doc-demo-block__title">
               基本信息
@@ -43,7 +43,7 @@
             操作
           </van-button>
         </van-tab>
-        <van-tab title="订单">
+        <van-tab title="订单" class="backgroundTab">
           <van-cell-group v-if="lineList.length">
             <h2 class="van-doc-demo-block__title">
               订单信息
@@ -57,7 +57,7 @@
             操作
           </van-button>
         </van-tab>
-        <van-tab title="线路">
+        <van-tab title="线路" class="backgroundTab">
           <van-cell-group v-if="lineList.length">
             <h2 class="van-doc-demo-block__title">
               线路信息
@@ -71,7 +71,7 @@
             操作
           </van-button>
         </van-tab>
-        <van-tab title="撮合">
+        <van-tab title="撮合" :class="matchModule ? 'backgroundTab2' : 'backgroundTab'">
           <div v-if="!matchModule" class="match_box">
             <img src="https://qizhiniao-dev.oss-cn-beijing.aliyuncs.com/img/998f5a4580604c4f8e798f98430cbe92" alt="">
             <p class="hint_weight">
@@ -83,7 +83,7 @@
             <p class="text_nomarl">
               系统会根据意向智能推荐匹配线路
             </p>
-            <van-button round type="info" block class="btn" @click="check">
+            <van-button round type="info" block class="btn" @click="goRouter">
               设置司机接活意向
             </van-button>
           </div>
@@ -111,8 +111,8 @@
                 线路区域
               </div>
               <div class="tage_type">
-                <van-tag round type="primary" color="#4F77AA" class="tag" size="medium">
-                  标签阿斯顿发送到发撒上点饭
+                <van-tag v-for="item in matchDetail.deliveryArea" :key="item" round type="primary" color="#4F77AA" class="tag" size="medium">
+                  {{ item }}
                 </van-tag>
               </div>
             </div>
@@ -121,8 +121,8 @@
                 装卸难度
               </div>
               <div class="tage_type">
-                <van-tag round type="primary" color="#4F77AA" class="tag" size="medium">
-                  标签
+                <van-tag v-for="item in matchDetail.handlingDifficultyDegree" :key="item" round type="primary" color="#4F77AA" class="tag" size="medium">
+                  {{ item }}
                 </van-tag>
               </div>
             </div>
@@ -131,19 +131,19 @@
                 出车时段
               </div>
               <div class="tage_type">
-                <van-tag round type="primary" color="#4F77AA" class="tag" size="medium">
-                  标签
+                <van-tag v-for="item in matchDetail.departureTime" :key="item" round type="primary" color="#4F77AA" class="tag" size="medium">
+                  {{ item }}
                 </van-tag>
               </div>
             </div>
             <van-cell-group class="menuBottom">
-              <van-cell title="接活意向" is-link value="设置智能筛选撮合线路" />
+              <van-cell title="接活意向" is-link value="设置智能筛选撮合线路" @click="goRouter(1)" />
             </van-cell-group>
             <van-cell-group class="menuBottom">
-              <van-cell title="促撮推荐" is-link value="根据接活意向推荐线路" />
+              <van-cell title="促撮推荐" is-link value="根据接活意向推荐线路" @click="goRouter(2)" />
             </van-cell-group>
             <van-cell-group class="menuBottom">
-              <van-cell title="撮合跟进" is-link value="跟进撮合进度及节点" />
+              <van-cell title="撮合跟进" is-link value="跟进撮合进度及节点" @click="goRouter(3)" />
             </van-cell-group>
           </div>
         </van-tab>
@@ -230,20 +230,29 @@ export default {
         }
       })
       judgingIntentionOfReceiving({
-        driverId: driverId,
-        jia: 1
+        driverId: driverId
       }).then((res) => {
         if (res.data.success) {
           this.matchModule = res.data.data.flag;
-          if (res.data.flag) {
+          if (this.matchModule) {
             this.matchDetail = res.data.data
+            console.log(this.matchDetail)
           }
         }
       })
     },
+    goRouter(type) {
+      let that = this;
+      if (type === 1) {
+        that.$router.push({ path: '/driverintention', query: { driverId: that.driverId }})// 撮合跟进
+      } else if (type === 2) {
+        that.$router.push({ path: '/matchcommend', query: { driverId: that.driverId }})// 撮合跟进
+      } else if (type === 3) {
+        that.$router.push({ path: '/driverfollow', query: { driverId: that.driverId }})// 撮合跟进
+      }
+    },
     check() {
       this.show = true;
-
     //   judgingIntentionOfReceiving({
     //     driverId: 201910231017
     //   }).then((res) => {
@@ -269,10 +278,18 @@ export default {
 </script>
 <style lang="scss" scoped>
 .driverDetail{
-  padding-bottom: 3.6rem;
-  box-sizing: border-box;
   background: #F5F5F5;
+  .backgroundTab{
+    height: 100%;
+    padding-bottom: 3.6rem;
+    box-sizing: border-box;
+    // background: #FFF;
+  }
+  .backgroundTab2{
+    background: #F5F5F5;
+  }
   .match_box2{
+    height: 100%;
     .matchGroup{
       margin-bottom: 2px;
     }
@@ -291,7 +308,7 @@ export default {
       .tage_type{
         overflow: hidden;
         .tag{
-          margin: 2px 0 8px;
+          margin: 2px 6px 8px 0;
         }
       }
     }

@@ -1,6 +1,6 @@
 <template>
   <div class="matchCommend">
-    <!-- <SearchItemMatch @searchData="searchFunction"></SearchItemMatch> -->
+    <SearchItemMatch @searchData="searchFunction"></SearchItemMatch>
     <div class="list-wrap">
       <vo-pages
         :data="list"
@@ -12,20 +12,34 @@
         <div v-for="item in list" :key="item.type" class="lineList" @click="goDetail(item.lineId, item.timeDiff, item.monthlyTransaction)">
           <div class="lineListTop">
             <div class="name">
-              <p>{{ item.lineName }} / {{ item.custom }}</p>
+              <p>{{ item.lineName }} / {{ item.customerName }}</p>
               <p class="address">
-                {{ item.address }}
+                {{ item.warehouse }}
               </p>
               <div class="tagBox">
+                <!--车类型-->
                 <van-tag round color="#81CA2A" type="success" size="medium">
-                  标签
+                  {{ item.carTypeName }}
                 </van-tag>
+                <!--货物类型-->
+                <van-tag round color="#81CA2A" type="success" size="medium">
+                  {{ item.cargoTypeName }}
+                </van-tag>
+                <!--区域类型-->
+                <van-tag round color="#81CA2A" type="success" size="medium">
+                  {{ item.countyAreaName }}
+                </van-tag>
+                <!--装卸类型-->
                 <van-tag round color="#E75E60" type="danger" size="medium">
-                  标签
+                  {{ item.handlingDifficultyDegreeName }}
+                </van-tag>
+                <!--时间-->
+                <van-tag v-for=" items in item.departure_time " :key="items" round color="#81CA2A" type="success" size="medium">
+                  {{ items }}
                 </van-tag>
               </div>
               <div class="matchRate">
-                匹配度 <span>86%</span>
+                匹配度 <span>{{ item.suitability }}%</span>
               </div>
               <div class="needCarBox">
                 <div class="needCarList">
@@ -33,8 +47,8 @@
                     所需车型
                   </div>
                   <div class="bottom">
-                    <van-icon name="checked" size="28" color="#70C740" />
-                    <van-icon name="clear" size="28" color="#DC6857" />
+                    <van-icon v-if="Number(item.carTypeMatch) === 1" name="checked" size="28" color="#70C740" />
+                    <van-icon v-if="Number(item.carTypeMatch) === 2" name="clear" size="28" color="#DC6857" />
                   </div>
                 </div>
                 <div class="needCarList">
@@ -42,8 +56,8 @@
                     货物类型
                   </div>
                   <div class="bottom">
-                    <van-icon name="checked" size="28" color="#70C740" />
-                    <van-icon name="clear" size="28" color="#DC6857" />
+                    <van-icon v-if="Number(item.cargoTypeMatch) === 1" name="checked" size="28" color="#70C740" />
+                    <van-icon v-if="Number(item.cargoTypeMatch) === 2" name="clear" size="28" color="#DC6857" />
                   </div>
                 </div>
                 <div class="needCarList">
@@ -51,8 +65,8 @@
                     线路区域
                   </div>
                   <div class="bottom">
-                    <van-icon name="checked" size="28" color="#70C740" />
-                    <van-icon name="clear" size="28" color="#DC6857" />
+                    <van-icon v-if="Number(item.countyAreaMatch) === 1" name="checked" size="28" color="#70C740" />
+                    <van-icon v-if="Number(item.countyAreaMatch) === 2" name="clear" size="28" color="#DC6857" />
                   </div>
                 </div>
                 <div class="needCarList">
@@ -60,8 +74,8 @@
                     装卸难度
                   </div>
                   <div class="bottom">
-                    <van-icon name="checked" size="28" color="#70C740" />
-                    <van-icon name="clear" size="28" color="#DC6857" />
+                    <van-icon v-if="Number(item.handlingDifficultyDegreeMatch) === 1" name="checked" size="28" color="#70C740" />
+                    <van-icon v-if="Number(item.handlingDifficultyDegreeMatch) === 2" name="clear" size="28" color="#DC6857" />
                   </div>
                 </div>
                 <div class="needCarList">
@@ -69,8 +83,8 @@
                     出车时段
                   </div>
                   <div class="bottom">
-                    <van-icon name="checked" size="28" color="#70C740" />
-                    <van-icon name="clear" size="28" color="#DC6857" />
+                    <van-icon v-if="Number(item.timeMatch) === 1" name="checked" size="28" color="#70C740" />
+                    <van-icon v-if="Number(item.timeMatch) === 2" name="clear" size="28" color="#DC6857" />
                   </div>
                 </div>
               </div>
@@ -86,10 +100,10 @@
 </template>
 <script>
 import { Tabbar, TabbarItem, Toast, Tab, Tabs, Cell, CellGroup, Tag, Icon } from 'vant'
-import { selectLineTask } from '@/api/line'
+import { helpMatchIntelligent, helpMatch } from '@/api/line'
 import { getCorpSignature, getAgentSignature } from '@/api/user'
 import VoPages from 'vo-pages'
-// import SearchItemMatch from 'components/SearchItemMatch'
+import SearchItemMatch from 'components/SearchItemMatch'
 import 'vo-pages/lib/vo-pages.css'
 const wx = window.wx;
 export default {
@@ -104,8 +118,8 @@ export default {
     [Tag.name]: Tag,
     [Cell.name]: Cell,
     [CellGroup.name]: CellGroup,
-    VoPages
-    // SearchItemMatch
+    VoPages,
+    SearchItemMatch
   },
   data() {
     return {
@@ -114,6 +128,8 @@ export default {
         'cargoType': '',
         'city': '',
         'county': '',
+        'handlingDifficultyDegree': '',
+        'departureTime': '',
         'key': '',
         'limit': '20',
         'page': 1
@@ -121,6 +137,7 @@ export default {
       active: 1,
       list: [],
       total: 0,
+      searchType: 0,
       page: 1,
       show: false,
       beforePullDown: false,
@@ -142,30 +159,9 @@ export default {
     //   this.getUserConfig(true, externalUserIdOld);
     // } else {
     //   this.getUserConfig(false, externalUserIdOld);
-    //   this.getList()
+    this.driverId = this.$route.query.driverId;
+    this.getList()
     // }
-    this.list = [
-      {
-        lineName: '希杰物流（广州市）',
-        custom: '配送外包承运商',
-        address: '广东省佛山市南海区南海区',
-        type: [
-          {
-            name: '4.2米想活',
-            type: '1'
-          }
-        ]
-      }
-    ]
-    this.total = 1
-    if (!this.beforePullDown) {
-      this.beforePullDown = true
-    }
-    if (this.list.length === this.total || this.list.length < 4) {
-      this.loadedAll = true
-    } else {
-      this.loadedAll = false
-    }
   },
   methods: {
     getUserConfig(type, externalUserIdOld) {
@@ -275,6 +271,9 @@ export default {
       this.listQuery.cargoType = data.cargoVal
       this.listQuery.county = data.lineVal
       this.listQuery.key = data.findVal
+      this.listQuery.handlingDifficultyDegree = data.difficultyVal
+      this.listQuery.departureTime = data.timeVal
+      this.searchType = data.type
       this.listQuery.page = 0
       this.list = [];
       this.pullingDown()
@@ -286,37 +285,81 @@ export default {
         loadingType: 'spinner',
         message: '加载中...'
       });
-      selectLineTask(this.listQuery).then((res) => {
-        if (res.data.success) {
-          Toast.clear();
-          let lists = res.data.data
-          this.total = res.data.page.total
-          // const newList = lists.map(item => {
-          //   return item
-          // })
-          if (loadMore) {
-            this.list = this.list.concat(lists)
+      if (this.searchType) {
+        helpMatch({
+          'arrivalArea': this.listQuery.county,
+          'carType': this.listQuery.carType,
+          'cargoType': this.listQuery.cargoType,
+          'deliveryArea': this.listQuery.county,
+          'departureTime': this.listQuery.departureTime,
+          'handlingDifficultyDegree': this.listQuery.handlingDifficultyDegree,
+          'driverId': this.driverId,
+          'key': this.listQuery.key,
+          'limit': 20,
+          'page': this.listQuery.page
+        }).then((res) => {
+          if (res.data.success) {
+            Toast.clear();
+            let lists = res.data.data
+            this.total = res.data.page.total
+            if (loadMore) {
+              this.list = this.list.concat(lists)
+            } else {
+              this.list = lists
+            }
+            if (!this.beforePullDown) {
+              this.beforePullDown = true
+            }
+            if (this.list.length === this.total || this.list.length < 4) {
+              this.loadedAll = true
+            } else {
+              this.loadedAll = false
+            }
           } else {
-            this.list = lists
+            Toast.clear();
+            this.loadedAll = true;
+            Toast.fail(res.data.errorMsg);
           }
-          if (!this.beforePullDown) {
-            this.beforePullDown = true
-          }
-          if (this.list.length === this.total || this.list.length < 4) {
-            this.loadedAll = true
-          } else {
-            this.loadedAll = false
-          }
-        } else {
+        }).catch((err) => {
           Toast.clear();
+          Toast.fail(err);
           this.loadedAll = true;
-          Toast.fail(res.data.errorMsg);
-        }
-      }).catch((err) => {
-        Toast.clear();
-        Toast.fail(err);
-        this.loadedAll = true;
-      })
+        })
+      } else {
+        helpMatchIntelligent({
+          'driverId': this.driverId,
+          'key': this.listQuery.key,
+          'limit': 20,
+          'page': this.listQuery.page
+        }).then((res) => {
+          if (res.data.success) {
+            Toast.clear();
+            let lists = res.data.data
+            this.total = res.data.page.total
+            if (loadMore) {
+              this.list = this.list.concat(lists)
+            } else {
+              this.list = lists
+            }
+            if (!this.beforePullDown) {
+              this.beforePullDown = true
+            }
+            if (this.list.length === this.total || this.list.length < 4) {
+              this.loadedAll = true
+            } else {
+              this.loadedAll = false
+            }
+          } else {
+            Toast.clear();
+            this.loadedAll = true;
+            Toast.fail(res.data.errorMsg);
+          }
+        }).catch((err) => {
+          Toast.clear();
+          Toast.fail(err);
+          this.loadedAll = true;
+        })
+      }
     },
     goDetail(id, timeDiff, monthlyTransaction) {
       this.$router.push({ path: '/linedetail', query: { id: id, timeDiff: timeDiff, monthlyTransaction: monthlyTransaction }})
@@ -359,6 +402,7 @@ export default {
                 font-size: 17px;
                 color: #000000;
                 .address{
+                    font-weight: 400;
                     font-size: 14px;
                     color: #000000;
                     padding: 0.16rem 0;
