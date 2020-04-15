@@ -1,7 +1,7 @@
 <template>
   <div class="linedetail">
     <div class="list-wrap">
-      <van-tabs v-model="listQuery.state" color="#3986CB" sticky>
+      <van-tabs v-model="listQuery.state" color="#3986CB" sticky @click="buryPoint">
         <van-tab title="基本">
           <h2 class="van-doc-demo-block__title">
             基本信息
@@ -25,14 +25,14 @@
             <van-cell v-if="detail.incomeSettlementMethod === 2" title="预计货主月报价" :value=" detail.preLowestQuotations | NumFormat" />
             <van-cell v-if="detail.incomeSettlementMethod === 2" title="预估月费用(元)(含油耗、过路、过桥)" :value=" detail.monthlyFuelConsumption | NumFormat" />
             <van-cell v-if="detail.incomeSettlementMethod === 2" title="预计去油净收入" :value=" Number(detail.preLowestQuotations) - Number(detail.monthlyFuelConsumption) ? Number(detail.preLowestQuotations) - Number(detail.monthlyFuelConsumption) : 0 | NumFormat" />
-            <van-cell title="油卡结算(%)" :value=" detail.fuelRatio | DataIsNull + '%'" />
+            <van-cell title="油卡结算(%)" :value=" detail.fuelRatio | DataIsNull" />
             <van-cell title="线路区域" :value=" (detail.provinceAreaName + detail.cityAreaName + detail.countyAreaName) | DataIsNull" />
             <van-cell title="具体区域范围" :value=" detail.districtArea | DataIsNull" />
             <van-cell title="线路编号" :value="detail.lineId | DataIsNull" />
             <van-cell title="线路入池原因" :value="detail.occurReasonName | DataIsNull" />
             <van-cell title="可上车数" :value="detail.deployNum | DataIsNull" />
             <van-cell title="线路稳定性" :value="detail.stabilityRateName | DataIsNull" />
-            <van-cell title="账期" :value="detail.billingCycle | DataIsNull + '天'" />
+            <van-cell title="账期(天)" :value="detail.billingCycle | DataIsNull" />
             <van-cell title="创建线路难度" :value="detail.handlingDifficultyDegreeName | DataIsNull" />
             <van-cell title="备注信息" :value="detail.remark | DataIsNull" />
             <van-cell title="线路类型" :value="detail.distinguishedTypeName | DataIsNull" />
@@ -170,6 +170,9 @@ export default {
   methods: {
     getDetail(id) {
       let that = this;
+      that.GLOBAL.buryPointFunction('lineDetail_visit', '线路详情页面访问', {
+        value: '线路详情页面访问'
+      })
       getLineDetail({ lineId: id }).then((res) => {
         if (res.data.success) {
           that.detail = res.data.data;
@@ -243,6 +246,9 @@ export default {
                           signature: agentData.signature, // 必填，签名，见附录1
                           jsApiList: ['sendChatMessage', 'getCurExternalContact'], // 必填
                           success: function(res) {
+                            that.GLOBAL.buryPointFunction('send_line', '发送线路', {
+                              value: '发送线路'
+                            })
                             wx.invoke('sendChatMessage', {
                               msgtype: 'image', // 消息类型，必填
                               image:
@@ -284,6 +290,11 @@ export default {
         }
       })
     },
+    buryPoint(name, title) {
+      this.GLOBAL.buryPointFunction('lineDetail_tab', '线路详情页-tab点击', {
+        value: title
+      })
+    },
     goLine() {
       this.$router.replace({ path: '/linecommend' })
     }
@@ -292,6 +303,8 @@ export default {
 </script>
 <style lang="scss" scoped>
 .linedetail{
+  padding-bottom: 3.6rem;
+  box-sizing: border-box;
   .backBtn{
     width:1rem;
     height: 1rem;
@@ -337,7 +350,11 @@ p{
 
 .btn{
     width:90%;
-    margin:1rem auto;
+    margin: 1rem auto;
+    position: fixed;
+    bottom: .6rem;
+    left:0;
+    right:0;
 }
 
 .article-list {

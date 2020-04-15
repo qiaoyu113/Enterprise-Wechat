@@ -7,3 +7,21 @@ export function driverDetail(data) {
     params: data
   })
 }
+
+// 司机意向保存
+export function saveIntentionOfReceiving(data) {
+  return request({
+    url: '/api/driver/corp/driver/saveIntentionOfReceiving',
+    method: 'post',
+    data
+  })
+}
+
+// 司机意向判断
+export function judgingIntentionOfReceiving(data) {
+  return request({
+    url: '/api/driver/corp/driver/judgingIntentionOfReceiving',
+    method: 'post',
+    data
+  })
+}
