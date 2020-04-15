@@ -1,4 +1,5 @@
 <script>
+let gio = gio;
 let agentId = '1000016';
 let url = window.location.host
 if (url !== 'firmiana-wechat.yunniao.cn') {
@@ -10,8 +11,13 @@ if (url !== 'firmiana-wechat.yunniao.cn') {
     // url = 'http://firmiana-open-api-d2.yunniao.cn/'
   }
 }
+function buryPointFunction(eventNameVal, propertiesVal) {
+  gio('track', eventNameVal, propertiesVal);
+  window.zhuge.track(eventNameVal, propertiesVal);
+}
 export default
 {
-  agentId // agentId
+  buryPointFunction,
+  agentId
 }
 </script>

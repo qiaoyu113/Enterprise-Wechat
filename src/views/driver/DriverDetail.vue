@@ -83,7 +83,7 @@
             <p class="text_nomarl">
               系统会根据意向智能推荐匹配线路
             </p>
-            <van-button round type="info" block class="btn" @click="goRouter">
+            <van-button round type="info" block class="btn" @click="goRouter(1)">
               设置司机接活意向
             </van-button>
           </div>
@@ -187,7 +187,7 @@ export default {
       driverType: '1',
       detail: '',
       show: false,
-      matchModule: true,
+      matchModule: false,
       matchDetail: '',
       actions: [
         { name: '产品介绍', color: '#3F8AF2' },

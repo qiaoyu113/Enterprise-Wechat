@@ -10,7 +10,7 @@ export function driverDetail(data) {
 
 export function judgingIntentionOfReceiving(data) {
   return request({
-    url: '/api/driver/corp/driver/judgingIntentionOfReceiving?jia=1',
+    url: '/api/driver/corp/driver/judgingIntentionOfReceiving',
     method: 'post',
     data
   })
