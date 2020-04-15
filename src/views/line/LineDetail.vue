@@ -110,8 +110,7 @@
 </template>
 <script>
 import { Tabbar, TabbarItem, Toast, Tab, Tabs, Cell, CellGroup, Button, Icon } from 'vant'
-// import { getLineDetail, listByLineId, loglist, getMediaIdOfLineDetail, updateState } from '@/api/line'
-import { getLineDetail, listByLineId, loglist, getMediaIdOfLineDetail } from '@/api/line'
+import { getLineDetail, listByLineId, loglist, getMediaIdOfLineDetail, updateState } from '@/api/line'
 import { getCorpSignature, getAgentSignature } from '@/api/user'
 // import VoPages from 'vo-pages'
 import 'vo-pages/lib/vo-pages.css'
@@ -206,13 +205,13 @@ export default {
       const hostName = window.location.href
       let that = this;
       that.disable = true;
-      // updateState({
-      //   'driverId': that.driverId,
-      //   'lineId': that.lineId,
-      //   'remark': '',
-      //   'state': 1
-      // }).then((res) => {
-      // })
+      updateState({
+        'driverId': that.driverId,
+        'lineId': that.lineId,
+        'remark': '',
+        'state': 1
+      }).then((res) => {
+      })
       getMediaIdOfLineDetail({
         lineId: that.lineId,
         busiType: that.detail.busiType
