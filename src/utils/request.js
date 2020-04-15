@@ -10,7 +10,7 @@ if (window.location.host !== 'firmiana-wechat.yunniao.cn') {
     url = 'http://firmiana-wechat.m1.yunniao.cn/'
   } else {
     url = 'http://firmiana-open-api-d2.yunniao.cn/'
-    url = 'http://firmiana-wechat.m1.yunniao.cn/'
+    // url = 'http://firmiana-wechat.m1.yunniao.cn/'
   }
 }
 
