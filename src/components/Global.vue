@@ -8,7 +8,7 @@ if (url !== 'firmiana-wechat.yunniao.cn') {
     agentId = '1000015'
   } else {
     agentId = '1000013'
-    url = 'http://firmiana-open-api-d2.yunniao.cn/'
+    // url = 'http://firmiana-open-api-d2.yunniao.cn/'
   }
 }
 function buryPointFunction(eventNameVal, propertiesVal) {
