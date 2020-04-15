@@ -40,13 +40,9 @@ export default {
     };
   },
   created: function() {
-    // window.location.href = '/login?developer=' + this.GLOBAL.developer
-    console.log(this.$route)
-    // window.zhuge.track('推文', {
-    //   '事件类型': '页面浏览',
-    //   '页面类别': '加入宣传',
-    //   '用户类型': '123'
-    // });
+    // this.GLOBAL.buryPointFunction('err_login', {
+    //   name: '请求错误'
+    // })
     /*
       微信授权方法
     */
