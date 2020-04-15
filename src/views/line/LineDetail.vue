@@ -1,7 +1,7 @@
 <template>
   <div class="linedetail">
     <div class="list-wrap">
-      <van-tabs v-model="listQuery.state" color="#3986CB" sticky>
+      <van-tabs v-model="listQuery.state" color="#3986CB" sticky @click="buryPoint">
         <van-tab title="基本">
           <h2 class="van-doc-demo-block__title">
             基本信息
@@ -170,6 +170,9 @@ export default {
   methods: {
     getDetail(id) {
       let that = this;
+      that.GLOBAL.buryPointFunction('lineDetail_visit', '线路详情页面访问', {
+        value: '线路详情页面访问'
+      })
       getLineDetail({ lineId: id }).then((res) => {
         if (res.data.success) {
           that.detail = res.data.data;
@@ -243,6 +246,9 @@ export default {
                           signature: agentData.signature, // 必填，签名，见附录1
                           jsApiList: ['sendChatMessage', 'getCurExternalContact'], // 必填
                           success: function(res) {
+                            that.GLOBAL.buryPointFunction('send_line', '发送线路', {
+                              value: '发送线路'
+                            })
                             wx.invoke('sendChatMessage', {
                               msgtype: 'image', // 消息类型，必填
                               image:
@@ -282,6 +288,11 @@ export default {
             }
           })
         }
+      })
+    },
+    buryPoint(name, title) {
+      this.GLOBAL.buryPointFunction('lineDetail_tab', '线路详情页-tab点击', {
+        value: title
       })
     },
     goLine() {

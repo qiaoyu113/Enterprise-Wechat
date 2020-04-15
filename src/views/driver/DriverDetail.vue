@@ -1,7 +1,7 @@
 <template>
   <div class="driverDetail">
     <div class="list-wrap">
-      <van-tabs color="#3986CB" sticky>
+      <van-tabs color="#3986CB" sticky @click="buryPoint">
         <van-tab title="基本" class="backgroundTab">
           <van-cell-group v-if="JSON.stringify(detail) != '{}'">
             <h2 class="van-doc-demo-block__title">
@@ -71,7 +71,7 @@
             操作
           </van-button>
         </van-tab>
-        <van-tab title="撮合" :class="matchModule ? 'backgroundTab2' : 'backgroundTab'">
+        <van-tab title="撮合" :class="matchModule ? 'backgroundTab2' : 'backgroundTab'" @click="buryPoint('撮合')">
           <div v-if="!matchModule" class="match_box">
             <img src="https://qizhiniao-dev.oss-cn-beijing.aliyuncs.com/img/998f5a4580604c4f8e798f98430cbe92" alt="">
             <p class="hint_weight">
@@ -202,6 +202,9 @@ export default {
   },
   methods: {
     getDetail(driverId) {
+      this.GLOBAL.buryPointFunction('customer_visit', '客户信息页面访问', {
+        value: '客户信息页面访问'
+      })
       driverDetail({
         driverId: driverId
       }).then((res) => {
@@ -241,6 +244,11 @@ export default {
         }
       })
     },
+    buryPoint(name, title) {
+      this.GLOBAL.buryPointFunction('customer_tab', '客户信息页-tab点击', {
+        value: title
+      })
+    },
     goRouter(type) {
       let that = this;
       if (type === 1) {
@@ -253,6 +261,9 @@ export default {
     },
     check() {
       this.show = true;
+      this.GLOBAL.buryPointFunction('customer_options', '客户详情操作按钮点击', {
+        value: '客户详情操作按钮点击'
+      })
     //   judgingIntentionOfReceiving({
     //     driverId: 201910231017
     //   }).then((res) => {

@@ -40,9 +40,6 @@ export default {
     };
   },
   created: function() {
-    // this.GLOBAL.buryPointFunction('err_login', {
-    //   name: '请求错误'
-    // })
     /*
       微信授权方法
     */
@@ -120,6 +117,9 @@ export default {
               this.$router.replace({ path: '/' })
             }
           } else {
+            this.GLOBAL.buryPointFunction('err_login', '授权失败', {
+              value: '请求错误'
+            })
             Toast.fail(res.data.errorMsg);
             localStorage.removeItem('code');
             this.btnShow = true;

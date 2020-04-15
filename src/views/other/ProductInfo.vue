@@ -118,6 +118,9 @@ export default {
                       jsApiList: ['sendChatMessage', 'getCurExternalContact'], // 必填
                       success: function(res) {
                         let id = that.productList[index].mediaId
+                        that.GLOBAL.buryPointFunction('send_product', '发送产品介绍', {
+                          value: '发送产品介绍'
+                        })
                         wx.invoke('sendChatMessage', {
                           msgtype: 'image', // 消息类型，必填
                           image:
