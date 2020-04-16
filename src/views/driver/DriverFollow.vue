@@ -1,160 +1,168 @@
 <template>
   <div class="DriverFollow">
     <div class="header">
-      <div class="header-tit" @click="show = true">
-        状态筛选<van-icon name="arrow-down" />
-      </div>
-      <van-popup
-        v-model="show"
-        class="header-popup"
-        closeable
-        position="top"
-        close-icon-position="bottom-right"
-      >
-        <div class="header-list">
-          <van-button
-            :type="form.key === '1' ? 'primary' : 'default'"
-            size="small"
-            @click="filterForm('1')"
-          >
-            推送
-          </van-button>
-          <van-button
-            :type="form.key === '2' ? 'primary' : 'default'"
-            size="small"
-            @click="filterForm('2')"
-          >
-            看活
-          </van-button>
-          <van-button
-            :type="form.key === '3' ? 'primary' : 'default'"
-            size="small"
-            @click="filterForm('3')"
-          >
-            试跑
-          </van-button>
-          <van-button
-            :type="form.key === '4' ? 'primary' : 'default'"
-            size="small"
-            @click="filterForm('4')"
-          >
-            上岗
-          </van-button>
-          <van-button
-            :type="form.key === '5' ? 'primary' : 'default'"
-            size="small"
-            @click="filterForm('5')"
-          >
-            失败
-          </van-button>
-        </div>
-      </van-popup>
+      <van-dropdown-menu>
+        <van-dropdown-item
+          v-model="form.key"
+          :options="option1"
+          @change="dropClick"
+        />
+      </van-dropdown-menu>
     </div>
     <div class="list">
-      <van-list
-        v-model="loading"
-        :error.sync="error"
-        error-text="请求失败，点击重新加载"
-        :finished="finished"
-        finished-text="没有更多了"
-        @load="getSelectList"
+      <vo-pages
+        :data="list"
+        :loaded-all="loadedAll"
+        @pullingUp="pullingUp"
+        @pullingDown="pullingDown"
       >
-        <div v-for="item in list" :key="item.lineId" :title="item.lineId" class="list-item">
-          <div class="list-top">
-            <h2>{{ item.customerName }}/{{ item.lineName }}</h2>
-            <p>{{ item.provinceAreaName | isNull }}{{ item.cityAreaName | isNull }}{{ item.countyAreaName | isNull }}{{ item.districtArea | isNull }}</p>
-            <div class="list-tag">
-              <template v-for="key in keyList">
-                <template v-if="Array.isArray(item[key.name])">
-                  <van-tag v-for="(value,index) in item[key.name]" :key="index" :class="value.matched | setClass('-bg')">
-                    {{ key.name==='warehouses' ? '[仓] ' : '' }}{{ key.name==='deliveryAreas' ? '[配] ' : '' }}{{ value.name }}
-                  </van-tag>
+        <div class="placeholder"></div>
+        <div
+          v-for="item in list"
+          :key="item.type"
+          class="lineList"
+          @click="goDetail(item)"
+        >
+          <div class="lineListTop">
+            <div class="name">
+              <van-tag v-if="item.lineSaleName" class="top-tag" type="warning">
+                {{ item.lineSaleName }}
+              </van-tag>
+              <p>{{ item.lineName }} / {{ item.customerName }}</p>
+              <p class="address">
+                {{ item.warehouse }}
+              </p>
+              <div class="tagBox">
+                <template v-for="key in keyList">
+                  <template v-if="Array.isArray(item[key.name])">
+                    <van-tag
+                      v-for="(value, index) in item[key.name]"
+                      :key="index"
+                      round
+                      size="medium"
+                      :class="value.matched | setClass('-bg tag_margin')"
+                    >
+                      {{ key.name === 'warehouses' ? '[仓] ' : ''
+                      }}{{ key.name === 'deliveryAreas' ? '[配] ' : ''
+                      }}{{ value.name }}
+                    </van-tag>
+                  </template>
                 </template>
-              </template>
-            </div>
-            <van-tag v-if="item.lineSaleName" class="top-tag" type="warning">
-              {{ item.lineSaleName }}
-            </van-tag>
-            <van-row class="tit" type="flex" justify="space-between">
-              <van-col class="lt">
-                匹配度
-              </van-col>
-              <van-col class="rt">
-                {{ item.suitability }}%
-              </van-col>
-            </van-row>
-            <van-row class="list-type" justify="space-between" type="flex">
-              <template v-for="key in keyList">
-                <template v-if="Array.isArray(item[key.name])">
-                  <van-col :key="key.name">
-                    <h5>{{ key.key }}</h5>
-                    <van-icon
-                      :name="item[key.name].some(val => val.matched) | setType"
-                      :class="item[key.name].some(val => val.matched) | setClass"
-                    />
-                  </van-col>
+              </div>
+              <div class="matchRate">
+                匹配度 <span>{{ item.suitability }}%</span>
+              </div>
+              <div class="needCarBox">
+                <template v-for="key in keyList">
+                  <template v-if="Array.isArray(item[key.name])">
+                    <div :key="key.name" class="needCarList">
+                      <div class="top">
+                        {{ key.key }}
+                      </div>
+                      <div class="bottom">
+                        <van-icon
+                          :name="
+                            item[key.name].some((val) => val.matched) | setType
+                          "
+                          :class="
+                            item[key.name].some((val) => val.matched) | setClass
+                          "
+                          size="26"
+                        />
+                      </div>
+                    </div>
+                  </template>
                 </template>
-              </template>
-            </van-row>
-            <div v-if="item.remark" class="list-note">
-              {{ item.remark }}
+              </div>
             </div>
-            <van-row v-if="item.followInfo" class="list-speed" type="flex" align="center">
-              <van-col class="list-speed-lt">
-                {{ item.followInfo.stateName }}
-              </van-col>
-              <van-col class="list-speed-rt">
-                <div class="list-speed-top">
-                  {{ item.followInfo.remark }}
-                </div>
-                <div class="list-speed-time">
-                  {{ item.followInfo.createDate }}
-                </div>
-              </van-col>
-            </van-row>
           </div>
-          <van-cell title="详情" is-link class="list-bm" @click="goDetail(item)" />
+          <div v-if="item.remark" class="list-note">
+            {{ item.remark }}
+          </div>
+          <van-row
+            v-if="item.followInfo"
+            class="list-speed"
+            type="flex"
+            align="center"
+          >
+            <van-col class="list-speed-lt">
+              {{ item.followInfo.stateName }}
+            </van-col>
+            <van-col class="list-speed-rt">
+              <div class="list-speed-top">
+                {{ item.followInfo.remark }}
+              </div>
+              <div class="list-speed-time">
+                {{ item.followInfo.createDate | Timestamp }}
+              </div>
+            </van-col>
+          </van-row>
+          <div class="lineListBottom">
+            <van-cell title="详情" is-link />
+          </div>
         </div>
-      </van-list>
+      </vo-pages>
     </div>
   </div>
 </template>
 
 <script>
-import { Popup, Icon, Button, Tag, Col, Row, Cell, List } from 'vant';
-import { getSelectList } from 'api/driver'
+import VoPages from 'vo-pages'
+import 'vo-pages/lib/vo-pages.css'
+import {
+  Toast,
+  Icon,
+  Button,
+  Tag,
+  Col,
+  Row,
+  Cell,
+  DropdownMenu,
+  DropdownItem
+} from 'vant';
+import { getSelectList } from 'api/driver';
 export default {
   name: 'DriverFollow',
   components: {
-    [Popup.name]: Popup,
+    [Toast.name]: Icon,
     [Icon.name]: Icon,
     [Tag.name]: Tag,
     [Button.name]: Button,
     [Col.name]: Col,
     [Row.name]: Row,
     [Cell.name]: Cell,
-    [List.name]: List
+    [DropdownMenu.name]: DropdownMenu,
+    [DropdownItem.name]: DropdownItem,
+    VoPages
   },
   filters: {
     setClass(key, bg) {
-      return (key ? 'success' : 'danger') + (bg || '')
+      return (key ? 'success' : 'danger') + (bg || '');
     },
     setType(key) {
-      return key ? 'checked' : 'warning'
+      return key ? 'checked' : 'warning';
     },
     isNull(val) {
-      return val || ''
+      return val || '';
     }
   },
   data() {
     return {
       show: false,
       form: {
-        // key: '1',
+        key: '1',
         limit: 10,
         page: 1,
         driverId: ''
       },
+      value1: 0,
+      option1: [
+        { text: '推送', value: '1' },
+        { text: '看活', value: '2' },
+        { text: '试跑', value: '3' },
+        { text: '上岗', value: '4' },
+        { text: '失败', value: '5' }
+      ],
       // 列表
       list: [],
       keyList: [
@@ -183,83 +191,109 @@ export default {
           key: '出车时段'
         }
       ],
-      error: false,
-      loading: false,
-      finished: false
-    }
+      total: 0,
+      loadedAll: false,
+      beforePullDown: false
+    };
   },
   mounted() {
     this.form.driverId = this.$route.query.driverId;
+    this.getList();
   },
   methods: {
-    goDetail(item) {
-      this.$router.push({ name: 'DriverFollowDetail', params: item })
+    // 下拉刷新
+    pullingUp() {
+      this.form.page += 1
+      this.getList()
     },
-    getSelectList() {
+    pullingDown() {
+      this.beforePullDown = false
+      this.form.page = 1
+      this.getList(false)
+    },
+    getList(loadMore = true) {
+      Toast.loading({
+        duration: 0, // 持续展示 toast
+        forbidClick: true, // 禁用背景点击
+        loadingType: 'spinner',
+        message: '加载中...'
+      });
       getSelectList(this.form)
-        .then(({ data }) => {
-          if (data.success) {
-            // 车型返回的为对象，转换为数组
-            data.data.map(item => {
-              item.driverCarType = [item.driverCarType]
-              return item
-            })
-            // 请求成功
-            this.list.push(...data.data);
+        .then((res) => {
+          if (res.data.success) {
+            res.data.data.map((item) => {
+              item.driverCarType = [item.driverCarType];
+              return item;
+            });
+            Toast.clear();
+            let lists = res.data.data
+            this.total = res.data.page.total
+            if (loadMore) {
+              this.list = this.list.concat(lists)
+            } else {
+              this.list = lists
+            }
+            if (!this.beforePullDown) {
+              this.beforePullDown = true
+            }
+            if (this.list.length === this.total || this.list.length < 4) {
+              this.loadedAll = true
+            } else {
+              this.loadedAll = false
+            }
           } else {
-            this.error = true;
+            Toast.clear();
+            this.loadedAll = true;
+            Toast.fail(res.data.errorMsg);
           }
-          if (data.data.length < this.form.limit) {
-            this.finished = true;
-          } else {
-            this.form.page++
-          }
-        }).catch(() => {
-          this.error = true;
-        }).finally(() => {
-          this.loading = false;
-        });
+        }).catch((err) => {
+          Toast.clear();
+          Toast.fail(err);
+          this.loadedAll = true;
+        })
     },
-    filterForm(val) {
-      this.form.key = val;
+
+    goDetail(item) {
+      this.$router.push({ name: 'DriverFollowDetail', params: item });
+    },
+    dropClick() {
       this.show = false;
       this.list = [];
       this.form.page = 1;
-      this.loading = true;
-      this.finished = false;
-      this.getSelectList();
+      this.getList();
     }
   }
-}
+};
 </script>
 
 <style lang="scss" scoped>
-
-$success: #49CB15;
-$danger: #EC5F50;
-
-.DriverFollow{
-  padding-top: 42px;
-  .van-button--primary{
+$success: #81CA2A;
+$danger: #E75E60;
+.DriverFollow {
+  .van-button--primary {
     background-color: $success;
     border-color: $success;
+  }
+  .placeholder{
+    width:100%;
+    padding-top: 1.6rem;
   }
   background-color: #f5f5f5;
   box-sizing: border-box;
   // 公用
-  .success{
+  .success {
     color: $success;
   }
   .danger {
     color: $danger;
   }
-  .success-bg{
+  .success-bg {
     background-color: $success;
   }
   .danger-bg {
     background-color: $danger;
   }
-  .header{
+  .header {
     position: fixed;
     top: 0;
     left: 0;
@@ -267,143 +301,259 @@ $danger: #EC5F50;
     margin-bottom: 10px;
     z-index: 100;
   }
-  .header-tit{
-    height: 32px;
-    line-height: 32px;
-    font-size: 12px;
-    color: #000;
-    text-align: center;
-    background-color: #fff;
-    border-bottom: 1px solid #ddd;
-  }
-  .header-popup{
-    padding: 20px 0 40px;
-    .header-list{
-      padding: 0 20px;
-    }
-  }
   // list
   .list{
-    padding: 0 18px;
-    .list-item{
-      position: relative;
-      margin-bottom: 10px;
-      background-color: #fff;
-      border: 1px solid #D9D9D9;
-      border-radius: 5px;
-      .list-top{
-        padding: 12px 16px 0;
-        color: #000;
-        .list-note{
-          padding: 8px 0;
-          font-size: 12px;
-          color: #B2B2B2;
-          line-height: 18px;
-          text-indent: 2em;
-        }
-        h2{
-          margin: 0 0 4px 0;
-          padding-right: 30px;
-          font-size: 18px;
-          line-height: 24px;
-        }
-        p{
-          margin: 0;
-          padding-bottom: 5px;
-          font-size: 14px;
-          line-height: 22px;
-          border-bottom: 1px solid #EEEBEB;
-        }
-        .list-tag{
-          padding: 8px 0;
-          border-bottom: 1px solid #EEEBEB;
-          .van-tag{
-            margin-right: 8px;
-            margin-bottom: 8px;
-            padding: 0 12px;
-            height: 18px;
-            line-height: 18px;
-            font-size: 12px;
-            color: #fff;
-            text-align: center;
-            border-radius: 10px;
-          }
-        }
-        .top-tag{
+    height: 100%;
+  }
+  .lineList {
+    width: 100%;
+    border-radius: 1.2rem;
+    padding: 0.3rem;
+    box-sizing: border-box;
+    p{
+      margin-block-start: 0;
+      margin-block-end: 0;
+    }
+    .tag_margin{
+      margin: 2px 6px 6px 0;
+    }
+    .lineListTop {
+      background: #fff;
+      padding: 0.2rem 0;
+      box-sizing: border-box;
+      .info {
+        color: #333;
+        font-size: 14px;
+        padding: 0 0.42667rem 0.26rem;
+        box-sizing: border-box;
+      }
+      .name {
+        position: relative;
+        width: 100%;
+        font-weight: 500;
+        padding: 0.2rem 0.42667rem 0;
+        box-sizing: border-box;
+        font-size: 17px;
+        color: #000000;
+        .top-tag {
           position: absolute;
           right: 0;
-          top: 0;
+          top: -0.2rem;
         }
-        .tit{
-          height: 42px;
-          line-height: 42px;
-          border-bottom: 1px solid #EEEBEB;
-          .lt{
-            font-size: 18px;
-            color: #000000;
-          }
-          .rt{
-            font-size: 20px;
-            color: #2F7DCD;
-            font-weight: bold;
-          }
-        }
-        .list-type{
-          padding-bottom: 6px;
-          text-align: center;
-          h5{
-            margin: 0;
-            padding: 8px 0;
-            font-size: 12px;
-            color: #B2B2B2;
-            line-height: 12px;
-            font-weight: normal;
-          }
-          .van-icon{
-            font-size: 20px;
-          }
+        .address {
+          font-weight: 400;
+          font-size: 14px;
+          color: #000000;
+          padding: 0.16rem 0;
+          box-sizing: border-box;
+          border-bottom: 1px solid #eeebeb;
         }
       }
-      .list-bm{
-        padding: 0 10px;
-        height: 40px;
-        line-height: 40px;
-        border-top: 1px solid #EEEBEB;
-        border-radius: 0 0 5px 5px;
-        font-size: 14px;
-        color: #9B9B9B;
-        .van-icon{
-          color: #9B9B9B;
-          line-height: 40px;
+      .tagBox {
+        width: 100%;
+        padding: 0.26rem 0;
+        box-sizing: border-box;
+        border-bottom: 1px solid #eeebeb;
+      }
+      .matchRate {
+        width: 100%;
+        padding: 0.26rem 0;
+        box-sizing: border-box;
+        font-size: 17px;
+        color: #000000;
+        font-weight: 400;
+        border-bottom: 1px solid #eeebeb;
+        span {
+          font-size: 20px;
+          color: #2f7dcd;
+          font-weight: bold;
+          float: right;
         }
       }
-    }
-    .list-speed{
-      padding: 10px 0;
-      border-top: 1px solid #EEEBEB;
-      .list-speed-lt{
-        width: 74px;
-        height: 20px;
-        line-height: 20px;
-        background: #4F77AA;
-        border-radius: 10px;
-        font-size: 12px;
-        color: #FFF;
-        text-align: center;
-      }
-      .list-speed-rt{
-        margin-left: 15px;
-        .list-speed-top{
-          font-size: 16px;
-          color: #000;
-          line-height:24px;
-        }
-        .list-speed-time{
-          font-size: 12px;
-          color: #B2B2B2;
+      .needCarBox {
+        width: 100%;
+        display: flex;
+        .needCarList {
+          flex: 1;
+          padding: 0.26rem 0 0;
+          box-sizing: border-box;
+          .top {
+            width: 100%;
+            text-align: center;
+            font-size: 11px;
+            color: #b2b2b2;
+          }
+          .bottom {
+            width: 100%;
+            padding: 0.26rem 0 0 0;
+            box-sizing: border-box;
+            text-align: center;
+          }
         }
       }
     }
   }
+  .lineListBottom{
+    border-top: 1px solid #EEEBEB;
+    font-size: 14px;
+    color: #9B9B9B;
+  }
+  .list-note {
+    padding: 8px 0.42667rem;
+    font-size: 12px;
+    color: #b2b2b2;
+    line-height: 18px;
+    text-indent: 2em;
+    background: #fff;
+  }
+  .list-speed {
+    padding: 0.2rem 0.42667rem;
+    border-top: 1px solid #eeebeb;
+    background-color: #fff;
+    .list-speed-lt {
+      width: 74px;
+      height: 20px;
+      line-height: 20px;
+      background: #4f77aa;
+      border-radius: 10px;
+      font-size: 12px;
+      color: #fff;
+      text-align: center;
+    }
+    .list-speed-rt {
+      margin-left: 15px;
+      .list-speed-top {
+        font-size: 16px;
+        color: #000;
+        line-height: 24px;
+      }
+      .list-speed-time {
+        font-size: 12px;
+        color: #b2b2b2;
+      }
+    }
+  }
+  // .list {
+  //   padding: 0 18px;
+  //   .list-item {
+  //     position: relative;
+  //     margin-bottom: 10px;
+  //     background-color: #fff;
+  //     border: 1px solid #d9d9d9;
+  //     border-radius: 5px;
+  //     .list-top {
+  //       padding: 12px 16px 0;
+  //       color: #000;
+  //       .list-note {
+  //         padding: 8px 0;
+  //         font-size: 12px;
+  //         color: #b2b2b2;
+  //         line-height: 18px;
+  //         text-indent: 2em;
+  //       }
+  //       h2 {
+  //         margin: 0 0 4px 0;
+  //         padding-right: 30px;
+  //         font-size: 18px;
+  //         line-height: 24px;
+  //       }
+  //       p {
+  //         margin: 0;
+  //         padding-bottom: 5px;
+  //         font-size: 14px;
+  //         line-height: 22px;
+  //         border-bottom: 1px solid #eeebeb;
+  //       }
+  //       .list-tag {
+  //         padding: 8px 0;
+  //         border-bottom: 1px solid #eeebeb;
+  //         .van-tag {
+  //           margin-right: 8px;
+  //           margin-bottom: 8px;
+  //           padding: 0 12px;
+  //           height: 18px;
+  //           line-height: 18px;
+  //           font-size: 12px;
+  //           color: #fff;
+  //           text-align: center;
+  //           border-radius: 10px;
+  //         }
+  //       }
+  //       .top-tag {
+  //         position: absolute;
+  //         right: 0;
+  //         top: 0;
+  //       }
+  //       .tit {
+  //         height: 42px;
+  //         line-height: 42px;
+  //         border-bottom: 1px solid #eeebeb;
+  //         .lt {
+  //           font-size: 18px;
+  //           color: #000000;
+  //         }
+  //         .rt {
+  //           font-size: 20px;
+  //           color: #2f7dcd;
+  //           font-weight: bold;
+  //         }
+  //       }
+  //       .list-type {
+  //         padding-bottom: 6px;
+  //         text-align: center;
+  //         h5 {
+  //           margin: 0;
+  //           padding: 8px 0;
+  //           font-size: 12px;
+  //           color: #b2b2b2;
+  //           line-height: 12px;
+  //           font-weight: normal;
+  //         }
+  //         .van-icon {
+  //           font-size: 20px;
+  //         }
+  //       }
+  //     }
+  //     .list-bm {
+  //       padding: 0 10px;
+  //       height: 40px;
+  //       line-height: 40px;
+  //       border-top: 1px solid #eeebeb;
+  //       border-radius: 0 0 5px 5px;
+  //       font-size: 14px;
+  //       color: #9b9b9b;
+  //       .van-icon {
+  //         color: #9b9b9b;
+  //         line-height: 40px;
+  //       }
+  //     }
+  //   }
+  //   .list-speed {
+  //     padding: 10px 0;
+  //     border-top: 1px solid #eeebeb;
+  //     .list-speed-lt {
+  //       width: 74px;
+  //       height: 20px;
+  //       line-height: 20px;
+  //       background: #4f77aa;
+  //       border-radius: 10px;
+  //       font-size: 12px;
+  //       color: #fff;
+  //       text-align: center;
+  //     }
+  //     .list-speed-rt {
+  //       margin-left: 15px;
+  //       .list-speed-top {
+  //         font-size: 16px;
+  //         color: #000;
+  //         line-height: 24px;
+  //       }
+  //       .list-speed-time {
+  //         font-size: 12px;
+  //         color: #b2b2b2;
+  //       }
+  //     }
+  //   }
+  // }
 }
 </style>
