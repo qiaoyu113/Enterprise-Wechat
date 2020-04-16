@@ -80,7 +80,7 @@
             />
           </van-popup>
           <!--出车时段-->
-          <van-field
+          <!-- <van-field
             readonly
             clickable
             label="出车时段"
@@ -96,7 +96,7 @@
               @cancel="showPicker5 = false"
               @confirm="onConfirm5"
             />
-          </van-popup>
+          </van-popup> -->
           <van-button class="searchBtn" round type="info" @click="onCancel">
             搜索
           </van-button>
