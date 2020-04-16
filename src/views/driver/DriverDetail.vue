@@ -263,6 +263,7 @@ export default {
     },
     goRouter(type) {
       let that = this;
+      // that.$destroy(true)
       if (type === 1) {
         that.$router.push({ path: '/driverintention', query: { driverId: that.driverId }})// 撮合跟进
       } else if (type === 2) {
