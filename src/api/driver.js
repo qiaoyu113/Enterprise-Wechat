@@ -12,7 +12,6 @@ export function driverDetail(data) {
  */
 export function getSelectList(data) {
   return request({
-    url: '/api/bss/v1/bss/corp/makeAMatch/selectListByKey?jia=true',
     url: '/api/bss/v1/bss/corp/makeAMatch/selectListByKey',
     method: 'post',
     data
