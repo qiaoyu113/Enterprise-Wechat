@@ -93,8 +93,8 @@ service.interceptors.response.use(
   error => {
     console.log('err' + error) // for debug
     Toast.fail({
-      message: error.message,
-      duration: 1.5 * 1000
+      message: error.data.msg,
+      duration: 2.5 * 1000
     })
     return Promise.reject(error)
   }
