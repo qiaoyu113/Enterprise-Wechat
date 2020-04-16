@@ -73,7 +73,7 @@
           </div>
         </template>
       </van-field>
-      <van-button class="save-btn" type="primary" block color="#2F7DCD" native-type="submit">
+      <van-button round class="save-btn" type="info" block color="#2F7DCD" native-type="submit">
         保存
       </van-button>
     </van-form>
@@ -289,8 +289,11 @@ export default {
 <style lang="scss">
 .driverIntention {
     min-height: 100vh;
-    padding-bottom: 1.1rem;
+    padding-bottom: 4rem;
     box-sizing: border-box;
+    .van-form{
+      border-bottom: 1px solid #d9d9d9;
+    }
     .van-cell:not(:last-child)::after{
       border: none!important;
     }
@@ -312,7 +315,7 @@ export default {
         align-items: center;
         justify-content: space-between;
         .size-font{
-            font-size: 17px;
+            font-size: 14px;
             color: #000000;
             line-height: 24px;
         }
@@ -334,7 +337,7 @@ export default {
           padding: 12px 0;
           border-bottom: 1px solid #d9d9d9;
           .van-checkbox__label{
-              font-size: 17px;
+              font-size: 14px;
               color: #000000;
               line-height: 24px;
               margin-left: 10px;
@@ -345,14 +348,13 @@ export default {
       }
   }
   .save-btn{
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      font-size: 18px;
       color: #FFFFFF;
-      text-align: center;
-      line-height: 24px;
-      height: 1.1rem;
+      width:90%;
+      margin: 1rem auto;
+      position: fixed;
+      bottom: .6rem;
+      left:0;
+      right:0;
   }
 }
 </style>
