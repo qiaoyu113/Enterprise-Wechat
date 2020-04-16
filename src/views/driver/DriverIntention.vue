@@ -3,7 +3,7 @@
     <div class="car-size" @click="showPicker = true">
       <span class="size-font">车型</span>
       <div class="car-size-right">
-        <span v-text="carTypeText"></span>
+        <span v-text="carTypeText === '' ? '请选择' : carTypeText"></span>
         <van-icon name="arrow" />
       </div>
     </div>
@@ -14,7 +14,7 @@
         <template #input>
           <div class="check-box">
             <van-checkbox-group v-model="cargoType">
-              <van-checkbox v-for="item in dataCargoType" :key="item.codeVal" :name="item.codeVal" icon-size="20px" checked-color="#6085b7">
+              <van-checkbox v-for="item in dataCargoType" :key="item.codeVal" :name="item.codeVal" icon-size="22px" checked-color="#6085b7">
                 {{ item.code }}
               </van-checkbox>
             </van-checkbox-group>
@@ -27,7 +27,7 @@
         <template #input>
           <div class="check-box">
             <van-checkbox-group v-model="arrivalArea">
-              <van-checkbox v-for="item in areaArray" :key="item.code" :name="item.code" icon-size="20px" checked-color="#6085b7">
+              <van-checkbox v-for="item in areaArray" :key="item.code" :name="item.code" icon-size="22px" checked-color="#6085b7">
                 {{ item.name }}
               </van-checkbox>
             </van-checkbox-group>
@@ -40,7 +40,7 @@
         <template #input>
           <div class="check-box">
             <van-checkbox-group v-model="deliveryArea">
-              <van-checkbox v-for="item in areaArray" :key="item.code" :name="item.code" icon-size="20px" checked-color="#6085b7">
+              <van-checkbox v-for="item in areaArray" :key="item.code" :name="item.code" icon-size="22px" checked-color="#6085b7">
                 {{ item.name }}
               </van-checkbox>
             </van-checkbox-group>
@@ -53,7 +53,7 @@
         <template #input>
           <div class="check-box">
             <van-checkbox-group v-model="handlingDifficultyDegree">
-              <van-checkbox v-for=" item in dataHandlingDifficultyDegree" :key="item.codeVal" :name="item.codeVal" icon-size="20px" checked-color="#6085b7">
+              <van-checkbox v-for=" item in dataHandlingDifficultyDegree" :key="item.codeVal" :name="item.codeVal" icon-size="22px" checked-color="#6085b7">
                 {{ item.code }}
               </van-checkbox>
             </van-checkbox-group>
@@ -66,14 +66,14 @@
         <template #input>
           <div class="check-box">
             <van-checkbox-group v-model="departureTime">
-              <van-checkbox v-for="item in dataDepartureTime" :key="item.codeVal" :name="item.codeVal" icon-size="20px" checked-color="#6085b7">
+              <van-checkbox v-for="item in dataDepartureTime" :key="item.codeVal" :name="item.codeVal" icon-size="22px" checked-color="#6085b7">
                 {{ item.code }}
               </van-checkbox>
             </van-checkbox-group>
           </div>
         </template>
       </van-field>
-      <van-button class="save-btn" type="primary" block color="#447dc7" native-type="submit">
+      <van-button class="save-btn" type="primary" block color="#2F7DCD" native-type="submit">
         保存
       </van-button>
     </van-form>
@@ -88,13 +88,14 @@
   </div>
 </template>
 <script>
-import { Toast, Cell, CellGroup, Button, Picker, Popup, Icon, Checkbox, CheckboxGroup, Form, Field } from 'vant';
+import { Loading, Toast, Cell, CellGroup, Button, Picker, Popup, Icon, Checkbox, CheckboxGroup, Form, Field } from 'vant';
 import { dictionary, getCityAreaByCode } from '@/api/common'
-import { saveIntentionOfReceiving, judgingIntentionOfReceiving } from '@/api/driver'
+import { judgingIntentionOfReceiving, saveIntentionOfReceiving } from '@/api/driver'
 export default {
   name: 'DriverIntention',
   components: {
     [Toast.name]: Toast,
+    [Loading.name]: Loading,
     [Cell.name]: Cell,
     [Field.name]: Field,
     [Form.name]: Form,
@@ -129,8 +130,26 @@ export default {
     this.getCityId();
   },
   methods: {
-    // 获取城市ID与字典
+    // 字典方法
+    async getDictionary(type, arrays) {
+      await dictionary({
+        dictType: type
+      }).then(res => {
+        let arr = res.data.data;
+        this[arrays] = arr;
+      }).catch(err => {
+        Toast.fail(err.data.errorMsg);
+      })
+      return arrays
+    },
+    // 获取基本数据
     async getCityId() {
+      Toast.loading({
+        duration: 0, // 持续展示 toast
+        forbidClick: true, // 禁用背景点击
+        loadingType: 'spinner',
+        message: '加载中...'
+      });
       let that = this;
       let cityCode = localStorage.getItem('city');
       // 区域参数
@@ -140,58 +159,21 @@ export default {
         let arr = res.data.data;
         that.areaArray = arr;
       }).catch(err => {
-        Toast.fail(err);
+        Toast.fail(err.data.errorMsg);
       });
-      // 意向车型
-      await dictionary({
-        dictType: 'Intentional_compartment'
-      }).then(res => {
-        let arr = res.data.data;
-        that.dataTypeCar = arr;
-        arr.forEach(ele => {
-          that.carTypeArray.push(ele.code)
-        });
-        that.carTypeText = this.carTypeArray[0]
-      }).catch(err => {
-        Toast.fail(err);
-      });
-      // 货物类型
-      await dictionary({
-        dictType: 'type_of_goods'
-      }).then(res => {
-        let arr = res.data.data;
-        that.dataCargoType = arr
-      }).catch(err => {
-        Toast.fail(err);
-      })
-      // 装卸难度
-      await dictionary({
-        dictType: 'handling_difficulty_degree'
-      }).then(res => {
-        let arr = res.data.data;
-        that.dataHandlingDifficultyDegree = arr;
-      }).catch(err => {
-        Toast.fail(err);
-      })
-      // 出车时段
-      await dictionary({
-        dictType: 'departure_time_interval'
-      }).then(res => {
-        let arr = res.data.data;
-        that.dataDepartureTime = arr
-      }).catch(err => {
-        Toast.fail(err);
-      })
+      await this.getDictionary('Intentional_compartment', 'dataTypeCar');
+      await this.getDictionary('type_of_goods', 'dataCargoType');
+      await this.getDictionary('handling_difficulty_degree', 'dataHandlingDifficultyDegree');
+      await this.getDictionary('departure_time_interval', 'dataDepartureTime');
       this.getDriverId();
     },
     // 意向保存
     btnSave(values) {
       values.driverId = this.driverId;
-      this.dataTypeCar.forEach(ele => {
-        if (ele.code === this.carTypeText) {
-          values.carType = ele.codeVal;
-        }
-      })
+      if (this.carTypeText === '') {
+        Toast('请选择车型');
+        return;
+      }
       if (values.cargoType.length === 0) {
         Toast('请选择货物类型');
         return;
@@ -212,12 +194,26 @@ export default {
         Toast('请选择出车时段');
         return;
       }
+      // console.log('carType', this.carTypeText, this.dataTypeCar)
+      this.dataTypeCar.forEach(ele => {
+        if (ele.code === this.carTypeText) {
+          values.carType = ele.codeVal;
+        }
+      })
+      Toast.loading({
+        duration: 0, // 持续展示 toast
+        forbidClick: true, // 禁用背景点击
+        loadingType: 'spinner',
+        message: '提交中...'
+      });
       saveIntentionOfReceiving(values).then(res => {
         if (res.data.data.flag) {
+          Toast.clear();
           this.$router.back()
         }
       }).catch(err => {
-        Toast.fail(err);
+        Toast.clear();
+        Toast.fail(err.data.errorMsg);
       })
     },
     onConfirm(value) {
@@ -236,6 +232,7 @@ export default {
         let deliveryArea = res.data.data.deliveryArea
         let handlingDifficultyDegree = res.data.data.handlingDifficultyDegree
         let departureTime = res.data.data.departureTime
+        Toast.clear();
         if (res.data.data.flag) {
           that.carTypeText = carType
           that.dataCargoType.forEach(ele => {
@@ -273,12 +270,11 @@ export default {
           })
         }
       }).catch(err => {
-        Toast.fail(err);
+        Toast.fail(err.data.errorMsg);
       })
     },
     getDriverId() {
       this.driverId = this.$route.query.driverId;
-      // this.driverId = 201910231017;
       this.judgingDriver()
     }
   }
@@ -287,45 +283,55 @@ export default {
 <style lang="scss">
 .driverIntention {
     min-height: 100vh;
-    padding-bottom: 50px;
+    padding-bottom: 1.1rem;
     box-sizing: border-box;
     .van-cell:not(:last-child)::after{
       border: none!important;
     }
     .van-cell-group__title{
-        background-color: #f5f5f5;
-        color: #b2b2b2;
+        background-color: #F5F5F5;
+        font-size: 14px;
+        color: #B2B2B2;
+        line-height: 12px;
         border-top: 1px solid #d9d9d9;
         border-bottom: 1px solid #d9d9d9;
+        padding: .4rem 0 .3rem .4rem;
+        box-sizing: border-box;
     }
     .car-size{
-        padding:8px 16px;
+        padding:0 .4rem;
+        height: 1.1rem;
         box-sizing: border-box;
         display: flex;
+        align-items: center;
         justify-content: space-between;
         .size-font{
-            font-weight: bold;
-            font-size: 16px;
+            font-size: 17px;
+            color: #000000;
+            line-height: 24px;
         }
         .car-size-right{
             display: flex;
             align-items: center;
-            font-size: 12px;
-            color: #969799;
+            font-size: 14px;
+            color: #9B9B9B;
+            text-align: right;
+            line-height: 22px;
             span{
-                margin-right: 6px;
+                margin-right: 8px;
             }
         }
     }
   .check-box{
       width: 100%;
       .van-checkbox{
-          padding: 8px 0;
+          padding: 12px 0;
           border-bottom: 1px solid #d9d9d9;
           .van-checkbox__label{
-              font-size: 14px;
-              font-weight: bold;
-              color: black;
+              font-size: 17px;
+              color: #000000;
+              line-height: 24px;
+              margin-left: 10px;
           }
       }
       .van-checkbox-group .van-checkbox:last-child{
@@ -336,6 +342,11 @@ export default {
       position: fixed;
       bottom: 0;
       left: 0;
+      font-size: 18px;
+      color: #FFFFFF;
+      text-align: center;
+      line-height: 24px;
+      height: 1.1rem;
   }
 }
 </style>

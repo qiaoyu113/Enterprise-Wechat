@@ -4,19 +4,20 @@ import { Toast } from 'vant'
 import { getToken } from '@/utils/auth'
 import JsCookie from 'js-cookie'
 
-let url = 'http://firmiana-wechat.yunniao.cn/'
-if (window.location.host !== 'firmiana-wechat.yunniao.cn') {
-  if (window.location.host !== 'firmiana-open-api-d2.yunniao.cn') {
-    url = 'http://firmiana-wechat.m1.yunniao.cn/'
-  } else {
-    url = 'http://firmiana-open-api-d2.yunniao.cn/'
-    // url = 'http://firmiana-wechat.m1.yunniao.cn/'
-  }
-}
+// let url = 'http://firmiana-wechat.yunniao.cn/'
+// if (window.location.host !== 'firmiana-wechat.yunniao.cn') {
+//   if (window.location.host !== 'firmiana-open-api-d2.yunniao.cn') {
+//     url = 'http://firmiana-wechat.m1.yunniao.cn/'
+//   } else {
+//     url = 'http://firmiana-open-api-d2.yunniao.cn/'
+//     // url = 'http://firmiana-wechat.m1.yunniao.cn/'
+//   }
+// }
 
 // create an axios instance
 const service = axios.create({
-  baseURL: url, // url = base url + request url
+  // url
+  baseURL: '', // url = base url + request url
   withCredentials: true, // send cookies when cross-domain requests
   timeout: 5000 // request timeout
 })
