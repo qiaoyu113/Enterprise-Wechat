@@ -33,7 +33,8 @@ export default [
     name: 'DriverFollowDetail',
     component: () => import('views/driver/DriverFollowDetail.vue'),
     meta: {
-      title: '跟进详情'
+      title: '跟进详情',
+      keepAlive: true
     }
   }, {
 
