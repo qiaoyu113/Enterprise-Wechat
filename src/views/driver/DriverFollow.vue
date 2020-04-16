@@ -62,28 +62,17 @@
         <div v-for="item in list" :key="item.lineId" :title="item.lineId" class="list-item">
           <div class="list-top">
             <h2>{{ item.customerName }}/{{ item.lineName }}</h2>
-            <p>{{ item.provinceAreaName+item.cityAreaName+item.countyAreaName+item.districtArea }}</p>
+            <p>{{ item.provinceAreaName | isNull }}{{ item.cityAreaName | isNull }}{{ item.countyAreaName | isNull }}{{ item.districtArea | isNull }}</p>
             <div class="list-tag">
-              <van-tag :class="item.carTypeMatch | setClass('-bg')">
-                {{ item.carTypeName }}
-              </van-tag>
-              <van-tag :class="item.cargoTypeMatch | setClass('-bg')">
-                {{ item.cargoTypeName }}
-              </van-tag>
-              <van-tag :class="item.warehouseMatch | setClass('-bg')">
-                [仓]{{ item.warehouse }}
-              </van-tag>
-              <van-tag :class="item.countyAreaMatch | setClass('-bg')">
-                [配]{{ item.warehouse }}
-              </van-tag>
-              <van-tag :class="item.handlingDifficultyDegreeMatch | setClass('-bg')">
-                {{ item.handlingDifficultyDegreeName }}
-              </van-tag>
-              <van-tag :class="item.timeMatch | setClass('-bg')">
-                {{ item.handlingDifficultyDegreeName }}
-              </van-tag>
+              <template v-for="key in keyList">
+                <template v-if="Array.isArray(item[key.name])">
+                  <van-tag v-for="(value,index) in item[key.name]" :key="index" :class="value.matched | setClass('-bg')">
+                    {{ key.name==='warehouses' ? '[仓] ' : '' }}{{ key.name==='deliveryAreas' ? '[配] ' : '' }}{{ value.name }}
+                  </van-tag>
+                </template>
+              </template>
             </div>
-            <van-tag class="top-tag" type="warning">
+            <van-tag v-if="item.lineSaleName" class="top-tag" type="warning">
               {{ item.lineSaleName }}
             </van-tag>
             <van-row class="tit" type="flex" justify="space-between">
@@ -95,54 +84,31 @@
               </van-col>
             </van-row>
             <van-row class="list-type" justify="space-between" type="flex">
-              <van-col>
-                <h5>所需车型</h5>
-                <van-icon
-                  :name="item.carTypeMatch | setType"
-                  :class="item.carTypeMatch | setClass"
-                />
-              </van-col>
-              <van-col>
-                <h5>货物类型</h5>
-                <van-icon
-                  :name="item.cargoTypeMatch | setType"
-                  :class="item.cargoTypeMatch | setClass"
-                />
-              </van-col>
-              <van-col>
-                <h5>到仓区域</h5>
-                <van-icon
-                  :name="item.cargoTypeMatch | setType"
-                />
-              </van-col>
-              <van-col>
-                <h5>配送区域</h5>
-                <van-icon
-                  :name="item.cargoTypeMatch | setType"
-                />
-              </van-col>
-              <van-col>
-                <h5>装卸难度</h5>
-                <van-icon
-                  :name="item.handlingDifficultyDegreeMatch | setType"
-                  :class="item.handlingDifficultyDegreeMatch | setClass"
-                />
-              </van-col>
-              <van-col>
-                <h5>出车时段</h5>
-                <van-icon name="checked" />
-              </van-col>
+              <template v-for="key in keyList">
+                <template v-if="Array.isArray(item[key.name])">
+                  <van-col :key="key.name">
+                    <h5>{{ key.key }}</h5>
+                    <van-icon
+                      :name="item[key.name].some(val => val.matched) | setType"
+                      :class="item[key.name].some(val => val.matched) | setClass"
+                    />
+                  </van-col>
+                </template>
+              </template>
             </van-row>
-            <van-row class="list-speed" type="flex" align="center">
+            <div class="list-note">
+              我是测试我是测试我是测试我是测试我是测试我是测试我是测试我是测试我是测试我是测试我是测试我是测试我是测试我是测试我是测试我是测试我是测试我是测试我是测试我是测试我是测试
+            </div>
+            <van-row v-if="item.followInfo" class="list-speed" type="flex" align="center">
               <van-col class="list-speed-lt">
-                {{ item.lastHistoryStateName }}
+                {{ item.followInfo.stateName }}
               </van-col>
               <van-col class="list-speed-rt">
                 <div class="list-speed-top">
-                  {{ item.lastHistoryRemark }}
+                  {{ item.followInfo.remark }}
                 </div>
                 <div class="list-speed-time">
-                  {{ item.lastHistoryDate }}
+                  {{ item.followInfo.createDate }}
                 </div>
               </van-col>
             </van-row>
@@ -171,39 +137,73 @@ export default {
   },
   filters: {
     setClass(key, bg) {
-      return (key === '1' ? 'success' : 'danger') + (bg || '')
+      return (key ? 'success' : 'danger') + (bg || '')
     },
     setType(key) {
-      return key === '1' ? 'checked' : 'warning'
+      return key ? 'checked' : 'warning'
+    },
+    isNull(val) {
+      return val || ''
     }
   },
   data() {
     return {
       show: false,
       form: {
-        'key': '1',
-        'limit': 10,
-        'page': 1,
-        'driverId': '100'
+        // key: '1',
+        limit: 10,
+        page: 1,
+        driverId: ''
       },
       // 列表
       list: [],
+      keyList: [
+        {
+          name: 'driverCarType',
+          key: '所需车型'
+        },
+        {
+          name: 'cargoTypes',
+          key: '货物类型'
+        },
+        {
+          name: 'warehouses',
+          key: '到仓区域'
+        },
+        {
+          name: 'deliveryAreas',
+          key: '配送区域'
+        },
+        {
+          name: 'handlingDifficultyDegrees',
+          key: '装卸难度'
+        },
+        {
+          name: 'runningDurations',
+          key: '出车时段'
+        }
+      ],
       error: false,
       loading: false,
       finished: false
     }
   },
   mounted() {
-    // this.getSelectList()
+    this.form.driverId = this.$route.query.driverId;
   },
   methods: {
     goDetail(item) {
-      this.$router.push(`/driverfollowdetail/${item.lineId}`);
+      this.$router.push({ name: 'DriverFollowDetail', params: item })
     },
     getSelectList() {
       getSelectList(this.form)
         .then(({ data }) => {
           if (data.success) {
+            // 车型返回的为对象，转换为数组
+            data.data.map(item => {
+              item.driverCarType = [item.driverCarType]
+              return item
+            })
             // 请求成功
             this.list.push(...data.data);
           } else {
@@ -294,6 +294,13 @@ $danger: #EC5F50;
       .list-top{
         padding: 12px 16px 0;
         color: #000;
+        .list-note{
+          padding: 8px 0;
+          font-size: 12px;
+          color: #B2B2B2;
+          line-height: 18px;
+          text-indent: 2em;
+        }
         h2{
           margin: 0 0 4px 0;
           padding-right: 30px;

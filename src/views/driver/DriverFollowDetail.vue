@@ -1,84 +1,75 @@
 <template>
   <div class="DriverFollowDetail">
-    <div class="list">
+    <div v-if="params" class="list">
       <div class="list-item">
         <div class="list-top">
-          <h2>希杰物流/配送外包承运商</h2>
-          <p>广东省佛山市南海区南海区</p>
+          <h2>{{ params.customerName }}/{{ params.lineName }}</h2>
+          <p>{{ params.provinceAreaName | isNull }}{{ params.cityAreaName | isNull }}{{ params.countyAreaName | isNull }}{{ params.districtArea | isNull }}</p>
           <div class="list-tag">
-            <van-tag class="success-bg">
-              标签
-            </van-tag>
-            <van-tag class="success-bg">
-              标签
-            </van-tag>
-            <van-tag class="success-bg">
-              标签
-            </van-tag>
-            <van-tag class="success-bg">
-              标签
-            </van-tag>
-            <van-tag class="danger-bg">
-              标签
-            </van-tag>
+            <template v-for="key in keyList">
+              <template v-if="Array.isArray(params[key.name])">
+                <van-tag v-for="(value,index) in params[key.name]" :key="index" :class="value.matched | setClass('-bg')">
+                  {{ key.name==='warehouses' ? '[仓] ' : '' }}{{ key.name==='deliveryAreas' ? '[配] ' : '' }}{{ value.name }}
+                </van-tag>
+              </template>
+            </template>
           </div>
-          <van-tag class="top-tag" type="warning">
-            张三
+          <van-tag v-if="params.lineSaleName" class="top-tag" type="warning">
+            {{ params.lineSaleName }}
           </van-tag>
           <van-row class="tit" type="flex" justify="space-between">
             <van-col class="lt">
               匹配度
             </van-col>
             <van-col class="rt">
-              85%
+              {{ params.suitability }}%
             </van-col>
           </van-row>
           <van-row class="list-type" justify="space-between" type="flex">
-            <van-col>
-              <h5>所需类型</h5>
-              <van-icon name="warning" class="danger" />
-            </van-col>
-            <van-col>
-              <h5>所需类型</h5>
-              <van-icon name="checked" class="success" />
-            </van-col>
-            <van-col>
-              <h5>所需类型</h5>
-              <van-icon name="checked" class="success" />
-            </van-col>
-            <van-col>
-              <h5>所需类型</h5>
-              <van-icon name="checked" class="success" />
-            </van-col>
-            <van-col>
-              <h5>所需类型</h5>
-              <van-icon name="checked" class="success" />
-            </van-col>
+            <template v-for="key in keyList">
+              <template v-if="Array.isArray(params[key.name])">
+                <van-col :key="key.name">
+                  <h5>{{ key.key }}</h5>
+                  <van-icon
+                    :name="params[key.name].some(val => val.matched) | setType"
+                    :class="params[key.name].some(val => val.matched) | setClass"
+                  />
+                </van-col>
+              </template>
+            </template>
           </van-row>
+          <div class="list-note">
+            我是测试我是测试我是测试我是测试我是测试我是测试我是测试我是测试我是测试我是测试我是测试我是测试我是测试我是测试我是测试我是测试我是测试我是测试我是测试我是测试我是测试
+          </div>
         </div>
       </div>
     </div>
-    <div class="speed">
+    <div v-if="list.length > 0" class="speed">
       <div class="speed-tit">
         跟进记录
       </div>
       <div class="list-ct">
-        <van-row class="list-speed" type="flex" align="center">
+        <van-row v-for="(item, index) in list" :key="index" class="list-speed" type="flex" align="center">
           <van-col class="list-speed-lt">
-            看活
+            {{ item.stateName }}
           </van-col>
           <van-col class="list-speed-rt">
             <div class="list-speed-top">
-              已确认司机上岗
+              {{ item.remark }}
             </div>
             <div class="list-speed-time">
-              2020-02-20 10:00:00
+              {{ item.createDate }}
             </div>
           </van-col>
         </van-row>
       </div>
     </div>
-    <van-button color="#2F7DCD" class="speed-btn" @click="showAction = true">
+    <van-button
+      color="#2F7DCD"
+      class="speed-btn"
+      :disabled="list.some(item => item.state ==5 || item.state == 4)"
+      @click="showAction = true"
+    >
       撮合跟进
     </van-button>
     <van-action-sheet
@@ -87,11 +78,26 @@
       cancel-text="取消"
       @select="onSelect"
     />
+    <van-dialog v-model="show" :title="dialogForm.name" :before-close="submitSave" show-cancel-button>
+      <van-field
+        v-model="saveForm.remark"
+        required
+        :error="error"
+        rows="2"
+        autosize
+        label="备注"
+        type="textarea"
+        maxlength="20"
+        placeholder="请输入备注"
+        show-word-limit
+      />
+    </van-dialog>
   </div>
 </template>
 
 <script>
-import { Icon, Button, Tag, Col, Row, Cell, ActionSheet } from 'vant';
+import { Icon, Button, Tag, Col, Row, Cell, ActionSheet, Dialog, Field } from 'vant';
+import { matchingRecordDetails, submitSave } from 'api/driver'
 export default {
   name: 'DriverFollowDetail',
   components: {
@@ -101,22 +107,141 @@ export default {
     [Col.name]: Col,
     [Row.name]: Row,
     [Cell.name]: Cell,
-    [ActionSheet.name]: ActionSheet
+    [ActionSheet.name]: ActionSheet,
+    [Field.name]: Field,
+    [Dialog.Component.name]: Dialog.Component
+  },
+  filters: {
+    setClass(key, bg) {
+      return (key ? 'success' : 'danger') + (bg || '')
+    },
+    setType(key) {
+      return key ? 'checked' : 'warning'
+    },
+    isNull(val) {
+      return val || ''
+    }
   },
   data() {
     return {
+      params: null,
+      keyList: [
+        {
+          name: 'driverCarType',
+          key: '所需车型'
+        },
+        {
+          name: 'cargoTypes',
+          key: '货物类型'
+        },
+        {
+          name: 'warehouses',
+          key: '到仓区域'
+        },
+        {
+          name: 'deliveryAreas',
+          key: '配送区域'
+        },
+        {
+          name: 'handlingDifficultyDegrees',
+          key: '装卸难度'
+        },
+        {
+          name: 'runningDurations',
+          key: '出车时段'
+        }
+      ],
+      list: [], // 跟进记录
       show: false,
       showAction: false,
       actions: [
-        { name: '选项1', id: 1 },
-        { name: '选项2', id: 2 },
-        { name: '选项3', id: 3 }
-      ]
+        { name: '推送线路信息', id: 1 },
+        { name: '确认司机看活', id: 2 },
+        { name: '确认司机试跑', id: 3 },
+        { name: '确认司机上岗', id: 4 },
+        { name: '此次撮合失败', id: 5 }
+      ],
+      // error: false,
+      // 提交保存
+      dialogForm: {},
+      saveForm: {
+        matchRateId: '',
+        remark: '',
+        state: 0
+      }
     }
   },
+  computed: {
+    error: {
+      get() {
+        return !this.saveForm.remark
+      },
+      set(newValue) {
+        if (newValue) {
+          return newValue
+        }
+        return !this.saveForm.remark
+      }
+    }
+  },
+  mounted() {
+    this.params = this.$route.params;
+    this.getDetail();
+  },
   methods: {
+    getDetail() {
+      matchingRecordDetails({
+        id: this.params.id
+      })
+        .then(({ data }) => {
+          if (data.success) {
+            this.list = data.data;
+          } else {
+            this.$toast.fail({
+              message: data.errorMsg || '网络错误，请稍后再试',
+              duration: 1.5 * 1000
+            })
+          }
+        }).catch((err) => {
+          console.log(err)
+        });
+    },
     onSelect(item) {
-      console.log(item)
+      this.dialogForm = item;
+      this.saveForm.remark = '';
+      this.saveForm.state = item.id;
+      this.saveForm.matchRateId = this.params.id;
+      this.showAction = false;
+      this.$nextTick(() => {
+        this.show = true;
+      })
+    },
+    submitSave(action, done) {
+      if (action === 'confirm') {
+        debugger
+        if (!this.saveForm.remark) {
+          this.error = true;
+          done(false)
+          return;
+        }
+        submitSave(this.saveForm)
+          .then(({ data }) => {
+            if (data.success) {
+              this.getDetail();
+            } else {
+              this.$toast.fail({
+                message: data.errorMsg || '网络错误，请稍后再试',
+                duration: 1.5 * 1000
+              })
+            }
+            done(data.success)
+          }).catch((err) => {
+            console.log(err)
+            done(false)
+          })
+      } else {
+        done();
+      }
     }
   }
 }
@@ -128,6 +253,7 @@ $success: #49CB15;
 $danger: #EC5F50;
 
 .DriverFollowDetail{
+  padding-bottom: 46px;
   .van-button--primary{
     background-color: $success;
     border-color: $success;
@@ -149,13 +275,21 @@ $danger: #EC5F50;
   }
   // list
   .list{
+    // padding: 0 18px;
     .list-item{
       position: relative;
+      margin-bottom: 10px;
       background-color: #fff;
-      border-radius: 5px;
       .list-top{
         padding: 12px 16px 0;
         color: #000;
+        .list-note{
+          padding: 8px 0;
+          font-size: 12px;
+          color: #B2B2B2;
+          line-height: 18px;
+          text-indent: 2em;
+        }
         h2{
           margin: 0 0 4px 0;
           padding-right: 30px;
@@ -174,6 +308,7 @@ $danger: #EC5F50;
           border-bottom: 1px solid #EEEBEB;
           .van-tag{
             margin-right: 8px;
+            margin-bottom: 8px;
             padding: 0 12px;
             height: 18px;
             line-height: 18px;
@@ -216,6 +351,32 @@ $danger: #EC5F50;
           .van-icon{
             font-size: 20px;
           }
+        }
+      }
+    }
+    .list-speed{
+      padding: 10px 0;
+      border-top: 1px solid #EEEBEB;
+      .list-speed-lt{
+        width: 74px;
+        height: 20px;
+        line-height: 20px;
+        background: #4F77AA;
+        border-radius: 10px;
+        font-size: 12px;
+        color: #FFF;
+        text-align: center;
+      }
+      .list-speed-rt{
+        margin-left: 15px;
+        .list-speed-top{
+          font-size: 16px;
+          color: #000;
+          line-height:24px;
+        }
+        .list-speed-time{
+          font-size: 12px;
+          color: #B2B2B2;
         }
       }
     }
@@ -268,6 +429,8 @@ $danger: #EC5F50;
     line-height: 46px;
     color: #fff;
     font-size: 18px;
+    opacity: 1;
+    border-radius: none;
     // background: #2F7DCD;
   }
 }

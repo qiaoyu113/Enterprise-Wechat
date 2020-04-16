@@ -29,7 +29,7 @@ export default [
     }
   },
   {
-    path: '/driverfollowdetail/:id',
+    path: '/driverfollowdetail',
     name: 'DriverFollowDetail',
     component: () => import('views/driver/DriverFollowDetail.vue'),
     meta: {

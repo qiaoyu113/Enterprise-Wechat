@@ -13,12 +13,31 @@ export function driverDetail(data) {
  */
 export function getSelectList(data) {
   return request({
-    url: '/api/bss/v1/bss/corp/makeAMatch/selectListByKey?jia=true',
+    url: '/api/bss/v1/bss/corp/makeAMatch/selectListByKey',
     method: 'post',
     data
   })
 }
-
+/**
+ * 促撮列表详情
+ */
+export function matchingRecordDetails(params) {
+  return request({
+    url: '/api/match/corp/match/history/matchingRecordDetails',
+    method: 'get',
+    params
+  })
+}
+/**
+ * 提交按钮
+ */
+export function submitSave(data) {
+  return request({
+    url: '/api/match/corp/match/history/save',
+    method: 'post',
+    data
+  })
+}
 export function judgingIntentionOfReceiving(data) {
   return request({
     url: '/api/driver/corp/driver/judgingIntentionOfReceiving?jia=1',
