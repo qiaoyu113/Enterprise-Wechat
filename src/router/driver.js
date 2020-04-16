@@ -36,6 +36,17 @@ export default [
       title: '跟进详情'
     }
   }, {
+
+    path: '/driverintention',
+    name: 'driverintention',
+    component: () => import('views/driver/DriverIntention.vue'),
+    meta: {
+      title: '司机接活意向'
+      // auth: true,
+      // keepAlive: true
+    }
+  },
+  {
     path: '/matchcommend',
     name: 'matchcommend',
     component: () => import('views/driver/MatchCommend.vue'),

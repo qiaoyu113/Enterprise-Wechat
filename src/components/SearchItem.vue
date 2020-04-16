@@ -155,6 +155,9 @@ export default {
         cargoVal: this.cargoValCode
       }
       this.$emit('searchData', data)
+      this.GLOBAL.buryPointFunction('search_complete', '线路搜索完成搜索', {
+        value: '线路搜索完成搜索'
+      })
     },
     remove() {
       this.value = ''
@@ -167,6 +170,9 @@ export default {
     },
     onSearch(val) {
       this.showBox = true;
+      this.GLOBAL.buryPointFunction('search_start', '线路搜索开始搜索', {
+        value: '线路搜索开始搜索'
+      })
     },
     onConfirm(value) {
       this.cargoVal = value.code;

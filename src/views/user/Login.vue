@@ -40,13 +40,6 @@ export default {
     };
   },
   created: function() {
-    // window.location.href = '/login?developer=' + this.GLOBAL.developer
-    console.log(this.$route)
-    // window.zhuge.track('推文', {
-    //   '事件类型': '页面浏览',
-    //   '页面类别': '加入宣传',
-    //   '用户类型': '123'
-    // });
     /*
       微信授权方法
     */
@@ -54,7 +47,7 @@ export default {
     /*
     d2环境或微信授权不通时
     */
-    // window.localStorage.setItem('token', 'eyJhbGciOiJIUzI1NiJ9.eyJwcm9maWxlIjoiZDIiLCJ1c2VySWQiOiIzNyIsInVzZXJuYW1lIjoid3RfYWRtaW4iLCJ0eXBlIjoiMyIsImJ1c2lQZXJtaXNzaW9uIjoiMCwxIiwiZXhwIjoxNTg2OTMxNDAyfQ.ah-efTfbwB9We5P-CLWqmDd-Vp4D7nFK8IHq5mO4Uqo')
+    // window.localStorage.setItem('token', 'eyJhbGciOiJIUzI1NiJ9.eyJwcm9maWxlIjoiZDIiLCJ1c2VySWQiOiIzNyIsInVzZXJuYW1lIjoid3RfYWRtaW4iLCJ0eXBlIjoiMyIsImJ1c2lQZXJtaXNzaW9uIjoiMCwxIiwiZXhwIjoxNTg5MzQ5MjU5fQ.9Sgf_SopHe3dR4ML5SM6MrgB765hnH3FqXfIKfE9sAY')
     // window.localStorage.setItem('code', '1234')
     // window.localStorage.setItem('SetUserData', 'token')
   },
@@ -74,6 +67,7 @@ export default {
           this.handleLogin(code)
         }
       }
+      console.log('tag', '')
     },
     linkGetCode() {
       var local = window.location.href
@@ -113,7 +107,12 @@ export default {
           if (res.data.success) {
             Toast.success('授权成功');
             localStorage.setItem('token', res.data.data.token)
-            localStorage.setItem('city', res.data.data.city)
+            let city = res.data.data.city;
+            if (city && city !== '') {
+              localStorage.setItem('city', city)
+            } else {
+              localStorage.setItem('city', '110100')
+            }
             this.getDeveloper(res.data.data.bssLoginName)
             let loginUrl = localStorage.getItem('loginUrl')
             if (loginUrl) {
@@ -124,6 +123,9 @@ export default {
               this.$router.replace({ path: '/' })
             }
           } else {
+            this.GLOBAL.buryPointFunction('err_login', '授权失败', {
+              value: '请求错误'
+            })
             Toast.fail(res.data.errorMsg);
             localStorage.removeItem('code');
             this.btnShow = true;
