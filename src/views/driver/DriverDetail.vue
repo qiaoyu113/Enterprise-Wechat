@@ -211,6 +211,7 @@ export default {
   mounted() {
     let driverId = this.$route.query.driverId;
     this.driverId = driverId;
+    this.active = Number(localStorage.getItem('active'))
     this.getDetail(driverId)
   },
   methods: {
@@ -252,7 +253,6 @@ export default {
           this.matchModule = res.data.data.flag;
           if (this.matchModule) {
             this.matchDetail = res.data.data
-            console.log(this.matchDetail)
           }
         }
       })
@@ -266,6 +266,7 @@ export default {
     goRouter(type) {
       let that = this;
       if (type === 1) {
+        that.$destroy(true)
         that.$router.push({ path: '/driverintention', query: { driverId: that.driverId }})// 撮合跟进
       } else if (type === 2) {
         that.$router.push({ path: '/matchcommend', query: { driverId: that.driverId }})// 撮合跟进

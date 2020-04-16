@@ -219,6 +219,7 @@ export default {
       saveIntentionOfReceiving(values).then(res => {
         if (res.data.data.flag) {
           Toast.clear();
+          localStorage.setItem('active', 3)
           this.$router.back()
         }
       }).catch(err => {
