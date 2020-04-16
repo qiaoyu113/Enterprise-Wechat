@@ -379,7 +379,6 @@ export default {
       }
     },
     goDetail(id, timeDiff, monthlyTransaction, driverId) {
-      this.$destroy(true)
       this.$router.push({ path: '/linedetail', query: { id: id, timeDiff: timeDiff, monthlyTransaction: monthlyTransaction, driverId: driverId }})
     }
   }

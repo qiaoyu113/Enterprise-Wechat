@@ -302,7 +302,7 @@ export default {
       })
     },
     buryPoint(name, title) {
-      this.tab_state = name;
+      this.tab_state = Number(name);
       this.GLOBAL.buryPointFunction('lineDetail_tab', '线路详情页-tab点击', {
         value: title
       })

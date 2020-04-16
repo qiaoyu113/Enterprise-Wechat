@@ -188,6 +188,10 @@ export default {
     this.params = this.$route.params;
     this.getDetail();
   },
+  beforeRouteLeave(to, from, next) {
+    this.$destroy(true)
+    next(true);
+  },
   methods: {
     getDetail() {
       matchingRecordDetails({

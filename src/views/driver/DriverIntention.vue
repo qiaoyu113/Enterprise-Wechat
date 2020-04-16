@@ -129,6 +129,10 @@ export default {
   mounted() {
     this.getCityId();
   },
+  beforeRouteLeave(to, from, next) {
+    this.$destroy(true)
+    next(true);
+  },
   methods: {
     // 字典方法
     async getDictionary(type, arrays) {

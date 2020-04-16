@@ -33,7 +33,8 @@ export default [
     name: 'DriverFollowDetail',
     component: () => import('views/driver/DriverFollowDetail.vue'),
     meta: {
-      title: '跟进详情'
+      title: '跟进详情',
+      keepAlive: true
     }
   }, {
 
@@ -41,9 +42,8 @@ export default [
     name: 'driverintention',
     component: () => import('views/driver/DriverIntention.vue'),
     meta: {
-      title: '司机接活意向'
-      // auth: true,
-      // keepAlive: true
+      title: '司机接活意向',
+      keepAlive: true
     }
   },
   {
@@ -52,7 +52,6 @@ export default [
     component: () => import('views/driver/MatchCommend.vue'),
     meta: {
       title: '促撮推荐',
-      // auth: true,
       keepAlive: true
     }
   }
