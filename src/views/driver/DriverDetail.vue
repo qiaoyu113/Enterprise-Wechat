@@ -39,7 +39,7 @@
           <p v-if="JSON.stringify(detail) == '{}'" class="noMore">
             暂无信息
           </p>
-          <van-button round type="info" block class="btn" @click="check">
+          <van-button block class="btn" @click="check">
             操作
           </van-button>
         </van-tab>
@@ -53,7 +53,7 @@
           <p v-if="!lineList.length" class="noMore">
             暂无信息
           </p>
-          <van-button round type="info" block class="btn" @click="check">
+          <van-button block class="btn" @click="check">
             操作
           </van-button>
         </van-tab>
@@ -67,7 +67,7 @@
           <p v-if="!lineList.length" class="noMore">
             暂无信息
           </p>
-          <van-button round type="info" block class="btn" @click="check">
+          <van-button block class="btn" @click="check">
             操作
           </van-button>
         </van-tab>
@@ -212,6 +212,7 @@ export default {
     let driverId = this.$route.query.driverId;
     this.driverId = driverId;
     this.active = Number(localStorage.getItem('active'))
+    localStorage.removeItem('active')
     this.getDetail(driverId)
   },
   methods: {
@@ -259,6 +260,7 @@ export default {
     },
     buryPoint(name, title) {
       this.active = Number(name);
+      localStorage.setItem('active', name)
       this.GLOBAL.buryPointFunction('customer_tab', '客户信息页-tab点击', {
         value: title
       })
@@ -307,7 +309,7 @@ export default {
   background: #F5F5F5;
   .backgroundTab{
     height: 100%;
-    padding-bottom: 3.6rem;
+    padding-bottom: 1.6rem;
     box-sizing: border-box;
     // background: #FFF;
   }
@@ -382,12 +384,14 @@ export default {
     }
 
     .btn{
-      width:90%;
-      margin: 1rem auto;
+      width:100%;
       position: fixed;
-      bottom: .6rem;
+      bottom: 0;
       left:0;
       right:0;
+      background:#2F7DCD;
+      font-size: 16px;
+      color:#fff;
     }
 
     .article-list {

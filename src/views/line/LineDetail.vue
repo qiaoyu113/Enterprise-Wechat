@@ -102,7 +102,7 @@
       <van-button round type="info" block class="btn" :disabled="disable" @click="pushSendLink">
         发送此线路
       </van-button>
-      <div v-if="backBtn" class="backBtn" @click="goLine">
+      <div v-if="backBtn" class="backBtn" color="#2F7DCD" @click="goLine">
         <van-icon name="home-o" />
       </div>
     </div>
@@ -315,7 +315,7 @@ export default {
 </script>
 <style lang="scss" scoped>
 .linedetail{
-  padding-bottom: 3.6rem;
+  padding-bottom: 1.6rem;
   box-sizing: border-box;
   .backBtn{
     width:1rem;
@@ -323,7 +323,7 @@ export default {
     position: fixed;
     right: 1rem;
     bottom: 1.6rem;
-    background:#4D86C6;
+    // background:#4D86C6;
     border-radius: 100%;
     text-align: center;
     line-height: 1.2rem;
@@ -361,12 +361,17 @@ p{
 }
 
 .btn{
-    width:90%;
-    margin: 1rem auto;
     position: fixed;
-    bottom: .6rem;
-    left:0;
-    right:0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    height: 46px;
+    line-height: 46px;
+    color: #fff;
+    font-size: 16px;
+    opacity: 1;
+    border-radius: 0;
 }
 
 .article-list {

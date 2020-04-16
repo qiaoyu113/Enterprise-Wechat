@@ -195,10 +195,6 @@ export default {
     this.saveForm.lineId = this.params.lineId;
     this.getDetail();
   },
-  beforeRouteLeave(to, from, next) {
-    this.$destroy(true)
-    next(true);
-  },
   methods: {
     getDetail() {
       matchingRecordDetails({
@@ -466,7 +462,7 @@ $danger: #E75E60;
     height: 46px;
     line-height: 46px;
     color: #fff;
-    font-size: 18px;
+    font-size: 16px;
     opacity: 1;
     border-radius: 0;
     // background: #2F7DCD;

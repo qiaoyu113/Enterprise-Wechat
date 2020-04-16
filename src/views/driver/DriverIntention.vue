@@ -219,7 +219,6 @@ export default {
       saveIntentionOfReceiving(values).then(res => {
         if (res.data.data.flag) {
           Toast.clear();
-          localStorage.setItem('active', 3)
           this.$router.back()
         }
       }).catch(err => {
@@ -294,7 +293,7 @@ export default {
 <style lang="scss">
 .driverIntention {
     min-height: 100vh;
-    padding-bottom: 4rem;
+    padding-bottom: 1.5rem;
     box-sizing: border-box;
     .van-form{
       border-bottom: 1px solid #d9d9d9;
@@ -353,13 +352,17 @@ export default {
       }
   }
   .save-btn{
-      color: #FFFFFF;
-      width:90%;
-      margin: 1rem auto;
       position: fixed;
-      bottom: .6rem;
-      left:0;
-      right:0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      width: 100%;
+      height: 46px;
+      line-height: 46px;
+      color: #fff;
+      font-size: 18px;
+      opacity: 1;
+      border-radius: 0;
   }
 }
 </style>
