@@ -132,11 +132,17 @@ export default {
   methods: {
     // 字典方法
     async getDictionary(type, arrays) {
+      let that = this
       await dictionary({
         dictType: type
       }).then(res => {
         let arr = res.data.data;
         this[arrays] = arr;
+        if (type === 'Intentional_compartment') {
+          arr.forEach(ele => {
+            that.carTypeArray.push(ele.code)
+          })
+        }
       }).catch(err => {
         Toast.fail(err.data.errorMsg);
       })
