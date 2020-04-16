@@ -360,7 +360,7 @@ export default {
       height: 46px;
       line-height: 46px;
       color: #fff;
-      font-size: 14px;
+      font-size: 16px;
       opacity: 1;
       border-radius: 0;
   }
