@@ -18,7 +18,7 @@
               </p>
               <div class="tagBox">
                 <!--车类型-->
-                <van-tag round color="#81CA2A'" type="success" size="medium" class="tag_margin">
+                <van-tag round :color="'#81CA2A'" type="success" size="medium" class="tag_margin">
                   {{ item.carTypeName }}
                 </van-tag>
                 <!--货物类型-->
@@ -47,8 +47,8 @@
                     所需车型
                   </div>
                   <div class="bottom">
-                    <van-icon v-if="Number(item.carTypeMatch) === 1" name="checked" size="28" color="#70C740" />
-                    <van-icon v-if="Number(item.carTypeMatch) === 2" name="clear" size="28" color="#DC6857" />
+                    <van-icon v-if="item.driverCarType.matched" name="checked" size="26" color="#70C740" />
+                    <van-icon v-else name="clear" size="26" color="#DC6857" />
                   </div>
                 </div>
                 <div class="needCarList">
@@ -56,17 +56,26 @@
                     货物类型
                   </div>
                   <div class="bottom">
-                    <van-icon v-if="Number(item.cargoTypeMatch) === 1" name="checked" size="28" color="#70C740" />
-                    <van-icon v-if="Number(item.cargoTypeMatch) === 2" name="clear" size="28" color="#DC6857" />
+                    <van-icon v-if="forEachArr(item.cargoTypes)" name="checked" size="26" color="#70C740" />
+                    <van-icon v-else name="clear" size="26" color="#DC6857" />
                   </div>
                 </div>
                 <div class="needCarList">
                   <div class="top">
-                    线路区域
+                    到仓区域
                   </div>
                   <div class="bottom">
-                    <van-icon v-if="Number(item.countyAreaMatch) === 1" name="checked" size="28" color="#70C740" />
-                    <van-icon v-if="Number(item.countyAreaMatch) === 2" name="clear" size="28" color="#DC6857" />
+                    <van-icon v-if="forEachArr(item.warehouses)" name="checked" size="28" color="#70C740" />
+                    <van-icon v-else name="clear" size="28" color="#DC6857" />
+                  </div>
+                </div>
+                <div class="needCarList">
+                  <div class="top">
+                    配送区域
+                  </div>
+                  <div class="bottom">
+                    <van-icon v-if="forEachArr(item.deliveryAreas)" name="checked" size="26" color="#70C740" />
+                    <van-icon v-else name="clear" size="26" color="#DC6857" />
                   </div>
                 </div>
                 <div class="needCarList">
@@ -74,8 +83,8 @@
                     装卸难度
                   </div>
                   <div class="bottom">
-                    <van-icon v-if="Number(item.handlingDifficultyDegreeMatch) === 1" name="checked" size="28" color="#70C740" />
-                    <van-icon v-if="Number(item.handlingDifficultyDegreeMatch) === 2" name="clear" size="28" color="#DC6857" />
+                    <van-icon v-if="forEachArr(item.handlingDifficultyDegrees)" name="checked" size="26" color="#70C740" />
+                    <van-icon v-else name="clear" size="26" color="#DC6857" />
                   </div>
                 </div>
                 <div class="needCarList">
@@ -83,8 +92,8 @@
                     出车时段
                   </div>
                   <div class="bottom">
-                    <van-icon v-if="Number(item.timeMatch) === 1" name="checked" size="28" color="#70C740" />
-                    <van-icon v-if="Number(item.timeMatch) === 2" name="clear" size="28" color="#DC6857" />
+                    <van-icon v-if="forEachArr(item.runningDurations)" name="checked" size="26" color="#70C740" />
+                    <van-icon v-else name="clear" size="26" color="#DC6857" />
                   </div>
                 </div>
               </div>
@@ -165,6 +174,14 @@ export default {
     // }
   },
   methods: {
+    forEachArr(arr) {
+      for (var i = 0; i < arr.length; i++) {
+        if (arr[i].matched) {
+          return true
+        }
+      }
+      return false;
+    },
     getUserConfig(type, externalUserIdOld) {
       let that = this;
       const hostName = window.location.href
@@ -218,7 +235,6 @@ export default {
                                   lineIdNeedBack = JSON.parse(lineIdNeedBack)
                                   if (lineIdNeedBack.lineId) {
                                     localStorage.removeItem('lineIdNeedBack')
-                                    that.$destroy(true)
                                     that.$router.push({ path: '/linedetail', query: { id: lineIdNeedBack.lineId, timeDiff: lineIdNeedBack.timeDiff, monthlyTransaction: lineIdNeedBack.monthlyTransaction, backBtn: 1, driverId: lineIdNeedBack.driverId }})
                                   }
                                 } else {
@@ -363,7 +379,6 @@ export default {
       }
     },
     goDetail(id, timeDiff, monthlyTransaction, driverId) {
-      this.$destroy(true)
       this.$router.push({ path: '/linedetail', query: { id: id, timeDiff: timeDiff, monthlyTransaction: monthlyTransaction, driverId: driverId }})
     }
   }
@@ -446,7 +461,7 @@ export default {
                     .top{
                         width: 100%;
                         text-align: center;
-                        font-size: 12px;
+                        font-size: 11px;
                         color: #B2B2B2;
                     }
                     .bottom{

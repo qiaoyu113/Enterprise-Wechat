@@ -59,7 +59,6 @@ service.interceptors.response.use(
    */
   response => {
     const res = response.data
-    console.log(res)
     if (res.code === 40101 || res.code === 40301) {
       Toast({
         message: res.message,

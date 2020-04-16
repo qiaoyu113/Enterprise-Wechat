@@ -195,6 +195,10 @@ export default {
     this.saveForm.lineId = this.params.lineId;
     this.getDetail();
   },
+  beforeRouteLeave(to, from, next) {
+    this.$destroy(true)
+    next(true);
+  },
   methods: {
     getDetail() {
       matchingRecordDetails({

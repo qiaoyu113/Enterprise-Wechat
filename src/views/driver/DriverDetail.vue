@@ -1,7 +1,7 @@
 <template>
   <div class="driverDetail">
     <div class="list-wrap">
-      <van-tabs color="#3986CB" sticky @click="buryPoint">
+      <van-tabs v-model="active" color="#3986CB" sticky @click="buryPoint">
         <van-tab title="基本" class="backgroundTab">
           <van-cell-group v-if="JSON.stringify(detail) != '{}'">
             <h2 class="van-doc-demo-block__title">
@@ -197,6 +197,7 @@ export default {
       judgeType: false,
       driverId: '',
       driverType: '1',
+      active: 0,
       detail: '',
       show: false,
       matchModule: false,
@@ -257,13 +258,13 @@ export default {
       })
     },
     buryPoint(name, title) {
+      this.active = Number(name);
       this.GLOBAL.buryPointFunction('customer_tab', '客户信息页-tab点击', {
         value: title
       })
     },
     goRouter(type) {
       let that = this;
-      // that.$destroy(true)
       if (type === 1) {
         that.$router.push({ path: '/driverintention', query: { driverId: that.driverId }})// 撮合跟进
       } else if (type === 2) {
