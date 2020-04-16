@@ -73,7 +73,7 @@
           </div>
         </template>
       </van-field>
-      <van-button round class="save-btn" type="info" block color="#2F7DCD" native-type="submit">
+      <van-button class="save-btn" type="info" block color="#2F7DCD" native-type="submit">
         保存
       </van-button>
     </van-form>
@@ -360,7 +360,7 @@ export default {
       height: 46px;
       line-height: 46px;
       color: #fff;
-      font-size: 18px;
+      font-size: 14px;
       opacity: 1;
       border-radius: 0;
   }
