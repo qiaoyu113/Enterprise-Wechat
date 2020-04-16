@@ -18,24 +18,24 @@
               </p>
               <div class="tagBox">
                 <!--车类型-->
-                <van-tag round color="#81CA2A" type="success" size="medium">
-                  {{ item.driverCarType }}
+                <van-tag round color="#81CA2A'" type="success" size="medium" class="tag_margin">
+                  {{ item.carTypeName }}
                 </van-tag>
                 <!--货物类型-->
-                <van-tag v-for=" items in item.cargoTypes " :key="items" round :color="items.matched ? '#81CA2A' : '#E75E60'" type="success" size="medium">
-                  {{ items.name }}
+                <van-tag v-for=" item_c in item.cargoTypes " :key="item_c.name" round :color="item_c.matched ? '#81CA2A' : '#E75E60'" type="success" size="medium" class="tag_margin">
+                  {{ item_c.name }}
                 </van-tag>
                 <!--区域类型-->
-                <van-tag v-for=" items in item.warehouses " :key="items" round :color="items.matched ? '#81CA2A' : '#E75E60'" type="success" size="medium">
-                  {{ items.name }}
+                <van-tag v-for=" item_w in item.deliveryAreas " :key="item_w.name" round :color="item_w.matched ? '#81CA2A' : '#E75E60'" type="success" size="medium" class="tag_margin">
+                  {{ item_w.name }}
                 </van-tag>
                 <!--装卸类型-->
-                <van-tag v-for=" items in item.handlingDifficultyDegree " :key="items" round :color="items.matched ? '#81CA2A' : '#E75E60'" type="success" size="medium">
-                  {{ items.name }}
+                <van-tag v-for=" item_h in item.handlingDifficultyDegrees " :key="item_h.name" round :color="item_h.matched ? '#81CA2A' : '#E75E60'" type="success" size="medium" class="tag_margin">
+                  {{ item_h.name }}
                 </van-tag>
                 <!--时间-->
-                <van-tag v-for=" items in item.runningDurations " :key="items" round :color="items.matched ? '#81CA2A' : '#E75E60'" type="success" size="medium">
-                  {{ items.name }}
+                <van-tag v-for=" item_r in item.runningDurations " :key="item_r.name" round :color="item_r.matched ? '#81CA2A' : '#E75E60'" type="success" size="medium" class="tag_margin">
+                  {{ item_r.name }}
                 </van-tag>
               </div>
               <div class="matchRate">
@@ -329,7 +329,7 @@ export default {
       } else {
         helpMatchIntelligent({
           'driverId': this.driverId,
-          'key': this.listQuery.key,
+          'key': '',
           'limit': 20,
           'page': this.listQuery.page
         }).then((res) => {
@@ -363,6 +363,7 @@ export default {
       }
     },
     goDetail(id, timeDiff, monthlyTransaction, driverId) {
+      this.$destroy(true)
       this.$router.push({ path: '/linedetail', query: { id: id, timeDiff: timeDiff, monthlyTransaction: monthlyTransaction, driverId: driverId }})
     }
   }
@@ -373,6 +374,9 @@ export default {
     background: #f7f8fa;
     height: 100%;
     width: 100%;
+    .tag_margin{
+      margin: 2px 6px 6px 0;
+    }
     .list-wrap{
         height: 100%;
         // overflow-y: hidden;

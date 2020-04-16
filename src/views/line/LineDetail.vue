@@ -1,7 +1,7 @@
 <template>
   <div class="linedetail">
     <div class="list-wrap">
-      <van-tabs v-model="listQuery.state" color="#3986CB" sticky @click="buryPoint">
+      <van-tabs v-model="tab_state" color="#3986CB" sticky @click="buryPoint">
         <van-tab title="基本">
           <h2 class="van-doc-demo-block__title">
             基本信息
@@ -136,6 +136,7 @@ export default {
       listQuery: {
         state: 0
       },
+      tab_state: 0,
       active: 1,
       detail: {},
       clueDetail: [],
@@ -301,6 +302,7 @@ export default {
       })
     },
     buryPoint(name, title) {
+      this.tab_state = name;
       this.GLOBAL.buryPointFunction('lineDetail_tab', '线路详情页-tab点击', {
         value: title
       })
