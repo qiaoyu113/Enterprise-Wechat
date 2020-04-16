@@ -38,8 +38,8 @@
               </template>
             </template>
           </van-row>
-          <div class="list-note">
-            我是测试我是测试我是测试我是测试我是测试我是测试我是测试我是测试我是测试我是测试我是测试我是测试我是测试我是测试我是测试我是测试我是测试我是测试我是测试我是测试我是测试
+          <div v-if="params.remark" class="list-note">
+            {{ params.remark }}
           </div>
         </div>
       </div>
