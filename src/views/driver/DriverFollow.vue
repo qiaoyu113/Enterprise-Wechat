@@ -96,8 +96,8 @@
                 </template>
               </template>
             </van-row>
-            <div class="list-note">
-              我是测试我是测试我是测试我是测试我是测试我是测试我是测试我是测试我是测试我是测试我是测试我是测试我是测试我是测试我是测试我是测试我是测试我是测试我是测试我是测试我是测试
+            <div v-if="item.remark" class="list-note">
+              {{ item.remark }}
             </div>
             <van-row v-if="item.followInfo" class="list-speed" type="flex" align="center">
               <van-col class="list-speed-lt">
