@@ -1,7 +1,7 @@
 <template>
   <div class="linedetail">
     <div class="list-wrap">
-      <van-tabs v-model="listQuery.state" color="#3986CB" sticky @click="buryPoint">
+      <van-tabs v-model="tab_state" color="#3986CB" sticky @click="buryPoint">
         <van-tab title="基本">
           <h2 class="van-doc-demo-block__title">
             基本信息
@@ -110,8 +110,8 @@
 </template>
 <script>
 import { Tabbar, TabbarItem, Toast, Tab, Tabs, Cell, CellGroup, Button, Icon } from 'vant'
-// import { getLineDetail, listByLineId, loglist, getMediaIdOfLineDetail, updateState } from '@/api/line'
-import { getLineDetail, listByLineId, loglist, getMediaIdOfLineDetail } from '@/api/line'
+import { getLineDetail, listByLineId, loglist, getMediaIdOfLineDetail, updateState } from '@/api/line'
+// import { getLineDetail, listByLineId, loglist, getMediaIdOfLineDetail } from '@/api/line'
 import { getCorpSignature, getAgentSignature } from '@/api/user'
 // import VoPages from 'vo-pages'
 import 'vo-pages/lib/vo-pages.css'
@@ -136,6 +136,7 @@ export default {
       listQuery: {
         state: 0
       },
+      tab_state: 0,
       active: 1,
       detail: {},
       clueDetail: [],
@@ -206,13 +207,13 @@ export default {
       const hostName = window.location.href
       let that = this;
       that.disable = true;
-      // updateState({
-      //   'driverId': that.driverId,
-      //   'lineId': that.lineId,
-      //   'remark': '',
-      //   'state': 1
-      // }).then((res) => {
-      // })
+      updateState({
+        'driverId': that.driverId,
+        'lineId': that.lineId,
+        'remark': '',
+        'state': 1
+      }).then((res) => {
+      })
       getMediaIdOfLineDetail({
         lineId: that.lineId,
         busiType: that.detail.busiType
@@ -301,6 +302,7 @@ export default {
       })
     },
     buryPoint(name, title) {
+      this.tab_state = name;
       this.GLOBAL.buryPointFunction('lineDetail_tab', '线路详情页-tab点击', {
         value: title
       })

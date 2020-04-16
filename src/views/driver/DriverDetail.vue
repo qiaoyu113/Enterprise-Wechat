@@ -71,7 +71,7 @@
             操作
           </van-button>
         </van-tab>
-        <van-tab v-if="false" title="撮合" :class="matchModule ? 'backgroundTab2' : 'backgroundTab'" @click="buryPoint('撮合')">
+        <van-tab title="撮合" :class="matchModule ? 'backgroundTab2' : 'backgroundTab'" @click="buryPoint('撮合')">
           <div v-if="!matchModule" class="match_box">
             <img src="https://qizhiniao-dev.oss-cn-beijing.aliyuncs.com/img/998f5a4580604c4f8e798f98430cbe92" alt="">
             <p class="hint_weight">
@@ -263,6 +263,7 @@ export default {
     },
     goRouter(type) {
       let that = this;
+      // that.$destroy(true)
       if (type === 1) {
         that.$router.push({ path: '/driverintention', query: { driverId: that.driverId }})// 撮合跟进
       } else if (type === 2) {
