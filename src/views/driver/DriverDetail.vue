@@ -39,7 +39,7 @@
           <p v-if="JSON.stringify(detail) == '{}'" class="noMore">
             暂无信息
           </p>
-          <van-button block class="btn" @click="check">
+          <van-button class="btn" @click="check">
             操作
           </van-button>
         </van-tab>
@@ -53,7 +53,7 @@
           <p v-if="!lineList.length" class="noMore">
             暂无信息
           </p>
-          <van-button block class="btn" @click="check">
+          <van-button class="btn" @click="check">
             操作
           </van-button>
         </van-tab>
@@ -67,7 +67,7 @@
           <p v-if="!lineList.length" class="noMore">
             暂无信息
           </p>
-          <van-button block class="btn" @click="check">
+          <van-button class="btn" @click="check">
             操作
           </van-button>
         </van-tab>
@@ -83,7 +83,7 @@
             <p class="text_nomarl">
               系统会根据意向智能推荐匹配线路
             </p>
-            <van-button round type="info" block class="btn" @click="goRouter(1)">
+            <van-button round type="info" class="btn2" @click="goRouter(1)">
               设置司机接活意向
             </van-button>
           </div>
@@ -385,6 +385,8 @@ export default {
 
     .btn{
       width:100%;
+      height: 46px;
+      line-height: 46px;
       position: fixed;
       bottom: 0;
       left:0;
@@ -392,6 +394,17 @@ export default {
       background:#2F7DCD;
       font-size: 16px;
       color:#fff;
+      border:none;
+    }
+
+    .btn2{
+      width:90%;
+      margin: 2rem auto;
+      height: 46px;
+      line-height: 46px;
+      background:#2F7DCD;
+      font-size: 16px;
+      border:none;
     }
 
     .article-list {
