@@ -1,7 +1,7 @@
 <template>
   <div class="driverDetail">
     <div class="list-wrap">
-      <van-tabs color="#3986CB" sticky>
+      <van-tabs color="#3986CB" sticky @click="buryPoint">
         <van-tab title="基本" class="backgroundTab">
           <van-cell-group v-if="JSON.stringify(detail) != '{}'">
             <h2 class="van-doc-demo-block__title">
@@ -71,7 +71,7 @@
             操作
           </van-button>
         </van-tab>
-        <van-tab title="撮合" :class="matchModule ? 'backgroundTab2' : 'backgroundTab'">
+        <van-tab title="撮合" :class="matchModule ? 'backgroundTab2' : 'backgroundTab'" @click="buryPoint('撮合')">
           <div v-if="!matchModule" class="match_box">
             <img src="https://qizhiniao-dev.oss-cn-beijing.aliyuncs.com/img/998f5a4580604c4f8e798f98430cbe92" alt="">
             <p class="hint_weight">
@@ -83,7 +83,7 @@
             <p class="text_nomarl">
               系统会根据意向智能推荐匹配线路
             </p>
-            <van-button round type="info" block class="btn" @click="goRouter">
+            <van-button round type="info" block class="btn" @click="goRouter(1)">
               设置司机接活意向
             </van-button>
           </div>
@@ -104,6 +104,9 @@
                 <van-tag v-for="item in matchDetail.cargoType" :key="item" round type="primary" color="#4F77AA" class="tag" size="medium">
                   {{ item }}
                 </van-tag>
+                <p v-if="!matchDetail.cargoType.length">
+                  暂无数据
+                </p>
               </div>
             </div>
             <div class="matchList">
@@ -114,6 +117,9 @@
                 <van-tag v-for="item in matchDetail.deliveryArea" :key="item" round type="primary" color="#4F77AA" class="tag" size="medium">
                   {{ item }}
                 </van-tag>
+                <p v-if="!matchDetail.deliveryArea.length">
+                  暂无数据
+                </p>
               </div>
             </div>
             <div class="matchList">
@@ -124,6 +130,9 @@
                 <van-tag v-for="item in matchDetail.handlingDifficultyDegree" :key="item" round type="primary" color="#4F77AA" class="tag" size="medium">
                   {{ item }}
                 </van-tag>
+                <p v-if="!matchDetail.handlingDifficultyDegree.length">
+                  暂无数据
+                </p>
               </div>
             </div>
             <div class="matchList">
@@ -134,6 +143,9 @@
                 <van-tag v-for="item in matchDetail.departureTime" :key="item" round type="primary" color="#4F77AA" class="tag" size="medium">
                   {{ item }}
                 </van-tag>
+                <p v-if="!matchDetail.departureTime.length">
+                  暂无数据
+                </p>
               </div>
             </div>
             <van-cell-group class="menuBottom">
@@ -187,7 +199,7 @@ export default {
       driverType: '1',
       detail: '',
       show: false,
-      matchModule: true,
+      matchModule: false,
       matchDetail: '',
       actions: [
         { name: '产品介绍', color: '#3F8AF2' },
@@ -202,6 +214,9 @@ export default {
   },
   methods: {
     getDetail(driverId) {
+      this.GLOBAL.buryPointFunction('customer_visit', '客户信息页面访问', {
+        value: '客户信息页面访问'
+      })
       driverDetail({
         driverId: driverId
       }).then((res) => {
@@ -241,8 +256,14 @@ export default {
         }
       })
     },
+    buryPoint(name, title) {
+      this.GLOBAL.buryPointFunction('customer_tab', '客户信息页-tab点击', {
+        value: title
+      })
+    },
     goRouter(type) {
       let that = this;
+      // that.$destroy(true)
       if (type === 1) {
         that.$router.push({ path: '/driverintention', query: { driverId: that.driverId }})// 撮合跟进
       } else if (type === 2) {
@@ -253,6 +274,9 @@ export default {
     },
     check() {
       this.show = true;
+      this.GLOBAL.buryPointFunction('customer_options', '客户详情操作按钮点击', {
+        value: '客户详情操作按钮点击'
+      })
     //   judgingIntentionOfReceiving({
     //     driverId: 201910231017
     //   }).then((res) => {

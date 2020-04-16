@@ -1,7 +1,7 @@
 <template>
   <div class="linedetail">
     <div class="list-wrap">
-      <van-tabs v-model="listQuery.state" color="#3986CB" sticky>
+      <van-tabs v-model="tab_state" color="#3986CB" sticky @click="buryPoint">
         <van-tab title="基本">
           <h2 class="van-doc-demo-block__title">
             基本信息
@@ -110,7 +110,8 @@
 </template>
 <script>
 import { Tabbar, TabbarItem, Toast, Tab, Tabs, Cell, CellGroup, Button, Icon } from 'vant'
-import { getLineDetail, listByLineId, loglist, getMediaIdOfLineDetail } from '@/api/line'
+import { getLineDetail, listByLineId, loglist, getMediaIdOfLineDetail, updateState } from '@/api/line'
+// import { getLineDetail, listByLineId, loglist, getMediaIdOfLineDetail } from '@/api/line'
 import { getCorpSignature, getAgentSignature } from '@/api/user'
 // import VoPages from 'vo-pages'
 import 'vo-pages/lib/vo-pages.css'
@@ -135,6 +136,7 @@ export default {
       listQuery: {
         state: 0
       },
+      tab_state: 0,
       active: 1,
       detail: {},
       clueDetail: [],
@@ -152,11 +154,13 @@ export default {
       loadedAll: false,
       backBtn: false,
       timeDiff: '',
+      driverId: '',
       monthlyTransaction: ''
     }
   },
   mounted() {
     let id = this.$route.query.id;
+    this.driverId = this.$route.query.driverId;
     this.lineId = id;
     this.timeDiff = this.$route.query.timeDiff
     this.monthlyTransaction = this.$route.query.monthlyTransaction
@@ -170,6 +174,9 @@ export default {
   methods: {
     getDetail(id) {
       let that = this;
+      that.GLOBAL.buryPointFunction('lineDetail_visit', '线路详情页面访问', {
+        value: '线路详情页面访问'
+      })
       getLineDetail({ lineId: id }).then((res) => {
         if (res.data.success) {
           that.detail = res.data.data;
@@ -200,6 +207,13 @@ export default {
       const hostName = window.location.href
       let that = this;
       that.disable = true;
+      updateState({
+        'driverId': that.driverId,
+        'lineId': that.lineId,
+        'remark': '',
+        'state': 1
+      }).then((res) => {
+      })
       getMediaIdOfLineDetail({
         lineId: that.lineId,
         busiType: that.detail.busiType
@@ -243,6 +257,9 @@ export default {
                           signature: agentData.signature, // 必填，签名，见附录1
                           jsApiList: ['sendChatMessage', 'getCurExternalContact'], // 必填
                           success: function(res) {
+                            that.GLOBAL.buryPointFunction('send_line', '发送线路', {
+                              value: '发送线路'
+                            })
                             wx.invoke('sendChatMessage', {
                               msgtype: 'image', // 消息类型，必填
                               image:
@@ -255,7 +272,7 @@ export default {
                                 Toast.fail('暂无功能权限')
                               }
                               that.disable = false;
-                              let lineIdNeedBack = { lineId: that.lineId, timeDiff: that.timeDiff, monthlyTransaction: that.monthlyTransaction }
+                              let lineIdNeedBack = { lineId: that.lineId, timeDiff: that.timeDiff, monthlyTransaction: that.monthlyTransaction, driverId: that.driverId }
                               localStorage.setItem('lineIdNeedBack', JSON.stringify(lineIdNeedBack))
                             })
                           },
@@ -282,6 +299,12 @@ export default {
             }
           })
         }
+      })
+    },
+    buryPoint(name, title) {
+      this.tab_state = name;
+      this.GLOBAL.buryPointFunction('lineDetail_tab', '线路详情页-tab点击', {
+        value: title
       })
     },
     goLine() {
