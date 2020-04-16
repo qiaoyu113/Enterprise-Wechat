@@ -107,7 +107,12 @@ export default {
           if (res.data.success) {
             Toast.success('授权成功');
             localStorage.setItem('token', res.data.data.token)
-            localStorage.setItem('city', res.data.data.city)
+            let city = res.data.data.city;
+            if (city && city !== '') {
+              localStorage.setItem('city', res.data.data.city)
+            } else {
+              localStorage.setItem('city', '110100')
+            }
             this.getDeveloper(res.data.data.bssLoginName)
             let loginUrl = localStorage.getItem('loginUrl')
             if (loginUrl) {
