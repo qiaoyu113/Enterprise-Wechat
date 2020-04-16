@@ -385,6 +385,8 @@ export default {
 
     .btn{
       width:100%;
+      height: 46px;
+      line-height: 46px;
       position: fixed;
       bottom: 0;
       left:0;

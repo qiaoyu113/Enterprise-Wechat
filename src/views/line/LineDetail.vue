@@ -99,7 +99,7 @@
           </p>
         </van-tab>
       </van-tabs>
-      <van-button round type="info" block class="btn" :disabled="disable" @click="pushSendLink">
+      <van-button block class="btn" :disabled="disable" @click="pushSendLink">
         发送此线路
       </van-button>
       <div v-if="backBtn" class="backBtn" @click="goLine">
@@ -368,8 +368,6 @@ p{
     width: 100%;
     height: 46px;
     line-height: 46px;
-    opacity: 1;
-    border-radius: 0;
     background:#2F7DCD;
     font-size: 16px;
     color:#fff;
