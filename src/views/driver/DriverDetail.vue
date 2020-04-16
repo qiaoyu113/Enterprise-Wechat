@@ -83,7 +83,7 @@
             <p class="text_nomarl">
               系统会根据意向智能推荐匹配线路
             </p>
-            <van-button type="info" block class="btn2" @click="goRouter(1)">
+            <van-button round type="info" block class="btn2" @click="goRouter(1)">
               设置司机接活意向
             </van-button>
           </div>
@@ -399,8 +399,12 @@ export default {
     .btn2{
       width:90%;
       margin: 1rem auto;
+      height: 46px;
+      line-height: 46px;
       position: fixed;
       bottom: .6rem;
+      background:#2F7DCD;
+      font-size: 16px;
       left:0;
       right:0;
     }
