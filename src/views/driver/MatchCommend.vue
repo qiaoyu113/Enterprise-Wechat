@@ -102,6 +102,9 @@
               </div>
             </div>
           </div>
+          <div v-if="item.remark" class="list-note">
+            {{ item.remark }}
+          </div>
           <div class="lineListBottom">
             <van-cell title="详情" is-link />
           </div>
@@ -395,6 +398,14 @@ export default {
     background: #f7f8fa;
     height: 100%;
     width: 100%;
+    .list-note {
+      padding: 8px 0.42667rem;
+      font-size: 12px;
+      color: #b2b2b2;
+      line-height: 18px;
+      text-indent: 2em;
+      background: #fff;
+    }
     .tag_margin{
       margin: 2px 6px 6px 0;
     }
