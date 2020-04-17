@@ -439,7 +439,6 @@ export default {
                 box-sizing: border-box;
                 font-size: 17px;
                 color: #000000;
-                margin-top: 10px;
                 .top-tag {
                   position: absolute;
                   right: 0;
