@@ -67,7 +67,7 @@ export function helpMatch(data) {
 
 export function updateState(data) {
   return request({
-    url: 'api/match/corp/match/updateState',
+    url: 'api/match/corp/match/history/save',
     method: 'post',
     data
   })
