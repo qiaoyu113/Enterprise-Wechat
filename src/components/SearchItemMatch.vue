@@ -43,13 +43,13 @@
               @confirm="onConfirm"
             />
           </van-popup>
-          <!--线路区域-->
+          <!--到仓区域-->
           <van-field
             readonly
             clickable
-            label="线路区域"
+            label="到仓区域"
             :value="lineVal"
-            placeholder="线路区域"
+            placeholder="到仓区域"
             @click="showPicker3 = true"
           />
           <van-popup v-model="showPicker3" position="bottom">
@@ -59,6 +59,24 @@
               value-key="name"
               @cancel="showPicker3 = false"
               @confirm="onConfirm3"
+            />
+          </van-popup>
+          <!--配送区域-->
+          <van-field
+            readonly
+            clickable
+            label="配送区域"
+            :value="diliverVal"
+            placeholder="配送区域"
+            @click="showPicker6 = true"
+          />
+          <van-popup v-model="showPicker6" position="bottom">
+            <van-picker
+              show-toolbar
+              :columns="columns3"
+              value-key="name"
+              @cancel="showPicker6 = false"
+              @confirm="onConfirm6"
             />
           </van-popup>
           <!--装卸难度-->
@@ -139,8 +157,11 @@ export default {
       showPicker3: false,
       showPicker4: false,
       showPicker5: false,
+      showPicker6: false,
       lineVal: '',
       lineValCode: '',
+      diliverVal: '',
+      diliverValCode: '',
       carVal: '',
       carValCode: '',
       cargoVal: '',
@@ -236,6 +257,7 @@ export default {
         let data = {
           findVal: '',
           lineVal: '',
+          diliverVal: '',
           carVal: '',
           cargoVal: '',
           difficultyVal: '',
@@ -250,10 +272,12 @@ export default {
       let data = {
         findVal: this.value,
         lineVal: this.lineValCode,
+        diliverVal: this.diliverValCode,
         carVal: this.carValCode,
         cargoVal: this.cargoValCode,
         difficultyVal: this.difficultyValCode,
-        timeVal: this.timeValCode
+        timeVal: this.timeValCode,
+        type: this.value1
       }
       this.$emit('searchData', data)
     },
@@ -284,6 +308,11 @@ export default {
       this.lineVal = value.name;
       this.lineValCode = value.code;
       this.showPicker3 = false;
+    },
+    onConfirm6(value) {
+      this.diliverVal = value.name;
+      this.diliverValCode = value.code;
+      this.showPicker6 = false;
     },
     onConfirm4(value) {
       this.difficultyVal = value.code;

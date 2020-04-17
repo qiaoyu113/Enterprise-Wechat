@@ -139,6 +139,7 @@ export default {
         'county': '',
         'handlingDifficultyDegree': '',
         'departureTime': '',
+        'arrivalArea': '',
         'key': '',
         'limit': '20',
         'page': 1
@@ -287,6 +288,7 @@ export default {
       this.listQuery.carType = data.carVal
       this.listQuery.cargoType = data.cargoVal
       this.listQuery.county = data.lineVal
+      this.listQuery.arrivalArea = data.diliverVal
       this.listQuery.key = data.findVal
       this.listQuery.handlingDifficultyDegree = data.difficultyVal
       this.listQuery.departureTime = data.timeVal
@@ -302,9 +304,10 @@ export default {
         loadingType: 'spinner',
         message: '加载中...'
       });
+      console.log('searchType', this.searchType)
       if (this.searchType) {
         helpMatch({
-          'arrivalArea': this.listQuery.county,
+          'arrivalArea': this.listQuery.arrivalArea,
           'carType': this.listQuery.carType,
           'cargoType': this.listQuery.cargoType,
           'deliveryArea': this.listQuery.county,
@@ -335,7 +338,6 @@ export default {
           } else {
             Toast.clear();
             this.loadedAll = true;
-            console.log(res)
             // Toast.fail(res.data.errorMsg);
           }
         }).catch((err) => {
