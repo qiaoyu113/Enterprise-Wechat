@@ -453,7 +453,7 @@ export default {
                 .top-tag {
                   position: absolute;
                   right: 0;
-                  top: -0.2rem;
+                  top: 0;
                 }
                 .address{
                     font-weight: 400;
