@@ -225,7 +225,9 @@ export default {
     let driverId = this.$route.query.driverId;
     this.driverId = driverId;
     this.active = Number(localStorage.getItem('active'))
-    localStorage.removeItem('active')
+    if (this.active) {
+      localStorage.removeItem('active')
+    }
     this.getDetail(driverId)
   },
   methods: {

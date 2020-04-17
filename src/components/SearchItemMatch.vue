@@ -2,7 +2,7 @@
   <div>
     <div class="searchBox">
       <van-dropdown-menu>
-        <van-dropdown-item v-model="value1" :options="option1" @change="dropClick" />
+        <van-dropdown-item v-model="value1" :options="option1" @close="dropClick" />
       </van-dropdown-menu>
       <div v-if="value1 === 1 && showBox">
         <van-search v-model="value" placeholder="请输入搜索关键词" />
@@ -250,6 +250,7 @@ export default {
       })
     },
     dropClick() {
+      console.log(this.value1)
       if (Number(this.value1)) {
         this.showBox = true;
       } else {
@@ -272,7 +273,7 @@ export default {
       let data = {
         findVal: this.value,
         lineVal: this.lineValCode,
-        diliverVal: this.diliverValCode,
+        diliverVal: this.diliverVal,
         carVal: this.carValCode,
         cargoVal: this.cargoValCode,
         difficultyVal: this.difficultyValCode,
