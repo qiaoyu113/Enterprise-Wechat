@@ -12,8 +12,8 @@
         <div v-for="item in list" :key="item.type" class="lineList" @click="goDetail(item.lineId, item.timeDiff, item.monthlyTransaction, item.driverId)">
           <div class="lineListTop">
             <div class="name">
-              <van-tag v-if="params.lineSaleName" class="top-tag" type="warning">
-                {{ params.lineSaleName }}
+              <van-tag v-if="item.lineSaleName" class="top-tag" type="warning">
+                {{ item.lineSaleName }}
               </van-tag>
               <p>{{ item.lineName }} / {{ item.customerName }}</p>
               <p class="address">
