@@ -108,7 +108,7 @@
         autosize
         label="备注"
         type="textarea"
-        maxlength="20"
+        maxlength="100"
         placeholder="请输入备注"
         show-word-limit
       />
