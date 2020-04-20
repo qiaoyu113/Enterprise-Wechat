@@ -44,11 +44,16 @@
                   </van-tag>
                   <!--装卸类型-->
                   <van-tag v-for=" item_h in item.handlingDifficultyDegrees " :key="item_h.name" round :color="item_h.matched ? '#49CB15' : '#EC5F50'" type="success" size="medium" class="tag_margin">
-                    {{ item_h.name }}
+                    <p v-if="!item_h.name && typeof(item_h.name) !== 'undefined' && item_h.name !== 0">
+                      {{ item_h.name }}
+                    </p>
                   </van-tag>
                   <!--时间-->
                   <van-tag v-for=" item_r in item.runningDurations " :key="item_r.name" round :color="item_r.matched ? '#49CB15' : '#EC5F50'" type="success" size="medium" class="tag_margin">
-                    {{ item_r.name }}
+                    <!-- {{ item_r.name }} -->
+                    <p v-if="!item_r.name && typeof(item_r.name) !== 'undefined' && item_r.name !== 0">
+                      {{ item_r.name }}
+                    </p>
                   </van-tag>
                 </div>
                 <div class="matchRate">

@@ -75,7 +75,7 @@
               />
             </van-popup>
             <van-cell-group>
-              <van-cell title="到仓区域" is-link :value="lineVal" @click="showPicker = true" />
+              <van-cell title="到仓区域" is-link :value="lineVal" @click="showPicker3 = true" />
             </van-cell-group>
             <!--配送区域-->
             <!-- <van-field
@@ -117,7 +117,7 @@
               />
             </van-popup>
             <van-cell-group>
-              <van-cell title="装卸难度" is-link :value="difficultyVal" @click="showPicker6 = true" />
+              <van-cell title="装卸难度" is-link :value="difficultyVal" @click="showPicker4 = true" />
             </van-cell-group>
           <!--出车时段-->
           <!-- <van-field
