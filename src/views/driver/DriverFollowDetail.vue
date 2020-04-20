@@ -57,7 +57,7 @@
         </div>
       </div>
       <div v-if="params.remark" class="list-note">
-        {{ params.remark }}
+        <p>{{ params.remark }}</p>
       </div>
     </div>
     <div v-if="list.length > 0" class="speed">
