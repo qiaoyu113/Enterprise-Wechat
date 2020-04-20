@@ -57,7 +57,7 @@
         </div>
       </div>
       <div v-if="params.remark" class="list-note">
-        {{ params.remark }}
+        <p>{{ params.remark }}</p>
       </div>
     </div>
     <div v-if="list.length > 0" class="speed">
@@ -521,5 +521,6 @@ $danger: #E75E60;
 .driver-dialog .van-field__label{
   width: auto;
   margin-right: 20px;
+  flex: none;
 }
 </style>
