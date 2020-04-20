@@ -12,6 +12,9 @@
         <div v-for="item in list" :key="item.type" class="lineList" @click="goDetail(item.lineId, item.timeDiff, item.monthlyTransaction, item.driverId)">
           <div class="lineListTop">
             <div class="name">
+              <van-tag v-if="item.lineSaleName" class="top-tag" type="warning">
+                {{ item.lineSaleName }}
+              </van-tag>
               <p>{{ item.lineName }} / {{ item.customerName }}</p>
               <p class="address">
                 {{ item.warehouse }}
@@ -99,6 +102,9 @@
               </div>
             </div>
           </div>
+          <div v-if="item.remark" class="list-note">
+            {{ item.remark }}
+          </div>
           <div class="lineListBottom">
             <van-cell title="详情" is-link />
           </div>
@@ -139,6 +145,7 @@ export default {
         'county': '',
         'handlingDifficultyDegree': '',
         'departureTime': '',
+        'arrivalArea': '',
         'key': '',
         'limit': '20',
         'page': 1
@@ -287,6 +294,7 @@ export default {
       this.listQuery.carType = data.carVal
       this.listQuery.cargoType = data.cargoVal
       this.listQuery.county = data.lineVal
+      this.listQuery.arrivalArea = data.diliverVal
       this.listQuery.key = data.findVal
       this.listQuery.handlingDifficultyDegree = data.difficultyVal
       this.listQuery.departureTime = data.timeVal
@@ -302,9 +310,10 @@ export default {
         loadingType: 'spinner',
         message: '加载中...'
       });
+      console.log('searchType', this.searchType)
       if (this.searchType) {
         helpMatch({
-          'arrivalArea': this.listQuery.county,
+          'arrivalArea': this.listQuery.arrivalArea,
           'carType': this.listQuery.carType,
           'cargoType': this.listQuery.cargoType,
           'deliveryArea': this.listQuery.county,
@@ -335,7 +344,6 @@ export default {
           } else {
             Toast.clear();
             this.loadedAll = true;
-            console.log(res)
             // Toast.fail(res.data.errorMsg);
           }
         }).catch((err) => {
@@ -390,6 +398,14 @@ export default {
     background: #f7f8fa;
     height: 100%;
     width: 100%;
+    .list-note {
+      padding: 8px 0.42667rem;
+      font-size: 12px;
+      color: #b2b2b2;
+      line-height: 18px;
+      text-indent: 2em;
+      background: #fff;
+    }
     .tag_margin{
       margin: 2px 6px 6px 0;
     }
@@ -409,6 +425,18 @@ export default {
             background:#fff;
             padding:0.2rem 0;
             box-sizing: border-box;
+            position: relative;
+            overflow: hidden;
+            .saleName{
+              padding:2px 4px;
+              box-sizing: border-box;
+              background:burlywood;
+              color:#fff;
+              position: absolute;
+              top:0;
+              right:0;
+              font-size: 12px;
+            }
             .info{
                 color:#333;
                 font-size:14px;
@@ -422,6 +450,11 @@ export default {
                 box-sizing: border-box;
                 font-size: 17px;
                 color: #000000;
+                .top-tag {
+                  position: absolute;
+                  right: 0;
+                  top: 0;
+                }
                 .address{
                     font-weight: 400;
                     font-size: 14px;

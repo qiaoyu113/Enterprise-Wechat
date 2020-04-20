@@ -111,7 +111,20 @@
             </div>
             <div class="matchList">
               <div class="title_sm">
-                线路区域
+                到仓区域
+              </div>
+              <div class="tage_type">
+                <van-tag v-for="item in matchDetail.arrivalArea" :key="item" round type="primary" color="#4F77AA" class="tag" size="medium">
+                  {{ item }}
+                </van-tag>
+                <p v-if="!matchDetail.deliveryArea.length">
+                  暂无数据
+                </p>
+              </div>
+            </div>
+            <div class="matchList">
+              <div class="title_sm">
+                配送区域
               </div>
               <div class="tage_type">
                 <van-tag v-for="item in matchDetail.deliveryArea" :key="item" round type="primary" color="#4F77AA" class="tag" size="medium">
@@ -212,7 +225,9 @@ export default {
     let driverId = this.$route.query.driverId;
     this.driverId = driverId;
     this.active = Number(localStorage.getItem('active'))
-    localStorage.removeItem('active')
+    if (this.active) {
+      localStorage.removeItem('active')
+    }
     this.getDetail(driverId)
   },
   methods: {

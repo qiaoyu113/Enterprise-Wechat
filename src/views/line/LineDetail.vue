@@ -210,7 +210,7 @@ export default {
       updateState({
         'driverId': that.driverId,
         'lineId': that.lineId,
-        'remark': '',
+        'remark': '线路推送至司机',
         'state': 1
       }).then((res) => {
       })
