@@ -74,8 +74,8 @@
                       所需车型
                     </div>
                     <div class="bottom">
-                      <van-icon v-if="item.driverCarType.matched" name="checked" size="26" color="#70C740" />
-                      <van-icon v-else name="clear" size="26" color="#DC6857" />
+                      <van-icon v-if="item.driverCarType.matched" name="checked" size="20" color="#70C740" />
+                      <van-icon v-else name="clear" size="20" color="#DC6857" />
                     </div>
                   </div>
                   <div class="needCarList">
@@ -83,8 +83,8 @@
                       货物类型
                     </div>
                     <div class="bottom">
-                      <van-icon v-if="forEachArr(item.cargoTypes)" name="checked" size="26" color="#70C740" />
-                      <van-icon v-else name="clear" size="26" color="#DC6857" />
+                      <van-icon v-if="forEachArr(item.cargoTypes)" name="checked" size="20" color="#70C740" />
+                      <van-icon v-else name="clear" size="20" color="#DC6857" />
                     </div>
                   </div>
                   <div class="needCarList">
@@ -92,8 +92,8 @@
                       到仓区域
                     </div>
                     <div class="bottom">
-                      <van-icon v-if="forEachArr(item.warehouses)" name="checked" size="28" color="#70C740" />
-                      <van-icon v-else name="clear" size="28" color="#DC6857" />
+                      <van-icon v-if="forEachArr(item.warehouses)" name="checked" size="20" color="#70C740" />
+                      <van-icon v-else name="clear" size="20" color="#DC6857" />
                     </div>
                   </div>
                   <div class="needCarList">
@@ -101,8 +101,8 @@
                       配送区域
                     </div>
                     <div class="bottom">
-                      <van-icon v-if="forEachArr(item.deliveryAreas)" name="checked" size="26" color="#70C740" />
-                      <van-icon v-else name="clear" size="26" color="#DC6857" />
+                      <van-icon v-if="forEachArr(item.deliveryAreas)" name="checked" size="20" color="#70C740" />
+                      <van-icon v-else name="clear" size="20" color="#DC6857" />
                     </div>
                   </div>
                   <div class="needCarList">
@@ -110,8 +110,8 @@
                       装卸难度
                     </div>
                     <div class="bottom">
-                      <van-icon v-if="forEachArr(item.handlingDifficultyDegrees)" name="checked" size="26" color="#70C740" />
-                      <van-icon v-else name="clear" size="26" color="#DC6857" />
+                      <van-icon v-if="forEachArr(item.handlingDifficultyDegrees)" name="checked" size="20" color="#70C740" />
+                      <van-icon v-else name="clear" size="20" color="#DC6857" />
                     </div>
                   </div>
                   <div class="needCarList">
@@ -119,8 +119,8 @@
                       出车时段
                     </div>
                     <div class="bottom">
-                      <van-icon v-if="forEachArr(item.runningDurations)" name="checked" size="26" color="#70C740" />
-                      <van-icon v-else name="clear" size="26" color="#DC6857" />
+                      <van-icon v-if="forEachArr(item.runningDurations)" name="checked" size="20" color="#70C740" />
+                      <van-icon v-else name="clear" size="20" color="#DC6857" />
                     </div>
                   </div>
                 </div>
@@ -596,8 +596,9 @@ export default {
                     .top{
                         width: 100%;
                         text-align: center;
-                        font-size: 11px;
+                        font-size: 10px;
                         color: #B2B2B2;
+                        font-weight: 400;
                     }
                     .bottom{
                         width: 100%;
