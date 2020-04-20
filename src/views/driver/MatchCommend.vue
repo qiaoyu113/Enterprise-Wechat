@@ -493,6 +493,7 @@ export default {
         border-radius: 5px;
         box-sizing: border-box;
         margin-bottom: 16px;
+        overflow: hidden;
         .lineListTop{
             background:#fff;
             // padding:0.2rem 0;
@@ -532,7 +533,8 @@ export default {
                   box-sizing: border-box;
                   background: #F09654;
                   border-radius: 5px;
-                  border-radius: 5px;
+                  height:21px;
+                  line-height: 20px;
                   font-size: 13px;
                   color: #FFFFFF;
                   position: absolute;
