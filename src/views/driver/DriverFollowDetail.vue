@@ -14,7 +14,7 @@
           </p>
           <div class="tagBox">
             <template v-for="key in keyList">
-              <template v-if="Array.isArray(params[key.name]) && item[key.name].length > 0">
+              <template v-if="Array.isArray(params[key.name]) && params[key.name].length > 0">
                 <van-tag
                   v-for="(value, index) in params[key.name]"
                   :key="index"
@@ -34,7 +34,7 @@
           </div>
           <div class="needCarBox">
             <template v-for="key in keyList">
-              <template v-if="Array.isArray(params[key.name]) && item[key.name].length > 0">
+              <template v-if="Array.isArray(params[key.name]) && params[key.name].length > 0">
                 <div :key="key.name" class="needCarList">
                   <div class="top">
                     {{ key.key }}
@@ -350,7 +350,7 @@ $danger: #E75E60;
       }
       .tagBox {
         width: 100%;
-        padding: 7px 0;
+        padding-top: 10px;
         box-sizing: border-box;
         font-size: 0;
         border-bottom: 1px solid #eeebeb;

@@ -362,7 +362,7 @@ $danger: #E75E60;
       }
       .tagBox {
         width: 100%;
-        padding: 7px 0;
+        padding-top: 10px;
         box-sizing: border-box;
         font-size: 0;
         border-bottom: 1px solid #eeebeb;
