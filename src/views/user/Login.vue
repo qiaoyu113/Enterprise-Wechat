@@ -47,7 +47,7 @@ export default {
     /*
     d2环境或微信授权不通时
     */
-    // window.localStorage.setItem('token', 'eyJhbGciOiJIUzI1NiJ9.eyJwcm9maWxlIjoiZDIiLCJ1c2VySWQiOiIzNyIsInVzZXJuYW1lIjoid3RfYWRtaW4iLCJ0eXBlIjoiMyIsImJ1c2lQZXJtaXNzaW9uIjoiMCwxIiwiZXhwIjoxNTg5MzQ5MjU5fQ.9Sgf_SopHe3dR4ML5SM6MrgB765hnH3FqXfIKfE9sAY')
+    // window.localStorage.setItem('token', 'eyJhbGciOiJIUzI1NiJ9.eyJwcm9maWxlIjoibTEiLCJ1c2VySWQiOiIxMyIsInVzZXJuYW1lIjoid3RfYWRtaW4iLCJ0eXBlIjoiMyIsImJ1c2lQZXJtaXNzaW9uIjoiMCIsImV4cCI6MTU4OTY3OTIwM30.yIIAHjJtxlwftfGga2L6KMtsZ_vthAOq7mXHaJraAcI')
     // window.localStorage.setItem('code', '1234')
     // window.localStorage.setItem('SetUserData', 'token')
   },
@@ -109,7 +109,7 @@ export default {
             localStorage.setItem('token', res.data.data.token)
             let city = res.data.data.city;
             if (city && city !== '') {
-              localStorage.setItem('city', res.data.data.city)
+              localStorage.setItem('city', city)
             } else {
               localStorage.setItem('city', '110100')
             }

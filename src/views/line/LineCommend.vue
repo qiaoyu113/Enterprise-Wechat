@@ -9,7 +9,7 @@
         @pullingDown="pullingDown"
       >
         <div class="placeholder"></div>
-        <div v-for="item in list" :key="item.type" class="lineList" @click="goDetail(item.lineId, item.timeDiff, item.monthlyTransaction)">
+        <div v-for="item in list" :key="item.type" class="lineList" @click="goDetail(item.lineId, item.timeDiff, item.monthlyTransaction, item.driverId)">
           <div class="lineListTop">
             <div class="name">
               {{ item.lineName }}<van-tag plain type="primary" size="small" style="margin-left: 0.3rem;">
@@ -143,7 +143,7 @@ export default {
                                   if (lineIdNeedBack.lineId) {
                                     localStorage.removeItem('lineIdNeedBack')
                                     that.$destroy(true)
-                                    that.$router.push({ path: '/linedetail', query: { id: lineIdNeedBack.lineId, timeDiff: lineIdNeedBack.timeDiff, monthlyTransaction: lineIdNeedBack.monthlyTransaction, backBtn: 1 }})
+                                    that.$router.push({ path: '/linedetail', query: { id: lineIdNeedBack.lineId, timeDiff: lineIdNeedBack.timeDiff, monthlyTransaction: lineIdNeedBack.monthlyTransaction, backBtn: 1, driverId: lineIdNeedBack.driverId }})
                                   }
                                 } else {
                                   that.getList()
@@ -239,8 +239,8 @@ export default {
         this.loadedAll = true;
       })
     },
-    goDetail(id, timeDiff, monthlyTransaction) {
-      this.$router.push({ path: '/linedetail', query: { id: id, timeDiff: timeDiff, monthlyTransaction: monthlyTransaction }})
+    goDetail(id, timeDiff, monthlyTransaction, driverId) {
+      this.$router.push({ path: '/linedetail', query: { id: id, timeDiff: timeDiff, monthlyTransaction: monthlyTransaction, driverId: driverId }})
     }
   }
 }
