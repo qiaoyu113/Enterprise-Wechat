@@ -10,13 +10,13 @@ if (window.location.host !== 'firmiana-wechat.yunniao.cn') {
     url = 'http://firmiana-wechat.m1.yunniao.cn/'
   } else {
     url = 'http://firmiana-open-api-d2.yunniao.cn/'
-    // url = 'http://firmiana-wechat.m1.yunniao.cn/'
+    // url = 'http://firmiana-wechat.m1.yunniao.cn/'注释
   }
 }
 
 // create an axios instance
 const service = axios.create({
-  baseURL: url, // url = base url + request url
+  baseURL: url, //  url = base url + request url
   withCredentials: true, // send cookies when cross-domain requests
   timeout: 5000 // request timeout
 })
@@ -94,8 +94,8 @@ service.interceptors.response.use(
   error => {
     console.log('err' + error) // for debug
     Toast.fail({
-      message: error.message,
-      duration: 1.5 * 1000
+      message: error.data.msg,
+      duration: 2.5 * 1000
     })
     return Promise.reject(error)
   }

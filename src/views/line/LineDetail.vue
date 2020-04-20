@@ -1,7 +1,7 @@
 <template>
   <div class="linedetail">
     <div class="list-wrap">
-      <van-tabs v-model="listQuery.state" color="#3986CB" sticky @click="buryPoint">
+      <van-tabs v-model="tab_state" color="#3986CB" sticky @click="buryPoint">
         <van-tab title="基本">
           <h2 class="van-doc-demo-block__title">
             基本信息
@@ -99,7 +99,7 @@
           </p>
         </van-tab>
       </van-tabs>
-      <van-button round type="info" block class="btn" :disabled="disable" @click="pushSendLink">
+      <van-button block class="btn" :disabled="disable" @click="pushSendLink">
         发送此线路
       </van-button>
       <div v-if="backBtn" class="backBtn" @click="goLine">
@@ -110,8 +110,8 @@
 </template>
 <script>
 import { Tabbar, TabbarItem, Toast, Tab, Tabs, Cell, CellGroup, Button, Icon } from 'vant'
-// import { getLineDetail, listByLineId, loglist, getMediaIdOfLineDetail, updateState } from '@/api/line'
-import { getLineDetail, listByLineId, loglist, getMediaIdOfLineDetail } from '@/api/line'
+import { getLineDetail, listByLineId, loglist, getMediaIdOfLineDetail, updateState } from '@/api/line'
+// import { getLineDetail, listByLineId, loglist, getMediaIdOfLineDetail } from '@/api/line'
 import { getCorpSignature, getAgentSignature } from '@/api/user'
 // import VoPages from 'vo-pages'
 import 'vo-pages/lib/vo-pages.css'
@@ -136,6 +136,7 @@ export default {
       listQuery: {
         state: 0
       },
+      tab_state: 0,
       active: 1,
       detail: {},
       clueDetail: [],
@@ -206,13 +207,13 @@ export default {
       const hostName = window.location.href
       let that = this;
       that.disable = true;
-      // updateState({
-      //   'driverId': that.driverId,
-      //   'lineId': that.lineId,
-      //   'remark': '',
-      //   'state': 1
-      // }).then((res) => {
-      // })
+      updateState({
+        'driverId': that.driverId,
+        'lineId': that.lineId,
+        'remark': '线路推送至司机',
+        'state': 1
+      }).then((res) => {
+      })
       getMediaIdOfLineDetail({
         lineId: that.lineId,
         busiType: that.detail.busiType
@@ -301,6 +302,7 @@ export default {
       })
     },
     buryPoint(name, title) {
+      this.tab_state = Number(name);
       this.GLOBAL.buryPointFunction('lineDetail_tab', '线路详情页-tab点击', {
         value: title
       })
@@ -313,7 +315,7 @@ export default {
 </script>
 <style lang="scss" scoped>
 .linedetail{
-  padding-bottom: 3.6rem;
+  padding-bottom: 1.6rem;
   box-sizing: border-box;
   .backBtn{
     width:1rem;
@@ -359,12 +361,16 @@ p{
 }
 
 .btn{
-    width:90%;
-    margin: 1rem auto;
     position: fixed;
-    bottom: .6rem;
-    left:0;
-    right:0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    height: 46px;
+    line-height: 46px;
+    background:#2F7DCD;
+    font-size: 16px;
+    color:#fff;
 }
 
 .article-list {

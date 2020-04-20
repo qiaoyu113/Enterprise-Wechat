@@ -58,3 +58,18 @@ $--transition-time: 300ms;
   transform: translate3d(-50%, 0, 0) !important;
   transition: transform $--transition-time;
 }
+
+.van-tab--active{
+  font-weight: 400 !important;
+  color: #2F7DCD !important;
+}
+.van-tabs__line{
+  width: 86px !important;
+}
+.vant-tab{
+  font-size: 17px !important;
+  color: #000000 !important;
+}
+.van-tabs__nav--line{
+  box-shadow: 0 0 0 0 #D4D4D4;
+}
