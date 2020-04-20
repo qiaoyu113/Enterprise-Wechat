@@ -416,12 +416,16 @@ $danger: #E75E60;
     }
   }
   .list-note {
-    padding: 8px 0.42667rem;
-    font-size: 12px;
-    color: #b2b2b2;
-    line-height: 18px;
-    text-indent: 2em;
+    padding: 0 17px;
     background: #fff;
+    p{
+      padding: 12px 0;
+      font-size: 12px;
+      color: rgba(0,0,0,0.40);
+      line-height: 18px;
+      text-indent: 2em;
+      border-top: 1px solid #eeebeb;
+    }
   }
   .list-speed {
     padding: 0.2rem 0.42667rem;
