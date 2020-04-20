@@ -8,98 +8,117 @@
         {{ optionsVal }} <van-icon name="arrow-down" color="#C7C7CC" size="12" />
       </div>
       <div v-if="showBox">
-        <van-search v-model="value" placeholder="请输入搜索关键词" />
-        <div v-if="showBox" class="selectItemBox">
-          <!--车型-->
-          <van-field
+        <div v-if="searchBox_type == 2">
+          <van-search v-model="value" placeholder="请输入线路关键词" input-align="center" @blur="onCancel" />
+          <div class="searchText">
+            过滤条件
+          </div>
+          <div v-if="showBox" class="selectItemBox">
+            <!--车型-->
+            <!-- <van-field
             readonly
             clickable
             label="车型"
             :value="carVal"
             placeholder="所需车型"
             @click="showPicker2 = true"
-          />
-          <van-popup v-model="showPicker2" position="bottom">
-            <van-picker
-              show-toolbar
-              :columns="columns2"
-              value-key="code"
-              @cancel="showPicker2 = false"
-              @confirm="onConfirm2"
-            />
-          </van-popup>
-          <!--货物类型-->
-          <van-field
+          /> -->
+            <van-popup v-model="showPicker2" position="bottom">
+              <van-picker
+                show-toolbar
+                :columns="columns2"
+                value-key="code"
+                @cancel="showPicker2 = false"
+                @confirm="onConfirm2"
+              />
+            </van-popup>
+            <van-cell-group>
+              <van-cell title="车型" is-link :value="carVal" @click="showPicker2 = true" />
+            </van-cell-group>
+            <!--货物类型-->
+            <!-- <van-field
             readonly
             clickable
             label="货物类型"
             :value="cargoVal"
             placeholder="货物类型"
             @click="showPicker = true"
-          />
-          <van-popup v-model="showPicker" position="bottom">
-            <van-picker
-              show-toolbar
-              :columns="columns"
-              value-key="code"
-              @cancel="showPicker = false"
-              @confirm="onConfirm"
-            />
-          </van-popup>
-          <!--到仓区域-->
-          <van-field
+          /> -->
+            <van-popup v-model="showPicker" position="bottom">
+              <van-picker
+                show-toolbar
+                :columns="columns"
+                value-key="code"
+                @cancel="showPicker = false"
+                @confirm="onConfirm"
+              />
+            </van-popup>
+            <van-cell-group>
+              <van-cell title="货物类型" is-link :value="cargoVal" @click="showPicker = true" />
+            </van-cell-group>
+            <!--到仓区域-->
+            <!-- <van-field
             readonly
             clickable
             label="到仓区域"
             :value="lineVal"
             placeholder="到仓区域"
             @click="showPicker3 = true"
-          />
-          <van-popup v-model="showPicker3" position="bottom">
-            <van-picker
-              show-toolbar
-              :columns="columns3"
-              value-key="name"
-              @cancel="showPicker3 = false"
-              @confirm="onConfirm3"
-            />
-          </van-popup>
-          <!--配送区域-->
-          <van-field
+          /> -->
+            <van-popup v-model="showPicker3" position="bottom">
+              <van-picker
+                show-toolbar
+                :columns="columns3"
+                value-key="name"
+                @cancel="showPicker3 = false"
+                @confirm="onConfirm3"
+              />
+            </van-popup>
+            <van-cell-group>
+              <van-cell title="到仓区域" is-link :value="lineVal" @click="showPicker = true" />
+            </van-cell-group>
+            <!--配送区域-->
+            <!-- <van-field
             readonly
             clickable
             label="配送区域"
             :value="diliverVal"
             placeholder="配送区域"
             @click="showPicker6 = true"
-          />
-          <van-popup v-model="showPicker6" position="bottom">
-            <van-picker
-              show-toolbar
-              :columns="columns3"
-              value-key="name"
-              @cancel="showPicker6 = false"
-              @confirm="onConfirm6"
-            />
-          </van-popup>
-          <!--装卸难度-->
-          <van-field
+          /> -->
+            <van-popup v-model="showPicker6" position="bottom">
+              <van-picker
+                show-toolbar
+                :columns="columns3"
+                value-key="name"
+                @cancel="showPicker6 = false"
+                @confirm="onConfirm6"
+              />
+            </van-popup>
+            <van-cell-group>
+              <van-cell title="配送区域" is-link :value="diliverVal" @click="showPicker6 = true" />
+            </van-cell-group>
+            <!--装卸难度-->
+            <!-- <van-field
             readonly
             clickable
             label="装卸难度"
             :value="difficultyVal"
             placeholder="装卸难度"
             @click="showPicker4 = true"
-          />
-          <van-popup v-model="showPicker4" position="bottom">
-            <van-picker
-              show-toolbar
-              :columns="columns4"
-              value-key="code"
-              @cancel="showPicker4 = false"
-              @confirm="onConfirm4"
-            />
-          </van-popup>
+          /> -->
+            <van-popup v-model="showPicker4" position="bottom">
+              <van-picker
+                show-toolbar
+                :columns="columns4"
+                value-key="code"
+                @cancel="showPicker4 = false"
+                @confirm="onConfirm4"
+              />
+            </van-popup>
+            <van-cell-group>
+              <van-cell title="装卸难度" is-link :value="difficultyVal" @click="showPicker6 = true" />
+            </van-cell-group>
           <!--出车时段-->
           <!-- <van-field
             readonly
@@ -118,28 +137,29 @@
               @confirm="onConfirm5"
             />
           </van-popup> -->
-          <van-button class="searchBtn" round type="info" @click="onCancel">
+          <!-- <van-button class="searchBtn" round type="info" @click="onCancel">
             搜索
           </van-button>
           <van-button class="searchBtn2" round type="default" @click="remove">
             重置
-          </van-button>
+          </van-button> -->
+          </div>
         </div>
         <div class="searchBox-bottom">
-          <div class="searchBox_btn">
+          <div :class="searchBox_type === 1 ? 'searchBox_btn checkBtn' : 'searchBox_btn'" @click="changeSearch(1, '智能匹配', true)">
             智能匹配
           </div>
-          <div class="searchBox_btn">
+          <div :class="searchBox_type === 2 ? 'searchBox_btn checkBtn' : 'searchBox_btn'" @click="changeSearch(2, '条件搜索', false)">
             条件搜索
           </div>
         </div>
       </div>
     </div>
-    <van-overlay :show="showBox" z-index="99" @click="showBox = false;value1 = 0;" />
+    <van-overlay :show="showBox" z-index="99" @click="showBox = false;" />
   </div>
 </template>
 <script>
-import { Toast, Search, Field, Popup, Picker, Button, Overlay, DropdownMenu, DropdownItem, Icon } from 'vant'
+import { Toast, Search, Field, Popup, Picker, Button, Overlay, DropdownMenu, DropdownItem, Icon, Cell, CellGroup } from 'vant'
 import { dictionary, getCityAreaByCode } from '@/api/common'
 export default {
   name: 'SearchItem',
@@ -153,6 +173,8 @@ export default {
     [Icon.name]: Icon,
     [DropdownMenu.name]: DropdownMenu,
     [DropdownItem.name]: DropdownItem,
+    [Cell.name]: Cell,
+    [CellGroup.name]: CellGroup,
     [Search.name]: Search
   },
   data() {
@@ -171,15 +193,15 @@ export default {
       showPicker4: false,
       showPicker5: false,
       showPicker6: false,
-      lineVal: '',
+      lineVal: '请选择到仓区域',
       lineValCode: '',
-      diliverVal: '',
+      diliverVal: '请选择配送区域',
       diliverValCode: '',
-      carVal: '',
+      carVal: '请选择线路车型',
       carValCode: '',
-      cargoVal: '',
+      cargoVal: '请选择货物类型',
       cargoValCode: '',
-      difficultyVal: '',
+      difficultyVal: '请选择装卸难度',
       difficultyValCode: '',
       timeVal: '',
       timeValCode: '',
@@ -190,7 +212,8 @@ export default {
       option1: [
         { text: '智能匹配', value: 0 },
         { text: '条件搜索', value: 1 }
-      ]
+      ],
+      searchBox_type: 1
     }
   },
   mounted() {
@@ -262,11 +285,11 @@ export default {
         Toast.fail(err);
       })
     },
-    dropClick() {
-      if (Number(this.value1)) {
-        this.showBox = true;
+    dropClick(type) {
+      if (type) {
+        this.onCancel()
       } else {
-        this.showBox = false;
+        // this.showBox = false;
         let data = {
           findVal: '',
           lineVal: '',
@@ -275,13 +298,13 @@ export default {
           cargoVal: '',
           difficultyVal: '',
           timeVal: '',
-          type: this.value1
+          type: 0
         }
         this.$emit('searchData', data)
       }
     },
     onCancel() {
-      this.showBox = false;
+      // this.showBox = false;
       let data = {
         findVal: this.value,
         lineVal: this.lineValCode,
@@ -290,9 +313,16 @@ export default {
         cargoVal: this.cargoValCode,
         difficultyVal: this.difficultyValCode,
         timeVal: this.timeValCode,
-        type: this.value1
+        type: 1
       }
       this.$emit('searchData', data)
+    },
+    changeSearch(type, name, boole) {
+      this.searchBox_type = type;
+      this.optionsVal = name;
+      if (boole) {
+        this.dropClick(!boole)
+      }
     },
     remove() {
       this.value = ''
@@ -311,36 +341,55 @@ export default {
       this.cargoVal = value.code;
       this.cargoValCode = value.codeVal;
       this.showPicker = false;
+      this.onCancel();
     },
     onConfirm2(value) {
       this.carVal = value.code;
       this.carValCode = value.codeVal;
       this.showPicker2 = false;
+      this.onCancel();
     },
     onConfirm3(value) {
       this.lineVal = value.name;
       this.lineValCode = value.code;
       this.showPicker3 = false;
+      this.onCancel();
     },
     onConfirm6(value) {
       this.diliverVal = value.name;
       this.diliverValCode = value.code;
       this.showPicker6 = false;
+      this.onCancel();
     },
     onConfirm4(value) {
       this.difficultyVal = value.code;
       this.difficultyValCode = value.codeVal;
       this.showPicker4 = false;
+      this.onCancel();
     },
     onConfirm5(value) {
       this.timeVal = value.code;
       this.timeValCode = value.codeVal;
       this.showPicker5 = false;
+      this.onCancel();
     }
   }
 }
 </script>
 <style lang="scss">
+.searchText{
+  width: 100%;
+  height: 46px;
+  line-height: 46px;
+  padding:0 15px;
+  box-sizing: border-box;
+  font-size: 14px;
+  color: #9B9B9B;
+  background: #F5F5F5;
+  text-align: left;
+  border-top: 1px solid #D7DADE;
+  border-bottom: 1px solid #D7DADE;
+}
 .searchBox{
     width: 100%;
     text-align: center;
@@ -354,6 +403,33 @@ export default {
     // transform: translate3d(0,0,0);
     // box-shadow: 0 8px 12px #666;
     z-index: 100;
+    .van-search{
+  height: 44px;
+  background: #F5F5F5;
+  padding:8px 10px;
+  box-sizing: border-box;
+  .van-field__value{
+    margin-top: -2px;
+  }
+}
+.van-cell__title{
+  text-align: left;
+  font-size: 17px;
+  color: #000000;
+}
+.van-search__content{
+  background: #FFFFFF;
+  border: 1px solid #D7DADE;
+  border-radius: 2px;
+  border-radius: 2px;
+  height: 28px;
+  line-height: 28px;
+  font-size: 14px !important;
+  color: #9B9B9B;
+}
+.van-field__left-icon{
+  display: none;
+}
     .menuBox{
       width: 100%;
       height: 34px;
@@ -379,7 +455,8 @@ export default {
     }
     .searchBox-bottom{
       width:100%;
-      height:90px;
+      height:46px;
+      line-height: 46px;
       display: flex;
       .searchBox_btn{
         flex: 1;
