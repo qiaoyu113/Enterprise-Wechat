@@ -89,9 +89,9 @@
           </div>
           <div v-else class="match_box2">
             <van-cell-group>
-              <h2 class="van-doc-demo-block__title">
+              <!-- <h2 class="van-doc-demo-block__title">
                 撮合信息
-              </h2>
+              </h2> -->
             </van-cell-group>
             <van-cell-group class="matchGroup">
               <van-cell title="车型" :value="matchDetail.carType | DataIsNull" />
@@ -161,15 +161,17 @@
                 </p>
               </div>
             </div>
-            <van-cell-group class="menuBottom">
-              <van-cell title="接活意向" is-link value="设置智能筛选撮合线路" @click="goRouter(1)" />
-            </van-cell-group>
-            <van-cell-group class="menuBottom">
-              <van-cell title="促撮推荐" is-link value="根据接活意向推荐线路" @click="goRouter(2)" />
-            </van-cell-group>
-            <van-cell-group class="menuBottom">
-              <van-cell title="撮合跟进" is-link value="跟进撮合进度及节点" @click="goRouter(3)" />
-            </van-cell-group>
+            <div style="margin-top:20px">
+              <van-cell-group class="menuBottom">
+                <van-cell title="接活意向" is-link value="设置智能筛选撮合线路" @click="goRouter(1)" />
+              </van-cell-group>
+              <van-cell-group class="menuBottom">
+                <van-cell title="促撮推荐" is-link value="根据接活意向推荐线路" @click="goRouter(2)" />
+              </van-cell-group>
+              <van-cell-group class="menuBottom">
+                <van-cell title="撮合跟进" is-link value="跟进撮合进度及节点" @click="goRouter(3)" />
+              </van-cell-group>
+            </div>
           </div>
         </van-tab>
       </van-tabs>
@@ -334,26 +336,46 @@ export default {
   }
   .match_box2{
     height: 100%;
+    padding-top:8px;
+    .van-cell__title{
+      font-size: 17px;
+      color: #000000;
+    }
     .matchGroup{
       margin-bottom: 2px;
+      border-top: 1px solid #ebedf0;
+      border-bottom: 1px solid #ebedf0;
     }
     .matchList{
       width:100%;
       background: #fff;
       border-bottom: 2px solid #F5F5F5;
-      padding:0 20px;
       box-sizing: border-box;
       .title_sm{
-        height:30px;
-        line-height: 35px;
-        font-size: 14px;
+        height:20px;
+        line-height: 20px;
+        font-size: 12px;
         color: #B2B2B2;
+        background: #F5F5F5;
+        padding: 0 10px;
+        box-sizing: border-box;
       }
       .tage_type{
         overflow: hidden;
-        .tag{
-          margin: 2px 6px 8px 0;
+        padding:14px 20px;
+        box-sizing: border-box;
+        border-top: 1px solid #ebedf0;
+        border-bottom: 1px solid #ebedf0;
+        .van-tag{
+          padding:0 12px;
+          box-sizing: border-box;
+          font-size: 13px;
+          color: #FFFFFF;
+          margin-right: 10px;
         }
+        // .tag{
+          // margin: 2px 6px 8px 0;
+        // }
       }
     }
   }

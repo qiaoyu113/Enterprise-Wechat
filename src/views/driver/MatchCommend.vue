@@ -14,7 +14,7 @@
             <div class="lineListTop">
               <div class="name">
                 <div class="nameBox">
-                  <van-tag v-if="item.lineSaleName" class="top-tag" type="warning">
+                  <van-tag class="top-tag" type="warning">
                     {{ item.lineSaleName }}
                   </van-tag>
                   <p>{{ item.lineName }} / {{ item.customerName }}</p>
@@ -24,8 +24,8 @@
                 </div>
                 <div class="tagBox">
                   <!--车类型-->
-                  <van-tag v-if="item.carTypeName" round :color="'#49CB15'" type="success" size="medium" class="tag_margin">
-                    {{ item.carTypeName }}
+                  <van-tag round :color="item.driverCarType.matched ? '#49CB15' : '#EC5F50'" type="success" size="medium" class="tag_margin">
+                    {{ item.driverCarType.name }}
                   </van-tag>
                   <!--货物类型-->
                   <van-tag v-for=" item_c in item.cargoTypes " :key="item_c.name" round :color="item_c.matched ? '#49CB15' : '#EC5F50'" type="success" size="medium" class="tag_margin">
@@ -33,29 +33,38 @@
                   </van-tag>
                   <!--区域类型-->
                   <van-tag v-for=" item_d in item.deliveryAreas " :key="item_d.name" round :color="item_d.matched ? '#49CB15' : '#EC5F50'" type="success" size="medium" class="tag_margin">
-                    <p v-if="!item_d.name && typeof(item_d.name) !== 'undefined' && item_d.name !== 0">
-                      <span>[配]</span> {{ item_d.name }}
-                    </p>
+                    <span>[配]</span> {{ !item_d.name && typeof(item_d.name) !== 'undefined' && item_d.name !== 0 ? item_d.name : '暂无地址' }}
                   </van-tag>
                   <van-tag v-for=" item_w in item.warehouses " :key="item_w.name" round :color="item_w.matched ? '#49CB15' : '#EC5F50'" type="success" size="medium" class="tag_margin">
-                    <p v-if="!item_w.name && typeof(item_w.name) !== 'undefined' && item_w.name !== 0">
-                      <span>[仓]</span> {{ item_w.name }}
-                    </p>
+                    <span>[仓]</span> {{ !item_w.name && typeof(item_w.name) !== 'undefined' && item_w.name !== 0 ? item_w.name : '暂无地址' }}
                   </van-tag>
                   <!--装卸类型-->
                   <van-tag v-for=" item_h in item.handlingDifficultyDegrees " :key="item_h.name" round :color="item_h.matched ? '#49CB15' : '#EC5F50'" type="success" size="medium" class="tag_margin">
-                    <p v-if="!item_h.name && typeof(item_h.name) !== 'undefined' && item_h.name !== 0">
-                      {{ item_h.name }}
-                    </p>
+                    {{ item_h.name }}
                   </van-tag>
                   <!--时间-->
                   <van-tag v-for=" item_r in item.runningDurations " :key="item_r.name" round :color="item_r.matched ? '#49CB15' : '#EC5F50'" type="success" size="medium" class="tag_margin">
-                    <!-- {{ item_r.name }} -->
-                    <p v-if="!item_r.name && typeof(item_r.name) !== 'undefined' && item_r.name !== 0">
-                      {{ item_r.name }}
-                    </p>
+                    {{ item_r.name }}
                   </van-tag>
                 </div>
+                <!-- <div class="tagBox">
+                  <template v-for="key in keyList">
+                    <template v-if="Array.isArray(item[key.name]) && item[key.name].length > 0">
+                      <van-tag
+                        v-for="(value, index) in item[key.name]"
+                        :key="index"
+                        round
+                        size="medium"
+                        :color="value.matched ? '#49CB15' : '#EC5F50'"
+                        :class="value.matched | setClass('-bg tag_margin')"
+                      >
+                        {{ key.name === 'warehouses' ? '[仓] ' : ''
+                        }}{{ key.name === 'deliveryAreas' ? '[配] ' : ''
+                        }}{{ value.name }}
+                      </van-tag>
+                    </template>
+                  </template>
+                </div> -->
                 <div class="matchRate">
                   匹配度 <span>{{ item.suitability }}%</span>
                 </div>
@@ -154,6 +163,17 @@ export default {
     VoPages,
     SearchItemMatch
   },
+  filters: {
+    setClass(key, bg) {
+      return (key ? 'success' : 'danger') + (bg || '')
+    },
+    setType(key) {
+      return key ? 'checked' : 'warning'
+    },
+    isNull(val) {
+      return val || ''
+    }
+  },
   data() {
     return {
       listQuery: {
@@ -179,6 +199,32 @@ export default {
       actions: [
         { name: '产品介绍', color: '#3F8AF2' },
         { name: '推荐线路', color: '#3F8AF2' }
+      ],
+      keyList: [
+        {
+          name: 'driverCarType',
+          key: '所需车型'
+        },
+        {
+          name: 'cargoTypes',
+          key: '货物类型'
+        },
+        {
+          name: 'warehouses',
+          key: '到仓区域'
+        },
+        {
+          name: 'deliveryAreas',
+          key: '配送区域'
+        },
+        {
+          name: 'handlingDifficultyDegrees',
+          key: '装卸难度'
+        },
+        {
+          name: 'runningDurations',
+          key: '出车时段'
+        }
       ],
       loadedAll: false
     }
@@ -329,7 +375,6 @@ export default {
         loadingType: 'spinner',
         message: '加载中...'
       });
-      console.log('searchType', this.searchType)
       if (this.searchType) {
         helpMatch({
           'arrivalArea': this.listQuery.arrivalArea,
@@ -446,9 +491,7 @@ export default {
         background: #FFFFFF;
         // border: 1px solid #D9D9D9;
         border-radius: 5px;
-        border-radius: 5px;
         box-sizing: border-box;
-        overflow: hidden;
         margin-bottom: 16px;
         .lineListTop{
             background:#fff;
@@ -482,6 +525,7 @@ export default {
                 .nameBox{
                   padding:10px 10px 0 10px;
                   border:1px solid #EEEBEB;
+                  border-radius: 5px 5px 0 0;
                   border-bottom:none;
                 }
                 .top-tag {
@@ -635,6 +679,7 @@ export default {
         font-size: 14px;
         color: #9B9B9B;
         padding:0 10px;
+        border-radius: 0 0 5px 5px;
         box-sizing: border-box;
         border-left: 1px solid #EEEBEB;
         border-right: 1px solid #EEEBEB;
