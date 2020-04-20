@@ -119,9 +119,9 @@ export default {
                                   // 1是司机，2是线索
                                   const state = res.data.data.driverType;
                                   const driverId = res.data.data.driverId;
-                                  if (state === 1) {
+                                  if (Number(state) === 1) {
                                     that.$router.replace({ path: '/driverDetail', query: { driverId: driverId }})
-                                  } else if (state === 2) {
+                                  } else if (Number(state) === 2) {
                                     that.$router.replace({ path: '/cluedetail', query: { clueId: driverId }})
                                   } else {
                                     // 无法识别
