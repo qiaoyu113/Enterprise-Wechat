@@ -28,9 +28,11 @@
                     {{ item.driverCarType.name }}
                   </van-tag>
                   <!--货物类型-->
-                  <van-tag v-for=" item_c in item.cargoTypes " :key="item_c.name" round :color="item_c.matched ? '#49CB15' : '#EC5F50'" type="success" size="medium" class="tag_margin">
-                    {{ item_c.name }}
-                  </van-tag>
+                  <template v-for=" item_c in item.cargoTypes ">
+                    <van-tag v-if="item_c.name" :key="item_c.name" round :color="item_c.matched ? '#49CB15' : '#EC5F50'" type="success" size="medium" class="tag_margin">
+                      {{ item_c.name }}
+                    </van-tag>
+                  </template>
                   <!--区域类型-->
                   <van-tag v-for=" item_d in item.deliveryAreas " :key="item_d.name" round :color="item_d.matched ? '#49CB15' : '#EC5F50'" type="success" size="medium" class="tag_margin">
                     <span>[配]</span> {{ !item_d.name && typeof(item_d.name) !== 'undefined' && item_d.name !== 0 ? '暂无地址' : item_d.name }}
@@ -39,13 +41,17 @@
                     <span>[仓]</span> {{ !item_w.name && typeof(item_w.name) !== 'undefined' && item_w.name !== 0 ? '暂无地址' : item_w.name }}
                   </van-tag>
                   <!--装卸类型-->
-                  <van-tag v-for=" item_h in item.handlingDifficultyDegrees " :key="item_h.name" round :color="item_h.matched ? '#49CB15' : '#EC5F50'" type="success" size="medium" class="tag_margin">
-                    {{ item_h.name }}
-                  </van-tag>
+                  <template v-for=" item_h in item.handlingDifficultyDegrees ">
+                    <van-tag v-if="item_h.name" :key="item_h.name" round :color="item_h.matched ? '#49CB15' : '#EC5F50'" type="success" size="medium" class="tag_margin">
+                      {{ item_h.name }}
+                    </van-tag>
+                  </template>
                   <!--时间-->
-                  <van-tag v-for=" item_r in item.runningDurations " :key="item_r.name" round :color="item_r.matched ? '#49CB15' : '#EC5F50'" type="success" size="medium" class="tag_margin">
-                    {{ item_r.name }}
-                  </van-tag>
+                  <template v-for=" item_r in item.runningDurations ">
+                    <van-tag v-if="item_r.name" :key="item_r.name" round :color="item_r.matched ? '#49CB15' : '#EC5F50'" type="success" size="medium" class="tag_margin">
+                      {{ item_r.name }}
+                    </van-tag>
+                  </template>
                 </div>
                 <!-- <div class="tagBox">
                   <template v-for="key in keyList">
