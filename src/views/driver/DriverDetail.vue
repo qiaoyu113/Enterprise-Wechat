@@ -182,7 +182,7 @@
 <script>
 import { Tabbar, TabbarItem, Toast, Tab, Tabs, Cell, CellGroup, Button, ActionSheet, Tag } from 'vant'
 import { driverDetail, queryOrdersByDriverId, relatedLineInformation } from '@/api/user'
-import { judgingIntentionOfReceiving } from '@/api/driver'
+// import { judgingIntentionOfReceiving } from '@/api/driver'
 // import VoPages from 'vo-pages'
 import 'vo-pages/lib/vo-pages.css'
 // import wx from 'jWeixin';
