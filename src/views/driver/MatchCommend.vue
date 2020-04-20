@@ -9,104 +9,122 @@
         @pullingDown="pullingDown"
       >
         <div class="placeholder"></div>
-        <div v-for="item in list" :key="item.type" class="lineList" @click="goDetail(item.lineId, item.timeDiff, item.monthlyTransaction, item.driverId)">
-          <div class="lineListTop">
-            <div class="name">
-              <van-tag v-if="item.lineSaleName" class="top-tag" type="warning">
-                {{ item.lineSaleName }}
-              </van-tag>
-              <p>{{ item.lineName }} / {{ item.customerName }}</p>
-              <p class="address">
-                {{ item.warehouse }}
-              </p>
-              <div class="tagBox">
-                <!--车类型-->
-                <van-tag round :color="'#81CA2A'" type="success" size="medium" class="tag_margin">
-                  {{ item.carTypeName }}
-                </van-tag>
-                <!--货物类型-->
-                <van-tag v-for=" item_c in item.cargoTypes " :key="item_c.name" round :color="item_c.matched ? '#81CA2A' : '#E75E60'" type="success" size="medium" class="tag_margin">
-                  {{ item_c.name }}
-                </van-tag>
-                <!--区域类型-->
-                <van-tag v-for=" item_w in item.deliveryAreas " :key="item_w.name" round :color="item_w.matched ? '#81CA2A' : '#E75E60'" type="success" size="medium" class="tag_margin">
-                  {{ item_w.name }}
-                </van-tag>
-                <!--装卸类型-->
-                <van-tag v-for=" item_h in item.handlingDifficultyDegrees " :key="item_h.name" round :color="item_h.matched ? '#81CA2A' : '#E75E60'" type="success" size="medium" class="tag_margin">
-                  {{ item_h.name }}
-                </van-tag>
-                <!--时间-->
-                <van-tag v-for=" item_r in item.runningDurations " :key="item_r.name" round :color="item_r.matched ? '#81CA2A' : '#E75E60'" type="success" size="medium" class="tag_margin">
-                  {{ item_r.name }}
-                </van-tag>
-              </div>
-              <div class="matchRate">
-                匹配度 <span>{{ item.suitability }}%</span>
-              </div>
-              <div class="needCarBox">
-                <div class="needCarList">
-                  <div class="top">
-                    所需车型
-                  </div>
-                  <div class="bottom">
-                    <van-icon v-if="item.driverCarType.matched" name="checked" size="26" color="#70C740" />
-                    <van-icon v-else name="clear" size="26" color="#DC6857" />
-                  </div>
+        <div class="lineBox">
+          <div v-for="item in list" :key="item.type" class="lineList" @click="goDetail(item.lineId, item.timeDiff, item.monthlyTransaction, item.driverId)">
+            <div class="lineListTop">
+              <div class="name">
+                <div class="nameBox">
+                  <van-tag v-if="item.lineSaleName" class="top-tag" type="warning">
+                    {{ item.lineSaleName }}
+                  </van-tag>
+                  <p>{{ item.lineName }} / {{ item.customerName }}</p>
+                  <p class="address">
+                    {{ item.warehouse }}
+                  </p>
                 </div>
-                <div class="needCarList">
-                  <div class="top">
-                    货物类型
-                  </div>
-                  <div class="bottom">
-                    <van-icon v-if="forEachArr(item.cargoTypes)" name="checked" size="26" color="#70C740" />
-                    <van-icon v-else name="clear" size="26" color="#DC6857" />
-                  </div>
+                <div class="tagBox">
+                  <!--车类型-->
+                  <van-tag v-if="item.carTypeName" round :color="'#49CB15'" type="success" size="medium" class="tag_margin">
+                    {{ item.carTypeName }}
+                  </van-tag>
+                  <!--货物类型-->
+                  <van-tag v-for=" item_c in item.cargoTypes " :key="item_c.name" round :color="item_c.matched ? '#49CB15' : '#EC5F50'" type="success" size="medium" class="tag_margin">
+                    {{ item_c.name }}
+                  </van-tag>
+                  <!--区域类型-->
+                  <van-tag v-for=" item_d in item.deliveryAreas " :key="item_d.name" round :color="item_d.matched ? '#49CB15' : '#EC5F50'" type="success" size="medium" class="tag_margin">
+                    <p v-if="!item_d.name && typeof(item_d.name) !== 'undefined' && item_d.name !== 0">
+                      <span>[配]</span> {{ item_d.name }}
+                    </p>
+                  </van-tag>
+                  <van-tag v-for=" item_w in item.warehouses " :key="item_w.name" round :color="item_w.matched ? '#49CB15' : '#EC5F50'" type="success" size="medium" class="tag_margin">
+                    <p v-if="!item_w.name && typeof(item_w.name) !== 'undefined' && item_w.name !== 0">
+                      <span>[仓]</span> {{ item_w.name }}
+                    </p>
+                  </van-tag>
+                  <!--装卸类型-->
+                  <van-tag v-for=" item_h in item.handlingDifficultyDegrees " :key="item_h.name" round :color="item_h.matched ? '#49CB15' : '#EC5F50'" type="success" size="medium" class="tag_margin">
+                    <p v-if="!item_h.name && typeof(item_h.name) !== 'undefined' && item_h.name !== 0">
+                      {{ item_h.name }}
+                    </p>
+                  </van-tag>
+                  <!--时间-->
+                  <van-tag v-for=" item_r in item.runningDurations " :key="item_r.name" round :color="item_r.matched ? '#49CB15' : '#EC5F50'" type="success" size="medium" class="tag_margin">
+                    <!-- {{ item_r.name }} -->
+                    <p v-if="!item_r.name && typeof(item_r.name) !== 'undefined' && item_r.name !== 0">
+                      {{ item_r.name }}
+                    </p>
+                  </van-tag>
                 </div>
-                <div class="needCarList">
-                  <div class="top">
-                    到仓区域
-                  </div>
-                  <div class="bottom">
-                    <van-icon v-if="forEachArr(item.warehouses)" name="checked" size="28" color="#70C740" />
-                    <van-icon v-else name="clear" size="28" color="#DC6857" />
-                  </div>
+                <div class="matchRate">
+                  匹配度 <span>{{ item.suitability }}%</span>
                 </div>
-                <div class="needCarList">
-                  <div class="top">
-                    配送区域
+                <div class="needCarBox">
+                  <div class="needCarList">
+                    <div class="top">
+                      所需车型
+                    </div>
+                    <div class="bottom">
+                      <van-icon v-if="item.driverCarType.matched" name="checked" size="26" color="#70C740" />
+                      <van-icon v-else name="clear" size="26" color="#DC6857" />
+                    </div>
                   </div>
-                  <div class="bottom">
-                    <van-icon v-if="forEachArr(item.deliveryAreas)" name="checked" size="26" color="#70C740" />
-                    <van-icon v-else name="clear" size="26" color="#DC6857" />
+                  <div class="needCarList">
+                    <div class="top">
+                      货物类型
+                    </div>
+                    <div class="bottom">
+                      <van-icon v-if="forEachArr(item.cargoTypes)" name="checked" size="26" color="#70C740" />
+                      <van-icon v-else name="clear" size="26" color="#DC6857" />
+                    </div>
                   </div>
-                </div>
-                <div class="needCarList">
-                  <div class="top">
-                    装卸难度
+                  <div class="needCarList">
+                    <div class="top">
+                      到仓区域
+                    </div>
+                    <div class="bottom">
+                      <van-icon v-if="forEachArr(item.warehouses)" name="checked" size="28" color="#70C740" />
+                      <van-icon v-else name="clear" size="28" color="#DC6857" />
+                    </div>
                   </div>
-                  <div class="bottom">
-                    <van-icon v-if="forEachArr(item.handlingDifficultyDegrees)" name="checked" size="26" color="#70C740" />
-                    <van-icon v-else name="clear" size="26" color="#DC6857" />
+                  <div class="needCarList">
+                    <div class="top">
+                      配送区域
+                    </div>
+                    <div class="bottom">
+                      <van-icon v-if="forEachArr(item.deliveryAreas)" name="checked" size="26" color="#70C740" />
+                      <van-icon v-else name="clear" size="26" color="#DC6857" />
+                    </div>
                   </div>
-                </div>
-                <div class="needCarList">
-                  <div class="top">
-                    出车时段
+                  <div class="needCarList">
+                    <div class="top">
+                      装卸难度
+                    </div>
+                    <div class="bottom">
+                      <van-icon v-if="forEachArr(item.handlingDifficultyDegrees)" name="checked" size="26" color="#70C740" />
+                      <van-icon v-else name="clear" size="26" color="#DC6857" />
+                    </div>
                   </div>
-                  <div class="bottom">
-                    <van-icon v-if="forEachArr(item.runningDurations)" name="checked" size="26" color="#70C740" />
-                    <van-icon v-else name="clear" size="26" color="#DC6857" />
+                  <div class="needCarList">
+                    <div class="top">
+                      出车时段
+                    </div>
+                    <div class="bottom">
+                      <van-icon v-if="forEachArr(item.runningDurations)" name="checked" size="26" color="#70C740" />
+                      <van-icon v-else name="clear" size="26" color="#DC6857" />
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
-          <div v-if="item.remark" class="list-note">
-            {{ item.remark }}
-          </div>
-          <div class="lineListBottom">
-            <van-cell title="详情" is-link />
+            <div v-if="item.remark" class="list-note">
+              {{ item.remark }}
+            </div>
+            <div class="lineListBottom">
+              <div class="lineListBottom_box">
+                <van-cell title="详情" is-link />
+              </div>
+            </div>
           </div>
         </div>
       </vo-pages>
@@ -118,7 +136,7 @@ import { Tabbar, TabbarItem, Toast, Tab, Tabs, Cell, CellGroup, Tag, Icon } from
 import { helpMatchIntelligent, helpMatch } from '@/api/line'
 import { getCorpSignature, getAgentSignature } from '@/api/user'
 import VoPages from 'vo-pages'
-import SearchItemMatch from 'components/SearchItemMatch'
+import SearchItemMatch from 'components/SearchItemMatchNew'
 import 'vo-pages/lib/vo-pages.css'
 const wx = window.wx;
 export default {
@@ -177,6 +195,7 @@ export default {
     // } else {
     //   this.getUserConfig(false, externalUserIdOld);
     this.driverId = this.$route.query.driverId;
+    console.log(this.driverId)
     this.getList()
     // }
   },
@@ -399,15 +418,18 @@ export default {
     height: 100%;
     width: 100%;
     .list-note {
-      padding: 8px 0.42667rem;
+      padding: 8px 10px;
       font-size: 12px;
       color: #b2b2b2;
       line-height: 18px;
       text-indent: 2em;
       background: #fff;
+      border-left: 1px solid #EEEBEB;
+      border-right: 1px solid #EEEBEB;
     }
     .tag_margin{
-      margin: 2px 6px 6px 0;
+      // margin: 2px 6px 6px 0;
+      margin: 3px 4px 3px 0;
     }
     .list-wrap{
         height: 100%;
@@ -415,15 +437,22 @@ export default {
         // padding:0.5rem 0.3rem;
         // box-sizing: border-box;
     }
+    .lineBox{
+        padding: 50px 18px;
+        box-sizing: border-box;
+    }
     .lineList{
         width:100%;
-        border-radius: 1.2rem;
-        padding: 0.3rem;
+        background: #FFFFFF;
+        // border: 1px solid #D9D9D9;
+        border-radius: 5px;
+        border-radius: 5px;
         box-sizing: border-box;
         overflow: hidden;
+        margin-bottom: 16px;
         .lineListTop{
             background:#fff;
-            padding:0.2rem 0;
+            // padding:0.2rem 0;
             box-sizing: border-box;
             position: relative;
             overflow: hidden;
@@ -446,11 +475,22 @@ export default {
             .name{
                 width:100%;
                 font-weight: 500;
-                padding:0.2rem 0.42667rem 0;
-                box-sizing: border-box;
+                // padding: 10px;
+                // box-sizing: border-box;
                 font-size: 17px;
                 color: #000000;
+                .nameBox{
+                  padding:10px 10px 0 10px;
+                  border:1px solid #EEEBEB;
+                  border-bottom:none;
+                }
                 .top-tag {
+                  box-sizing: border-box;
+                  background: #F09654;
+                  border-radius: 5px;
+                  border-radius: 5px;
+                  font-size: 13px;
+                  color: #FFFFFF;
                   position: absolute;
                   right: 0;
                   top: 0;
@@ -461,23 +501,27 @@ export default {
                     color: #000000;
                     padding: 0.16rem 0;
                     box-sizing: border-box;
-                    border-bottom: 1px solid #EEEBEB;
+                    border-bottom: 1px solid #ECECEC;
                 }
             }
             .tagBox{
                 width: 100%;
-                padding:0.26rem 0;
+                padding:3px 10px;
                 box-sizing: border-box;
                 border-bottom: 1px solid #EEEBEB;
+                border-left: 1px solid #EEEBEB;
+                border-right: 1px solid #EEEBEB;
             }
             .matchRate{
                 width: 100%;
-                padding:0.26rem 0;
+                padding:0.26rem 15px;
                 box-sizing: border-box;
                 font-size: 17px;
                 color: #000000;
                 font-weight: 400;
                 border-bottom: 1px solid #EEEBEB;
+                border-left: 1px solid #EEEBEB;
+                border-right: 1px solid #EEEBEB;
                 span{
                     font-size: 20px;
                     color: #2F7DCD;
@@ -488,9 +532,13 @@ export default {
             .needCarBox{
                 width:100%;
                 display: flex;
+                padding: 0 10px;
+                border-left: 1px solid #EEEBEB;
+                border-right: 1px solid #EEEBEB;
+                box-sizing: border-box;
                 .needCarList{
                     flex: 1;
-                    padding: 0.26rem 0 0;
+                    padding: 11px 0 0;
                     box-sizing: border-box;
                     .top{
                         width: 100%;
@@ -500,7 +548,7 @@ export default {
                     }
                     .bottom{
                         width: 100%;
-                        padding: 0.26rem 0 0 0;
+                        padding: 4px 0 0 0;
                         box-sizing: border-box;
                         text-align: center;
                     }
@@ -581,12 +629,34 @@ export default {
     }
     .placeholder{
       width:100%;
-      height:1.6rem;
     }
     .lineListBottom{
-        border-top: 1px solid #EEEBEB;
+        // border-top: 1px solid #EEEBEB;
         font-size: 14px;
         color: #9B9B9B;
+        padding:0 10px;
+        box-sizing: border-box;
+        border-left: 1px solid #EEEBEB;
+        border-right: 1px solid #EEEBEB;
+        border-bottom: 1px solid #EEEBEB;
+        .lineListBottom_box{
+          border-top: 1px solid #EEEBEB;
+        }
+        .van-cell{
+          padding: 0;
+          height:27px;
+          line-height: 27px;
+          box-sizing: border-box;
+          font-size: 14px;
+          color: #9B9B9B;
+          .van-cell__title{
+            font-size: 14px;
+            color: #9B9B9B;
+          }
+        }
+        .van-cell__right-icon{
+          color:#C7C7CC;
+        }
     }
 }
 </style>
