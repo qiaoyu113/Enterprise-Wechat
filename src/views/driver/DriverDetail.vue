@@ -362,7 +362,7 @@ export default {
       }
       .tage_type{
         overflow: hidden;
-        padding:14px 20px;
+        padding:14px 20px 8px;
         box-sizing: border-box;
         border-top: 1px solid #ebedf0;
         border-bottom: 1px solid #ebedf0;
@@ -372,6 +372,7 @@ export default {
           font-size: 13px;
           color: #FFFFFF;
           margin-right: 10px;
+          margin-bottom: 6px;
         }
         // .tag{
           // margin: 2px 6px 8px 0;
