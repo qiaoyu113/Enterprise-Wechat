@@ -79,7 +79,7 @@
             </div>
           </div>
           <div v-if="item.remark" class="list-note">
-            {{ item.remark }}
+            <p>{{ item.remark }}</p>
           </div>
           <van-row
             v-if="item.followInfo"

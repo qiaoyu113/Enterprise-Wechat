@@ -57,7 +57,7 @@
         </div>
       </div>
       <div v-if="params.remark" class="list-note">
-        {{ params.remark }}
+        <p>{{ params.remark }}</p>
       </div>
     </div>
     <div v-if="list.length > 0" class="speed">
@@ -266,7 +266,7 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 
 $success: #81CA2A;
 $danger: #E75E60;
@@ -511,15 +511,12 @@ $danger: #E75E60;
     border-radius: 0;
     // background: #2F7DCD;
   }
-
-}
-</style>
-<style lang="scss">
-.driver-dialog .van-dialog__content{
-  padding: 0 10px;
-}
-.driver-dialog .van-field__label{
-  width: auto;
-  margin-right: 20px;
+  .driver-dialog .van-dialog__content{
+    padding: 0 10px;
+  }
+  .driver-dialog .van-field__label{
+    width: auto;
+    margin-right: 20px;
+  }
 }
 </style>
