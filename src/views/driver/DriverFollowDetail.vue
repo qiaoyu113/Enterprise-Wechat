@@ -332,6 +332,11 @@ $danger: #E75E60;
           position: absolute;
           right: 0;
           top: 0;
+          height: 20px;
+          line-height: 20px;
+          font-size: 13px;
+          color: #FFFFFF;
+          border-radius: 5px;
         }
         .line-tit{
           font-size: 16px;
