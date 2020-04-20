@@ -6,13 +6,15 @@
           <van-tag v-if="params.lineSaleName" class="top-tag" type="warning">
             {{ params.lineSaleName }}
           </van-tag>
-          <p>{{ params.lineName }} / {{ params.customerName }}</p>
+          <p class="line-tit">
+            {{ params.lineName }} / {{ params.customerName }}
+          </p>
           <p class="address">
             {{ params.warehouse }}
           </p>
           <div class="tagBox">
             <template v-for="key in keyList">
-              <template v-if="Array.isArray(params[key.name])">
+              <template v-if="Array.isArray(params[key.name]) && params[key.name].length > 0">
                 <van-tag
                   v-for="(value, index) in params[key.name]"
                   :key="index"
@@ -32,7 +34,7 @@
           </div>
           <div class="needCarBox">
             <template v-for="key in keyList">
-              <template v-if="Array.isArray(params[key.name])">
+              <template v-if="Array.isArray(params[key.name]) && params[key.name].length > 0">
                 <div :key="key.name" class="needCarList">
                   <div class="top">
                     {{ key.key }}
@@ -45,7 +47,7 @@
                       :class="
                         params[key.name].some((val) => val.matched) | setClass
                       "
-                      size="26"
+                      size="20"
                     />
                   </div>
                 </div>
@@ -55,7 +57,7 @@
         </div>
       </div>
       <div v-if="params.remark" class="list-note">
-        {{ params.remark }}
+        <p>{{ params.remark }}</p>
       </div>
     </div>
     <div v-if="list.length > 0" class="speed">
@@ -92,7 +94,13 @@
       cancel-text="取消"
       @select="onSelect"
     />
-    <van-dialog v-model="show" :title="dialogForm.name" :before-close="submitSave" show-cancel-button>
+    <van-dialog
+      v-model="show"
+      class-name="driver-dialog"
+      :title="dialogForm.name"
+      :before-close="submitSave"
+      show-cancel-button
+    >
       <van-field
         v-model="saveForm.remark"
         required
@@ -100,7 +108,7 @@
         autosize
         label="备注"
         type="textarea"
-        maxlength="20"
+        maxlength="100"
         placeholder="请输入备注"
         show-word-limit
       />
@@ -269,7 +277,7 @@ $danger: #E75E60;
     background-color: $success;
     border-color: $success;
   }
-  background-color: #f5f5f5;
+  background-color: #E8ECEE;
   box-sizing: border-box;
   // 公用
   .success{
@@ -297,12 +305,15 @@ $danger: #E75E60;
       margin-block-end: 0;
     }
     .tag_margin{
-      margin: 2px 6px 6px 0;
+      margin: 0 10px 10px 0;
+      padding: 0 10px;
+      height: 18px;
+      line-height: 18px;
     }
     .lineListTop {
       background: #fff;
-      padding: 0.2rem 0;
       box-sizing: border-box;
+      // border-radius: 10px 10px 0 0;
       .info {
         color: #333;
         font-size: 14px;
@@ -313,35 +324,47 @@ $danger: #E75E60;
         position: relative;
         width: 100%;
         font-weight: 500;
-        padding: 0.2rem 0.42667rem 0;
+        padding: 18px 17px 0;
         box-sizing: border-box;
         font-size: 17px;
         color: #000000;
         .top-tag {
           position: absolute;
           right: 0;
-          top: -0.2rem;
+          top: 0;
+          height: 20px;
+          line-height: 20px;
+          font-size: 13px;
+          color: #FFFFFF;
+          border-radius: 5px;
+        }
+        .line-tit{
+          font-size: 16px;
+          color: #000;
+          line-height: 24px;
         }
         .address {
           font-weight: 400;
           font-size: 14px;
+          line-height:22px;
           color: #000000;
-          padding: 0.16rem 0;
+          padding: 4px 0;
           box-sizing: border-box;
           border-bottom: 1px solid #eeebeb;
         }
       }
       .tagBox {
         width: 100%;
-        padding: 0.26rem 0;
+        padding-top: 10px;
         box-sizing: border-box;
+        font-size: 0;
         border-bottom: 1px solid #eeebeb;
       }
       .matchRate {
         width: 100%;
         padding: 0.26rem 0;
         box-sizing: border-box;
-        font-size: 17px;
+        font-size: 16px;
         color: #000000;
         font-weight: 400;
         border-bottom: 1px solid #eeebeb;
@@ -357,19 +380,26 @@ $danger: #E75E60;
         display: flex;
         .needCarList {
           flex: 1;
-          padding: 0.26rem 0 0;
+          padding-top: 10px;
           box-sizing: border-box;
           .top {
+            margin-bottom: 8px;
             width: 100%;
             text-align: center;
             font-size: 11px;
+            line-height:1;
             color: #b2b2b2;
           }
           .bottom {
+            padding-bottom: 6px;
             width: 100%;
-            padding: 0.26rem 0 0 0;
             box-sizing: border-box;
             text-align: center;
+            line-height: 1;
+            font-size: 0;
+            .van-icon{
+              font-size: 20px
+            }
           }
         }
       }
@@ -379,14 +409,28 @@ $danger: #E75E60;
     border-top: 1px solid #EEEBEB;
     font-size: 14px;
     color: #9B9B9B;
+    border-radius: 0 0 10px 10px;
+    overflow: hidden;
+    .van-cell{
+      padding: 0 7px 0 19px;
+      height: 40px;
+      line-height: 40px;
+      .van-icon{
+        line-height: 40px
+      }
+    }
   }
   .list-note {
-    padding: 8px 0.42667rem;
-    font-size: 12px;
-    color: #b2b2b2;
-    line-height: 18px;
-    text-indent: 2em;
+    padding: 0 17px;
     background: #fff;
+    p{
+      padding: 12px 0;
+      font-size: 12px;
+      color: rgba(0,0,0,0.40);
+      line-height: 18px;
+      text-indent: 2em;
+      border-top: 1px solid #eeebeb;
+    }
   }
   .list-speed {
     padding: 0.2rem 0.42667rem;
@@ -441,6 +485,7 @@ $danger: #E75E60;
       }
       .list-speed-rt{
         margin-left: 15px;
+        flex: 1;
         .list-speed-top{
           font-size: 16px;
           color: #000;
@@ -467,5 +512,16 @@ $danger: #E75E60;
     border-radius: 0;
     // background: #2F7DCD;
   }
+
+}
+</style>
+<style lang="scss">
+.driver-dialog .van-dialog__content{
+  padding: 0 10px;
+}
+.driver-dialog .van-field__label{
+  width: auto;
+  margin-right: 20px;
+  flex: none;
 }
 </style>
