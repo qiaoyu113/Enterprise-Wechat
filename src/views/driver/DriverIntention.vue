@@ -80,7 +80,7 @@
         </div>
       </div>
     </div>
-    <van-button class="save-btn" type="info" round block color="#2F7DCD" @click="btnSubmit">
+    <van-button class="save-btn" type="info" block color="#2F7DCD" @click="btnSubmit">
       保存
     </van-button>
   </div>
@@ -137,7 +137,7 @@ export default {
         let arr = res.data.data;
         that.areaArray = arr;
       }).catch(err => {
-        Toast.fail(err.data.errorMsg);
+        Toast.fail(err);
       });
       this.getJudging();
     },
@@ -150,12 +150,11 @@ export default {
         let arr = res.data.data;
         that[array] = arr;
       }).catch(err => {
-        Toast.fail(err.data.errorMsg);
+        Toast.fail(err);
       });
     },
     getJudging() {
       this.driverId = this.$route.query.driverId;
-      // this.driverId = 'BJS202003101000';
       Toast.loading({
         duration: 0, // 持续展示 toast
         forbidClick: true, // 禁用背景点击
@@ -249,7 +248,7 @@ export default {
         }
       }).catch(err => {
         Toast.clear();
-        Toast.fail(err.data.errorMsg);
+        Toast.fail(err);
       })
     },
     judgingDriver() {
@@ -308,7 +307,7 @@ export default {
           })
         }
       }).catch(err => {
-        Toast.fail(err.data.errorMsg);
+        Toast.fail(err);
       })
     }
   }
@@ -317,19 +316,21 @@ export default {
 <style lang="scss">
 .driverIntention {
   width: 100%;
-  padding-bottom: 2.5rem;
+  padding-bottom: 1.1rem;
   box-sizing: border-box;
   .van-cell-group__title{
     background-color: #f5f5f5;
     border-top: 1px solid #D9D9D9;
     border-bottom: 1px solid #D9D9D9;
-    padding: .3rem 0 .2rem .3rem;
+    padding: 3px 0 5px 10px;
     box-sizing: border-box;
+    font-size: 12px;
+    color: #B2B2B2;
   }
   .types_box {
     width: 100%;
-    min-height: 2rem;
-    padding:.2rem .4rem;
+    min-height: 2.15rem;
+    padding:.36rem .52rem;
     box-sizing: border-box;
     display: flex;
     // justify-content: space-between;
@@ -337,17 +338,18 @@ export default {
     flex-wrap: wrap;
     .tag_margin{
       // margin: 2px 6px 6px 0;
-      margin: 2px 12px 12px 0;
-      height: 15px;
-      min-width: 1.5rem;
+      margin: 2px 11px 12px 0;
+      height: 12px;
+      min-width: 1.4rem;
     }
     .van-tag{
       justify-content: center;
+      font-size: 13px;
     }
   }
   .loadingStatus{
      display: flex;
-     min-height: 2rem;
+     min-height: 2.18rem;
      justify-content: center;
      align-items: center;
   }
@@ -361,12 +363,10 @@ export default {
     left: 0;
     right: 0;
     width: 100%;
-    // height: 46px;
-    // line-height: 46px;
+    height: 1.1rem;
+    line-height: 1.1rem;
     color: #fff;
     font-size: 16px;
-    width:90%;
-    margin: 1rem auto;
   }
 }
 </style>
