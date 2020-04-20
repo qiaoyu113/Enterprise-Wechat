@@ -460,6 +460,7 @@ $danger: #E75E60;
     }
     .list-speed-rt {
       margin-left: 15px;
+      flex: 1;
       .list-speed-top {
         font-size: 16px;
         color: #000;
