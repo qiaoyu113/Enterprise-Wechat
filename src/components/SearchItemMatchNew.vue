@@ -439,7 +439,7 @@ export default {
       color: #000000;
       background: #FAFAFA;
       box-shadow: 0 0 0 0 #D4D4D4;
-      border-bottom: 1px solid #DFDFDF;
+      border-bottom: 1px solid #D4D4D4;
     }
     .searchBtn{
         width:88%;

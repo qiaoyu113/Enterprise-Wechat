@@ -33,10 +33,10 @@
                   </van-tag>
                   <!--区域类型-->
                   <van-tag v-for=" item_d in item.deliveryAreas " :key="item_d.name" round :color="item_d.matched ? '#49CB15' : '#EC5F50'" type="success" size="medium" class="tag_margin">
-                    <span>[配]</span> {{ !item_d.name && typeof(item_d.name) !== 'undefined' && item_d.name !== 0 ? item_d.name : '暂无地址' }}
+                    <span>[配]</span> {{ !item_d.name && typeof(item_d.name) !== 'undefined' && item_d.name !== 0 ? '暂无地址' : item_d.name }}
                   </van-tag>
                   <van-tag v-for=" item_w in item.warehouses " :key="item_w.name" round :color="item_w.matched ? '#49CB15' : '#EC5F50'" type="success" size="medium" class="tag_margin">
-                    <span>[仓]</span> {{ !item_w.name && typeof(item_w.name) !== 'undefined' && item_w.name !== 0 ? item_w.name : '暂无地址' }}
+                    <span>[仓]</span> {{ !item_w.name && typeof(item_w.name) !== 'undefined' && item_w.name !== 0 ? '暂无地址' : item_w.name }}
                   </van-tag>
                   <!--装卸类型-->
                   <van-tag v-for=" item_h in item.handlingDifficultyDegrees " :key="item_h.name" round :color="item_h.matched ? '#49CB15' : '#EC5F50'" type="success" size="medium" class="tag_margin">
@@ -127,7 +127,9 @@
               </div>
             </div>
             <div v-if="item.remark" class="list-note">
-              {{ item.remark }}
+              <div class="list-note_mize">
+                {{ item.remark }}
+              </div>
             </div>
             <div class="lineListBottom">
               <div class="lineListBottom_box">
@@ -463,14 +465,19 @@ export default {
     height: 100%;
     width: 100%;
     .list-note {
-      padding: 8px 10px;
+      padding: 0 10px;
       font-size: 12px;
       color: #b2b2b2;
-      line-height: 18px;
       text-indent: 2em;
       background: #fff;
       border-left: 1px solid #EEEBEB;
       border-right: 1px solid #EEEBEB;
+      .list-note_mize{
+        padding: 8px 0;
+        box-sizing: border-box;
+        line-height: 18px;
+        border-top: 1px solid #EEEBEB;
+      }
     }
     .tag_margin{
       // margin: 2px 6px 6px 0;
