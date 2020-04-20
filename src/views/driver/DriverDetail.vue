@@ -167,7 +167,7 @@
 <script>
 import { Tabbar, TabbarItem, Toast, Tab, Tabs, Cell, CellGroup, Button, ActionSheet, Tag } from 'vant'
 import { driverDetail, queryOrdersByDriverId, relatedLineInformation } from '@/api/user'
-// import { judgingIntentionOfReceiving } from '@/api/driver'
+import { judgingIntentionOfReceiving } from '@/api/driver'
 // import VoPages from 'vo-pages'
 import 'vo-pages/lib/vo-pages.css'
 // import wx from 'jWeixin';
@@ -244,17 +244,17 @@ export default {
           this.lineList = res.data.data.lineTenderInformationVOS;
         }
       })
-      // judgingIntentionOfReceiving({
-      //   driverId: driverId
-      // }).then((res) => {
-      //   if (res.data.success) {
-      //     this.matchModule = res.data.data.flag;
-      //     if (this.matchModule) {
-      //       this.matchDetail = res.data.data
-      //       console.log(this.matchDetail)
-      //     }
-      //   }
-      // })
+      judgingIntentionOfReceiving({
+        driverId: driverId
+      }).then((res) => {
+        if (res.data.success) {
+          this.matchModule = res.data.data.flag;
+          if (this.matchModule) {
+            this.matchDetail = res.data.data
+            console.log(this.matchDetail)
+          }
+        }
+      })
     },
     buryPoint(name, title) {
       this.GLOBAL.buryPointFunction('customer_tab', '客户信息页-tab点击', {
