@@ -17,6 +17,7 @@ if (window.location.host !== 'firmiana-wechat.yunniao.cn') {
 // create an axios instance
 const service = axios.create({
   baseURL: url, // url = base url + request url
+  // baseURL: '', // url = base url + request url
   withCredentials: true, // send cookies when cross-domain requests
   timeout: 5000 // request timeout
 })
