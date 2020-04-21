@@ -186,6 +186,7 @@ import { judgingIntentionOfReceiving } from '@/api/driver'
 // import VoPages from 'vo-pages'
 import 'vo-pages/lib/vo-pages.css'
 // import wx from 'jWeixin';
+var startTime
 export default {
   name: 'Clue',
   components: {
@@ -213,6 +214,7 @@ export default {
       driverId: '',
       driverType: '1',
       active: 0,
+      loadTimeNum: 0,
       detail: '',
       show: false,
       matchModule: false,
@@ -223,20 +225,56 @@ export default {
       ]
     }
   },
+  beforeRouteLeave(to, from, next) {
+    let that = this;
+    let eventLevelVariables = {
+      duration_look: that.loadTimeNum || '0'
+    }
+    clearInterval(startTime);
+    that.GLOBAL.buryPointFunction('customer_visit', '客户信息页面访问', eventLevelVariables)
+    next(true);
+  },
+  created() {
+  },
   mounted() {
     let driverId = this.$route.query.driverId;
     this.driverId = driverId;
     this.active = Number(localStorage.getItem('active'))
+    this.loadTime()
     if (this.active) {
       localStorage.removeItem('active')
     }
     this.getDetail(driverId)
   },
   methods: {
+    double(mat) {
+      return mat < 10 ? '0' + mat : mat;
+    },
+    loadTime() {
+      let date = 0;
+      let hour = 0;
+      let minute = 0;
+      let second = 0;
+      let that = this;
+      startTime = setInterval(function() {
+        second++;
+        if (second === 60) {
+          minute += 1;
+          second = 0;
+        }
+        if (minute === 60) {
+          hour += 1;
+          minute = 0;
+        }
+        if (hour === 24) {
+          date += 1;
+          hour = 0;
+        }
+        let days = that.double(date) + '天：' + that.double(hour) + ':' + that.double(minute) + ':' + that.double(second);
+        that.loadTimeNum = days
+      }, 1000)
+    },
     getDetail(driverId) {
-      this.GLOBAL.buryPointFunction('customer_visit', '客户信息页面访问', {
-        value: '客户信息页面访问'
-      })
       driverDetail({
         driverId: driverId
       }).then((res) => {
@@ -278,12 +316,14 @@ export default {
     buryPoint(name, title) {
       this.active = Number(name);
       localStorage.setItem('active', name)
-      this.GLOBAL.buryPointFunction('customer_tab', '客户信息页-tab点击', {
-        value: title
-      })
+      let eventLevelVariables = {
+        tab: title || ''
+      }
+      this.GLOBAL.buryPointFunction('customer_tab', '客户信息页-tab点击', eventLevelVariables)
     },
     goRouter(type) {
       let that = this;
+      localStorage.setItem('active', 3)
       if (type === 1) {
         that.$destroy(true)
         that.$router.push({ path: '/driverintention', query: { driverId: that.driverId }})// 撮合跟进
@@ -295,9 +335,6 @@ export default {
     },
     check() {
       this.show = true;
-      this.GLOBAL.buryPointFunction('customer_options', '客户详情操作按钮点击', {
-        value: '客户详情操作按钮点击'
-      })
     //   judgingIntentionOfReceiving({
     //     driverId: 201910231017
     //   }).then((res) => {
@@ -311,6 +348,10 @@ export default {
       // 默认情况下点击选项时不会自动收起
       // 可以通过 close-on-click-action 属性开启自动收起
       this.show = false;
+      let eventLevelVariables = {
+        option: item.name || ''
+      }
+      this.GLOBAL.buryPointFunction('customer_options', '客户详情操作按钮点击', eventLevelVariables)
       Toast(item.name);
       if (item.name === '产品介绍') {
         this.$router.push({ path: '/productinfo' })

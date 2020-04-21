@@ -308,7 +308,7 @@ export default {
       let data = {
         findVal: this.value,
         lineVal: this.lineValCode,
-        diliverVal: this.diliverVal,
+        diliverVal: this.diliverValCode,
         carVal: this.carValCode,
         cargoVal: this.cargoValCode,
         difficultyVal: this.difficultyValCode,

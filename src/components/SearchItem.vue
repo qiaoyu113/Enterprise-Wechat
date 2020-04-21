@@ -154,10 +154,14 @@ export default {
         carVal: this.carValCode,
         cargoVal: this.cargoValCode
       }
+      let eventLevelVariables = {
+        or_input: data.findVal ? data.findVal : '',
+        line_type: data.lineVal ? data.lineVal : '',
+        vehicle_type: data.carVal ? data.carVal : '',
+        goods_type: data.cargoVal ? data.cargoVal : ''
+      }
       this.$emit('searchData', data)
-      this.GLOBAL.buryPointFunction('search_complete', '线路搜索完成搜索', {
-        value: '线路搜索完成搜索'
-      })
+      this.GLOBAL.buryPointFunction('search_complete', '线路搜索完成搜索', eventLevelVariables)
     },
     remove() {
       this.value = ''
