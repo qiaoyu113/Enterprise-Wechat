@@ -17,7 +17,9 @@
                   <van-tag class="top-tag" type="warning">
                     {{ item.lineSaleName }}
                   </van-tag>
-                  <p>{{ item.lineName }} / {{ item.customerName }}</p>
+                  <p style="padding-right: 40px;box-sizing: border-box;">
+                    {{ item.lineName }} / {{ item.customerName }}
+                  </p>
                   <p class="address">
                     {{ item.warehouse }}
                   </p>
