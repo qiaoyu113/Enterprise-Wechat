@@ -3,9 +3,9 @@
     <div class="list-wrap">
       <van-tabs v-model="tab_state" color="#3986CB" sticky @click="buryPoint">
         <van-tab title="基本">
-          <h2 class="van-doc-demo-block__title">
+          <!-- <h2 class="van-doc-demo-block__title">
             基本信息
-          </h2>
+          </h2> -->
           <van-cell-group>
             <van-cell title="货主" :value="detail.customerName | DataIsNull" />
             <van-cell title="城市" :value="detail.cityName | DataIsNull" />
@@ -45,9 +45,9 @@
           </p>
         </van-tab>
         <van-tab title="配送">
-          <h2 class="van-doc-demo-block__title">
+          <!-- <h2 class="van-doc-demo-block__title">
             配送信息
-          </h2>
+          </h2> -->
           <van-cell-group>
             <van-cell title="预计每日平均配送点位数" :value="detail.deliveryNum | DataIsNull" />
             <van-cell title="预计每日平均总里程(公里)" :value="detail.distance | DataIsNull" />
@@ -64,9 +64,9 @@
           </p>
         </van-tab>
         <van-tab title="关键">
-          <h2 class="van-doc-demo-block__title">
+          <!-- <h2 class="van-doc-demo-block__title">
             关键信息
-          </h2>
+          </h2> -->
           <van-cell-group>
             <van-cell title="每日总里程（公里）" :value="detail.distance | DataIsNull" />
             <van-cell title="预计月收入" :value="monthlyTransaction | DataIsNull" />
@@ -77,9 +77,9 @@
           </p>
         </van-tab>
         <van-tab title="标书">
-          <h2 class="van-doc-demo-block__title">
+          <!-- <h2 class="van-doc-demo-block__title">
             标书信息
-          </h2>
+          </h2> -->
           <van-cell-group>
             <van-cell v-for="item in clueDetail" :key="item.customerName" :title="item.cityName" :value="item.lineName" />
           </van-cell-group>
@@ -88,9 +88,9 @@
           </p>
         </van-tab>
         <van-tab title="记录">
-          <h2 class="van-doc-demo-block__title">
+          <!-- <h2 class="van-doc-demo-block__title">
             记录信息
-          </h2>
+          </h2> -->
           <van-cell-group>
             <van-cell v-for="item in logList" :key="item.operType" :title="item.operType" :value="'(' + item.createrName + ')' + item.createDate" />
           </van-cell-group>
@@ -352,6 +352,7 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
+@import '../../style/common';
 .linedetail{
   padding-bottom: 1.6rem;
   box-sizing: border-box;
@@ -398,18 +399,18 @@ p{
   }
 }
 
-.btn{
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    width: 100%;
-    height: 46px;
-    line-height: 46px;
-    background:#2F7DCD;
-    font-size: 16px;
-    color:#fff;
-}
+// .btn{
+//     position: fixed;
+//     bottom: 0;
+//     left: 0;
+//     right: 0;
+//     width: 100%;
+//     height: 46px;
+//     line-height: 46px;
+//     background:#2F7DCD;
+//     font-size: 16px;
+//     color:#fff;
+// }
 
 .article-list {
   width: 100%;

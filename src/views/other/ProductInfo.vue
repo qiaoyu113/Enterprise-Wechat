@@ -12,7 +12,7 @@
         <!-- <p>{{ item.mediaDesc }}</p> -->
       </van-radio>
     </van-radio-group>
-    <van-button round type="info" block class="btn" :disabled="disable" @click="sendCustmer">
+    <van-button type="info" block class="btn_bottom" :disabled="disable" @click="sendCustmer">
       发送给客户
     </van-button>
   </div>
@@ -168,12 +168,14 @@ export default {
 }
 </script>
 <style lang="scss">
+@import "../../style/common.scss";
 .ProductInfo{
   width: 100%;
+  min-height: 100vh;
   text-align: center;
   // padding:1rem;
   box-sizing: border-box;
-  background-color: #f7f8fa;
+  background: #F5F5F5;
   text-align: center;
   .title{
     width: 100%;
@@ -219,12 +221,10 @@ export default {
     background-color: #f7f8fa;
   }
   .productBox{
-    padding: 0.3rem 0.6rem;
+    // padding: 0.3rem 0.6rem;
+    // box-sizing: border-box;
+    padding-bottom: 1.6rem;
     box-sizing: border-box;
-  }
-  .btn{
-    width: 88%;
-    margin:0 auto 1rem;
   }
   .van-radio__label{
     width: 100% !important;

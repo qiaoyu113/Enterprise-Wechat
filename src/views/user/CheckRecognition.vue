@@ -125,7 +125,7 @@
           </p>
         </van-tab>
       </van-tabs>
-      <van-button round type="info" block class="btn" @click="checkPush">
+      <van-button type="info" block class="btn_bottom" @click="checkPush">
         确认匹配
       </van-button>
     </div>
@@ -280,6 +280,7 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
+@import '../../style/common';
 .checkrecognition{
   padding-bottom: 0.8rem;
   .van-doc-demo-block__title{
@@ -312,11 +313,11 @@ export default {
   }
 }
 
-.btn{
-    width:90%;
-    margin: auto;
-    margin-top:1rem;
-}
+// .btn{
+//     width:90%;
+//     margin: auto;
+//     margin-top:1rem;
+// }
 
 .article-list {
   width: 100%;
