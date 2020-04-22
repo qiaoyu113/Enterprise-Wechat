@@ -39,7 +39,7 @@
           <p v-if="JSON.stringify(detail) == '{}'" class="noMore">
             暂无信息
           </p>
-          <van-button class="btn" @click="check">
+          <van-button class="btn_bottom" @click="check">
             操作
           </van-button>
         </van-tab>
@@ -53,7 +53,7 @@
           <p v-if="!lineList.length" class="noMore">
             暂无信息
           </p>
-          <van-button class="btn" @click="check">
+          <van-button class="btn_bottom" @click="check">
             操作
           </van-button>
         </van-tab>
@@ -67,7 +67,7 @@
           <p v-if="!lineList.length" class="noMore">
             暂无信息
           </p>
-          <van-button class="btn" @click="check">
+          <van-button class="btn_bottom" @click="check">
             操作
           </van-button>
         </van-tab>
@@ -387,6 +387,9 @@ export default {
       border-top: 1px solid #ebedf0;
       border-bottom: 1px solid #ebedf0;
     }
+    .van-hairline--top-bottom::after, .van-hairline-unset--top-bottom::after{
+      border: none;
+    }
     .matchList{
       width:100%;
       background: #fff;
@@ -464,20 +467,6 @@ export default {
         height: calc(100% - 50px);
         overflow-y: hidden;
     }
-    }
-
-    .btn{
-      width:100%;
-      height: 46px;
-      line-height: 46px;
-      position: fixed;
-      bottom: 0;
-      left:0;
-      right:0;
-      background:#2F7DCD;
-      font-size: 16px;
-      color:#fff;
-      border:none;
     }
 
     .btn2{

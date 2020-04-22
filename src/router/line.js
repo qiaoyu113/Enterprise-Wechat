@@ -2,7 +2,7 @@ export default [
   {
     path: '/line',
     name: 'line',
-    component: () => import('views/line/Line.vue'),
+    component: resolve => require(['@/views/line/Line'], resolve),
     meta: {
       title: '线路管理',
       // auth: true,
@@ -12,7 +12,8 @@ export default [
   {
     path: '/linecommend',
     name: 'linecommend',
-    component: () => import('views/line/LineCommend.vue'),
+    component: resolve => require(['@/views/line/LineCommend'], resolve),
+
     meta: {
       title: '推荐线路',
       // auth: true,
@@ -22,7 +23,7 @@ export default [
   {
     path: '/linedetail',
     name: 'linedetail',
-    component: () => import('views/line/LineDetail.vue'),
+    component: resolve => require(['@/views/line/LineDetail'], resolve),
     meta: {
       title: '线路详情',
       // auth: true,
