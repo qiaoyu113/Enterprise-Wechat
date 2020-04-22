@@ -1,12 +1,12 @@
 <template>
   <div class="driverDetail">
     <div class="list-wrap">
-      <van-tabs v-model="active" color="#3986CB" sticky @click="buryPoint">
+      <van-tabs v-model="active" color="#0082EF" sticky @click="buryPoint">
         <van-tab title="基本" class="backgroundTab">
           <van-cell-group v-if="JSON.stringify(detail) != '{}'">
-            <h2 class="van-doc-demo-block__title">
+            <!-- <h2 class="van-doc-demo-block__title">
               基本信息
-            </h2>
+            </h2> -->
             <van-cell title="姓名" :value="detail.name | DataIsNull" />
             <van-cell title="身份证号" :value="detail.idNumber | DataIsNull" />
             <van-cell title="联系电话" :value="detail.phone | DataIsNull" />
@@ -45,9 +45,9 @@
         </van-tab>
         <van-tab title="订单" class="backgroundTab">
           <van-cell-group v-if="lineList.length">
-            <h2 class="van-doc-demo-block__title">
+            <!-- <h2 class="van-doc-demo-block__title">
               订单信息
-            </h2>
+            </h2> -->
             <van-cell v-for="item in orderList" :key="item.type" title="订单编号" :value="item.orderId + '(' + item.stateName + ')'" />
           </van-cell-group>
           <p v-if="!lineList.length" class="noMore">
@@ -59,9 +59,9 @@
         </van-tab>
         <van-tab title="线路" class="backgroundTab">
           <van-cell-group v-if="lineList.length">
-            <h2 class="van-doc-demo-block__title">
+            <!-- <h2 class="van-doc-demo-block__title">
               线路信息
-            </h2>
+            </h2> -->
             <van-cell v-for="item in lineList" :key="item.type" title="线路编号" :value="item.lineId + '(' + item.stateName + ')'" />
           </van-cell-group>
           <p v-if="!lineList.length" class="noMore">
@@ -73,7 +73,7 @@
         </van-tab>
         <van-tab title="撮合" :class="matchModule ? 'backgroundTab2' : 'backgroundTab'" @click="buryPoint('撮合')">
           <div v-if="!matchModule" class="match_box">
-            <img src="https://qizhiniao-dev.oss-cn-beijing.aliyuncs.com/img/998f5a4580604c4f8e798f98430cbe92" alt="">
+            <img src="https://qizhiniao-dev.oss-cn-beijing.aliyuncs.com/img/97ee7868311c46b3be2875cbaf5e354d" alt="">
             <p class="hint_weight">
               未设置接活意向
             </p>
@@ -83,15 +83,15 @@
             <p class="text_nomarl">
               系统会根据意向智能推荐匹配线路
             </p>
-            <van-button round type="info" class="btn2" @click="goRouter(1)">
+            <van-button type="info" class="btn2" @click="goRouter(1)">
               设置司机接活意向
             </van-button>
           </div>
           <div v-else class="match_box2">
             <van-cell-group>
-              <h2 class="van-doc-demo-block__title">
+              <!-- <h2 class="van-doc-demo-block__title">
                 撮合信息
-              </h2>
+              </h2> -->
             </van-cell-group>
             <van-cell-group class="matchGroup">
               <van-cell title="车型" :value="matchDetail.carType | DataIsNull" />
@@ -111,7 +111,20 @@
             </div>
             <div class="matchList">
               <div class="title_sm">
-                线路区域
+                到仓区域
+              </div>
+              <div class="tage_type">
+                <van-tag v-for="item in matchDetail.arrivalArea" :key="item" round type="primary" color="#4F77AA" class="tag" size="medium">
+                  {{ item }}
+                </van-tag>
+                <p v-if="!matchDetail.deliveryArea.length">
+                  暂无数据
+                </p>
+              </div>
+            </div>
+            <div class="matchList">
+              <div class="title_sm">
+                配送区域
               </div>
               <div class="tage_type">
                 <van-tag v-for="item in matchDetail.deliveryArea" :key="item" round type="primary" color="#4F77AA" class="tag" size="medium">
@@ -148,15 +161,17 @@
                 </p>
               </div>
             </div>
-            <van-cell-group class="menuBottom">
-              <van-cell title="接活意向" is-link value="设置智能筛选撮合线路" @click="goRouter(1)" />
-            </van-cell-group>
-            <van-cell-group class="menuBottom">
-              <van-cell title="促撮推荐" is-link value="根据接活意向推荐线路" @click="goRouter(2)" />
-            </van-cell-group>
-            <van-cell-group class="menuBottom">
-              <van-cell title="撮合跟进" is-link value="跟进撮合进度及节点" @click="goRouter(3)" />
-            </van-cell-group>
+            <div style="margin-top:20px">
+              <van-cell-group class="menuBottom">
+                <van-cell title="接活意向" is-link value="设置智能筛选撮合线路" @click="goRouter(1)" />
+              </van-cell-group>
+              <van-cell-group class="menuBottom">
+                <van-cell title="促撮推荐" is-link value="根据接活意向推荐线路" @click="goRouter(2)" />
+              </van-cell-group>
+              <van-cell-group class="menuBottom">
+                <van-cell title="撮合跟进" is-link value="跟进撮合进度及节点" @click="goRouter(3)" />
+              </van-cell-group>
+            </div>
           </div>
         </van-tab>
       </van-tabs>
@@ -167,10 +182,11 @@
 <script>
 import { Tabbar, TabbarItem, Toast, Tab, Tabs, Cell, CellGroup, Button, ActionSheet, Tag } from 'vant'
 import { driverDetail, queryOrdersByDriverId, relatedLineInformation } from '@/api/user'
-import { judgingIntentionOfReceiving } from '@/api/driver'
+// import { judgingIntentionOfReceiving } from '@/api/driver'
 // import VoPages from 'vo-pages'
 import 'vo-pages/lib/vo-pages.css'
 // import wx from 'jWeixin';
+var startTime
 export default {
   name: 'Clue',
   components: {
@@ -198,6 +214,7 @@ export default {
       driverId: '',
       driverType: '1',
       active: 0,
+      loadTimeNum: 0,
       detail: '',
       show: false,
       matchModule: false,
@@ -208,18 +225,56 @@ export default {
       ]
     }
   },
+  beforeRouteLeave(to, from, next) {
+    let that = this;
+    let eventLevelVariables = {
+      duration_look: that.loadTimeNum || '0'
+    }
+    clearInterval(startTime);
+    that.GLOBAL.buryPointFunction('customer_visit', '客户信息页面访问', eventLevelVariables)
+    next(true);
+  },
+  created() {
+  },
   mounted() {
     let driverId = this.$route.query.driverId;
     this.driverId = driverId;
     this.active = Number(localStorage.getItem('active'))
-    localStorage.removeItem('active')
+    this.loadTime()
+    if (this.active) {
+      localStorage.removeItem('active')
+    }
     this.getDetail(driverId)
   },
   methods: {
+    double(mat) {
+      return mat < 10 ? '0' + mat : mat;
+    },
+    loadTime() {
+      let date = 0;
+      let hour = 0;
+      let minute = 0;
+      let second = 0;
+      let that = this;
+      startTime = setInterval(function() {
+        second++;
+        if (second === 60) {
+          minute += 1;
+          second = 0;
+        }
+        if (minute === 60) {
+          hour += 1;
+          minute = 0;
+        }
+        if (hour === 24) {
+          date += 1;
+          hour = 0;
+        }
+        let days = that.double(date) + '天：' + that.double(hour) + ':' + that.double(minute) + ':' + that.double(second);
+        that.loadTimeNum = days
+      }, 1000)
+    },
     getDetail(driverId) {
-      this.GLOBAL.buryPointFunction('customer_visit', '客户信息页面访问', {
-        value: '客户信息页面访问'
-      })
       driverDetail({
         driverId: driverId
       }).then((res) => {
@@ -261,12 +316,14 @@ export default {
     buryPoint(name, title) {
       this.active = Number(name);
       localStorage.setItem('active', name)
-      this.GLOBAL.buryPointFunction('customer_tab', '客户信息页-tab点击', {
-        value: title
-      })
+      let eventLevelVariables = {
+        tab: title || ''
+      }
+      this.GLOBAL.buryPointFunction('customer_tab', '客户信息页-tab点击', eventLevelVariables)
     },
     goRouter(type) {
       let that = this;
+      localStorage.setItem('active', 3)
       if (type === 1) {
         that.$destroy(true)
         that.$router.push({ path: '/driverintention', query: { driverId: that.driverId }})// 撮合跟进
@@ -278,9 +335,6 @@ export default {
     },
     check() {
       this.show = true;
-      this.GLOBAL.buryPointFunction('customer_options', '客户详情操作按钮点击', {
-        value: '客户详情操作按钮点击'
-      })
     //   judgingIntentionOfReceiving({
     //     driverId: 201910231017
     //   }).then((res) => {
@@ -294,6 +348,10 @@ export default {
       // 默认情况下点击选项时不会自动收起
       // 可以通过 close-on-click-action 属性开启自动收起
       this.show = false;
+      let eventLevelVariables = {
+        option: item.name || ''
+      }
+      this.GLOBAL.buryPointFunction('customer_options', '客户详情操作按钮点击', eventLevelVariables)
       Toast(item.name);
       if (item.name === '产品介绍') {
         this.$router.push({ path: '/productinfo' })
@@ -305,6 +363,7 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
+@import "../../style/common.scss";
 .driverDetail{
   background: #F5F5F5;
   .backgroundTab{
@@ -318,26 +377,47 @@ export default {
   }
   .match_box2{
     height: 100%;
+    padding-top:8px;
+    .van-cell__title{
+      font-size: 17px;
+      color: #000000;
+    }
     .matchGroup{
       margin-bottom: 2px;
+      border-top: 1px solid #ebedf0;
+      border-bottom: 1px solid #ebedf0;
     }
     .matchList{
       width:100%;
       background: #fff;
       border-bottom: 2px solid #F5F5F5;
-      padding:0 20px;
       box-sizing: border-box;
       .title_sm{
-        height:30px;
-        line-height: 35px;
-        font-size: 14px;
+        height:20px;
+        line-height: 20px;
+        font-size: 12px;
         color: #B2B2B2;
+        background: #F5F5F5;
+        padding: 0 10px;
+        box-sizing: border-box;
       }
       .tage_type{
         overflow: hidden;
-        .tag{
-          margin: 2px 6px 8px 0;
+        padding:14px 20px 8px;
+        box-sizing: border-box;
+        border-top: 1px solid #ebedf0;
+        border-bottom: 1px solid #ebedf0;
+        .van-tag{
+          padding:0 12px;
+          box-sizing: border-box;
+          font-size: 13px;
+          color: #FFFFFF;
+          margin-right: 10px;
+          margin-bottom: 6px;
         }
+        // .tag{
+          // margin: 2px 6px 8px 0;
+        // }
       }
     }
   }
@@ -347,20 +427,23 @@ export default {
   .match_box{
     width: 100%;
     text-align: center;
-    padding:1rem 0;
+    padding:60px 0;
     box-sizing: border-box;
     img{
-      width:3rem;
-      height: 3rem;
+      width: 90px;
+      height: 90px;
     }
     .hint_weight{
-      font-size: 16px;
+      font-size: 20px;
+      color: #2D3034;
       font-weight: bold;
-      padding:0.8rem;
+      padding:31px 0 14px;
       box-sizing: border-box;
     }
     .text_nomarl{
       font-size: 14px;
+      color: #9B9B9B;
+      line-height: 22px;
     }
   }
   .noMore{
@@ -399,12 +482,13 @@ export default {
 
     .btn2{
       width:90%;
-      margin: 2rem auto;
+      margin: 63px auto 0;
       height: 46px;
       line-height: 46px;
-      background:#2F7DCD;
-      font-size: 16px;
+      background: #3C7FC8;
+      font-size: 18px;
       border:none;
+      border-radius: 5px;
     }
 
     .article-list {

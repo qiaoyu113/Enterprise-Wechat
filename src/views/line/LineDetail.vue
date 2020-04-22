@@ -116,6 +116,7 @@ import { getCorpSignature, getAgentSignature } from '@/api/user'
 // import VoPages from 'vo-pages'
 import 'vo-pages/lib/vo-pages.css'
 const wx = window.wx;
+var startTime
 export default {
   name: 'LineDetail',
   components: {
@@ -155,7 +156,8 @@ export default {
       backBtn: false,
       timeDiff: '',
       driverId: '',
-      monthlyTransaction: ''
+      monthlyTransaction: '',
+      loadTimeNum: 0
     }
   },
   mounted() {
@@ -165,18 +167,53 @@ export default {
     this.timeDiff = this.$route.query.timeDiff
     this.monthlyTransaction = this.$route.query.monthlyTransaction
     this.backBtn = this.$route.query.backBtn
+    this.loadTime()
     this.getDetail(id)
   },
   beforeRouteLeave(to, from, next) {
-    this.$destroy(true)
+    let that = this;
+    let eventLevelVariables = {
+      line_type: that.detail.distinguishedTypeName || '',
+      duration_look: that.loadTimeNum || '0',
+      vehicle_type: that.detail.carVal || '',
+      goods_type: that.detail.cargoVal || ''
+    }
+    clearInterval(startTime);
+    console.log('eventLevelVariables', eventLevelVariables)
+    that.GLOBAL.buryPointFunction('lineDetail_visit', '线路详情页面访问', eventLevelVariables)
+    that.$destroy(true)
     next(true);
   },
   methods: {
+    double(mat) {
+      return mat < 10 ? '0' + mat : mat;
+    },
+    loadTime() {
+      let date = 0;
+      let hour = 0;
+      let minute = 0;
+      let second = 0;
+      let that = this;
+      startTime = setInterval(function() {
+        second++;
+        if (second === 60) {
+          minute += 1;
+          second = 0;
+        }
+        if (minute === 60) {
+          hour += 1;
+          minute = 0;
+        }
+        if (hour === 24) {
+          date += 1;
+          hour = 0;
+        }
+        let days = that.double(date) + '天：' + that.double(hour) + ':' + that.double(minute) + ':' + that.double(second);
+        that.loadTimeNum = days
+      }, 1000)
+    },
     getDetail(id) {
       let that = this;
-      that.GLOBAL.buryPointFunction('lineDetail_visit', '线路详情页面访问', {
-        value: '线路详情页面访问'
-      })
       getLineDetail({ lineId: id }).then((res) => {
         if (res.data.success) {
           that.detail = res.data.data;
@@ -210,7 +247,7 @@ export default {
       updateState({
         'driverId': that.driverId,
         'lineId': that.lineId,
-        'remark': '',
+        'remark': '线路推送至司机',
         'state': 1
       }).then((res) => {
       })
@@ -303,9 +340,10 @@ export default {
     },
     buryPoint(name, title) {
       this.tab_state = Number(name);
-      this.GLOBAL.buryPointFunction('lineDetail_tab', '线路详情页-tab点击', {
-        value: title
-      })
+      let eventLevelVariables = {
+        tab: title || ''
+      }
+      this.GLOBAL.buryPointFunction('lineDetail_tab', '线路详情页-tab点击', eventLevelVariables)
     },
     goLine() {
       this.$router.replace({ path: '/linecommend' })
