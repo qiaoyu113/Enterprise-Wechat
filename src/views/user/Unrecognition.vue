@@ -10,7 +10,7 @@
         <p>请完善客户信息</p>
       </div>
       <van-cell-group class="input_border">
-        <van-field v-model="phone" type="tel" label="手机号" placeholder="请输入手机号" />
+        <van-field v-model="phone" type="textarea" autosize label="手机号" placeholder="请输入手机号" />
       </van-cell-group>
       <van-button type="info" block @click="submitPhone">
         尝试匹配
@@ -209,6 +209,7 @@ export default {
   }
   .input_border{
     border-top:1px solid #F5F6F7;
+    height: 45px;
     display: block;
     margin-top:40px;
   }
