@@ -2,7 +2,7 @@ export default [
   {
     path: '/',
     name: 'clue',
-    component: () => import('views/clue/Clue.vue'),
+    component: resolve => require(['@/views/clue/Clue'], resolve),
     meta: {
       title: '线索管理',
       // auth: true,
@@ -12,7 +12,7 @@ export default [
   {
     path: '/cluedetail',
     name: 'cluedetail',
-    component: () => import('views/clue/ClueDetail.vue'),
+    component: resolve => require(['@/views/clue/ClueDetail'], resolve),
     meta: {
       title: '线索详情',
       // auth: true,

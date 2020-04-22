@@ -11,7 +11,7 @@ export default [
   }, {
     path: '/driverdetail',
     name: 'driverdetail',
-    component: () => import('views/driver/DriverDetail.vue'),
+    component: resolve => require(['@/views/driver/DriverDetail'], resolve),
     meta: {
       title: '司机详情',
       // auth: true,
@@ -49,7 +49,7 @@ export default [
   {
     path: '/matchcommend',
     name: 'matchcommend',
-    component: () => import('views/driver/MatchCommend.vue'),
+    component: resolve => require(['@/views/driver/MatchCommend'], resolve),
     meta: {
       title: '促撮推荐',
       keepAlive: true

@@ -80,7 +80,7 @@
         </div>
       </div>
     </div>
-    <van-button class="save-btn" type="info" block color="#2F7DCD" @click="btnSubmit">
+    <van-button class="btn_bottom" type="info" block color="#2F7DCD" @click="btnSubmit">
       保存
     </van-button>
   </div>
@@ -155,6 +155,7 @@ export default {
     },
     getJudging() {
       this.driverId = this.$route.query.driverId;
+      // this.driverId = 'BJS202003101000'
       Toast.loading({
         duration: 0, // 持续展示 toast
         forbidClick: true, // 禁用背景点击
@@ -314,6 +315,7 @@ export default {
 }
 </script>
 <style lang="scss">
+@import '../../style/common';
 .driverIntention {
   width: 100%;
   padding-bottom: 1.1rem;
@@ -327,17 +329,18 @@ export default {
     font-size: 12px;
     color: #B2B2B2;
   }
+  .van-hairline--top-bottom::after, .van-hairline-unset--top-bottom::after{
+    border: none;
+  }
   .types_box {
     width: 100%;
-    min-height: 2.15rem;
+    min-height: 2.18rem;
     padding:.36rem .52rem;
     box-sizing: border-box;
     display: flex;
-    // justify-content: space-between;
     align-content: flex-start;
     flex-wrap: wrap;
     .tag_margin{
-      // margin: 2px 6px 6px 0;
       margin: 2px 11px 12px 0;
       height: 12px;
       min-width: 1.4rem;
@@ -352,21 +355,6 @@ export default {
      min-height: 2.18rem;
      justify-content: center;
      align-items: center;
-  }
-  // .types_box:after {
-  //   content: "";
-  //   flex: auto;
-  // }
-  .save-btn{
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    width: 100%;
-    height: 1.1rem;
-    line-height: 1.1rem;
-    color: #fff;
-    font-size: 16px;
   }
 }
 </style>
