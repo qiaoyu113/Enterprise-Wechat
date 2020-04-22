@@ -250,7 +250,6 @@ export default {
     //   this.getUserConfig(true, externalUserIdOld);
     // } else {
     //   this.getUserConfig(false, externalUserIdOld);
-    // this.driverId = 'BJS202003101000'
     this.driverId = this.$route.query.driverId;
     console.log(this.driverId)
     this.getList()
@@ -386,7 +385,6 @@ export default {
         loadingType: 'spinner',
         message: '加载中...'
       });
-      console.log(this.listQuery, 'this.listQuery')
       if (this.searchType) {
         helpMatch({
           'arrivalArea': this.listQuery.arrivalArea,
