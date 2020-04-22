@@ -168,14 +168,14 @@ export default {
 }
 </script>
 <style lang="scss">
-@import "../../style/common.scss";
+@import '../../style/common.scss';
 .ProductInfo{
   width: 100%;
   min-height: 100vh;
   text-align: center;
   // padding:1rem;
   box-sizing: border-box;
-  background: #F5F5F5;
+  background-color: #f7f8fa;
   text-align: center;
   .title{
     width: 100%;
@@ -221,9 +221,7 @@ export default {
     background-color: #f7f8fa;
   }
   .productBox{
-    // padding: 0.3rem 0.6rem;
-    // box-sizing: border-box;
-    padding-bottom: 1.6rem;
+    padding: 0.3rem 0.6rem 1.6rem 0.6rem;
     box-sizing: border-box;
   }
   .van-radio__label{

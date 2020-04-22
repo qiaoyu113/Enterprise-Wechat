@@ -313,12 +313,6 @@ export default {
   }
 }
 
-// .btn{
-//     width:90%;
-//     margin: auto;
-//     margin-top:1rem;
-// }
-
 .article-list {
   width: 100%;
   height: auto;

@@ -99,7 +99,7 @@
           </p>
         </van-tab>
       </van-tabs>
-      <van-button block class="btn" :disabled="disable" @click="pushSendLink">
+      <van-button block class="btn_bottom" :disabled="disable" @click="pushSendLink">
         发送此线路
       </van-button>
       <div v-if="backBtn" class="backBtn" @click="goLine">
@@ -352,7 +352,7 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-@import '../../style/common';
+@import '../../style/common.scss';
 .linedetail{
   padding-bottom: 1.6rem;
   box-sizing: border-box;
