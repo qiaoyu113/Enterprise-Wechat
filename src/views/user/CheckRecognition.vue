@@ -2,7 +2,7 @@
   <div class="checkrecognition">
     <div class="list-wrap">
       <van-tabs color="#3986CB" sticky>
-        <van-tab v-if="driverType === 1" title="基本">
+        <van-tab v-if="driverType === 1" title="基本" class="backgroundTab">
           <van-cell-group v-if="JSON.stringify(detail) != '{}'">
             <!-- <h2 class="van-doc-demo-block__title">
               基本信息
@@ -40,7 +40,7 @@
             暂无信息
           </p>
         </van-tab>
-        <van-tab v-if="driverType === 2" title="基本">
+        <van-tab v-if="driverType === 2" title="基本" class="backgroundTab">
           <van-cell-group v-if="JSON.stringify(detail) != '{}'">
             <!-- <h2 class="van-doc-demo-block__title">
               基本信息
@@ -90,7 +90,7 @@
             暂无信息
           </p>
         </van-tab> -->
-        <van-tab v-if="driverType === 2" title="跟进">
+        <van-tab v-if="driverType === 2" title="跟进" class="backgroundTab">
           <van-cell-group v-if="JSON.stringify(detail) != '{}'">
             <!-- <h2 class="van-doc-demo-block__title">
               跟进信息
@@ -113,7 +113,7 @@
             暂无信息
           </p>
         </van-tab> -->
-        <van-tab v-if="driverType === 2" title="行为">
+        <van-tab v-if="driverType === 2" title="行为" class="backgroundTab">
           <van-cell-group v-if="clueLog.length">
             <!-- <h2 class="van-doc-demo-block__title">
               行为信息
@@ -282,8 +282,12 @@ export default {
 <style lang="scss" scoped>
 @import '../../style/common';
 .checkrecognition{
-  padding-bottom: 1.6rem;
   background: #F5F5F5;
+  .backgroundTab{
+    height: 100%;
+    padding-bottom: 1.6rem;
+    box-sizing: border-box;
+  }
   .van-doc-demo-block__title{
     margin: 0;
     text-align: center;
