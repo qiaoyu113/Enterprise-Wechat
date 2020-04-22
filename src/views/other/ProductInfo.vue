@@ -11,6 +11,9 @@
         <img style="margin-top:0.4rem;" :src="item.mediaUrl" alt="">
         <!-- <p>{{ item.mediaDesc }}</p> -->
       </van-radio>
+      <div v-if="!productList.length">
+        暂无数据
+      </div>
     </van-radio-group>
     <van-button type="info" block class="btn_bottom" :disabled="disable" @click="sendCustmer">
       发送给客户
