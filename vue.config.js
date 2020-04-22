@@ -9,7 +9,7 @@ const IS_PRODUCTION = process.env.NODE_ENV === 'production'
 const cdn = {
   css: [],
   js: [
-    'https://cdn.bootcss.com/vue/2.6.10/vue.min.js',
+    'https://cdn.bootcss.com/vue/2.6.11/vue.min.js',
     'https://cdn.bootcss.com/vue-router/3.0.3/vue-router.min.js',
     'https://cdn.bootcss.com/vuex/3.1.0/vuex.min.js',
     'https://res.wx.qq.com/open/js/jweixin-1.2.0.js',
@@ -88,7 +88,22 @@ module.exports = {
   chainWebpack(config) {
     config.plugins.delete('preload') // TODO: need test
     config.plugins.delete('prefetch') // TODO: need test
-
+    config => {
+      const plugins = [];
+      const productionGzipExtensions = /\.(js|css|json|txt|html|ico|svg)(\?.*)?$/i;
+      // Begin 生成 gzip 压缩文件
+      plugins.push(
+        new CompressionWebpackPlugin({
+          filename: '[path].gz[query]',
+          algorithm: 'gzip',
+          test: productionGzipExtensions,
+          threshold: 10240,
+          minRatio: 0.8
+        })
+      );
+      // End 生成 gzip 压缩文件
+      config.plugins = [...config.plugins, ...plugins];
+    }
     // set svg-sprite-loader
     config.module
       .rule('svg')

@@ -8,7 +8,8 @@ let routes = [
   {
     path: '/404',
     name: '404',
-    component: () => import(/* webpackChunkName: "404" */ 'views/404.vue'),
+    // component: () => import(/* webpackChunkName: "404" */ 'views/404.vue'),
+    component: resolve => require(['@/views/404'], resolve),
     meta: {
       title: '404',
       keepAlive: true
@@ -17,7 +18,8 @@ let routes = [
   {
     path: '/unauthority',
     name: 'unauthority',
-    component: () => import('views/Unauthority.vue'),
+    // component: () => import('views/Unauthority.vue'),
+    component: resolve => require(['@/views/Unauthority'], resolve),
     meta: {
       title: '朱雀',
       keepAlive: true

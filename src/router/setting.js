@@ -2,7 +2,7 @@ export default [
   {
     path: '/setting',
     name: 'setting',
-    component: () => import('views/setting/Setting.vue'),
+    component: resolve => require(['@/views/setting/Setting'], resolve),
     meta: {
       title: '工具',
       // auth: true,
