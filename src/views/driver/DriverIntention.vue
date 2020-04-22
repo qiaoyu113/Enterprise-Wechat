@@ -155,6 +155,7 @@ export default {
     },
     getJudging() {
       this.driverId = this.$route.query.driverId;
+      // this.driverId = 'BJS202003101000'
       Toast.loading({
         duration: 0, // 持续展示 toast
         forbidClick: true, // 禁用背景点击
@@ -327,9 +328,12 @@ export default {
     font-size: 12px;
     color: #B2B2B2;
   }
+  .van-hairline--top-bottom::after, .van-hairline-unset--top-bottom::after{
+    border: none;
+  }
   .types_box {
     width: 100%;
-    min-height: 2.15rem;
+    min-height: 2.18rem;
     padding:.36rem .52rem;
     box-sizing: border-box;
     display: flex;
@@ -337,7 +341,6 @@ export default {
     align-content: flex-start;
     flex-wrap: wrap;
     .tag_margin{
-      // margin: 2px 6px 6px 0;
       margin: 2px 11px 12px 0;
       height: 12px;
       min-width: 1.4rem;
