@@ -62,7 +62,7 @@ export default {
     }
   },
   mounted() {
-    this.getUserConfig()
+    // this.getUserConfig()
   },
   methods: {
     getUserConfig() {
