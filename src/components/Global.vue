@@ -12,15 +12,15 @@ if (url !== 'firmiana-wechat.yunniao.cn') {
   }
 }
 function buryPointFunction(eventNameVal, eventNameValCH, propertiesVal) {
-  // if (window.location.host === 'firmiana-wechat.yunniao.cn') {
-  for (var i in propertiesVal) {
-    if (propertiesVal[i] === '') {
-      delete propertiesVal[i]
+  if (window.location.host === 'firmiana-wechat.yunniao.cn') {
+    for (var i in propertiesVal) {
+      if (propertiesVal[i] === '') {
+        delete propertiesVal[i]
+      }
     }
+    gio('track', eventNameVal, propertiesVal);
+    window.zhuge.track(eventNameValCH, propertiesVal);
   }
-  gio('track', eventNameVal, propertiesVal);
-  window.zhuge.track(eventNameValCH, propertiesVal);
-  // }
 }
 export default
 {
