@@ -120,7 +120,7 @@ export default {
                                   const state = res.data.data.driverType;
                                   const driverId = res.data.data.driverId;
                                   if (Number(state) === 1) {
-                                    that.$router.replace({ path: '/driverDetail', query: { driverId: driverId }})
+                                    that.$router.replace({ path: '/driverdetail', query: { driverId: driverId }})
                                   } else if (Number(state) === 2) {
                                     that.$router.replace({ path: '/cluedetail', query: { clueId: driverId }})
                                   } else {
