@@ -356,6 +356,7 @@ export default {
 .linedetail{
   padding-bottom: 1.6rem;
   box-sizing: border-box;
+  background: #F5F5F5;
   .backBtn{
     width:1rem;
     height: 1rem;
