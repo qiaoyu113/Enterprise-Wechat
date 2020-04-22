@@ -16,7 +16,7 @@ if (window.location.host !== 'firmiana-wechat.yunniao.cn') {
 
 // create an axios instance
 const service = axios.create({
-  baseURL: url, //  url = base url + request url
+  baseURL: url, //   url = base url + request url
   withCredentials: true, // send cookies when cross-domain requests
   timeout: 5000 // request timeout
 })
@@ -59,7 +59,8 @@ service.interceptors.response.use(
    */
   response => {
     const res = response.data
-    if (res.code === 40101 || res.code === 40301) {
+    // if (res.code === 40101 || res.code === 40301) {
+    if (res.code === 40101) {
       Toast({
         message: res.message,
         type: 'error',

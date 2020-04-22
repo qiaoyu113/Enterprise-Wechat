@@ -251,7 +251,6 @@ export default {
     // } else {
     //   this.getUserConfig(false, externalUserIdOld);
     this.driverId = this.$route.query.driverId;
-    console.log(this.driverId)
     this.getList()
     // }
   },

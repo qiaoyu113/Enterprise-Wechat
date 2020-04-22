@@ -4,9 +4,9 @@
       <van-tabs color="#3986CB" sticky>
         <van-tab v-if="driverType === 1" title="基本">
           <van-cell-group v-if="JSON.stringify(detail) != '{}'">
-            <h2 class="van-doc-demo-block__title">
+            <!-- <h2 class="van-doc-demo-block__title">
               基本信息
-            </h2>
+            </h2> -->
             <van-cell title="姓名" :value="detail.name | DataIsNull" />
             <van-cell title="身份证号" :value="detail.idNumber | DataIsNull" />
             <van-cell title="联系电话" :value="detail.phone | DataIsNull" />
@@ -42,9 +42,9 @@
         </van-tab>
         <van-tab v-if="driverType === 2" title="基本">
           <van-cell-group v-if="JSON.stringify(detail) != '{}'">
-            <h2 class="van-doc-demo-block__title">
+            <!-- <h2 class="van-doc-demo-block__title">
               基本信息
-            </h2>
+            </h2> -->
             <van-cell title="姓名" :value="detail.name | DataIsNull" />
             <van-cell title="联系电话" :value="detail.phone | DataIsNull" />
             <van-cell title="来源渠道" :value="detail.sourceTypeName | DataIsNull" />
@@ -59,9 +59,9 @@
         </van-tab>
         <van-tab v-if="driverType === 1" title="订单">
           <van-cell-group v-if="orderList.length">
-            <h2 class="van-doc-demo-block__title">
+            <!-- <h2 class="van-doc-demo-block__title">
               订单信息
-            </h2>
+            </h2> -->
             <van-cell v-for="item in orderList" :key="item.type" title="订单编号" :value="item.orderId + '(' + item.stateName + ')'" />
           </van-cell-group>
           <p v-if="!orderList.length" class="noMore">
@@ -70,9 +70,9 @@
         </van-tab>
         <van-tab v-if="driverType === 1" title="线路">
           <van-cell-group v-if="lineList.length">
-            <h2 class="van-doc-demo-block__title">
+            <!-- <h2 class="van-doc-demo-block__title">
               线路信息
-            </h2>
+            </h2> -->
             <van-cell v-for="item in lineList" :key="item.type" title="线路编号" :value="item.lineId + '(' + item.stateName + ')'" />
           </van-cell-group>
           <p v-if="!lineList.length" class="noMore">
@@ -92,9 +92,9 @@
         </van-tab> -->
         <van-tab v-if="driverType === 2" title="跟进">
           <van-cell-group v-if="JSON.stringify(detail) != '{}'">
-            <h2 class="van-doc-demo-block__title">
+            <!-- <h2 class="van-doc-demo-block__title">
               跟进信息
-            </h2>
+            </h2> -->
             <van-cell title="跟进方式" :value="detail.wayName | DataIsNull" />
             <van-cell title="跟进情况" :value="detail.situation | DataIsNull" />
           </van-cell-group>
@@ -115,9 +115,9 @@
         </van-tab> -->
         <van-tab v-if="driverType === 2" title="行为">
           <van-cell-group v-if="clueLog.length">
-            <h2 class="van-doc-demo-block__title">
+            <!-- <h2 class="van-doc-demo-block__title">
               行为信息
-            </h2>
+            </h2> -->
             <van-cell v-for="item in clueLog" :key="item.type" :title="item.operType" :value="'(' + item.creatorName + ')' + item.createDate" />
           </van-cell-group>
           <p v-if="!clueLog.length" class="noMore">
@@ -125,7 +125,7 @@
           </p>
         </van-tab>
       </van-tabs>
-      <van-button round type="info" block class="btn" @click="checkPush">
+      <van-button type="info" block class="btn_bottom" @click="checkPush">
         确认匹配
       </van-button>
     </div>
@@ -280,8 +280,10 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
+@import '../../style/common';
 .checkrecognition{
-  padding-bottom: 0.8rem;
+  padding-bottom: 1.6rem;
+  background: #F5F5F5;
   .van-doc-demo-block__title{
     margin: 0;
     text-align: center;
@@ -310,12 +312,6 @@ export default {
     height: calc(100% - 50px);
     overflow-y: hidden;
   }
-}
-
-.btn{
-    width:90%;
-    margin: auto;
-    margin-top:1rem;
 }
 
 .article-list {

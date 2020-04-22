@@ -4,9 +4,9 @@
       <van-tabs color="#3986CB" sticky>
         <van-tab title="基本">
           <van-cell-group v-if="JSON.stringify(detail) != '{}'">
-            <h2 class="van-doc-demo-block__title">
+            <!-- <h2 class="van-doc-demo-block__title">
               基本信息
-            </h2>
+            </h2> -->
             <van-cell title="姓名" :value="detail.name | DataIsNull" />
             <van-cell title="联系电话" :value="detail.phone | DataIsNull" />
             <van-cell title="来源渠道" :value="detail.sourceTypeName | DataIsNull" />
@@ -21,9 +21,9 @@
         </van-tab>
         <van-tab title="跟进">
           <van-cell-group v-if="JSON.stringify(detail) != '{}'">
-            <h2 class="van-doc-demo-block__title">
+            <!-- <h2 class="van-doc-demo-block__title">
               跟进信息
-            </h2>
+            </h2> -->
             <van-cell title="跟进方式" :value="detail.wayName | DataIsNull" />
             <van-cell title="跟进情况" :value="detail.situation | DataIsNull" />
           </van-cell-group>
@@ -33,9 +33,9 @@
         </van-tab>
         <van-tab title="行为">
           <van-cell-group v-if="clueLog.length">
-            <h2 class="van-doc-demo-block__title">
+            <!-- <h2 class="van-doc-demo-block__title">
               行为信息
-            </h2>
+            </h2> -->
             <van-cell v-for="item in clueLog" :key="item.type" :title="item.operType" :value="'(' + item.creatorName + ')' + item.createDate" />
           </van-cell-group>
           <p v-if="!clueLog.length" class="noMore">
@@ -43,7 +43,7 @@
           </p>
         </van-tab>
       </van-tabs>
-      <van-button round type="info" block class="btn" @click="check">
+      <van-button type="info" block class="btn_bottom" @click="check">
         操作
       </van-button>
       <van-action-sheet v-model="show" :actions="actions" @select="onSelect" />
@@ -136,6 +136,7 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
+@import '../../style/common.scss';
 .clueDetail{
     p{
     margin-block-start: 0;
@@ -149,11 +150,6 @@ export default {
         height: calc(100% - 50px);
         overflow-y: hidden;
     }
-    }
-
-    .btn{
-    width:90%;
-    margin: 1rem auto;
     }
 
   .noMore{
