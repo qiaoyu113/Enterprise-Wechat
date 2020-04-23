@@ -47,9 +47,9 @@ export default {
     /*
     d2环境或微信授权不通时
     */
-    window.localStorage.setItem('token', 'eyJhbGciOiJIUzI1NiJ9.eyJwcm9maWxlIjoibTEiLCJ1c2VySWQiOiIxMyIsInVzZXJuYW1lIjoid3RfYWRtaW4iLCJ0eXBlIjoiMyIsImJ1c2lQZXJtaXNzaW9uIjoiMCIsImV4cCI6MTU4OTY3OTIwM30.yIIAHjJtxlwftfGga2L6KMtsZ_vthAOq7mXHaJraAcI')
-    window.localStorage.setItem('code', '1234')
-    window.localStorage.setItem('SetUserData', 'token')
+    // window.localStorage.setItem('token', 'eyJhbGciOiJIUzI1NiJ9.eyJwcm9maWxlIjoibTEiLCJ1c2VySWQiOiIxMyIsInVzZXJuYW1lIjoid3RfYWRtaW4iLCJ0eXBlIjoiMyIsImJ1c2lQZXJtaXNzaW9uIjoiMCIsImV4cCI6MTU4OTY3OTIwM30.yIIAHjJtxlwftfGga2L6KMtsZ_vthAOq7mXHaJraAcI')
+    // window.localStorage.setItem('code', '1234')
+    // window.localStorage.setItem('SetUserData', 'token')
   },
   mounted() {},
   methods: {
