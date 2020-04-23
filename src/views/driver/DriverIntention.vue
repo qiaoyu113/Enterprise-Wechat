@@ -210,7 +210,7 @@ export default {
       }).then(res => {
         let arr = res.data.data;
         let unlimited = { code: '-2', name: '不限' };
-        arr.push(unlimited)
+        arr.unshift(unlimited)
         that.areaArray = arr;
       }).catch(err => {
         Toast.fail(err);
@@ -234,8 +234,8 @@ export default {
       });
     },
     getJudging() {
-      this.driverId = this.$route.query.driverId;
-      // this.driverId = 'BJS202003101000'
+      // this.driverId = this.$route.query.driverId;
+      this.driverId = 'BJS202003101000'
       Toast.loading({
         duration: 0, // 持续展示 toast
         forbidClick: true, // 禁用背景点击
