@@ -2,7 +2,8 @@
   <div class="driverIntention">
     <div>
       <div>
-        <van-cell-group title="车型"></van-cell-group>
+        <!-- <van-cell-group title="车型"></van-cell-group> -->
+        <van-cell title="车型" />
         <div v-if="dataTypeCar.length != 0" class="types_box">
           <van-tag v-for="(item, index) in dataTypeCar" :key="item.codeVal" round size="medium" :color="typeCar.indexOf(item.codeVal) > -1 ? '#5376a6' : '#c8c8cb'" class="tag_margin" @click="getType(index, 'dataTypeCar', 'typeCar')">
             {{ item.code }}
@@ -15,9 +16,14 @@
         </div>
       </div>
       <div>
-        <van-cell-group title="货物类型"></van-cell-group>
+        <!-- <van-cell-group title="货物类型"></van-cell-group> -->
+        <van-cell title="货物类型">
+          <template>
+            <span class="check_right" @click="doCheck('dataCargoType','cargoType','cargoText')" v-text="cargoText"></span>
+          </template>
+        </van-cell>
         <div v-if="dataCargoType.length != 0" class="types_box">
-          <van-tag v-for="(item, index) in dataCargoType" :key="item.codeVal" round size="medium" :color="cargoType.indexOf(item.codeVal) > -1 ? '#5376a6' : '#c8c8cb'" class="tag_margin" @click="getType(index, 'dataCargoType', 'cargoType')">
+          <van-tag v-for="(item, index) in dataCargoType" :key="item.codeVal" round size="medium" :color="cargoType.indexOf(item.codeVal) > -1 ? '#5376a6' : '#c8c8cb'" class="tag_margin" @click="getType(index, 'dataCargoType', 'cargoType','cargoText')">
             {{ item.code }}
           </van-tag>
         </div>
@@ -28,9 +34,14 @@
         </div>
       </div>
       <div>
-        <van-cell-group title="到仓区域"></van-cell-group>
+        <!-- <van-cell-group title="到仓区域"></van-cell-group> -->
+        <van-cell title="到仓区域">
+          <template>
+            <span class="check_right" @click="doCheck('areaArray','arrivalArea','arrivalText')" v-text="arrivalText"></span>
+          </template>
+        </van-cell>
         <div v-if="areaArray.length != 0" class="types_box">
-          <van-tag v-for="(item, index) in areaArray" :key="item.code" size="medium" round :color="arrivalArea.indexOf(item.code) > -1 ? '#5376a6' : '#c8c8cb'" class="tag_margin" @click="getType(index, 'areaArray', 'arrivalArea')">
+          <van-tag v-for="(item, index) in areaArray" :key="item.code" size="medium" round :color="arrivalArea.indexOf(item.code) > -1 ? '#5376a6' : '#c8c8cb'" class="tag_margin" @click="getType(index, 'areaArray', 'arrivalArea','arrivalText')">
             {{ item.name }}
           </van-tag>
         </div>
@@ -41,9 +52,14 @@
         </div>
       </div>
       <div>
-        <van-cell-group title="配送区域"></van-cell-group>
+        <!-- <van-cell-group title="配送区域"></van-cell-group> -->
+        <van-cell title="配送区域">
+          <template>
+            <span class="check_right" @click="doCheck('areaArray','deliveryArea','deliveryText')" v-text="deliveryText"></span>
+          </template>
+        </van-cell>
         <div v-if="areaArray.length != 0" class="types_box">
-          <van-tag v-for="(item, index) in areaArray" :key="item.code" size="medium" round :color="deliveryArea.indexOf(item.code) > -1 ? '#5376a6' : '#c8c8cb'" class="tag_margin" @click="getType(index, 'areaArray', 'deliveryArea')">
+          <van-tag v-for="(item, index) in areaArray" :key="item.code" size="medium" round :color="deliveryArea.indexOf(item.code) > -1 ? '#5376a6' : '#c8c8cb'" class="tag_margin" @click="getType(index, 'areaArray', 'deliveryArea','deliveryText')">
             {{ item.name }}
           </van-tag>
         </div>
@@ -54,9 +70,14 @@
         </div>
       </div>
       <div>
-        <van-cell-group title="装卸难度"></van-cell-group>
+        <!-- <van-cell-group title="装卸难度"></van-cell-group> -->
+        <van-cell title="装卸难度">
+          <template>
+            <span class="check_right" @click="doCheck('dataHandlingDifficultyDegree','handlingDifficultyDegree','handlingDifficultyText')" v-text="handlingDifficultyText"></span>
+          </template>
+        </van-cell>
         <div v-if="dataHandlingDifficultyDegree.length != 0" class="types_box">
-          <van-tag v-for="(item, index) in dataHandlingDifficultyDegree" :key="item.codeVal" size="medium" round :color="handlingDifficultyDegree.indexOf(item.codeVal) > -1 ? '#5376a6' : '#c8c8cb'" class="tag_margin" @click="getType(index, 'dataHandlingDifficultyDegree', 'handlingDifficultyDegree')">
+          <van-tag v-for="(item, index) in dataHandlingDifficultyDegree" :key="item.codeVal" size="medium" round :color="handlingDifficultyDegree.indexOf(item.codeVal) > -1 ? '#5376a6' : '#c8c8cb'" class="tag_margin" @click="getType(index, 'dataHandlingDifficultyDegree', 'handlingDifficultyDegree','handlingDifficultyText')">
             {{ item.code }}
           </van-tag>
         </div>
@@ -67,9 +88,14 @@
         </div>
       </div>
       <div>
-        <van-cell-group title="出车时段"></van-cell-group>
+        <!-- <van-cell-group title="出车时段"></van-cell-group> -->
+        <van-cell title="出车时段">
+          <template>
+            <span class="check_right" @click="doCheck('dataDepartureTime','departureTime','departureText')" v-text="departureText"></span>
+          </template>
+        </van-cell>
         <div v-if="dataDepartureTime.length != 0" class="types_box">
-          <van-tag v-for="(item, index) in dataDepartureTime" :key="item.codeVal" round size="medium" :color="departureTime.indexOf(item.codeVal) > -1 ? '#5376a6' : '#c8c8cb'" class="tag_margin" @click="getType(index, 'dataDepartureTime', 'departureTime')">
+          <van-tag v-for="(item, index) in dataDepartureTime" :key="item.codeVal" round size="medium" :color="departureTime.indexOf(item.codeVal) > -1 ? '#5376a6' : '#c8c8cb'" class="tag_margin" @click="getType(index, 'dataDepartureTime', 'departureTime','departureText')">
             {{ item.code }}
           </van-tag>
         </div>
@@ -87,7 +113,7 @@
 </template>
 <script>
 import { dictionary, getCityAreaByCode } from '@/api/common'
-import { Toast, CellGroup, Button, Tag, loading } from 'vant'
+import { Toast, CellGroup, Cell, Button, Tag, loading } from 'vant'
 import { judgingIntentionOfReceiving, saveIntentionOfReceiving } from '@/api/driver'
 export default {
   name: 'DriverIntention',
@@ -96,7 +122,8 @@ export default {
     [Tag.name]: Tag,
     [loading.name]: loading,
     [Button.name]: Button,
-    [CellGroup.name]: CellGroup
+    [CellGroup.name]: CellGroup,
+    [Cell.name]: Cell
   },
   data() {
     return {
@@ -112,7 +139,54 @@ export default {
       areaArray: [],
       dataHandlingDifficultyDegree: [],
       dataDepartureTime: [],
-      flag: false
+      flag: false,
+      cargoText: '全选',
+      deliveryText: '全选',
+      arrivalText: '全选',
+      handlingDifficultyText: '全选',
+      departureText: '全选'
+    }
+  },
+  watch: {
+    cargoType(newarr, oldarr) {
+      if (newarr.length === 0) {
+        this.cargoType.push('-2')
+      }
+      if (newarr.length < this.dataCargoType.length - 1 && newarr.indexOf('-2') === -1) {
+        this.cargoText = '全选'
+      }
+    },
+    arrivalArea: function(newarr, oldarr) {
+      if (newarr.length === 0) {
+        this.arrivalArea.push('-2')
+      }
+      if (newarr.length < this.areaArray.length - 1 && newarr.indexOf('-2') === -1) {
+        this.arrivalText = '全选'
+      }
+    },
+    deliveryArea(newarr, oldarr) {
+      if (newarr.length === 0) {
+        this.deliveryArea.push('-2')
+      }
+      if (newarr.length < this.areaArray.length - 1 && newarr.indexOf('-2') === -1) {
+        this.deliveryText = '全选'
+      }
+    },
+    departureTime(newarr, oldarr) {
+      if (newarr.length === 0) {
+        this.departureTime.push('-2')
+      }
+      if (newarr.length < this.dataDepartureTime.length - 1 && newarr.indexOf('-2') === -1) {
+        this.departureText = '全选'
+      }
+    },
+    handlingDifficultyDegree(newarr, oldarr) {
+      if (newarr.length === 0) {
+        this.handlingDifficultyDegree.push('-2')
+      }
+      if (newarr.length < this.dataHandlingDifficultyDegree.length - 1 && newarr.indexOf('-2') === -1) {
+        this.handlingDifficultyText = '全选'
+      }
     }
   },
   mounted() {
@@ -135,6 +209,8 @@ export default {
         cityCode: cityCode
       }).then(res => {
         let arr = res.data.data;
+        let unlimited = { code: '-2', name: '不限' };
+        arr.push(unlimited)
         that.areaArray = arr;
       }).catch(err => {
         Toast.fail(err);
@@ -148,6 +224,10 @@ export default {
         dictType: type
       }).then(res => {
         let arr = res.data.data;
+        if (type !== 'Intentional_compartment') {
+          let unlimited = { codeVal: '-2', code: '不限' };
+          arr.unshift(unlimited);
+        }
         that[array] = arr;
       }).catch(err => {
         Toast.fail(err);
@@ -164,48 +244,53 @@ export default {
       });
       this.judgingDriver();
     },
+    checkUnlimited(eleItem, array, check_status) {
+      let that = this
+      if (eleItem === '-2') {
+        that[array] = [];
+        that[array].push(eleItem);
+        that[check_status] = '全选'
+      } else {
+        let newArr = that[array].filter((item, index, arr) => {
+          return item !== '-2'
+        });
+        that[array] = newArr;
+        that[check_status] = '全选'
+        that[array].push(eleItem);
+      }
+    },
+    isArea(array, eleItem, check_status) {
+      if (this[array].indexOf(eleItem) === -1) {
+        this.checkUnlimited(eleItem, array, check_status)
+      } else {
+        this.checkUnlimited(eleItem, array, check_status)
+        let newArr = this[array].filter((item, index, arr) => {
+          return eleItem !== item
+        });
+        this[array] = newArr;
+      }
+    },
     // 选中改变
-    getType(index, dataArray, array) {
-      let that = this;
+    getType(index, dataArray, array, check_status) {
       this[dataArray].forEach((ele, idx, arr) => {
         if (index === idx) {
+          // 区域表
           if (dataArray === 'areaArray') {
-            if (that[array].indexOf(ele.code) === -1) {
-              that[array].push(ele.code)
-            } else {
-              that[array].forEach((element, i) => {
-                if (element === ele.code) {
-                  let a = that[array].splice(i, 1)
-                  a.length = 0;
-                }
-              })
-            }
-          } else if (dataArray === 'dataTypeCar') {
-            that[array].splice(0, 1, ele.codeVal)
+            this.isArea(array, ele.code, check_status)
+          // 车型
           } else {
-            if (that[array].indexOf(ele.codeVal) === -1) {
-              that[array].push(ele.codeVal)
-            } else {
-              that[array].forEach((element, i) => {
-                if (element === ele.codeVal) {
-                  let a = that[array].splice(i, 1)
-                  a.length = 0;
-                }
-              })
-            }
+            this.isArea(array, ele.codeVal, check_status)
           }
         }
       })
     },
     btnSubmit() {
-      let carType = '';
       let json = {}
       if (this.typeCar.length === 0) {
         Toast('请选择车型');
         return;
       }
-      carType = this.typeCar[0];
-      json.carType = carType;
+      json.carType = this.typeCar;
       json.cargoType = this.cargoType;
       json.arrivalArea = this.arrivalArea;
       json.deliveryArea = this.deliveryArea;
@@ -269,9 +354,11 @@ export default {
         Toast.clear();
         if (flag) {
           that.dataTypeCar.forEach(ele => {
-            if (carType === ele.code) {
-              that.typeCar.push(ele.codeVal)
-            }
+            carType.forEach(item => {
+              if (item === ele.code) {
+                that.typeCar.push(ele.codeVal)
+              }
+            })
           });
           that.dataCargoType.forEach(ele => {
             cargoType.forEach(item => {
@@ -310,6 +397,34 @@ export default {
       }).catch(err => {
         Toast.fail(err);
       })
+    },
+    // 全选与反选
+    doCheck(dataArray, array, check_status) {
+      // 全选
+      if (this[check_status] === '全选') {
+        this[dataArray].forEach(data_ele => {
+          if (dataArray === 'areaArray') {
+            if (data_ele.code !== '-2') {
+              this[array].push(data_ele.code)
+              this[array] = [...new Set(this[array])];
+            }
+          } else {
+            if (data_ele.codeVal !== '-2') {
+              this[array].push(data_ele.codeVal)
+              this[array] = [...new Set(this[array])];
+            }
+          }
+        })
+        let newArr = this[array].filter((item, index, arr) => {
+          return item !== '-2'
+        });
+        this[array] = newArr;
+        this[check_status] = '不选';
+      } else {
+        // 反选
+        this[array] = [];
+        this[check_status] = '全选';
+      }
     }
   }
 }
@@ -320,14 +435,17 @@ export default {
   width: 100%;
   padding-bottom: 1.1rem;
   box-sizing: border-box;
-  .van-cell-group__title{
+  .van-cell{
     background-color: #f5f5f5;
     border-top: 1px solid #D9D9D9;
     border-bottom: 1px solid #D9D9D9;
-    padding: 3px 0 5px 10px;
+    padding: 3px 10px 5px 10px;
     box-sizing: border-box;
     font-size: 12px;
     color: #B2B2B2;
+  }
+  .check_right{
+    color: rgb(70,125,185);
   }
   .van-hairline--top-bottom::after, .van-hairline-unset--top-bottom::after{
     border: none;
