@@ -93,9 +93,22 @@
                 撮合信息
               </h2> -->
             </van-cell-group>
-            <van-cell-group class="matchGroup">
+            <!-- <van-cell-group class="matchGroup">
               <van-cell title="车型" :value="matchDetail.carType | DataIsNull" />
-            </van-cell-group>
+            </van-cell-group> -->
+            <div class="matchList">
+              <div class="title_sm">
+                车型
+              </div>
+              <div class="tage_type">
+                <van-tag v-for="item in matchDetail.carType" :key="item" round type="primary" color="#4F77AA" class="tag" size="medium">
+                  {{ item }}
+                </van-tag>
+                <p v-if="!matchDetail.cargoType.length">
+                  暂无数据
+                </p>
+              </div>
+            </div>
             <div class="matchList">
               <div class="title_sm">
                 货物类型
