@@ -72,3 +72,11 @@ export function updateState(data) {
     data
   })
 }
+
+export function getUrlOfLineDetailByLineId(data) {
+  return request({
+    url: '/api/line/v1/wechat/corp/getUrlOfLineDetailByLineId',
+    method: 'get',
+    params: data
+  })
+}

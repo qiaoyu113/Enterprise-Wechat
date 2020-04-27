@@ -321,7 +321,6 @@ export default {
         if (res.data.success) {
           this.matchModule = res.data.data.flag;
           if (this.matchModule) {
-            console.log(this.matchDetail)
             this.matchDetail = res.data.data
           }
         }
