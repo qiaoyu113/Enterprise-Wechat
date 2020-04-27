@@ -160,6 +160,7 @@ export default {
       value1: 0,
       option1: [
         { text: '全部', value: '-1' },
+        { text: '发起', value: '6' },
         { text: '推送', value: '1' },
         { text: '看活', value: '2' },
         { text: '试跑', value: '3' },
