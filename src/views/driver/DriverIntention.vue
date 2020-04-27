@@ -2,6 +2,7 @@
   <div class="driverIntention">
     <div>
       <div>
+        <!-- <van-cell-group title="车型"></van-cell-group> -->
         <van-cell title="车型" />
         <div v-if="dataTypeCar.length != 0" class="types_box">
           <van-tag v-for="(item, index) in dataTypeCar" :key="item.codeVal" round size="medium" :color="typeCar.indexOf(item.codeVal) > -1 ? '#5376a6' : '#c8c8cb'" class="tag_margin" @click="getType(index, 'dataTypeCar', 'typeCar')">
@@ -15,6 +16,7 @@
         </div>
       </div>
       <div>
+        <!-- <van-cell-group title="货物类型"></van-cell-group> -->
         <van-cell title="货物类型">
           <template>
             <span class="check_right" @click="doCheck('dataCargoType','cargoType','cargoText')" v-text="cargoText"></span>
@@ -32,6 +34,7 @@
         </div>
       </div>
       <div>
+        <!-- <van-cell-group title="到仓区域"></van-cell-group> -->
         <van-cell title="到仓区域">
           <template>
             <span class="check_right" @click="doCheck('areaArray','arrivalArea','arrivalText')" v-text="arrivalText"></span>
@@ -49,6 +52,7 @@
         </div>
       </div>
       <div>
+        <!-- <van-cell-group title="配送区域"></van-cell-group> -->
         <van-cell title="配送区域">
           <template>
             <span class="check_right" @click="doCheck('areaArray','deliveryArea','deliveryText')" v-text="deliveryText"></span>
@@ -66,6 +70,7 @@
         </div>
       </div>
       <div>
+        <!-- <van-cell-group title="装卸难度"></van-cell-group> -->
         <van-cell title="装卸难度">
           <template>
             <span class="check_right" @click="doCheck('dataHandlingDifficultyDegree','handlingDifficultyDegree','handlingDifficultyText')" v-text="handlingDifficultyText"></span>
@@ -83,6 +88,7 @@
         </div>
       </div>
       <div>
+        <!-- <van-cell-group title="出车时段"></van-cell-group> -->
         <van-cell title="出车时段">
           <template>
             <span class="check_right" @click="doCheck('dataDepartureTime','departureTime','departureText')" v-text="departureText"></span>
@@ -146,50 +152,40 @@ export default {
       if (newarr.length === 0) {
         this.cargoType.push('-2')
       }
-      if (newarr.length < this.dataCargoType.length - 1) {
+      if (newarr.length < this.dataCargoType.length - 1 && newarr.indexOf('-2') === -1) {
         this.cargoText = '全选'
-      } else {
-        this.cargoText = '不选'
       }
     },
     arrivalArea: function(newarr, oldarr) {
       if (newarr.length === 0) {
         this.arrivalArea.push('-2')
       }
-      if (newarr.length < this.areaArray.length - 1) {
+      if (newarr.length < this.areaArray.length - 1 && newarr.indexOf('-2') === -1) {
         this.arrivalText = '全选'
-      } else {
-        this.arrivalText = '不选'
       }
     },
     deliveryArea(newarr, oldarr) {
       if (newarr.length === 0) {
         this.deliveryArea.push('-2')
       }
-      if (newarr.length < this.areaArray.length - 1) {
+      if (newarr.length < this.areaArray.length - 1 && newarr.indexOf('-2') === -1) {
         this.deliveryText = '全选'
-      } else {
-        this.deliveryText = '不选'
       }
     },
     departureTime(newarr, oldarr) {
       if (newarr.length === 0) {
         this.departureTime.push('-2')
       }
-      if (newarr.length < this.dataDepartureTime.length - 1) {
+      if (newarr.length < this.dataDepartureTime.length - 1 && newarr.indexOf('-2') === -1) {
         this.departureText = '全选'
-      } else {
-        this.departureText = '不选'
       }
     },
     handlingDifficultyDegree(newarr, oldarr) {
       if (newarr.length === 0) {
         this.handlingDifficultyDegree.push('-2')
       }
-      if (newarr.length < this.dataHandlingDifficultyDegree.length - 1) {
+      if (newarr.length < this.dataHandlingDifficultyDegree.length - 1 && newarr.indexOf('-2') === -1) {
         this.handlingDifficultyText = '全选'
-      } else {
-        this.handlingDifficultyText = '不选'
       }
     }
   },
@@ -214,11 +210,8 @@ export default {
       }).then(res => {
         let arr = res.data.data;
         let unlimited = { code: '-2', name: '不限' };
-        arr.unshift(unlimited)
-        // that.areaArray = arr;
-        that.areaArray = arr.filter((item, index, arr) => {
-          return item.code !== '-99'
-        });
+        arr.push(unlimited)
+        that.areaArray = arr;
       }).catch(err => {
         Toast.fail(err);
       });
@@ -409,7 +402,6 @@ export default {
     doCheck(dataArray, array, check_status) {
       // 全选
       if (this[check_status] === '全选') {
-        console.log(this[check_status], '全选')
         this[dataArray].forEach(data_ele => {
           if (dataArray === 'areaArray') {
             if (data_ele.code !== '-2') {

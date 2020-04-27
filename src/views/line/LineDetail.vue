@@ -43,6 +43,7 @@
           <p v-if="!detail.lineName" class="noMore">
             暂无信息
           </p>
+          <!-- <img src="https://qizhiniao-dev.oss-cn-beijing.aliyuncs.com/img/7edacf78ec6c4f1da2b39912a3bcc4ed" alt="" style="-webkit-touch-callout: default;"> -->
         </van-tab>
         <van-tab title="配送">
           <!-- <h2 class="van-doc-demo-block__title">
@@ -99,18 +100,22 @@
           </p>
         </van-tab>
       </van-tabs>
-      <van-button block class="btn_bottom" :disabled="disable" @click="pushSendLink">
+      <!-- <van-button block class="btn_bottom" :disabled="disable" @click="pushSendLink">
         发送此线路
+      </van-button> -->
+      <van-button class="btn_bottom" @click="check">
+        操作
       </van-button>
       <div v-if="backBtn" class="backBtn" @click="goLine">
         <van-icon name="home-o" />
       </div>
+      <van-action-sheet v-model="show" :actions="actions" @select="onSelect" />
     </div>
   </div>
 </template>
 <script>
-import { Tabbar, TabbarItem, Toast, Tab, Tabs, Cell, CellGroup, Button, Icon } from 'vant'
-import { getLineDetail, listByLineId, loglist, getMediaIdOfLineDetail, updateState } from '@/api/line'
+import { Tabbar, TabbarItem, Toast, Tab, Tabs, Cell, CellGroup, Button, Icon, ActionSheet, ImagePreview } from 'vant'
+import { getLineDetail, listByLineId, loglist, getMediaIdOfLineDetail, updateState, getUrlOfLineDetailByLineId } from '@/api/line'
 // import { getLineDetail, listByLineId, loglist, getMediaIdOfLineDetail } from '@/api/line'
 import { getCorpSignature, getAgentSignature } from '@/api/user'
 // import VoPages from 'vo-pages'
@@ -121,6 +126,8 @@ export default {
   name: 'LineDetail',
   components: {
     [Tabbar.name]: Tabbar,
+    [ImagePreview.name]: ImagePreview,
+    [ActionSheet.name]: ActionSheet,
     [TabbarItem.name]: TabbarItem,
     [Toast.name]: Toast,
     [Icon.name]: Icon,
@@ -149,8 +156,8 @@ export default {
       page: 1,
       show: false,
       actions: [
-        { name: '产品介绍', color: '#3F8AF2' },
-        { name: '推荐线路', color: '#3F8AF2' }
+        { name: '发送此线路', color: '#3F8AF2' },
+        { name: '下载图片', color: '#3F8AF2' }
       ],
       loadedAll: false,
       backBtn: false,
@@ -235,6 +242,9 @@ export default {
           that.logList = res.data.data;
         }
       })
+    },
+    check() {
+      this.show = true;
     },
     pushSendLink() {
       Toast.loading({
@@ -337,6 +347,36 @@ export default {
           })
         }
       })
+    },
+    onSelect(item) {
+      // 默认情况下点击选项时不会自动收起
+      // 可以通过 close-on-click-action 属性开启自动收起
+      this.show = false;
+      let that = this;
+      Toast(item.name);
+      if (item.name === '发送此线路') {
+        that.pushSendLink()
+      } else {
+        getUrlOfLineDetailByLineId({
+          lineId: that.lineId
+        }).then((res) => {
+          if (res.data.success) {
+            ImagePreview({
+              images: [
+                res.data.data
+              ],
+              closeable: true
+            });
+          }
+        })
+      }
+    },
+    isIos() {
+      var u = navigator.userAgent;
+      if (u.indexOf('iPhone') > -1 || u.indexOf('iOS') > -1) {
+        return false;
+      }
+      return true;
     },
     buryPoint(name, title) {
       this.tab_state = Number(name);
