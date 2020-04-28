@@ -110,24 +110,27 @@
         <van-icon name="home-o" />
       </div>
       <van-action-sheet v-model="show" :actions="actions" @select="onSelect" />
+      <van-overlay :show="showoverlay" />
     </div>
   </div>
 </template>
 <script>
-import { Tabbar, TabbarItem, Toast, Tab, Tabs, Cell, CellGroup, Button, Icon, ActionSheet, ImagePreview } from 'vant'
+import { Tabbar, TabbarItem, Toast, Tab, Tabs, Cell, CellGroup, Button, Icon, ActionSheet, ImagePreview, Overlay } from 'vant'
 import { getLineDetail, listByLineId, loglist, getMediaIdOfLineDetail, updateState, getUrlOfLineDetailByLineId } from '@/api/line'
 // import { getLineDetail, listByLineId, loglist, getMediaIdOfLineDetail } from '@/api/line'
 import { getCorpSignature, getAgentSignature } from '@/api/user'
 // import VoPages from 'vo-pages'
 import 'vo-pages/lib/vo-pages.css'
 const wx = window.wx;
-var startTime
+var startTime;
+var instance;
 export default {
   name: 'LineDetail',
   components: {
     [Tabbar.name]: Tabbar,
     [ImagePreview.name]: ImagePreview,
     [ActionSheet.name]: ActionSheet,
+    [Overlay.name]: Overlay,
     [TabbarItem.name]: TabbarItem,
     [Toast.name]: Toast,
     [Icon.name]: Icon,
@@ -155,6 +158,7 @@ export default {
       total: 0,
       page: 1,
       show: false,
+      showoverlay: false,
       actions: [
         { name: '发送此线路', color: '#3F8AF2' },
         { name: '下载图片', color: '#3F8AF2' }
@@ -186,7 +190,7 @@ export default {
       goods_type: that.detail.cargoVal || ''
     }
     clearInterval(startTime);
-    console.log('eventLevelVariables', eventLevelVariables)
+    instance.close();
     that.GLOBAL.buryPointFunction('lineDetail_visit', '线路详情页面访问', eventLevelVariables)
     that.$destroy(true)
     next(true);
@@ -353,19 +357,32 @@ export default {
       // 可以通过 close-on-click-action 属性开启自动收起
       this.show = false;
       let that = this;
-      Toast(item.name);
+      // Toast(item.name);
       if (item.name === '发送此线路') {
         that.pushSendLink()
       } else {
+        that.showoverlay = true;
+        Toast.loading({
+          message: '正在加载图片...',
+          forbidClick: true
+        });
         getUrlOfLineDetailByLineId({
           lineId: that.lineId
         }).then((res) => {
           if (res.data.success) {
-            ImagePreview({
+            Toast.clear()
+            // ImagePreview({
+            //   images: [
+            //     res.data.data
+            //   ],
+            //   closeable: true
+            // });
+            instance = ImagePreview({
               images: [
                 res.data.data
               ],
-              closeable: true
+              closeable: true,
+              asyncClose: true
             });
           }
         })
