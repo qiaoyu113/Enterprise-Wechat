@@ -123,7 +123,6 @@ import { getCorpSignature, getAgentSignature } from '@/api/user'
 import 'vo-pages/lib/vo-pages.css'
 const wx = window.wx;
 var startTime;
-var instance;
 export default {
   name: 'LineDetail',
   components: {
@@ -190,7 +189,6 @@ export default {
       goods_type: that.detail.cargoVal || ''
     }
     clearInterval(startTime);
-    instance.close();
     that.GLOBAL.buryPointFunction('lineDetail_visit', '线路详情页面访问', eventLevelVariables)
     that.$destroy(true)
     next(true);
@@ -377,15 +375,12 @@ export default {
             //   ],
             //   closeable: true
             // });
-            instance = ImagePreview({
+            ImagePreview({
               images: [
                 res.data.data
               ],
               closeable: true,
-              asyncClose: true,
-              onClose() {
-                instance.close();
-              }
+              closeOnPopstate: true
             });
           }
         })
