@@ -381,6 +381,7 @@ export default {
               images: [
                 res.data.data
               ],
+              closeable: true,
               asyncClose: true,
               onClose() {
                 instance.close();
