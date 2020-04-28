@@ -359,7 +359,7 @@ export default {
       if (item.name === '发送此线路') {
         that.pushSendLink()
       } else {
-        that.showoverlay = true;
+        // that.showoverlay = true;
         Toast.loading({
           message: '正在加载图片...',
           forbidClick: true
