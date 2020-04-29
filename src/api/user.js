@@ -118,3 +118,11 @@ export function getActivationStatus(data) {
     params: data
   })
 }
+
+export function getMediaIdOfActivationQrCode(data) {
+  return request({
+    url: '/api/driver/v1/wechat/corp/getMediaIdOfActivationQrCode',
+    method: 'get',
+    params: data
+  })
+}
