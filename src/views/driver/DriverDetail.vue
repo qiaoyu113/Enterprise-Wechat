@@ -495,7 +495,7 @@ export default {
                           externalUserId: externalUserId
                         }).then((res) => {
                           if (res.data.success) {
-                            alert(res.data.data)
+                            alert(JSON.stringify(res.data.data))
                             wx.invoke('sendChatMessage', {
                               msgtype: 'image', // 消息类型，必填
                               image:
@@ -503,14 +503,14 @@ export default {
                                   mediaid: res.data.data // 图片的素材id
                                 }
                             }, function(res) {
-                              alert(res)
+                              alert(JSON.stringify(res))
                               Toast.clear();
                               if (res.err_msg === 'sendChatMessage:permission denied') {
                                 Toast.fail('暂无功能权限')
                               }
                             })
                           } else {
-                            alert(res)
+                            alert(JSON.stringify(res))
                           }
                         })
                       },
