@@ -509,6 +509,8 @@ export default {
                                 Toast.fail('暂无功能权限')
                               }
                             })
+                          } else {
+                            alert(res)
                           }
                         })
                       },
