@@ -122,6 +122,7 @@ import {
   DropdownMenu,
   DropdownItem
 } from 'vant';
+import { matchingRecordDetails } from 'api/driver';
 import { getSelectList } from 'api/driver';
 export default {
   name: 'DriverFollow',
@@ -150,6 +151,7 @@ export default {
   },
   data() {
     return {
+      params: {},
       show: false,
       form: {
         key: '-1',
@@ -199,6 +201,14 @@ export default {
       loadedAll: false,
       beforePullDown: false
     };
+  },
+  watch: {
+    '$route'(to, from) {
+      if (from.name === 'DriverFollowDetail') {
+        this.params = from.params;
+        this.getDetail();
+      }
+    }
   },
   mounted() {
     this.form.driverId = this.$route.query.driverId;
@@ -256,7 +266,28 @@ export default {
           this.loadedAll = true;
         })
     },
-
+    getDetail() {
+      if (!this.params.driverId || !this.params.lineId) {
+        return
+      }
+      matchingRecordDetails({
+        driverId: this.params.driverId,
+        lineId: this.params.lineId
+      })
+        .then(({ data }) => {
+          if (data.success) {
+            this.setData(data.data);
+          } else {
+            Toast.fail({
+              message: data.errorMsg || '网络错误，请稍后再试',
+              duration: 1.5 * 1000
+            });
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
     goDetail(item) {
       this.$router.push({ name: 'DriverFollowDetail', params: item });
     },
@@ -265,6 +296,15 @@ export default {
       this.list = [];
       this.form.page = 1;
       this.getList();
+    },
+    setData(list) {
+      if (list && list.length > 0) {
+        list[0].createDate = +new Date(list[0].createDate);
+        const detail = this.list.find(item => item.id === this.params.id)
+        if (detail) {
+          Object.assign(detail.followInfo, list[0])
+        }
+      }
     }
   }
 };
