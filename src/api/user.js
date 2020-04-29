@@ -110,3 +110,11 @@ export function logout() {
     method: 'post'
   })
 }
+
+export function getActivationStatus(data) {
+  return request({
+    url: '/api/driver/v1/wechat/corp/getActivationStatus',
+    method: 'get',
+    params: data
+  })
+}
