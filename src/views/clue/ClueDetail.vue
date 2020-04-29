@@ -302,7 +302,7 @@ export default {
       if (item.name === '产品介绍') {
         this.$router.push({ path: '/productinfo' })
       } else if (item.name === '激活推送') {
-        console.log('激活推送')
+        this.pushSendLink()
       } else {
         this.$router.push({ path: '/linecommend' })
       }
