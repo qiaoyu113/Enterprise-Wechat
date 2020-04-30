@@ -94,8 +94,11 @@
               <div class="list-speed-top">
                 {{ item.followInfo.remark }}
               </div>
-              <div class="list-speed-time">
+              <div v-if="(/^\d+$/).test(String(item.followInfo.createDate))" class="list-speed-time">
                 {{ item.followInfo.createDate | Timestamp }}
+              </div>
+              <div v-else class="list-speed-time">
+                {{ item.followInfo.createDate }}
               </div>
             </van-col>
           </van-row>
@@ -299,7 +302,7 @@ export default {
     },
     setData(list) {
       if (list && list.length > 0) {
-        list[0].createDate = +new Date(list[0].createDate);
+        // list[0].createDate = +new Date(list[0].createDate);
         const detail = this.list.find(item => item.id === this.params.id)
         if (detail) {
           Object.assign(detail.followInfo, list[0])
