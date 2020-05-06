@@ -19,7 +19,7 @@
                   </div>
                 </div>
                 <div class="content-wrapper">
-                  <span class="content">加入企业微信</span>
+                  <span class="content">加入会员</span>
                 </div>
               </div>
               <div class="list-item current">
@@ -33,7 +33,7 @@
                   </div>
                 </div>
                 <div class="content-wrapper">
-                  <span class="content">关注企业微信号</span>
+                  <span class="content">订阅线路</span>
                 </div>
               </div>
               <div class="list-item future">
@@ -47,7 +47,7 @@
                   </div>
                 </div>
                 <div class="content-wrapper">
-                  <span class="content">激活推荐</span>
+                  <span class="content">推送验证</span>
                 </div>
               </div>
             </div>
