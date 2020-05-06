@@ -314,6 +314,9 @@ export default {
       }).then((res) => {
         if (res.data.success) {
           let mediaidNew = res.data.data;
+          // if (mediaidNew === '') {
+
+          // }
           getCorpSignature({
             url: hostName
           }).then((res) => {
@@ -394,6 +397,44 @@ export default {
                                   });
                               }
                             );
+                            var u = navigator.userAgent;
+                            if (u.indexOf('iPhone') > -1 || u.indexOf('iOS') > -1) {
+                              setTimeout(() => {
+                                wx.invoke(
+                                  'sendChatMessage',
+                                  {
+                                    msgtype: 'image', // 消息类型，必填
+                                    image: {
+                                      mediaid: mediaidNew // 图片的素材id
+                                    }
+                                  },
+                                  function(res) {
+                                    Toast.clear();
+                                    if (
+                                      res.err_msg ===
+                                  'sendChatMessage:permission denied'
+                                    ) {
+                                      Toast.fail('暂无功能权限');
+                                    }
+                                    that.saveForm.remark = '线路推送至司机';
+                                    submitSave(that.saveForm)
+                                      .then(({ data }) => {
+                                        if (data.success) {
+                                          this.getDetail();
+                                        } else {
+                                          Toast.fail({
+                                            message: data.errorMsg || '网络错误，请稍后再试',
+                                            duration: 1.5 * 1000
+                                          });
+                                        }
+                                      })
+                                      .catch((err) => {
+                                        console.log(err);
+                                      });
+                                  }
+                                );
+                              }, 100)
+                            }
                           },
                           fail: function(res) {
                             console.log('err', res);
