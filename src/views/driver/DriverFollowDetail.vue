@@ -433,7 +433,7 @@ export default {
                                       });
                                   }
                                 );
-                              }, 100)
+                              }, 400)
                             }
                           },
                           fail: function(res) {
