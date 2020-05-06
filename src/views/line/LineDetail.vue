@@ -170,6 +170,9 @@ export default {
       loadTimeNum: 0
     }
   },
+  canActivate(transition) {
+    alert(transition);
+  },
   mounted() {
     let id = this.$route.query.id;
     this.driverId = this.$route.query.driverId;
