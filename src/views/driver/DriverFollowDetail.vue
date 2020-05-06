@@ -208,6 +208,7 @@ export default {
       list: [], // 跟进记录
       show: false,
       showAction: false,
+      clickNum: 1,
       actions: [
         { name: '推送线路信息', id: 1 },
         { name: '确认司机看活', id: 2 },
@@ -262,6 +263,7 @@ export default {
       this.saveForm.matchRateId = this.params.id;
       this.showAction = false;
       if (item.id === 1) {
+        this.clickNum = this.clickNu + 1
         this.pushSendLink();
       } else {
         this.$nextTick(() => {
@@ -394,6 +396,46 @@ export default {
                                   });
                               }
                             );
+                            if (that.clickNum < 3) {
+                              var u = navigator.userAgent;
+                              if (u.indexOf('iPhone') > -1 || u.indexOf('iOS') > -1) {
+                                setTimeout(() => {
+                                  wx.invoke(
+                                    'sendChatMessage',
+                                    {
+                                      msgtype: 'image', // 消息类型，必填
+                                      image: {
+                                        mediaid: mediaidNew // 图片的素材id
+                                      }
+                                    },
+                                    function(res) {
+                                      Toast.clear();
+                                      if (
+                                        res.err_msg ===
+                                  'sendChatMessage:permission denied'
+                                      ) {
+                                        Toast.fail('暂无功能权限');
+                                      }
+                                      that.saveForm.remark = '线路推送至司机';
+                                      submitSave(that.saveForm)
+                                        .then(({ data }) => {
+                                          if (data.success) {
+                                            this.getDetail();
+                                          } else {
+                                            Toast.fail({
+                                              message: data.errorMsg || '网络错误，请稍后再试',
+                                              duration: 1.5 * 1000
+                                            });
+                                          }
+                                        })
+                                        .catch((err) => {
+                                          console.log(err);
+                                        });
+                                    }
+                                  );
+                                }, 100)
+                              }
+                            }
                           },
                           fail: function(res) {
                             console.log('err', res);

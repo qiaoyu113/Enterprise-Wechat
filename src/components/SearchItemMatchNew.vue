@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="searchBox">
+    <div class="searchBoxNew">
       <!-- <van-dropdown-menu>
         <van-dropdown-item v-model="value1" :options="option1" @close="dropClick" />
       </van-dropdown-menu> -->
@@ -376,7 +376,7 @@ export default {
   }
 }
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
 .searchText{
   width: 100%;
   height: 46px;
@@ -390,7 +390,7 @@ export default {
   border-top: 1px solid #D7DADE;
   border-bottom: 1px solid #D7DADE;
 }
-.searchBox{
+.searchBoxNew{
     width: 100%;
     text-align: center;
     background: #fff;
