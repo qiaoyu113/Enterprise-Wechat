@@ -376,7 +376,20 @@ export default {
   }
 }
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
+.searchText{
+  width: 100%;
+  height: 46px;
+  line-height: 46px;
+  padding:0 15px;
+  box-sizing: border-box;
+  font-size: 14px;
+  color: #9B9B9B;
+  background: #F5F5F5;
+  text-align: left;
+  border-top: 1px solid #D7DADE;
+  border-bottom: 1px solid #D7DADE;
+}
 .searchBoxNew{
     width: 100%;
     text-align: center;
@@ -390,84 +403,71 @@ export default {
     // transform: translate3d(0,0,0);
     // box-shadow: 0 8px 12px #666;
     z-index: 100;
-    .searchText{
-      width: 100%;
-      height: 46px;
-      line-height: 46px;
-      padding:0 15px;
-      box-sizing: border-box;
-      font-size: 14px;
-      color: #9B9B9B;
-      background: #F5F5F5;
-      text-align: left;
-      border-top: 1px solid #D7DADE;
-      border-bottom: 1px solid #D7DADE;
-    }
     .van-search{
-      height: 44px;
-      background: #F5F5F5;
-      padding:8px 10px;
-      box-sizing: border-box;
-      .van-field__value{
-        margin-top: -2px;
-      }
-      .van-cell__title{
-        text-align: left;
-        font-size: 17px;
-        color: #000000;
-      }
-      .van-search__content{
-        background: #FFFFFF;
-        border: 1px solid #D7DADE;
-        border-radius: 2px;
-        border-radius: 2px;
-        height: 28px;
-        line-height: 28px;
-        font-size: 14px !important;
-        color: #9B9B9B;
-      }
-      .van-field__left-icon{
-        display: none;
-      }
-      .menuBox{
-        width: 100%;
-        height: 34px;
-        line-height: 34px;
-        text-align: center;
-        font-size: 14px;
-        color: #000000;
-        background: #FAFAFA;
-        box-shadow: 0 0 0 0 #D4D4D4;
-        border-bottom: 1px solid #D4D4D4;
-      }
-      .searchBtn{
-          width:88%;
-          height: 1rem;
-          line-height: 1rem;
-          margin: 0.4rem auto;
-      }
-      .searchBtn2{
-          width:88%;
-          height: 1rem;
-          line-height: 1rem;
-          margin: 0 auto 0.4rem;
-      }
-      .searchBox-bottom{
-        width:100%;
-        height:46px;
-        line-height: 46px;
-        display: flex;
-        .searchBox_btn{
-          flex: 1;
-          background: #4F77AA;
-          text-align: center;
-          font-size: 18px;
-          color: #fff;
-        }
-        .checkBtn{
-          background: #2F7DCD;
-        }
-      }
+  height: 44px;
+  background: #F5F5F5;
+  padding:8px 10px;
+  box-sizing: border-box;
+  .van-field__value{
+    margin-top: -2px;
   }
+}
+.van-cell__title{
+  text-align: left;
+  font-size: 17px;
+  color: #000000;
+}
+.van-search__content{
+  background: #FFFFFF;
+  border: 1px solid #D7DADE;
+  border-radius: 2px;
+  border-radius: 2px;
+  height: 28px;
+  line-height: 28px;
+  font-size: 14px !important;
+  color: #9B9B9B;
+}
+.van-field__left-icon{
+  display: none;
+}
+    .menuBox{
+      width: 100%;
+      height: 34px;
+      line-height: 34px;
+      text-align: center;
+      font-size: 14px;
+      color: #000000;
+      background: #FAFAFA;
+      box-shadow: 0 0 0 0 #D4D4D4;
+      border-bottom: 1px solid #D4D4D4;
+    }
+    .searchBtn{
+        width:88%;
+        height: 1rem;
+        line-height: 1rem;
+        margin: 0.4rem auto;
+    }
+    .searchBtn2{
+        width:88%;
+        height: 1rem;
+        line-height: 1rem;
+        margin: 0 auto 0.4rem;
+    }
+    .searchBox-bottom{
+      width:100%;
+      height:46px;
+      line-height: 46px;
+      display: flex;
+      .searchBox_btn{
+        flex: 1;
+        background: #4F77AA;
+        text-align: center;
+        font-size: 18px;
+        color: #fff;
+      }
+      .checkBtn{
+        background: #2F7DCD;
+      }
+    }
 }
 </style>
