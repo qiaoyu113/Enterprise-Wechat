@@ -316,9 +316,6 @@ export default {
       }).then((res) => {
         if (res.data.success) {
           let mediaidNew = res.data.data;
-          // if (mediaidNew === '') {
-
-          // }
           getCorpSignature({
             url: hostName
           }).then((res) => {
