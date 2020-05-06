@@ -110,3 +110,19 @@ export function logout() {
     method: 'post'
   })
 }
+
+export function getActivationStatus(data) {
+  return request({
+    url: '/api/driver/v1/wechat/corp/sys/getActivationStatus',
+    method: 'get',
+    params: data
+  })
+}
+
+export function getMediaIdOfActivationQrCode(data) {
+  return request({
+    url: '/api/driver/v1/wechat/corp/getMediaIdOfActivationQrCode',
+    method: 'get',
+    params: data
+  })
+}

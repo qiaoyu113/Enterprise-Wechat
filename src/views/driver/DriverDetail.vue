@@ -7,6 +7,55 @@
             <!-- <h2 class="van-doc-demo-block__title">
               基本信息
             </h2> -->
+            <div class="step-bar">
+              <div class="list-item pass">
+                <div class="head">
+                  <div class="line-wrapper">
+                    <i class="line"></i>
+                  </div>
+                  <div class="icon-wrapper">
+                    <van-icon v-if="isJoinCorpWechat" name="checked" color="#70C740" size="28" />
+                    <van-icon v-else name="warning" color="#DC6857" size="28" />
+                  </div>
+                </div>
+                <div class="content-wrapper">
+                  <span class="content">加入企业微信</span>
+                </div>
+              </div>
+              <div class="list-item current">
+                <div class="head">
+                  <div class="line-wrapper">
+                    <i class="line"></i>
+                  </div>
+                  <div class="icon-wrapper">
+                    <van-icon v-if="isFollowWorkBench" name="checked" color="#70C740" size="28" />
+                    <van-icon v-else name="warning" color="#DC6857" size="28" />
+                  </div>
+                </div>
+                <div class="content-wrapper">
+                  <span class="content">关注企业微信号</span>
+                </div>
+              </div>
+              <div class="list-item future">
+                <div class="head">
+                  <div class="line-wrapper">
+                    <i class="line"></i>
+                  </div>
+                  <div class="icon-wrapper">
+                    <van-icon v-if="isActivationPush" name="checked" color="#70C740" size="28" />
+                    <van-icon v-else name="warning" color="#DC6857" size="28" />
+                  </div>
+                </div>
+                <div class="content-wrapper">
+                  <span class="content">激活推荐</span>
+                </div>
+              </div>
+            </div>
+            <div class="matchList">
+              <div class="title_sm">
+                基本信息
+              </div>
+            </div>
             <van-cell title="姓名" :value="detail.name | DataIsNull" />
             <van-cell title="身份证号" :value="detail.idNumber | DataIsNull" />
             <van-cell title="联系电话" :value="detail.phone | DataIsNull" />
@@ -193,12 +242,13 @@
   </div>
 </template>
 <script>
-import { Tabbar, TabbarItem, Toast, Tab, Tabs, Cell, CellGroup, Button, ActionSheet, Tag } from 'vant'
-import { driverDetail, queryOrdersByDriverId, relatedLineInformation } from '@/api/user'
+import { Tabbar, TabbarItem, Toast, Tab, Tabs, Cell, CellGroup, Button, ActionSheet, Tag, Icon } from 'vant'
+import { driverDetail, queryOrdersByDriverId, relatedLineInformation, getActivationStatus, getMediaIdOfActivationQrCode, getCorpSignature, getAgentSignature } from '@/api/user'
 import { judgingIntentionOfReceiving } from '@/api/driver'
 // import VoPages from 'vo-pages'
 import 'vo-pages/lib/vo-pages.css'
 // import wx from 'jWeixin';
+const wx = window.wx;
 var startTime
 export default {
   name: 'Clue',
@@ -212,6 +262,7 @@ export default {
     [CellGroup.name]: CellGroup,
     [Button.name]: Button,
     [Tag.name]: Tag,
+    [Icon.name]: Icon,
     [ActionSheet.name]: ActionSheet
   },
   data() {
@@ -232,7 +283,11 @@ export default {
       show: false,
       matchModule: false,
       matchDetail: '',
+      isActivationPush: false,
+      isFollowWorkBench: false,
+      isJoinCorpWechat: false,
       actions: [
+        { name: '激活推送', color: '#3F8AF2' },
         { name: '产品介绍', color: '#3F8AF2' },
         { name: '推荐线路', color: '#3F8AF2' }
       ]
@@ -258,6 +313,7 @@ export default {
       localStorage.removeItem('active')
     }
     this.getDetail(driverId)
+    this.getActivation()
   },
   methods: {
     double(mat) {
@@ -286,6 +342,19 @@ export default {
         let days = that.double(date) + '天：' + that.double(hour) + ':' + that.double(minute) + ':' + that.double(second);
         that.loadTimeNum = days
       }, 1000)
+    },
+    getActivation() {
+      const externalUserId = localStorage.getItem('externalUserId')
+      let that = this;
+      getActivationStatus({
+        externalUserId: externalUserId
+      }).then((res) => {
+        if (res.data.success) {
+          that.isActivationPush = res.data.data.isActivationPush
+          that.isFollowWorkBench = res.data.data.isFollowWorkBench
+          that.isJoinCorpWechat = res.data.data.isJoinCorpWechat
+        }
+      })
     },
     getDetail(driverId) {
       driverDetail({
@@ -321,7 +390,6 @@ export default {
         if (res.data.success) {
           this.matchModule = res.data.data.flag;
           if (this.matchModule) {
-            console.log(this.matchDetail)
             this.matchDetail = res.data.data
           }
         }
@@ -366,12 +434,108 @@ export default {
         option: item.name || ''
       }
       this.GLOBAL.buryPointFunction('customer_options', '客户详情操作按钮点击', eventLevelVariables)
-      Toast(item.name);
+      // Toast(item.name);
       if (item.name === '产品介绍') {
         this.$router.push({ path: '/productinfo' })
+      } else if (item.name === '激活推送') {
+        this.pushSendLink()
       } else {
         this.$router.push({ path: '/linecommend' })
       }
+    },
+    pushSendLink() {
+      Toast.loading({
+        message: '正在获取二维码...',
+        forbidClick: true
+      });
+      const hostName = window.location.href
+      let that = this;
+      getCorpSignature({
+        url: hostName
+      }).then((res) => {
+        if (res.data.success) {
+          let data = res.data.data;
+          wx.config({
+            beta: true,
+            debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+            appId: data.corpId, // 必填，企业号的唯一标识，此处填写企业号corpid
+            timestamp: Number(data.timestamp), // 必填，生成签名的时间戳
+            nonceStr: data.nonceStr, // 必填，生成签名的随机串
+            signature: data.signature, // 必填，签名，见附录1
+            jsApiList: ['agentConfig'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+          });
+          wx.ready(function() {
+            // 开启企业微信debug模式wx.config里的debug为true
+            wx.checkJsApi({
+              jsApiList: [
+                'agentConfig',
+                'sendChatMessage',
+                'getCurExternalContact'
+              ],
+              success: function(res) {
+                getAgentSignature({
+                  agentId: that.GLOBAL.agentId,
+                  url: hostName
+                }).then((res) => {
+                  if (res.data.success) {
+                    const agentData = res.data.data
+                    wx.agentConfig({
+                      corpid: agentData.corpId, // 必填，企业微信的corpid，必须与当前登录的企业一致
+                      agentid: agentData.agentId, // 必填，企业微信的应用id （e.g. 1000247）
+                      timestamp: '' + agentData.timestamp, // 必填，生成签名的时间戳
+                      nonceStr: agentData.nonceStr, // 必填，生成签名的随机串
+                      signature: agentData.signature, // 必填，签名，见附录1
+                      jsApiList: ['sendChatMessage', 'getCurExternalContact'], // 必填
+                      success: function(res) {
+                        // that.GLOBAL.buryPointFunction('send_line', '发送线路', {
+                        //   value: '发送线路'
+                        // })
+                        const externalUserId = localStorage.getItem('externalUserId')
+                        getMediaIdOfActivationQrCode({
+                          externalUserId: externalUserId
+                        }).then((res) => {
+                          if (res.data.success) {
+                            // alert(JSON.stringify(res.data.data))
+                            wx.invoke('sendChatMessage', {
+                              msgtype: 'image', // 消息类型，必填
+                              image:
+                                {
+                                  mediaid: res.data.data // 图片的素材id
+                                }
+                            }, function(res) {
+                              // alert(JSON.stringify(res))
+                              Toast.clear();
+                              if (res.err_msg === 'sendChatMessage:permission denied') {
+                                Toast.fail('暂无功能权限')
+                              }
+                            })
+                          } else {
+                            // alert(JSON.stringify(res))
+                          }
+                        })
+                      },
+                      fail: function(res) {
+                        console.log('err', res)
+                        if (res.errMsg.indexOf('is not a function') > -1) {
+                          alert('<i class="weui-icon-warn">版本过低请升级</i>')
+                        }
+                      }
+                    });
+                  }
+                  that.disable = false;
+                  Toast.clear();
+                })
+              },
+              fail: function(res) {
+                alert('版本过低请升级');
+              }
+            });
+          });
+          wx.error(function(res) {
+            console.log(res);
+          });
+        }
+      })
     }
   }
 }
@@ -463,6 +627,123 @@ export default {
       line-height: 22px;
     }
   }
+  /*进度条start*/
+    .step-bar {
+      padding: 15px 10px;
+      box-sizing: border-box;
+      display: flex;
+      justify-content: space-between;
+      .van-icon{
+        background: #fff;
+      }
+    }
+    .list-item {
+        flex: 1;
+        .head {
+          position: relative;
+        }
+        .line-wrapper {
+          position: absolute;
+          height: 3px;
+          background-color: #5877A6;
+          /* 实现n个元素但有n-1条线的必要条件，且需要将最后的线删除 */
+          left: 50%;
+          right: -50%;
+          top: 13px;
+          .line {
+                display: block;
+                width: 100%;
+                height: 100%;
+          }
+        }
+        .icon-wrapper,
+        .content-wrapper {
+          text-align: center;
+        }
+        .content-wrapper {
+          margin-top: 6px;
+        }
+        &:last-of-type {
+          .line-wrapper {
+                display: none;
+          }
+        }
+        .icon {
+          display: inline-block;
+          width: 10px;
+          height: 10px;
+          border-radius: 50%;
+          position: relative;
+          z-index: 1;
+          border: 2px solid #FFF;
+        }
+        &.current {
+          .icon {
+            background-color: #2298fe;
+          }
+          .content {
+            color: #333;
+          }
+        }
+        &.pass {
+          .icon {
+                background-color: #b9defe;
+          }
+          .content {
+            color: #333;
+          }
+          .line {
+                background-color: #5877A6;
+          }
+        }
+        &.future {
+          .icon {
+                background-color: #dfe4e8;
+          }
+          .content {
+            color: #333;
+          }
+        }
+    }
+    .van-step--horizontal:last-child{
+      .van-step__line{
+        background-color: #5877A6 !important;
+      }
+    }
+  .matchList{
+      width:100%;
+      background: #fff;
+      box-sizing: border-box;
+      .title_sm{
+        height:24px;
+        line-height: 24px;
+        font-size: 12px;
+        color: #B2B2B2;
+        background: #F5F5F5;
+        border-top: 1px solid #ebedf0;
+        border-bottom: 1px solid #ebedf0;
+        padding: 0 10px;
+        box-sizing: border-box;
+      }
+      .tage_type{
+        overflow: hidden;
+        padding:14px 20px 8px;
+        box-sizing: border-box;
+        // border-top: 1px solid #ebedf0;
+        // border-bottom: 1px solid #ebedf0;
+        .van-tag{
+          padding:0 12px;
+          box-sizing: border-box;
+          font-size: 13px;
+          color: #FFFFFF;
+          margin-right: 10px;
+          margin-bottom: 6px;
+        }
+        // .tag{
+          // margin: 2px 6px 8px 0;
+        // }
+      }
+    }
   .noMore{
     width: 100%;
     text-align: center;

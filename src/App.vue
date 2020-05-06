@@ -6,12 +6,20 @@
       </keep-alive>
       <router-view v-else class="router"></router-view>
     </transition>
+    <div v-if="version" class="version">
+      {{ version }}
+    </div>
   </div>
 </template>
 <script>
 import defaultSetting from './settings'
 export default {
   name: 'App',
+  data() {
+    return {
+      version: ''
+    }
+  },
   computed: {
     transitionName() {
       if (defaultSetting.needPageTrans) {
@@ -22,6 +30,9 @@ export default {
   },
   mounted() {
     // this.wxLogin()
+    if (window.location.host !== 'firmiana-wechat.yunniao.cn') {
+      this.version = this.GLOBAL.version
+    }
   },
   methods: {
     wxLogin() {
@@ -49,6 +60,14 @@ html,body{ margin:0px; height:100%;}
   width: 100%;
   height: 100%;
   position: relative;
+}
+
+.version{
+  font-size: 12px;
+  position: fixed;
+  top:0;
+  bottom:0;
+  left:0;
 }
 
 .router {
