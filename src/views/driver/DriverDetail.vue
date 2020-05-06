@@ -571,7 +571,7 @@ export default {
     .matchList{
       width:100%;
       background: #fff;
-      border-bottom: 2px solid #F5F5F5;
+      border-bottom: 1px solid #F5F5F5;
       box-sizing: border-box;
       .title_sm{
         height:20px;
@@ -587,7 +587,7 @@ export default {
         padding:14px 20px 8px;
         box-sizing: border-box;
         border-top: 1px solid #ebedf0;
-        border-bottom: 1px solid #ebedf0;
+        // border-bottom: 1px solid #ebedf0;
         .van-tag{
           padding:0 12px;
           box-sizing: border-box;
