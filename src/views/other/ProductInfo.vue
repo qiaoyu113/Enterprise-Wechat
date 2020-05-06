@@ -139,7 +139,28 @@ export default {
                           if (res.err_msg === 'sendChatMessage:permission denied') {
                             Toast.fail('暂无功能权限')
                           }
+                          return
                         })
+                        var u = navigator.userAgent;
+                        if (u.indexOf('iPhone') > -1 || u.indexOf('iOS') > -1) {
+                          setTimeout(() => {
+                            wx.invoke('sendChatMessage', {
+                              msgtype: 'image', // 消息类型，必填
+                              image:
+                            {
+                              mediaid: id // 图片的素材id
+                            }
+                            }, function(res) {
+                              Toast.clear();
+                              // Toast.success('')
+                              that.disable = false;
+                              console.log('发送图片回调', res)
+                              if (res.err_msg === 'sendChatMessage:permission denied') {
+                                Toast.fail('暂无功能权限')
+                              }
+                            })
+                          }, 100)
+                        }
                         Toast.clear();
                         that.disable = false;
                       },
