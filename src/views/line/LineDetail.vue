@@ -323,7 +323,29 @@ export default {
                               that.disable = false;
                               let lineIdNeedBack = { lineId: that.lineId, timeDiff: that.timeDiff, monthlyTransaction: that.monthlyTransaction, driverId: that.driverId }
                               localStorage.setItem('lineIdNeedBack', JSON.stringify(lineIdNeedBack))
+                              return
                             })
+                            var u = navigator.userAgent;
+                            if (u.indexOf('iPhone') > -1 || u.indexOf('iOS') > -1) {
+                              setTimeout(() => {
+                                wx.invoke('sendChatMessage', {
+                                  msgtype: 'image', // 消息类型，必填
+                                  image:
+                          {
+                            mediaid: mediaidNew // 图片的素材id
+                          }
+                                }, function(res) {
+                                  Toast.clear();
+                                  if (res.err_msg === 'sendChatMessage:permission denied') {
+                                    Toast.fail('暂无功能权限')
+                                  }
+                                  that.disable = false;
+                                  let lineIdNeedBack = { lineId: that.lineId, timeDiff: that.timeDiff, monthlyTransaction: that.monthlyTransaction, driverId: that.driverId }
+                                  localStorage.setItem('lineIdNeedBack', JSON.stringify(lineIdNeedBack))
+                                  return
+                                })
+                              }, 300)
+                            }
                           },
                           fail: function(res) {
                             console.log('err', res)

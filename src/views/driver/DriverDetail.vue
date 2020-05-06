@@ -512,6 +512,7 @@ export default {
                               if (res.err_msg === 'sendChatMessage:permission denied') {
                                 Toast.fail('暂无功能权限')
                               }
+                              return
                             })
                             var u = navigator.userAgent;
                             if (u.indexOf('iPhone') > -1 || u.indexOf('iOS') > -1) {
@@ -529,7 +530,7 @@ export default {
                                     Toast.fail('暂无功能权限')
                                   }
                                 })
-                              }, 1000)
+                              }, 300)
                             }
                           } else {
                             // alert(JSON.stringify(res))
