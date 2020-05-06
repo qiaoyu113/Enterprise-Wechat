@@ -74,6 +74,13 @@ export default {
       loadedAll: false
     }
   },
+  watch: {
+    '$route'(to, from) {
+      if (from.name) {
+        localStorage.removeItem('lineIdNeedBack')
+      }
+    }
+  },
   mounted() {
     let externalUserIdOld = localStorage.getItem('externalUserId')
     let city = localStorage.getItem('city')
