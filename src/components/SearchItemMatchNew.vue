@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="searchBox">
+    <div class="searchBoxNew">
       <!-- <van-dropdown-menu>
         <van-dropdown-item v-model="value1" :options="option1" @close="dropClick" />
       </van-dropdown-menu> -->
@@ -377,20 +377,7 @@ export default {
 }
 </script>
 <style lang="scss">
-.searchText{
-  width: 100%;
-  height: 46px;
-  line-height: 46px;
-  padding:0 15px;
-  box-sizing: border-box;
-  font-size: 14px;
-  color: #9B9B9B;
-  background: #F5F5F5;
-  text-align: left;
-  border-top: 1px solid #D7DADE;
-  border-bottom: 1px solid #D7DADE;
-}
-.searchBox{
+.searchBoxNew{
     width: 100%;
     text-align: center;
     background: #fff;
@@ -403,6 +390,19 @@ export default {
     // transform: translate3d(0,0,0);
     // box-shadow: 0 8px 12px #666;
     z-index: 100;
+    .searchText{
+  width: 100%;
+  height: 46px;
+  line-height: 46px;
+  padding:0 15px;
+  box-sizing: border-box;
+  font-size: 14px;
+  color: #9B9B9B;
+  background: #F5F5F5;
+  text-align: left;
+  border-top: 1px solid #D7DADE;
+  border-bottom: 1px solid #D7DADE;
+}
     .van-search{
   height: 44px;
   background: #F5F5F5;
@@ -411,8 +411,7 @@ export default {
   .van-field__value{
     margin-top: -2px;
   }
-}
-.van-cell__title{
+  .van-cell__title{
   text-align: left;
   font-size: 17px;
   color: #000000;
@@ -469,5 +468,6 @@ export default {
         background: #2F7DCD;
       }
     }
+}
 }
 </style>
