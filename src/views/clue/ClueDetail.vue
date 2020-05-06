@@ -392,7 +392,7 @@ export default {
                                     Toast.fail('暂无功能权限')
                                   }
                                 })
-                              }, 300)
+                              }, 100)
                             }
                           }
                         })

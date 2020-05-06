@@ -342,9 +342,8 @@ export default {
                                   that.disable = false;
                                   let lineIdNeedBack = { lineId: that.lineId, timeDiff: that.timeDiff, monthlyTransaction: that.monthlyTransaction, driverId: that.driverId }
                                   localStorage.setItem('lineIdNeedBack', JSON.stringify(lineIdNeedBack))
-                                  return
                                 })
-                              }, 300)
+                              }, 100)
                             }
                           },
                           fail: function(res) {

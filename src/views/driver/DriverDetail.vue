@@ -530,7 +530,7 @@ export default {
                                     Toast.fail('暂无功能权限')
                                   }
                                 })
-                              }, 300)
+                              }, 100)
                             }
                           } else {
                             // alert(JSON.stringify(res))
