@@ -14,7 +14,11 @@
           </p>
           <div class="tagBox">
             <template v-for="key in keyList">
-              <template v-if="Array.isArray(params[key.name]) && params[key.name].length > 0">
+              <template
+                v-if="
+                  Array.isArray(params[key.name]) && params[key.name].length > 0
+                "
+              >
                 <van-tag
                   v-for="(value, index) in params[key.name]"
                   :key="index"
@@ -34,7 +38,11 @@
           </div>
           <div class="needCarBox">
             <template v-for="key in keyList">
-              <template v-if="Array.isArray(params[key.name]) && params[key.name].length > 0">
+              <template
+                v-if="
+                  Array.isArray(params[key.name]) && params[key.name].length > 0
+                "
+              >
                 <div :key="key.name" class="needCarList">
                   <div class="top">
                     {{ key.key }}
@@ -65,7 +73,13 @@
         跟进记录
       </div>
       <div class="list-ct">
-        <van-row v-for="(item, index) in list" :key="index" class="list-speed" type="flex" align="center">
+        <van-row
+          v-for="(item, index) in list"
+          :key="index"
+          class="list-speed"
+          type="flex"
+          align="center"
+        >
           <van-col class="list-speed-lt">
             {{ item.stateName }}
           </van-col>
@@ -81,9 +95,13 @@
       </div>
     </div>
     <van-button
-      :color="list.some(item => item.state ==5 || item.state == 4) ? '#A6C5E5' : '#2F7DCD'"
+      :color="
+        list.some((item) => item.state == 5 || item.state == 4)
+          ? '#A6C5E5'
+          : '#2F7DCD'
+      "
       class="speed-btn"
-      :disabled="list.some(item => item.state ==5 || item.state == 4)"
+      :disabled="list.some((item) => item.state == 5 || item.state == 4)"
       @click="showAction = true"
     >
       撮合跟进
@@ -117,8 +135,22 @@
 </template>
 
 <script>
-import { Icon, Button, Tag, Col, Row, Cell, ActionSheet, Dialog, Field, Toast } from 'vant';
-import { matchingRecordDetails, submitSave } from 'api/driver'
+import {
+  Icon,
+  Button,
+  Tag,
+  Col,
+  Row,
+  Cell,
+  ActionSheet,
+  Dialog,
+  Field,
+  Toast
+} from 'vant';
+import { matchingRecordDetails, submitSave } from 'api/driver';
+import { getMediaIdOfLineDetail } from '@/api/line';
+import { getCorpSignature, getAgentSignature } from '@/api/user';
+const wx = window.wx;
 export default {
   name: 'DriverFollowDetail',
   components: {
@@ -135,13 +167,13 @@ export default {
   },
   filters: {
     setClass(key, bg) {
-      return (key ? 'success' : 'danger') + (bg || '')
+      return (key ? 'success' : 'danger') + (bg || '');
     },
     setType(key) {
-      return key ? 'checked' : 'warning'
+      return key ? 'checked' : 'warning';
     },
     isNull(val) {
-      return val || ''
+      return val || '';
     }
   },
   data() {
@@ -191,10 +223,10 @@ export default {
         remark: '',
         state: 0
       }
-    }
+    };
   },
   beforeRouteLeave(to, from, next) {
-    this.$destroy(true)
+    this.$destroy(true);
     next(true);
   },
   mounted() {
@@ -216,10 +248,11 @@ export default {
             Toast.fail({
               message: data.errorMsg || '网络错误，请稍后再试',
               duration: 1.5 * 1000
-            })
+            });
           }
-        }).catch((err) => {
-          console.log(err)
+        })
+        .catch((err) => {
+          console.log(err);
         });
     },
     onSelect(item) {
@@ -228,9 +261,13 @@ export default {
       this.saveForm.state = item.id;
       this.saveForm.matchRateId = this.params.id;
       this.showAction = false;
-      this.$nextTick(() => {
-        this.show = true;
-      })
+      if (item.id === 1) {
+        this.pushSendLink();
+      } else {
+        this.$nextTick(() => {
+          this.show = true;
+        });
+      }
     },
     submitSave(action, done) {
       if (action === 'confirm') {
@@ -239,8 +276,8 @@ export default {
           Toast.fail({
             message: '请输入备注',
             duration: 1.5 * 1000
-          })
-          done(false)
+          });
+          done(false);
           return;
         }
         submitSave(this.saveForm)
@@ -251,60 +288,182 @@ export default {
               Toast.fail({
                 message: data.errorMsg || '网络错误，请稍后再试',
                 duration: 1.5 * 1000
-              })
+              });
             }
-            done(data.success)
-          }).catch((err) => {
-            console.log(err)
-            done(false)
+            done(data.success);
           })
+          .catch((err) => {
+            console.log(err);
+            done(false);
+          });
       } else {
         done();
       }
+    },
+    pushSendLink() {
+      Toast.loading({
+        message: '正在生产二维码...',
+        forbidClick: true
+      });
+      const hostName = window.location.href;
+      let that = this;
+      that.disable = true;
+      getMediaIdOfLineDetail({
+        lineId: that.params.lineId,
+        busiType: that.params.busiType
+      }).then((res) => {
+        if (res.data.success) {
+          let mediaidNew = res.data.data;
+          getCorpSignature({
+            url: hostName
+          }).then((res) => {
+            if (res.data.success) {
+              let data = res.data.data;
+              wx.config({
+                beta: true,
+                debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+                appId: data.corpId, // 必填，企业号的唯一标识，此处填写企业号corpid
+                timestamp: Number(data.timestamp), // 必填，生成签名的时间戳
+                nonceStr: data.nonceStr, // 必填，生成签名的随机串
+                signature: data.signature, // 必填，签名，见附录1
+                jsApiList: ['agentConfig'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+              });
+              wx.ready(function() {
+                // 开启企业微信debug模式wx.config里的debug为true
+                wx.checkJsApi({
+                  jsApiList: [
+                    'agentConfig',
+                    'sendChatMessage',
+                    'getCurExternalContact'
+                  ],
+                  success: function(res) {
+                    getAgentSignature({
+                      agentId: that.GLOBAL.agentId,
+                      url: hostName
+                    }).then((res) => {
+                      if (res.data.success) {
+                        const agentData = res.data.data;
+                        wx.agentConfig({
+                          corpid: agentData.corpId, // 必填，企业微信的corpid，必须与当前登录的企业一致
+                          agentid: agentData.agentId, // 必填，企业微信的应用id （e.g. 1000247）
+                          timestamp: '' + agentData.timestamp, // 必填，生成签名的时间戳
+                          nonceStr: agentData.nonceStr, // 必填，生成签名的随机串
+                          signature: agentData.signature, // 必填，签名，见附录1
+                          jsApiList: [
+                            'sendChatMessage',
+                            'getCurExternalContact'
+                          ], // 必填
+                          success: function(res) {
+                            that.GLOBAL.buryPointFunction(
+                              'send_line',
+                              '发送线路',
+                              {
+                                value: '发送线路'
+                              }
+                            );
+                            wx.invoke(
+                              'sendChatMessage',
+                              {
+                                msgtype: 'image', // 消息类型，必填
+                                image: {
+                                  mediaid: mediaidNew // 图片的素材id
+                                }
+                              },
+                              function(res) {
+                                Toast.clear();
+                                if (
+                                  res.err_msg ===
+                                  'sendChatMessage:permission denied'
+                                ) {
+                                  Toast.fail('暂无功能权限');
+                                }
+                                that.saveForm.remark = '线路推送至司机';
+                                submitSave(that.saveForm)
+                                  .then(({ data }) => {
+                                    if (data.success) {
+                                      this.getDetail();
+                                    } else {
+                                      Toast.fail({
+                                        message: data.errorMsg || '网络错误，请稍后再试',
+                                        duration: 1.5 * 1000
+                                      });
+                                    }
+                                  })
+                                  .catch((err) => {
+                                    console.log(err);
+                                  });
+                              }
+                            );
+                          },
+                          fail: function(res) {
+                            console.log('err', res);
+                            if (res.errMsg.indexOf('is not a function') > -1) {
+                              alert(
+                                '<i class="weui-icon-warn">版本过低请升级</i>'
+                              );
+                            }
+                          }
+                        });
+                      }
+                      that.disable = false;
+                      Toast.clear();
+                    });
+                  },
+                  fail: function(res) {
+                    alert('版本过低请升级');
+                  }
+                });
+              });
+              wx.error(function(res) {
+                console.log(res);
+              });
+            }
+          });
+        }
+      });
     }
   }
-}
+};
 </script>
 
 <style lang="scss" scoped>
+$success: #81ca2a;
+$danger: #e75e60;
 
-$success: #81CA2A;
-$danger: #E75E60;
-
-.DriverFollowDetail{
+.DriverFollowDetail {
   padding-bottom: 46px;
-  .van-button--primary{
+  .van-button--primary {
     background-color: $success;
     border-color: $success;
   }
-  background-color: #E8ECEE;
+  background-color: #e8ecee;
   box-sizing: border-box;
   // 公用
-  .success{
+  .success {
     color: $success;
   }
   .danger {
     color: $danger;
   }
-  .success-bg{
+  .success-bg {
     background-color: $success;
   }
   .danger-bg {
     background-color: $danger;
   }
   // list
-  .list{
+  .list {
     height: 100%;
   }
   .lineList {
     width: 100%;
     border-radius: 1.2rem;
     box-sizing: border-box;
-    p{
+    p {
       margin-block-start: 0;
       margin-block-end: 0;
     }
-    .tag_margin{
+    .tag_margin {
       margin: 0 10px 10px 0;
       padding: 0 10px;
       height: 18px;
@@ -335,10 +494,10 @@ $danger: #E75E60;
           height: 20px;
           line-height: 20px;
           font-size: 13px;
-          color: #FFFFFF;
+          color: #ffffff;
           border-radius: 5px;
         }
-        .line-tit{
+        .line-tit {
           font-size: 16px;
           color: #000;
           line-height: 24px;
@@ -346,7 +505,7 @@ $danger: #E75E60;
         .address {
           font-weight: 400;
           font-size: 14px;
-          line-height:22px;
+          line-height: 22px;
           color: #000000;
           padding: 4px 0;
           box-sizing: border-box;
@@ -387,7 +546,7 @@ $danger: #E75E60;
             width: 100%;
             text-align: center;
             font-size: 11px;
-            line-height:1;
+            line-height: 1;
             color: #b2b2b2;
           }
           .bottom {
@@ -397,36 +556,36 @@ $danger: #E75E60;
             text-align: center;
             line-height: 1;
             font-size: 0;
-            .van-icon{
-              font-size: 20px
+            .van-icon {
+              font-size: 20px;
             }
           }
         }
       }
     }
   }
-  .lineListBottom{
-    border-top: 1px solid #EEEBEB;
+  .lineListBottom {
+    border-top: 1px solid #eeebeb;
     font-size: 14px;
-    color: #9B9B9B;
+    color: #9b9b9b;
     border-radius: 0 0 10px 10px;
     overflow: hidden;
-    .van-cell{
+    .van-cell {
       padding: 0 7px 0 19px;
       height: 40px;
       line-height: 40px;
-      .van-icon{
-        line-height: 40px
+      .van-icon {
+        line-height: 40px;
       }
     }
   }
   .list-note {
     padding: 0 17px;
     background: #fff;
-    p{
+    p {
       padding: 12px 0;
       font-size: 12px;
-      color: rgba(0,0,0,0.40);
+      color: rgba(0, 0, 0, 0.4);
       line-height: 18px;
       text-indent: 2em;
       border-top: 1px solid #eeebeb;
@@ -459,46 +618,46 @@ $danger: #E75E60;
       }
     }
   }
-  .speed{
+  .speed {
     margin-top: 30px;
-    .speed-tit{
+    .speed-tit {
       padding-left: 16px;
       line-height: 24px;
-      color: #B2B2B2;
+      color: #b2b2b2;
     }
-    .list-speed{
+    .list-speed {
       padding: 10px 16px;
-      border-top: 1px solid #EEEBEB;
+      border-top: 1px solid #eeebeb;
       background-color: #fff;
-      &:nth-last-of-type(1){
-        border-bottom: 1px solid #EEEBEB;
+      &:nth-last-of-type(1) {
+        border-bottom: 1px solid #eeebeb;
       }
-      .list-speed-lt{
+      .list-speed-lt {
         width: 74px;
         height: 20px;
         line-height: 20px;
-        background: #4F77AA;
+        background: #4f77aa;
         border-radius: 10px;
         font-size: 12px;
-        color: #FFF;
+        color: #fff;
         text-align: center;
       }
-      .list-speed-rt{
+      .list-speed-rt {
         margin-left: 15px;
         flex: 1;
-        .list-speed-top{
+        .list-speed-top {
           font-size: 16px;
           color: #000;
-          line-height:24px;
+          line-height: 24px;
         }
-        .list-speed-time{
+        .list-speed-time {
           font-size: 12px;
-          color: #B2B2B2;
+          color: #b2b2b2;
         }
       }
     }
   }
-  .speed-btn{
+  .speed-btn {
     position: fixed;
     bottom: 0;
     left: 0;
@@ -512,14 +671,13 @@ $danger: #E75E60;
     border-radius: 0;
     // background: #2F7DCD;
   }
-
 }
 </style>
 <style lang="scss">
-.driver-dialog .van-dialog__content{
+.driver-dialog .van-dialog__content {
   padding: 0 10px;
 }
-.driver-dialog .van-field__label{
+.driver-dialog .van-field__label {
   width: auto;
   margin-right: 20px;
   flex: none;
