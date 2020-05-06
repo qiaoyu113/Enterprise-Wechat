@@ -76,6 +76,7 @@ export default {
   },
   watch: {
     '$route'(to, from) {
+      alert(from.name)
       if (from.name) {
         localStorage.removeItem('lineIdNeedBack')
       }

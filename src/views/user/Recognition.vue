@@ -121,7 +121,6 @@ export default {
                                   const driverId = res.data.data.driverId;
                                   const type = that.$route.query.type;
                                   if (Number(state) === 1) {
-                                    alert(type)
                                     if (type === 'driverfollow') {
                                       that.$router.replace({ path: '/driverfollow', query: { driverId: driverId }})
                                     } else {
