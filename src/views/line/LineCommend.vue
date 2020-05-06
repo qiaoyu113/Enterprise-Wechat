@@ -74,13 +74,9 @@ export default {
       loadedAll: false
     }
   },
-  watch: {
-    '$route'(to, from) {
-      alert(from.name)
-      if (from.name) {
-        localStorage.removeItem('lineIdNeedBack')
-      }
-    }
+  beforeRouteEnter(to, from, next) {
+    let path = from.path // path为定义的变量，不是vue的data定义的变量，当前生命周期data还未初始化
+    alert(path)
   },
   mounted() {
     let externalUserIdOld = localStorage.getItem('externalUserId')
