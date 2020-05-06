@@ -358,6 +358,11 @@ export default {
                           externalUserId: externalUserId
                         }).then((res) => {
                           if (res.data.success) {
+                            let imageData = res.data.data;
+                            if (imageData === '') {
+                              Toast.success('已通过后台发送')
+                              return
+                            }
                             wx.invoke('sendChatMessage', {
                               msgtype: 'image', // 消息类型，必填
                               image:
