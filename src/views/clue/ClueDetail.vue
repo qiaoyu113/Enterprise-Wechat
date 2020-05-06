@@ -367,7 +367,7 @@ export default {
                               msgtype: 'image', // 消息类型，必填
                               image:
                                 {
-                                  mediaid: res.data.data // 图片的素材id
+                                  mediaid: imageData // 图片的素材id
                                 }
                             }, function(res) {
                               Toast.clear();
