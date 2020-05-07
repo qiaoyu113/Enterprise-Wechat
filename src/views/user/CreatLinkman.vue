@@ -220,9 +220,9 @@ export default {
                             let userId = res.userId; // 返回当前外部联系人userId
                             wx.openEnterpriseChat({
                               // 注意：userIds和externalUserIds至少选填一个，且userIds+externalUserIds总数不能超过2000。
-                              userIds: userId,
+                              // userIds: userId,
                               // 参与会话的企业成员列表，格式为userid1;userid2;...，用分号隔开。
-                              // externalUserIds: 'wmUXHJDgAAzDgTLZoiOZEcccZghCizRA', // 参与会话的外部联系人列表，格式为userId1;userId2;…，用分号隔开。
+                              externalUserIds: userId, // 参与会话的外部联系人列表，格式为userId1;userId2;…，用分号隔开。
                               groupName: '会话测试',
                               // 必填，会话名称。单聊时该参数传入空字符串""即可。
                               success: function(res) {
