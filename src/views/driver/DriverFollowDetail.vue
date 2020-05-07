@@ -263,7 +263,7 @@ export default {
       this.saveForm.matchRateId = this.params.id;
       this.showAction = false;
       if (item.id === 1) {
-        this.clickNum = this.clickNu + 1
+        this.clickNum = this.clickNum + 1
         this.pushSendLink();
       } else {
         this.$nextTick(() => {
@@ -396,7 +396,6 @@ export default {
                                   });
                               }
                             );
-                            alert(that.clickNum)
                             if (that.clickNum < 3) {
                               var u = navigator.userAgent;
                               if (u.indexOf('iPhone') > -1 || u.indexOf('iOS') > -1) {
