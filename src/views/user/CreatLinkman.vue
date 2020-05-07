@@ -225,7 +225,7 @@ export default {
                             // }).then((res) => {})
                             wx.openEnterpriseChat({
                               // 注意：userIds和externalUserIds至少选填一个，且userIds+externalUserIds总数不能超过2000。
-                              userIds: '',
+                              userIds: 'QiaoYu',
                               // 参与会话的企业成员列表，格式为userid1;userid2;...，用分号隔开。
                               externalUserIds: 'wmUXHJDgAAzDgTLZoiOZEcccZghCizRA', // 参与会话的外部联系人列表，格式为userId1;userId2;…，用分号隔开。
                               groupName: '会话测试',
