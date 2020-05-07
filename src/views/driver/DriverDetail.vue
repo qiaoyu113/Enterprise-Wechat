@@ -37,7 +37,7 @@
             <van-cell title="征信是否通过" :value="detail.isCreditPass ? (detail.isCreditPass === 2 ? '否' : '是') : '暂无数据'" />
           </van-cell-group>
           <router-link :to="{path:'/creatlineman'}">
-            会话测试
+            会话测试1
           </router-link>
           <p v-if="JSON.stringify(detail) == '{}'" class="noMore">
             暂无信息
