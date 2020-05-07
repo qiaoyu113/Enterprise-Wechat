@@ -5,7 +5,7 @@
       :loaded-all="loadedAll"
       :no-data-hint="false"
     >
-      <img src="../../assets/recognition.png" alt="">
+      <img src="../../assets/chat.png" alt="">
       <div>
         <van-loading v-if="!btnShow" />
         <div v-if="!btnShow" class="font">
@@ -73,8 +73,7 @@ export default {
   methods: {
     getUserConfig() {
       let that = this;
-      // const hostName = window.location.href
-      const hostName = 'http://firmiana-wechat.m1.yunniao.cn/'
+      const hostName = window.location.href
       getCorpSignature({
         url: hostName
       }).then((res) => {
@@ -226,10 +225,10 @@ export default {
                             // }).then((res) => {})
                             wx.openEnterpriseChat({
                               // 注意：userIds和externalUserIds至少选填一个，且userIds+externalUserIds总数不能超过2000。
-                              userIds: 'zhangshan;lisi;wangwu',
+                              userIds: '',
                               // 参与会话的企业成员列表，格式为userid1;userid2;...，用分号隔开。
-                              externalUserIds: 'wmEAlECwAAHrbWYDOK5u3Bf13xlYDAAA;wmEAlECwAAHibWYDOK5u3Af13xlYDAAA', // 参与会话的外部联系人列表，格式为userId1;userId2;…，用分号隔开。
-                              groupName: '',
+                              externalUserIds: 'wmUXHJDgAAzDgTLZoiOZEcccZghCizRA', // 参与会话的外部联系人列表，格式为userId1;userId2;…，用分号隔开。
+                              groupName: '会话测试',
                               // 必填，会话名称。单聊时该参数传入空字符串""即可。
                               success: function(res) {
                                 // 回调
@@ -313,7 +312,7 @@ export default {
                         wx.invoke('openUserProfile', {
                           'type': 1,
                           // 1表示该userid是企业成员，2表示该userid是外部联系人
-                          'userid': 'wmEAlECwAAHrbWYDetiu3Af13xlYDAAA'
+                          'userid': 'QiaoYu'
                           // 可以是企业成员，也可以是外部联系人
                         }, function(res) {
                           console.log('个人页成功！！！')
