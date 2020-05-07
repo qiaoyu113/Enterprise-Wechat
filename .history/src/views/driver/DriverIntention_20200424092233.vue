@@ -241,8 +241,8 @@ export default {
       });
     },
     getJudging() {
-      this.driverId = this.$route.query.driverId;
-      // this.driverId = 'BJS202003101000'
+      // this.driverId = this.$route.query.driverId;
+      this.driverId = 'BJS202003101000'
       Toast.loading({
         duration: 0, // 持续展示 toast
         forbidClick: true, // 禁用背景点击
