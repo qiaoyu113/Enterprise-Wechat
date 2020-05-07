@@ -263,7 +263,7 @@ export default {
       this.saveForm.matchRateId = this.params.id;
       this.showAction = false;
       if (item.id === 1) {
-        this.clickNum = this.clickNu + 1
+        this.clickNum = this.clickNum + 1
         this.pushSendLink();
       } else {
         this.$nextTick(() => {
