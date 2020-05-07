@@ -231,46 +231,8 @@ export default {
                             }
                           }
                         });
-                        wx.invoke('getCurExternalContact', {
-                        }, function(res) {
-                          console.log(res)
-                          if (res.err_msg === 'getCurExternalContact:ok') {
-                            console.log('userId', res.userId) // 返回当前外部联系人userId
-                            // localStorage.setItem('externalUserId', res.userId.toString())
-                            // externalUserId({
-                            //   externalUserId: res.userId
-                            // }).then((res) => {})
-                            wx.openEnterpriseChat({
-                              // 注意：userIds和externalUserIds至少选填一个，且userIds+externalUserIds总数不能超过2000。
-                              userIds: 'QiaoYu',
-                              // 参与会话的企业成员列表，格式为userid1;userid2;...，用分号隔开。
-                              // externalUserIds: 'wmUXHJDgAAzDgTLZoiOZEcccZghCizRA', // 参与会话的外部联系人列表，格式为userId1;userId2;…，用分号隔开。
-                              groupName: '会话测试',
-                              // 必填，会话名称。单聊时该参数传入空字符串""即可。
-                              success: function(res) {
-                                // 回调
-                                console.log('会话成功！！！')
-                              },
-                              fail: function(res) {
-                                if (res.errMsg.indexOf('function not exist') > -1) {
-                                  alert('版本过低请升级')
-                                }
-                              }
-                            });
-                          } else {
-                            // 错误处理
-                            that.btnShow = true;
-                            alert('外部联系人识别失败')
-                          }
-                        });
-                      },
-                      fail: function(res) {
-                        console.log('err', res)
-                        if (res.errMsg.indexOf('is not a function') > -1) {
-                          alert('<i class="weui-icon-warn">版本过低请升级3</i>')
-                        }
                       }
-                    });
+                    })
                   }
                 })
               },
