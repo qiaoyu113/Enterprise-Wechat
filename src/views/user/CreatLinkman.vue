@@ -214,21 +214,29 @@ export default {
                       signature: agentData.signature, // 必填，签名，见附录1
                       jsApiList: ['sendChatMessage', 'getCurExternalContact', 'openEnterpriseChat'], // 必填
                       success: function(res) {
-                        wx.openEnterpriseChat({
-                          // 注意：userIds和externalUserIds至少选填一个，且userIds+externalUserIds总数不能超过2000。
-                          userIds: 'QiaoYu',
-                          // 参与会话的企业成员列表，格式为userid1;userid2;...，用分号隔开。
-                          // externalUserIds: 'wmUXHJDgAAzDgTLZoiOZEcccZghCizRA', // 参与会话的外部联系人列表，格式为userId1;userId2;…，用分号隔开。
-                          groupName: '会话测试',
-                          // 必填，会话名称。单聊时该参数传入空字符串""即可。
-                          success: function(res) {
-                            // 回调
-                            console.log('会话成功！！！')
-                          },
-                          fail: function(res) {
-                            if (res.errMsg.indexOf('function not exist') > -1) {
-                              alert('版本过低请升级')
-                            }
+                        wx.invoke('getCurExternalContact', {
+                        }, function(res) {
+                          if (res.err_msg === 'getCurExternalContact:ok') {
+                            let userId = res.userId; // 返回当前外部联系人userId
+                            wx.openEnterpriseChat({
+                              // 注意：userIds和externalUserIds至少选填一个，且userIds+externalUserIds总数不能超过2000。
+                              userIds: userId,
+                              // 参与会话的企业成员列表，格式为userid1;userid2;...，用分号隔开。
+                              // externalUserIds: 'wmUXHJDgAAzDgTLZoiOZEcccZghCizRA', // 参与会话的外部联系人列表，格式为userId1;userId2;…，用分号隔开。
+                              groupName: '会话测试',
+                              // 必填，会话名称。单聊时该参数传入空字符串""即可。
+                              success: function(res) {
+                                // 回调
+                                console.log('会话成功！！！')
+                              },
+                              fail: function(res) {
+                                if (res.errMsg.indexOf('function not exist') > -1) {
+                                  alert('版本过低请升级')
+                                }
+                              }
+                            });
+                          } else {
+                            // 错误处理
                           }
                         });
                       }
@@ -288,14 +296,22 @@ export default {
                       signature: agentData.signature, // 必填，签名，见附录1
                       jsApiList: ['sendChatMessage', 'getCurExternalContact', 'openUserProfile'], // 必填
                       success: function(res) {
-                        wx.invoke('openUserProfile', {
-                          'type': 1,
-                          // 1表示该userid是企业成员，2表示该userid是外部联系人
-                          'userid': 'QiaoYu'
-                          // 可以是企业成员，也可以是外部联系人
+                        wx.invoke('getCurExternalContact', {
                         }, function(res) {
-                          console.log('个人页成功！！！')
-                          if (res.err_msg !== 'openUserProfile:ok') {
+                          if (res.err_msg === 'getCurExternalContact:ok') {
+                            let userId = res.userId; // 返回当前外部联系人userId
+                            wx.invoke('openUserProfile', {
+                              'type': 2,
+                              // 1表示该userid是企业成员，2表示该userid是外部联系人
+                              'userid': userId
+                              // 可以是企业成员，也可以是外部联系人
+                            }, function(res) {
+                              console.log('个人页成功！！！')
+                              if (res.err_msg !== 'openUserProfile:ok') {
+                                // 错误处理
+                              }
+                            });
+                          } else {
                             // 错误处理
                           }
                         });
