@@ -214,6 +214,23 @@ export default {
                       signature: agentData.signature, // 必填，签名，见附录1
                       jsApiList: ['sendChatMessage', 'getCurExternalContact', 'openEnterpriseChat'], // 必填
                       success: function(res) {
+                        wx.openEnterpriseChat({
+                          // 注意：userIds和externalUserIds至少选填一个，且userIds+externalUserIds总数不能超过2000。
+                          userIds: 'QiaoYu',
+                          // 参与会话的企业成员列表，格式为userid1;userid2;...，用分号隔开。
+                          // externalUserIds: 'wmUXHJDgAAzDgTLZoiOZEcccZghCizRA', // 参与会话的外部联系人列表，格式为userId1;userId2;…，用分号隔开。
+                          groupName: '会话测试',
+                          // 必填，会话名称。单聊时该参数传入空字符串""即可。
+                          success: function(res) {
+                            // 回调
+                            console.log('会话成功！！！')
+                          },
+                          fail: function(res) {
+                            if (res.errMsg.indexOf('function not exist') > -1) {
+                              alert('版本过低请升级')
+                            }
+                          }
+                        });
                         wx.invoke('getCurExternalContact', {
                         }, function(res) {
                           console.log(res)
@@ -227,7 +244,7 @@ export default {
                               // 注意：userIds和externalUserIds至少选填一个，且userIds+externalUserIds总数不能超过2000。
                               userIds: 'QiaoYu',
                               // 参与会话的企业成员列表，格式为userid1;userid2;...，用分号隔开。
-                              externalUserIds: 'wmUXHJDgAAzDgTLZoiOZEcccZghCizRA', // 参与会话的外部联系人列表，格式为userId1;userId2;…，用分号隔开。
+                              // externalUserIds: 'wmUXHJDgAAzDgTLZoiOZEcccZghCizRA', // 参与会话的外部联系人列表，格式为userId1;userId2;…，用分号隔开。
                               groupName: '会话测试',
                               // 必填，会话名称。单聊时该参数传入空字符串""即可。
                               success: function(res) {
