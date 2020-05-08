@@ -36,9 +36,6 @@
             <van-cell title="是否有货车" :value="detail.isHaveCar ? (detail.isHaveCar === 2 ? '否' : '是') : '暂无数据'" />
             <van-cell title="征信是否通过" :value="detail.isCreditPass ? (detail.isCreditPass === 2 ? '否' : '是') : '暂无数据'" />
           </van-cell-group>
-          <router-link :to="{name:'creatlinkman'}">
-            会话测试3
-          </router-link>
           <p v-if="JSON.stringify(detail) == '{}'" class="noMore">
             暂无信息
           </p>
