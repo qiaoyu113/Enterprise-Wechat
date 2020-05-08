@@ -105,7 +105,7 @@ export default {
       })
         .then(res => {
           if (res.data.success) {
-            Toast.success('授权成功');
+            // Toast.success('授权成功');
             localStorage.setItem('token', res.data.data.token)
             let city = res.data.data.city;
             if (city && city !== '') {

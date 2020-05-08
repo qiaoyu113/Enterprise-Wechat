@@ -28,6 +28,8 @@ export default {
   },
   methods: {
     reLogin() {
+      localStorage.removeItem('token')
+      localStorage.removeItem('code')
       let url = localStorage.getItem('unauthorityUrl')
       localStorage.removeItem('unauthorityUrl')
       location.replace(url)
