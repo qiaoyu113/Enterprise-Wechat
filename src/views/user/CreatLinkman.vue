@@ -5,7 +5,7 @@
       :loaded-all="loadedAll"
       :no-data-hint="false"
     >
-      <img src="../../assets/recognition.png" alt="">
+      <img src="../../assets/chat.png" alt="">
       <div>
         <van-loading v-if="!btnShow" />
         <div v-if="!btnShow" class="font">
@@ -73,8 +73,7 @@ export default {
   methods: {
     getUserConfig() {
       let that = this;
-      // const hostName = window.location.href
-      const hostName = 'http://firmiana-wechat.m1.yunniao.cn/'
+      const hostName = window.location.href
       getCorpSignature({
         url: hostName
       }).then((res) => {
@@ -215,46 +214,25 @@ export default {
                       signature: agentData.signature, // 必填，签名，见附录1
                       jsApiList: ['sendChatMessage', 'getCurExternalContact', 'openEnterpriseChat'], // 必填
                       success: function(res) {
-                        wx.invoke('getCurExternalContact', {
-                        }, function(res) {
-                          console.log(res)
-                          if (res.err_msg === 'getCurExternalContact:ok') {
-                            console.log('userId', res.userId) // 返回当前外部联系人userId
-                            // localStorage.setItem('externalUserId', res.userId.toString())
-                            // externalUserId({
-                            //   externalUserId: res.userId
-                            // }).then((res) => {})
-                            wx.openEnterpriseChat({
-                              // 注意：userIds和externalUserIds至少选填一个，且userIds+externalUserIds总数不能超过2000。
-                              userIds: 'zhangshan;lisi;wangwu',
-                              // 参与会话的企业成员列表，格式为userid1;userid2;...，用分号隔开。
-                              externalUserIds: 'wmEAlECwAAHrbWYDOK5u3Bf13xlYDAAA;wmEAlECwAAHibWYDOK5u3Af13xlYDAAA', // 参与会话的外部联系人列表，格式为userId1;userId2;…，用分号隔开。
-                              groupName: '',
-                              // 必填，会话名称。单聊时该参数传入空字符串""即可。
-                              success: function(res) {
-                                // 回调
-                                console.log('会话成功！！！')
-                              },
-                              fail: function(res) {
-                                if (res.errMsg.indexOf('function not exist') > -1) {
-                                  alert('版本过低请升级')
-                                }
-                              }
-                            });
-                          } else {
-                            // 错误处理
-                            that.btnShow = true;
-                            alert('外部联系人识别失败')
+                        wx.openEnterpriseChat({
+                          // 注意：userIds和externalUserIds至少选填一个，且userIds+externalUserIds总数不能超过2000。
+                          // userIds: userId,
+                          // 参与会话的企业成员列表，格式为userid1;userid2;...，用分号隔开。
+                          externalUserIds: 'wmUXHJDgAAzDgTLZoiOZEcccZghCizRA', // 参与会话的外部联系人列表，格式为userId1;userId2;…，用分号隔开。
+                          groupName: '会话测试',
+                          // 必填，会话名称。单聊时该参数传入空字符串""即可。
+                          success: function(res) {
+                            // 回调
+                            console.log('会话成功！！！')
+                          },
+                          fail: function(res) {
+                            if (res.errMsg.indexOf('function not exist') > -1) {
+                              alert('版本过低请升级')
+                            }
                           }
                         });
-                      },
-                      fail: function(res) {
-                        console.log('err', res)
-                        if (res.errMsg.indexOf('is not a function') > -1) {
-                          alert('<i class="weui-icon-warn">版本过低请升级3</i>')
-                        }
                       }
-                    });
+                    })
                   }
                 })
               },
@@ -311,9 +289,9 @@ export default {
                       jsApiList: ['sendChatMessage', 'getCurExternalContact', 'openUserProfile'], // 必填
                       success: function(res) {
                         wx.invoke('openUserProfile', {
-                          'type': 1,
+                          'type': 2,
                           // 1表示该userid是企业成员，2表示该userid是外部联系人
-                          'userid': 'wmEAlECwAAHrbWYDetiu3Af13xlYDAAA'
+                          'userid': 'wmUXHJDgAAzDgTLZoiOZEcccZghCizRA'
                           // 可以是企业成员，也可以是外部联系人
                         }, function(res) {
                           console.log('个人页成功！！！')
