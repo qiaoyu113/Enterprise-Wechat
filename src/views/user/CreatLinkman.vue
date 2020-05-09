@@ -133,6 +133,7 @@ export default {
                             }
                           },
                           fail: function(res) {
+                            alert(res.errCode)
                             if (res.errCode === 2) {
                               that.btnShow = true;
                             }
