@@ -7,9 +7,9 @@
     >
       <img src="../../assets/chat.png" alt="">
       <div>
-        <van-loading v-if="!btnShow" />
+        <van-loading v-if="!btnShow && loginShow" />
         <div v-if="!btnShow" class="font">
-          正在识别联系人信息...
+          {{ textVal }}
         </div>
         <div v-if="btnShow" class="font">
           识别不到该用户
@@ -53,7 +53,9 @@ export default {
         isPayDeposit: '',
         state: '1'
       },
+      textVal: '正在识别联系人信息...',
       btnShow: false,
+      loginShow: true,
       active: 1,
       list: [],
       total: 0,
@@ -99,6 +101,7 @@ export default {
                 'closeWindow'
               ],
               success: function(res) {
+                that.textVal = '正在创建会话...'
                 getAgentSignature({
                   agentId: that.GLOBAL.agentId,
                   url: hostName
@@ -118,11 +121,16 @@ export default {
                           // userIds: userId,
                           // 参与会话的企业成员列表，格式为userid1;userid2;...，用分号隔开。'wmUXHJDgAAzDgTLZoiOZEcccZghCizRA'
                           externalUserIds: that.externalUserIds, // 参与会话的外部联系人列表，格式为userId1;userId2;…，用分号隔开。
-                          groupName: '',
+                          groupName: '创建会话中',
                           // 必填，会话名称。单聊时该参数传入空字符串""即可。
                           success: function(res) {
+                            that.textVal = '已成功创建会话'
+                            that.loginShow = false;
                             // 回调
-                            wx.closeWindow();
+                            var u = navigator.userAgent;
+                            if (u.indexOf('Android') > -1 || u.indexOf('Linux') > -1) {
+                              if (window.ShowFitness !== undefined) wx.closeWindow();
+                            }
                           },
                           fail: function(res) {
                             if (res.errMsg.indexOf('function not exist') > -1) {
