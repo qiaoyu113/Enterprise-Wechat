@@ -109,6 +109,7 @@
 import { dictionary, getCityAreaByCode } from '@/api/common'
 import { Toast, CellGroup, Cell, Button, Tag, loading } from 'vant'
 import { judgingIntentionOfReceiving, saveIntentionOfReceiving } from '@/api/driver'
+import { driverDetail } from '@/api/user'
 export default {
   name: 'DriverIntention',
   components: {
@@ -122,6 +123,7 @@ export default {
   data() {
     return {
       driverId: '',
+      workCity: null,
       typeCar: [],
       cargoType: [],
       arrivalArea: [],
@@ -194,28 +196,39 @@ export default {
     }
   },
   mounted() {
-    this.intentionaInfo();
+    this.driverId = this.$route.query.driverId;
+    this.getWorkId();
   },
   beforeRouteLeave(to, from, next) {
     this.$destroy(true)
     next(true);
   },
   methods: {
+    // 获取司机城市ID
+    getWorkId() {
+      let that = this
+      driverDetail({
+        driverId: that.driverId
+      }).then((res) => {
+        if (res.data.success) {
+          that.workCity = res.data.data.workCity;
+          that.intentionaInfo();
+        }
+      })
+    },
     // 基本数据获取
     async intentionaInfo() {
       let that = this
-      let cityCode = localStorage.getItem('city');
       await this.getDictionary('Intentional_compartment', 'dataTypeCar');
       await this.getDictionary('type_of_goods', 'dataCargoType');
       await this.getDictionary('handling_difficulty_degree', 'dataHandlingDifficultyDegree');
       await this.getDictionary('departure_time_interval', 'dataDepartureTime');
       await getCityAreaByCode({
-        cityCode: cityCode
+        cityCode: that.workCity
       }).then(res => {
         let arr = res.data.data;
         let unlimited = { code: '-2', name: '不限' };
         arr.unshift(unlimited)
-        // that.areaArray = arr;
         that.areaArray = arr.filter((item, index, arr) => {
           return item.code !== '-99'
         });
@@ -241,8 +254,6 @@ export default {
       });
     },
     getJudging() {
-      this.driverId = this.$route.query.driverId;
-      // this.driverId = 'BJS202003101000'
       Toast.loading({
         duration: 0, // 持续展示 toast
         forbidClick: true, // 禁用背景点击
