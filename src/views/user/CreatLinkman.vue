@@ -164,7 +164,7 @@ export default {
 .recognition {
   width: 100%;
   text-align: center;
-  padding:5rem 0;
+  padding:5rem 0 0;
   box-sizing: border-box;
   img{
     width:3rem;
