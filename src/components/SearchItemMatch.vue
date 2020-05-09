@@ -340,7 +340,7 @@ export default {
   }
 }
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
 .searchBox{
     width: 100%;
     text-align: center;

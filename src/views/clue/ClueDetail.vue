@@ -358,18 +358,42 @@ export default {
                           externalUserId: externalUserId
                         }).then((res) => {
                           if (res.data.success) {
+                            let imageData = res.data.data;
+                            if (imageData === '') {
+                              Toast.success('已通过后台发送')
+                              return
+                            }
                             wx.invoke('sendChatMessage', {
                               msgtype: 'image', // 消息类型，必填
                               image:
                                 {
-                                  mediaid: res.data.data // 图片的素材id
+                                  mediaid: imageData // 图片的素材id
                                 }
                             }, function(res) {
                               Toast.clear();
                               if (res.err_msg === 'sendChatMessage:permission denied') {
                                 Toast.fail('暂无功能权限')
                               }
+                              return
                             })
+                            var u = navigator.userAgent;
+                            if (u.indexOf('iPhone') > -1 || u.indexOf('iOS') > -1) {
+                              setTimeout(() => {
+                                wx.invoke('sendChatMessage', {
+                                  msgtype: 'image', // 消息类型，必填
+                                  image:
+                                {
+                                  mediaid: imageData // 图片的素材id
+                                }
+                                }, function(res) {
+                                  // alert(JSON.stringify(res))
+                                  Toast.clear();
+                                  if (res.err_msg === 'sendChatMessage:permission denied') {
+                                    Toast.fail('暂无功能权限')
+                                  }
+                                })
+                              }, 100)
+                            }
                           }
                         })
                       },
