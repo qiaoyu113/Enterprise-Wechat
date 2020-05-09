@@ -133,10 +133,7 @@ export default {
                             }
                           },
                           fail: function(res) {
-                            alert(res.errCode)
-                            if (res.errCode === 2) {
-                              that.btnShow = true;
-                            }
+                            that.btnShow = true;
                             if (res.errMsg.indexOf('function not exist') > -1) {
                               alert('版本过低请升级')
                             }
