@@ -31,6 +31,16 @@ export default [
     }
   },
   {
+    path: '/creatlinkman',
+    name: 'creatlinkman',
+    // component: () => import(/* webpackChunkName: "login" */ 'views/user/Unrecognition.vue'),
+    component: resolve => require(['@/views/user/CreatLinkman'], resolve),
+    meta: {
+      title: '创建联系人',
+      keepAlive: true
+    }
+  },
+  {
     path: '/checkrecognition',
     name: 'checkrecognition',
     // component: () => import(/* webpackChunkName: "login" */ 'views/user/CheckRecognition.vue'),
