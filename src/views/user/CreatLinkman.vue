@@ -133,6 +133,9 @@ export default {
                             }
                           },
                           fail: function(res) {
+                            if (res.errCode === 2) {
+                              that.btnShow = true;
+                            }
                             if (res.errMsg.indexOf('function not exist') > -1) {
                               alert('版本过低请升级')
                             }
@@ -170,7 +173,7 @@ export default {
   .font{
     font-size: 14px;
     color:#666;
-    padding: 0.8rem 0;
+    padding: 0.8rem 0 2rem;
   }
 }
 </style>
