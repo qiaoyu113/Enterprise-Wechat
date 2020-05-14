@@ -242,7 +242,7 @@
   </div>
 </template>
 <script>
-import { Tabbar, TabbarItem, Toast, Tab, Tabs, Cell, CellGroup, Button, ActionSheet, Tag, Icon } from 'vant'
+import { Tabbar, TabbarItem, Toast, Tab, Tabs, Cell, CellGroup, Button, ActionSheet, Tag, Icon, Dialog } from 'vant'
 import { driverDetail, queryOrdersByDriverId, relatedLineInformation, getActivationStatus, getMediaIdOfActivationQrCode, getCorpSignature, getAgentSignature } from '@/api/user'
 import { judgingIntentionOfReceiving } from '@/api/driver'
 // import VoPages from 'vo-pages'
@@ -262,6 +262,7 @@ export default {
     [CellGroup.name]: CellGroup,
     [Button.name]: Button,
     [Tag.name]: Tag,
+    [Dialog.name]: Dialog,
     [Icon.name]: Icon,
     [ActionSheet.name]: ActionSheet
   },
@@ -289,7 +290,8 @@ export default {
       actions: [
         { name: '激活推送', color: '#3F8AF2' },
         { name: '产品介绍', color: '#3F8AF2' },
-        { name: '推荐线路', color: '#3F8AF2' }
+        { name: '推荐线路', color: '#3F8AF2' },
+        { name: '重新匹配', color: '#D03228' }
       ]
     }
   },
@@ -439,8 +441,15 @@ export default {
         this.$router.push({ path: '/productinfo' })
       } else if (item.name === '激活推送') {
         this.pushSendLink()
-      } else {
+      } else if (item.name === '推荐线路') {
         this.$router.push({ path: '/linecommend' })
+      } else {
+        Dialog.confirm({
+          title: '提示',
+          message: '是否确认进行重新匹配?'
+        }).then(() => {
+          this.$router.replace({ path: '/unrecognition' })
+        });
       }
     },
     pushSendLink() {
@@ -450,115 +459,121 @@ export default {
       });
       const hostName = window.location.href
       let that = this;
-      getCorpSignature({
-        url: hostName
-      }).then((res) => {
-        if (res.data.success) {
-          let data = res.data.data;
-          wx.config({
-            beta: true,
-            debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
-            appId: data.corpId, // 必填，企业号的唯一标识，此处填写企业号corpid
-            timestamp: Number(data.timestamp), // 必填，生成签名的时间戳
-            nonceStr: data.nonceStr, // 必填，生成签名的随机串
-            signature: data.signature, // 必填，签名，见附录1
-            jsApiList: ['agentConfig'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
-          });
-          wx.ready(function() {
+      if (that.imageData) {
+        that.sedLine(that.imageData)
+      } else {
+        getCorpSignature({
+          url: hostName
+        }).then((res) => {
+          if (res.data.success) {
+            let data = res.data.data;
+            wx.config({
+              beta: true,
+              debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+              appId: data.corpId, // 必填，企业号的唯一标识，此处填写企业号corpid
+              timestamp: Number(data.timestamp), // 必填，生成签名的时间戳
+              nonceStr: data.nonceStr, // 必填，生成签名的随机串
+              signature: data.signature, // 必填，签名，见附录1
+              jsApiList: ['agentConfig'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+            });
+            wx.ready(function() {
             // 开启企业微信debug模式wx.config里的debug为true
-            wx.checkJsApi({
-              jsApiList: [
-                'agentConfig',
-                'sendChatMessage',
-                'getCurExternalContact'
-              ],
-              success: function(res) {
-                getAgentSignature({
-                  agentId: that.GLOBAL.agentId,
-                  url: hostName
-                }).then((res) => {
-                  if (res.data.success) {
-                    const agentData = res.data.data
-                    wx.agentConfig({
-                      corpid: agentData.corpId, // 必填，企业微信的corpid，必须与当前登录的企业一致
-                      agentid: agentData.agentId, // 必填，企业微信的应用id （e.g. 1000247）
-                      timestamp: '' + agentData.timestamp, // 必填，生成签名的时间戳
-                      nonceStr: agentData.nonceStr, // 必填，生成签名的随机串
-                      signature: agentData.signature, // 必填，签名，见附录1
-                      jsApiList: ['sendChatMessage', 'getCurExternalContact'], // 必填
-                      success: function(res) {
+              wx.checkJsApi({
+                jsApiList: [
+                  'agentConfig',
+                  'sendChatMessage',
+                  'getCurExternalContact'
+                ],
+                success: function(res) {
+                  getAgentSignature({
+                    agentId: that.GLOBAL.agentId,
+                    url: hostName
+                  }).then((res) => {
+                    if (res.data.success) {
+                      const agentData = res.data.data
+                      wx.agentConfig({
+                        corpid: agentData.corpId, // 必填，企业微信的corpid，必须与当前登录的企业一致
+                        agentid: agentData.agentId, // 必填，企业微信的应用id （e.g. 1000247）
+                        timestamp: '' + agentData.timestamp, // 必填，生成签名的时间戳
+                        nonceStr: agentData.nonceStr, // 必填，生成签名的随机串
+                        signature: agentData.signature, // 必填，签名，见附录1
+                        jsApiList: ['sendChatMessage', 'getCurExternalContact'], // 必填
+                        success: function(res) {
                         // that.GLOBAL.buryPointFunction('send_line', '发送线路', {
                         //   value: '发送线路'
                         // })
-                        const externalUserId = localStorage.getItem('externalUserId')
-                        getMediaIdOfActivationQrCode({
-                          externalUserId: externalUserId
-                        }).then((res) => {
-                          if (res.data.success) {
-                            let imageData = res.data.data;
-                            if (imageData === '') {
-                              Toast.success('已通过后台发送')
-                              return
-                            }
-                            wx.invoke('sendChatMessage', {
-                              msgtype: 'image', // 消息类型，必填
-                              image:
-                                {
-                                  mediaid: imageData // 图片的素材id
-                                }
-                            }, function(res) {
-                              // alert(JSON.stringify(res))
-                              Toast.clear();
-                              if (res.err_msg === 'sendChatMessage:permission denied') {
-                                Toast.fail('暂无功能权限')
+                          const externalUserId = localStorage.getItem('externalUserId')
+                          getMediaIdOfActivationQrCode({
+                            externalUserId: externalUserId
+                          }).then((res) => {
+                            if (res.data.success) {
+                              let imageData = res.data.data;
+                              that.imageData = imageData
+                              if (imageData === '') {
+                                Toast.success('已通过后台发送')
+                                return
                               }
-                              return
-                            })
-                            var u = navigator.userAgent;
-                            if (u.indexOf('iPhone') > -1 || u.indexOf('iOS') > -1) {
-                              setTimeout(() => {
-                                wx.invoke('sendChatMessage', {
-                                  msgtype: 'image', // 消息类型，必填
-                                  image:
-                                {
-                                  mediaid: imageData // 图片的素材id
-                                }
-                                }, function(res) {
-                                  // alert(JSON.stringify(res))
-                                  Toast.clear();
-                                  if (res.err_msg === 'sendChatMessage:permission denied') {
-                                    Toast.fail('暂无功能权限')
-                                  }
-                                })
-                              }, 100)
-                            }
-                          } else {
+                              that.sedLine(imageData)
+                            } else {
                             // alert(JSON.stringify(res))
+                            }
+                          })
+                        },
+                        fail: function(res) {
+                          console.log('err', res)
+                          if (res.errMsg.indexOf('is not a function') > -1) {
+                            alert('<i class="weui-icon-warn">版本过低请升级</i>')
                           }
-                        })
-                      },
-                      fail: function(res) {
-                        console.log('err', res)
-                        if (res.errMsg.indexOf('is not a function') > -1) {
-                          alert('<i class="weui-icon-warn">版本过低请升级</i>')
                         }
-                      }
-                    });
-                  }
-                  that.disable = false;
-                  Toast.clear();
-                })
-              },
-              fail: function(res) {
-                alert('版本过低请升级');
-              }
+                      });
+                    }
+                    that.disable = false;
+                    Toast.clear();
+                  })
+                },
+                fail: function(res) {
+                  alert('版本过低请升级');
+                }
+              });
             });
-          });
-          wx.error(function(res) {
-            console.log(res);
-          });
+            wx.error(function(res) {
+              console.log(res);
+            });
+          }
+        })
+      }
+    },
+    sedLine(imageData) {
+      wx.invoke('sendChatMessage', {
+        msgtype: 'image', // 消息类型，必填
+        image: {
+          mediaid: imageData // 图片的素材id
         }
+      }, function(res) {
+        // alert(JSON.stringify(res))
+        Toast.clear();
+        if (res.err_msg === 'sendChatMessage:permission denied') {
+          Toast.fail('暂无功能权限')
+        }
+        return
       })
+      var u = navigator.userAgent;
+      if (u.indexOf('iPhone') > -1 || u.indexOf('iOS') > -1) {
+        setTimeout(() => {
+          wx.invoke('sendChatMessage', {
+            msgtype: 'image', // 消息类型，必填
+            image: {
+              mediaid: imageData // 图片的素材id
+            }
+          }, function(res) {
+            // alert(JSON.stringify(res))
+            Toast.clear();
+            if (res.err_msg === 'sendChatMessage:permission denied') {
+              Toast.fail('暂无功能权限')
+            }
+          })
+        }, 100)
+      }
     }
   }
 }
