@@ -284,6 +284,7 @@ export default {
       show: false,
       matchModule: false,
       matchDetail: '',
+      imageData: '',
       isActivationPush: false,
       isFollowWorkBench: false,
       isJoinCorpWechat: false,
