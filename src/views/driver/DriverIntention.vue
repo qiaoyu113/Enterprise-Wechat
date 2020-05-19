@@ -604,8 +604,6 @@ export default {
             picker.setColumnValue(1, arr[0].text)
             picker.setColumnValues(1, arr);
           }, 500);
-          // picker.setColumnValue(1, arr[0].text)
-          // picker.setColumnValues(1, arr);
         })
       }
     },
