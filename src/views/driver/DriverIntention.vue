@@ -142,8 +142,7 @@
 // GetReginByCityCode
 import { dictionary, getCityAreaByCode } from '@/api/common'
 import { Toast, CellGroup, Cell, Button, Tag, loading, Picker, Popup, ActionSheet } from 'vant'
-import { judgingIntentionOfReceiving } from '@/api/driver'
-// saveIntentionOfReceiving
+import { saveIntentionOfReceiving, judgingIntentionOfReceiving } from '@/api/driver'
 import { driverDetail } from '@/api/user'
 export default {
   name: 'DriverIntention',
@@ -290,7 +289,6 @@ export default {
   },
   mounted() {
     this.driverId = this.$route.query.driverId;
-    // this.driverId = 'BJS202003101000'
     this.getWorkId();
   },
   beforeRouteLeave(to, from, next) {
@@ -389,18 +387,20 @@ export default {
         let district = res.data.data;
         this.district = district;
         let children = [];
-        district.forEach(ele => {
-          if (ele.name !== '全区域') {
-            let text = ele.name;
-            children.push({ text: text, code: ele.code })
-          }
-        })
-        this.citylist.forEach((ele, index) => {
-          if (ele.code === code) {
-            this.$set(this.columns[index], 'children', children)
-            this.checkedCity.push(ele.name);
-          }
-        })
+        if (district.length !== 0) {
+          district.forEach(ele => {
+            if (ele.name !== '全区域') {
+              let text = ele.name;
+              children.push({ text: text, code: ele.code })
+            }
+          })
+          this.citylist.forEach((ele, index) => {
+            if (ele.code === code) {
+              this.$set(this.columns[index], 'children', children)
+              this.checkedCity.push(ele.name);
+            }
+          })
+        }
       }).catch(err => {
         Toast.fail(err);
       });
@@ -497,11 +497,14 @@ export default {
       })
       this.columns.forEach((eles, indexs) => {
         if (eles.text === city) {
-          eles.children.forEach(ele2 => {
-            if (ele2.text === area) {
-              code = ele2.code;
-            }
-          })
+          // console.log(eles.children, 'eles.children')
+          if (eles.children.length !== 0) {
+            eles.children.forEach(ele2 => {
+              if (ele2.text === area && ele2.code !== undefined) {
+                code = ele2.code;
+              }
+            })
+          }
         }
       })
       let item = { name: name, code: code, city: city, cityCode: cityCode };
@@ -518,12 +521,15 @@ export default {
         this[cityitem] = null;
       } else {
         let has1
-        this[cityArrs].forEach(ele => {
-          if (ele.code === code && ele.city === city) {
-            has1 = true
-          }
-        })
+        if (this[cityArrs].length !== 0) {
+          this[cityArrs].forEach(ele => {
+            if (ele.code === code && ele.city === city) {
+              has1 = true
+            }
+          })
+        }
         if (has1 === undefined) {
+          // console.log('item', item)
           this[cityArrs].push(item);
           this.$refs.pickers.setIndexes(this.pickhistory1);
         } else {
@@ -590,10 +596,14 @@ export default {
         // await this.getGetRegin(['370000', codes]);
         await this.getcounty(codes)
         let arr = [];
-        this.columns[indexCity].children.forEach(ele => {
-          arr.push(ele.text)
-        })
-        picker.setColumnValues(1, arr);
+        if (this.columns[indexCity].children.length !== 0) {
+          this.columns[indexCity].children.forEach(ele => {
+            arr.push(ele.text)
+          })
+        }
+        setTimeout(() => {
+          picker.setColumnValues(1, arr);
+        }, 500)
       }
     },
     checkUnlimited(eleItem, array, check_status) {
@@ -697,20 +707,20 @@ export default {
         loadingType: 'spinner',
         message: '提交中...'
       });
-      console.log(json, this.acrossArr, this.acrossDel)
-      // saveIntentionOfReceiving(json).then(res => {
-      //   if (res.data.data.errorMsg != null) {
-      //     Toast.clear();
-      //     Toast.fail(res.data.errorMsg);
-      //   }
-      //   if (res.data.data.flag) {
-      //     Toast.clear();
-      //     // this.$router.back()
-      //   }
-      // }).catch(err => {
-      //   Toast.clear();
-      //   Toast.fail(err);
-      // })
+      // console.log(json, this.acrossArr, this.acrossDel)
+      saveIntentionOfReceiving(json).then(res => {
+        if (res.data.data.errorMsg != null) {
+          Toast.clear();
+          Toast.fail(res.data.errorMsg);
+        }
+        if (res.data.data.flag) {
+          Toast.clear();
+          this.$router.back()
+        }
+      }).catch(err => {
+        Toast.clear();
+        Toast.fail(err);
+      })
     },
     judgingDriver() {
       let that = this
