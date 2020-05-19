@@ -827,9 +827,6 @@ export default {
   }
   .across_city{
     width: 100%;
-    .cancheck{
-
-    }
     .acitybtn{
       text-align: center;
       width: 100%;
