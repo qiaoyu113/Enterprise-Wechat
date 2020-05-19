@@ -180,7 +180,7 @@
                   {{ item.name }}
                 </van-tag>
                 <van-tag v-for="item in matchDetail.arrivalArea" :key="item.name" round type="primary" color="#4F77AA" class="tag" size="medium">
-                  {{ item.across ? item.cityName + '-' + item.countyName : '' }}
+                  {{ item.cityName + '-' + item.countyName }}
                 </van-tag>
                 <p v-if="!matchDetail.arrivalArea.length">
                   暂无数据
@@ -405,6 +405,7 @@ export default {
               }
             })
           })
+          console.log(that.arrivalArea)
           that.deliveryArea.forEach((ele, index) => {
             arr.forEach(item => {
               if (ele.county === item.code) {
@@ -465,8 +466,24 @@ export default {
         if (res.data.success) {
           this.matchModule = res.data.data.flag;
           if (this.matchModule) {
-            this.matchDetail = res.data.data;
-            let { carType, cargoType, handlingDifficultyDegree, departureTime, arrivalArea, deliveryArea } = res.data.data
+            let data = res.data.data;
+            let matchDetail = Object.assign({}, data);
+            this.matchDetail = matchDetail
+            let { carType, cargoType, handlingDifficultyDegree, departureTime, arrivalArea, deliveryArea } = data
+            let arrivalAreaNew = []
+            let deliveryAreaNew = []
+            matchDetail.arrivalArea.forEach((ele) => {
+              if (ele.across) {
+                arrivalAreaNew.push(ele)
+              }
+            });
+            matchDetail.deliveryArea.forEach((ele) => {
+              if (ele.across) {
+                deliveryAreaNew.push(ele)
+              }
+            });
+            this.matchDetail.arrivalArea = arrivalAreaNew
+            this.matchDetail.deliveryArea = deliveryAreaNew
             carType.forEach(ele => {
               this.carType.push({ code: ele })
             });
@@ -867,12 +884,13 @@ export default {
         // border-top: 1px solid #ebedf0;
         // border-bottom: 1px solid #ebedf0;
         .van-tag{
+          // padding:0 12px;
           padding:0 12px;
           box-sizing: border-box;
           font-size: 13px;
           color: #FFFFFF;
           margin-right: 10px;
-          margin-bottom: 6px;
+          margin-bottom: 5px;
         }
         // .tag{
           // margin: 2px 6px 8px 0;
