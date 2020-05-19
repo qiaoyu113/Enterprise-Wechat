@@ -514,6 +514,7 @@ export default {
         this.changeOtherCity('cityitem2', 'acrossDel', code, city, item)
       }
       this.showCity = false;
+      console.log(this.columns, 'columns')
     },
     changeOtherCity(cityitem, cityArrs, code, city, item) {
       if (this[cityitem] !== null) {

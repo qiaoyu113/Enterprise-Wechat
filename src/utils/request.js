@@ -4,19 +4,19 @@ import { Toast } from 'vant'
 import { getToken } from '@/utils/auth'
 import JsCookie from 'js-cookie'
 
-let url = 'http://firmiana-wechat.yunniao.cn/'
-if (window.location.host !== 'firmiana-wechat.yunniao.cn') {
-  if (window.location.host !== 'firmiana-open-api-d2.yunniao.cn') {
-    url = 'http://firmiana-wechat.m1.yunniao.cn/'
-  } else {
-    url = 'http://firmiana-open-api-d2.yunniao.cn/'
-    // url = 'http://firmiana-wechat.m1.yunniao.cn/'注释
-  }
-}
+// let url = 'http://firmiana-wechat.yunniao.cn/'
+// if (window.location.host !== 'firmiana-wechat.yunniao.cn') {
+//   if (window.location.host !== 'firmiana-open-api-d2.yunniao.cn') {
+//     url = 'http://firmiana-wechat.m1.yunniao.cn/'
+//   } else {
+//     url = 'http://firmiana-open-api-d2.yunniao.cn/'
+//     // url = 'http://firmiana-wechat.m1.yunniao.cn/'注释
+//   }
+// }
 
 // create an axios instance
 const service = axios.create({
-  baseURL: url, // url url = base url + request url
+  baseURL: '', // url url = base url + request url
   withCredentials: true, // send cookies when cross-domain requests
   timeout: 5000 // request timeout
 })
@@ -72,7 +72,7 @@ service.interceptors.response.use(
       let unauthorityUrl = window.location.href;
       localStorage.setItem('unauthorityUrl', unauthorityUrl)
       // location.href = '/unauthority'
-      location.replace('/unauthority')
+      // location.replace('/unauthority')
       // 50008:非法的token; 50012:其他货主端登录了;  40101:Token 过期了;
       // if (res.code === 50008 || res.code === 50012 || res.code === 40101) {
       //   // to re-login

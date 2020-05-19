@@ -56,8 +56,8 @@ module.exports = {
         }
       },
       '/api': {
-        target: 'http://firmiana-open-api-d2.yunniao.cn/',
-        // target: 'http://firmiana-wechat.m1.yunniao.cn/',
+        // target: 'http://firmiana-open-api-d2.yunniao.cn/',
+        target: 'http://firmiana-wechat.m1.yunniao.cn/',
         changeOrigin: true,
         pathRewrite: {
           // ['^' + process.env.VUE_APP_BASE_API]: ''
