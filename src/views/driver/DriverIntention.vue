@@ -142,7 +142,8 @@
 // GetReginByCityCode
 import { dictionary, getCityAreaByCode } from '@/api/common'
 import { Toast, CellGroup, Cell, Button, Tag, loading, Picker, Popup, ActionSheet } from 'vant'
-import { saveIntentionOfReceiving, judgingIntentionOfReceiving } from '@/api/driver'
+import { judgingIntentionOfReceiving } from '@/api/driver'
+// saveIntentionOfReceiving
 import { driverDetail } from '@/api/user'
 export default {
   name: 'DriverIntention',
@@ -389,8 +390,10 @@ export default {
         this.district = district;
         let children = [];
         district.forEach(ele => {
-          let text = ele.name;
-          children.push({ text: text, code: ele.code })
+          if (ele.name !== '全区域') {
+            let text = ele.name;
+            children.push({ text: text, code: ele.code })
+          }
         })
         this.citylist.forEach((ele, index) => {
           if (ele.code === code) {
@@ -527,6 +530,7 @@ export default {
           Toast('该区域已选择');
         }
       }
+      console.log(this[cityArrs], 'this[cityArrs]')
     },
     // 删除区市
     delcity(type) {
@@ -693,19 +697,20 @@ export default {
         loadingType: 'spinner',
         message: '提交中...'
       });
-      saveIntentionOfReceiving(json).then(res => {
-        if (res.data.data.errorMsg != null) {
-          Toast.clear();
-          Toast.fail(res.data.errorMsg);
-        }
-        if (res.data.data.flag) {
-          Toast.clear();
-          this.$router.back()
-        }
-      }).catch(err => {
-        Toast.clear();
-        Toast.fail(err);
-      })
+      console.log(json, this.acrossArr, this.acrossDel)
+      // saveIntentionOfReceiving(json).then(res => {
+      //   if (res.data.data.errorMsg != null) {
+      //     Toast.clear();
+      //     Toast.fail(res.data.errorMsg);
+      //   }
+      //   if (res.data.data.flag) {
+      //     Toast.clear();
+      //     // this.$router.back()
+      //   }
+      // }).catch(err => {
+      //   Toast.clear();
+      //   Toast.fail(err);
+      // })
     },
     judgingDriver() {
       let that = this
