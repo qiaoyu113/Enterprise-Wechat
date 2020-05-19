@@ -315,7 +315,6 @@ export default {
       await this.getDictionary('type_of_goods', 'dataCargoType');
       await this.getDictionary('handling_difficulty_degree', 'dataHandlingDifficultyDegree');
       await this.getDictionary('departure_time_interval', 'dataDepartureTime');
-      // await this.getGetRegin(['370000']);
       await this.getcity('online_city', 'citylist');
       await getCityAreaByCode({
         cityCode: that.workCity
@@ -830,9 +829,6 @@ export default {
   }
   .across_city{
     width: 100%;
-    .cancheck{
-
-    }
     .acitybtn{
       text-align: center;
       width: 100%;
