@@ -18,6 +18,14 @@ export function getCityAreaByCode(data) {
     params: data
   })
 }
+/* 获取区 */
+export function GetReginByCityCode(data) {
+  return request({
+    url: '/api/base/user/area/getCityByCode',
+    method: 'post',
+    data
+  })
+}
 
 /* 字典 */
 export function dictionary(data) {
