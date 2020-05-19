@@ -372,7 +372,7 @@ export default {
         })
         this.citylist = citylist;
         citylist.forEach(ele => {
-          this.columns.push({ text: ele.name });
+          this.columns.push({ text: ele.name, children: [{ text: '加载中...' }] });
         })
         this.getcounty(citylist[0].code);
       }).catch(err => {
@@ -497,7 +497,6 @@ export default {
       })
       this.columns.forEach((eles, indexs) => {
         if (eles.text === city) {
-          // console.log(eles.children, 'eles.children')
           if (eles.children.length !== 0) {
             eles.children.forEach(ele2 => {
               if (ele2.text === area && ele2.code !== undefined) {
@@ -514,7 +513,6 @@ export default {
         this.changeOtherCity('cityitem2', 'acrossDel', code, city, item)
       }
       this.showCity = false;
-      console.log(this.columns, 'columns')
     },
     changeOtherCity(cityitem, cityArrs, code, city, item) {
       if (this[cityitem] !== null) {
@@ -530,14 +528,12 @@ export default {
           })
         }
         if (has1 === undefined) {
-          // console.log('item', item)
           this[cityArrs].push(item);
           this.$refs.pickers.setIndexes(this.pickhistory1);
         } else {
           Toast('该区域已选择');
         }
       }
-      console.log(this[cityArrs], 'this[cityArrs]')
     },
     // 删除区市
     delcity(type) {
@@ -580,11 +576,14 @@ export default {
     //   }
     // },
     async citychange(picker, value, index) {
-      let names = picker.getValues()[0];
+      let names = value[0];
       let has = this.checkedCity.some(ele => {
         return ele === names
       })
       if (!has) {
+        this.$nextTick(() => {
+          this.loading = true;
+        })
         let codes
         let indexCity
         this.citylist.forEach((ele, index) => {
@@ -593,18 +592,22 @@ export default {
             indexCity = index
           }
         })
-        this.loading = true;
         // await this.getGetRegin(['370000', codes]);
         await this.getcounty(codes)
-        let arr = [];
-        if (this.columns[indexCity].children.length !== 0) {
-          this.columns[indexCity].children.forEach(ele => {
-            arr.push(ele.text)
-          })
-        }
-        setTimeout(() => {
-          picker.setColumnValues(1, arr);
-        }, 500)
+        this.$nextTick(function() {
+          let arr = [];
+          if (this.columns[indexCity].children.length !== 0) {
+            this.columns[indexCity].children.forEach(ele => {
+              arr.push(ele.text)
+            })
+          }
+          setTimeout(() => {
+            picker.setColumnValue(1, arr[0].text)
+            picker.setColumnValues(1, arr);
+          }, 500);
+          // picker.setColumnValue(1, arr[0].text)
+          // picker.setColumnValues(1, arr);
+        })
       }
     },
     checkUnlimited(eleItem, array, check_status) {
@@ -708,7 +711,6 @@ export default {
         loadingType: 'spinner',
         message: '提交中...'
       });
-      // console.log(json, this.acrossArr, this.acrossDel)
       saveIntentionOfReceiving(json).then(res => {
         if (res.data.data.errorMsg != null) {
           Toast.clear();
@@ -716,7 +718,7 @@ export default {
         }
         if (res.data.data.flag) {
           Toast.clear();
-          this.$router.back()
+          // this.$router.back()
         }
       }).catch(err => {
         Toast.clear();
