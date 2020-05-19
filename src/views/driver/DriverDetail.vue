@@ -150,8 +150,8 @@
                 车型
               </div>
               <div class="tage_type">
-                <van-tag v-for="item in matchDetail.carType" :key="item" round type="primary" color="#4F77AA" class="tag" size="medium">
-                  {{ item }}
+                <van-tag v-for="item in carType" :key="item.name" round type="primary" color="#4F77AA" class="tag" size="medium">
+                  {{ item.name }}
                 </van-tag>
                 <p v-if="!matchDetail.cargoType.length">
                   暂无数据
@@ -163,8 +163,8 @@
                 货物类型
               </div>
               <div class="tage_type">
-                <van-tag v-for="item in matchDetail.cargoType" :key="item" round type="primary" color="#4F77AA" class="tag" size="medium">
-                  {{ item }}
+                <van-tag v-for="item in cargoType" :key="item.name" round type="primary" color="#4F77AA" class="tag" size="medium">
+                  {{ item.name }}
                 </van-tag>
                 <p v-if="!matchDetail.cargoType.length">
                   暂无数据
@@ -176,8 +176,11 @@
                 到仓区域
               </div>
               <div class="tage_type">
-                <van-tag v-for="item in matchDetail.arrivalArea" :key="item" round type="primary" color="#4F77AA" class="tag" size="medium">
-                  {{ item }}
+                <van-tag v-for="item in arrivalArea" :key="item.name" round type="primary" color="#4F77AA" class="tag" size="medium">
+                  {{ item.name }}
+                </van-tag>
+                <van-tag v-for="item in matchDetail.arrivalArea" :key="item.name" round type="primary" color="#4F77AA" class="tag" size="medium">
+                  {{ item.across ? item.cityName + '-' + item.countyName : '' }}
                 </van-tag>
                 <p v-if="!matchDetail.deliveryArea.length">
                   暂无数据
@@ -189,8 +192,11 @@
                 配送区域
               </div>
               <div class="tage_type">
-                <van-tag v-for="item in matchDetail.deliveryArea" :key="item" round type="primary" color="#4F77AA" class="tag" size="medium">
-                  {{ item }}
+                <van-tag v-for="item in deliveryArea" :key="item.name" round type="primary" color="#4F77AA" class="tag" size="medium">
+                  {{ item.name }}
+                </van-tag>
+                <van-tag v-for="item in matchDetail.deliveryArea" :key="item.name" round type="primary" color="#4F77AA" class="tag" size="medium">
+                  {{ item.across ? item.cityName + '-' + item.countyName : '' }}
                 </van-tag>
                 <p v-if="!matchDetail.deliveryArea.length">
                   暂无数据
@@ -202,8 +208,8 @@
                 装卸难度
               </div>
               <div class="tage_type">
-                <van-tag v-for="item in matchDetail.handlingDifficultyDegree" :key="item" round type="primary" color="#4F77AA" class="tag" size="medium">
-                  {{ item }}
+                <van-tag v-for="item in handlingDifficultyDegree" :key="item.name" round type="primary" color="#4F77AA" class="tag" size="medium">
+                  {{ item.name }}
                 </van-tag>
                 <p v-if="!matchDetail.handlingDifficultyDegree.length">
                   暂无数据
@@ -215,8 +221,8 @@
                 出车时段
               </div>
               <div class="tage_type">
-                <van-tag v-for="item in matchDetail.departureTime" :key="item" round type="primary" color="#4F77AA" class="tag" size="medium">
-                  {{ item }}
+                <van-tag v-for="item in departureTime" :key="item.name" round type="primary" color="#4F77AA" class="tag" size="medium">
+                  {{ item.name }}
                 </van-tag>
                 <p v-if="!matchDetail.departureTime.length">
                   暂无数据
@@ -245,6 +251,7 @@
 import { Tabbar, TabbarItem, Toast, Tab, Tabs, Cell, CellGroup, Button, ActionSheet, Tag, Icon, Dialog } from 'vant'
 import { driverDetail, queryOrdersByDriverId, relatedLineInformation, getActivationStatus, getMediaIdOfActivationQrCode, getCorpSignature, getAgentSignature } from '@/api/user'
 import { judgingIntentionOfReceiving } from '@/api/driver'
+import { dictionary, getCityAreaByCode } from '@/api/common'
 // import VoPages from 'vo-pages'
 import 'vo-pages/lib/vo-pages.css'
 // import wx from 'jWeixin';
@@ -291,9 +298,15 @@ export default {
       actions: [
         { name: '激活推送', color: '#3F8AF2' },
         { name: '产品介绍', color: '#3F8AF2' },
-        { name: '推荐线路', color: '#3F8AF2' },
-        { name: '重新匹配', color: '#D03228' }
-      ]
+        { name: '推荐线路', color: '#3F8AF2' }
+      ],
+      carType: [],
+      cargoType: [],
+      handlingDifficultyDegree: [],
+      departureTime: [],
+      arrivalArea: [],
+      deliveryArea: [],
+      workCity: ''
     }
   },
   beforeRouteLeave(to, from, next) {
@@ -309,6 +322,7 @@ export default {
   },
   mounted() {
     let driverId = this.$route.query.driverId;
+    // driverId = 'BJS202003101000'
     this.driverId = driverId;
     this.active = Number(localStorage.getItem('active'))
     this.loadTime()
@@ -316,7 +330,7 @@ export default {
       localStorage.removeItem('active')
     }
     this.getDetail(driverId)
-    this.getActivation()
+    this.getActivation();
   },
   methods: {
     double(mat) {
@@ -346,6 +360,63 @@ export default {
         that.loadTimeNum = days
       }, 1000)
     },
+    // 字典查询
+    async getDictionary(type, array) {
+      let that = this;
+      await dictionary({
+        dictType: type
+      }).then(res => {
+        let arr = res.data.data;
+        if (type !== 'Intentional_compartment') {
+          let unlimited = { codeVal: '-2', code: '不限' };
+          arr.unshift(unlimited);
+        }
+        arr.forEach(ele => {
+          that[array].forEach((item, index) => {
+            if (ele.codeVal === item.code) {
+              this.$set(that[array][index], 'name', ele.code)
+            }
+          })
+        })
+      }).catch(err => {
+        Toast.fail(err);
+      });
+    },
+    async baseData() {
+      await this.getDictionary('Intentional_compartment', 'carType');
+      await this.getDictionary('type_of_goods', 'cargoType');
+      await this.getDictionary('handling_difficulty_degree', 'handlingDifficultyDegree');
+      await this.getDictionary('departure_time_interval', 'departureTime');
+      await this.getCounty(this.workCity);
+    },
+    async getCounty(workCity) {
+      let that = this
+      await getCityAreaByCode({
+        cityCode: workCity
+      }).then(res => {
+        if (res.data.success) {
+          let arr = res.data.data;
+          let unlimited = { code: '-2', name: '不限' };
+          arr.unshift(unlimited)
+          that.arrivalArea.forEach((ele, index) => {
+            arr.forEach(item => {
+              if (ele.county === item.code) {
+                that.$set(that.arrivalArea[index], 'name', item.name)
+              }
+            })
+          })
+          that.deliveryArea.forEach((ele, index) => {
+            arr.forEach(item => {
+              if (ele.county === item.code) {
+                that.$set(that.deliveryArea[index], 'name', item.name)
+              }
+            })
+          })
+        }
+      }).catch(err => {
+        Toast.fail(err);
+      });
+    },
     getActivation() {
       const externalUserId = localStorage.getItem('externalUserId')
       let that = this;
@@ -364,7 +435,8 @@ export default {
         driverId: driverId
       }).then((res) => {
         if (res.data.success) {
-          this.detail = res.data.data
+          this.detail = res.data.data;
+          this.workCity = res.data.data.workCity;
           if (this.detail.accountType === 1) {
             this.detail.accountType = '城镇户口'
           }
@@ -393,7 +465,31 @@ export default {
         if (res.data.success) {
           this.matchModule = res.data.data.flag;
           if (this.matchModule) {
-            this.matchDetail = res.data.data
+            this.matchDetail = res.data.data;
+            let { carType, cargoType, handlingDifficultyDegree, departureTime, arrivalArea, deliveryArea } = res.data.data
+            carType.forEach(ele => {
+              this.carType.push({ code: ele })
+            });
+            cargoType.forEach(ele => {
+              this.cargoType.push({ code: ele })
+            });
+            handlingDifficultyDegree.forEach(ele => {
+              this.handlingDifficultyDegree.push({ code: ele })
+            });
+            departureTime.forEach(ele => {
+              this.departureTime.push({ code: ele })
+            });
+            arrivalArea.forEach(ele => {
+              if (!ele.across) {
+                this.arrivalArea.push({ county: ele.county })
+              }
+            });
+            deliveryArea.forEach(ele => {
+              if (!ele.across) {
+                this.deliveryArea.push({ county: ele.county })
+              }
+            });
+            this.baseData();
           }
         }
       })
