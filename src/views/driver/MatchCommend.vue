@@ -386,10 +386,10 @@ export default {
       });
       if (this.searchType) {
         helpMatch({
-          'arrivalArea': this.listQuery.arrivalArea,
+          'arrivalArea': this.listQuery.county,
           'carType': this.listQuery.carType,
           'cargoType': this.listQuery.cargoType,
-          'deliveryArea': this.listQuery.county,
+          'deliveryArea': this.listQuery.arrivalArea,
           'departureTime': this.listQuery.departureTime,
           'handlingDifficultyDegree': this.listQuery.handlingDifficultyDegree,
           'driverId': this.driverId,

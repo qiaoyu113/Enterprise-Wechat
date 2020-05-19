@@ -297,7 +297,7 @@ export default {
     dropClick() {
       this.show = false;
       this.list = [];
-      this.form.page = 1;
+      this.form.page = 0;
       this.getList();
     },
     setData(list) {

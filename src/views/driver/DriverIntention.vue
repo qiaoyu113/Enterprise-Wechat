@@ -315,7 +315,6 @@ export default {
       await this.getDictionary('type_of_goods', 'dataCargoType');
       await this.getDictionary('handling_difficulty_degree', 'dataHandlingDifficultyDegree');
       await this.getDictionary('departure_time_interval', 'dataDepartureTime');
-      // await this.getGetRegin(['370000']);
       await this.getcity('online_city', 'citylist');
       await getCityAreaByCode({
         cityCode: that.workCity
@@ -707,7 +706,6 @@ export default {
         loadingType: 'spinner',
         message: '提交中...'
       });
-      // console.log(json, this.acrossArr, this.acrossDel)
       saveIntentionOfReceiving(json).then(res => {
         if (res.data.data.errorMsg != null) {
           Toast.clear();
