@@ -179,7 +179,7 @@
                 <van-tag v-for="item in matchDetail.arrivalArea" :key="item" round type="primary" color="#4F77AA" class="tag" size="medium">
                   {{ item }}
                 </van-tag>
-                <p v-if="!matchDetail.deliveryArea.length">
+                <p v-if="!matchDetail.arrivalArea.length">
                   暂无数据
                 </p>
               </div>
