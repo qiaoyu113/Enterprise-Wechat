@@ -47,7 +47,7 @@ export function saveIntentionOfReceiving(data) {
   })
 }
 
-// 司机意向判断
+// 司机意向判断POST /corp/driver/judgingIntentionOfReceiving
 export function judgingIntentionOfReceiving(data) {
   return request({
     url: '/api/driver/corp/driver/judgingIntentionOfReceiving',
