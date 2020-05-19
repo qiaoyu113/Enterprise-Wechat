@@ -142,8 +142,7 @@
 // GetReginByCityCode
 import { dictionary, getCityAreaByCode } from '@/api/common'
 import { Toast, CellGroup, Cell, Button, Tag, loading, Picker, Popup, ActionSheet } from 'vant'
-import { judgingIntentionOfReceiving } from '@/api/driver'
-// saveIntentionOfReceiving
+import { judgingIntentionOfReceiving, saveIntentionOfReceiving } from '@/api/driver'
 import { driverDetail } from '@/api/user'
 export default {
   name: 'DriverIntention',
@@ -695,20 +694,19 @@ export default {
         loadingType: 'spinner',
         message: '提交中...'
       });
-      console.log(json, this.acrossArr, this.acrossDel)
-      // saveIntentionOfReceiving(json).then(res => {
-      //   if (res.data.data.errorMsg != null) {
-      //     Toast.clear();
-      //     Toast.fail(res.data.errorMsg);
-      //   }
-      //   if (res.data.data.flag) {
-      //     Toast.clear();
-      //     // this.$router.back()
-      //   }
-      // }).catch(err => {
-      //   Toast.clear();
-      //   Toast.fail(err);
-      // })
+      saveIntentionOfReceiving(json).then(res => {
+        if (res.data.data.errorMsg != null) {
+          Toast.clear();
+          Toast.fail(res.data.errorMsg);
+        }
+        if (res.data.data.flag) {
+          Toast.clear();
+          // this.$router.back()
+        }
+      }).catch(err => {
+        Toast.clear();
+        Toast.fail(err);
+      })
     },
     judgingDriver() {
       let that = this
