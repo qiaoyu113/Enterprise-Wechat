@@ -715,7 +715,7 @@ export default {
         }
         if (res.data.data.flag) {
           Toast.clear();
-          // this.$router.back()
+          this.$router.back()
         }
       }).catch(err => {
         Toast.clear();
