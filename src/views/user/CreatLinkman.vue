@@ -88,15 +88,13 @@ export default {
             timestamp: Number(data.timestamp), // 必填，生成签名的时间戳
             nonceStr: data.nonceStr, // 必填，生成签名的随机串
             signature: data.signature, // 必填，签名，见附录1
-            jsApiList: ['agentConfig', 'sendChatMessage', 'getCurExternalContact', 'openEnterpriseChat', 'closeWindow'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+            jsApiList: ['agentConfig', 'openEnterpriseChat', 'closeWindow'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
           });
           wx.ready(function() {
             // 开启企业微信debug模式wx.config里的debug为true
             wx.checkJsApi({
               jsApiList: [
                 'agentConfig',
-                'sendChatMessage',
-                'getCurExternalContact',
                 'openEnterpriseChat',
                 'closeWindow'
               ],
@@ -114,32 +112,9 @@ export default {
                       timestamp: '' + agentData.timestamp, // 必填，生成签名的时间戳
                       nonceStr: agentData.nonceStr, // 必填，生成签名的随机串
                       signature: agentData.signature, // 必填，签名，见附录1
-                      jsApiList: ['sendChatMessage', 'getCurExternalContact', 'openEnterpriseChat', 'closeWindow'], // 必填
+                      jsApiList: ['openEnterpriseChat', 'closeWindow'], // 必填
                       success: function(res) {
-                        wx.openEnterpriseChat({
-                          // 注意：userIds和externalUserIds至少选填一个，且userIds+externalUserIds总数不能超过2000。
-                          // userIds: userId,
-                          // 参与会话的企业成员列表，格式为userid1;userid2;...，用分号隔开。'wmUXHJDgAAzDgTLZoiOZEcccZghCizRA'
-                          externalUserIds: that.externalUserIds, // 参与会话的外部联系人列表，格式为userId1;userId2;…，用分号隔开。
-                          groupName: '创建会话中',
-                          // 必填，会话名称。单聊时该参数传入空字符串""即可。
-                          success: function(res) {
-                            that.textVal = '已成功创建会话'
-                            that.loginShow = false;
-                            // 回调
-                            var u = navigator.userAgent;
-                            if (u.indexOf('Android') > -1 || u.indexOf('Linux') > -1) {
-                              if (window.ShowFitness !== undefined) wx.closeWindow();
-                            }
-                          },
-                          fail: function(res) {
-                            alert(JSON.stringify(res))
-                            that.btnShow = true;
-                            if (res.errMsg.indexOf('function not exist') > -1) {
-                              alert('版本过低请升级')
-                            }
-                          }
-                        });
+                        that.creatChat()
                       }
                     })
                   }
@@ -155,6 +130,33 @@ export default {
           });
         }
       })
+    },
+    creatChat() {
+      let that = this;
+      wx.openEnterpriseChat({
+        // 注意：userIds和externalUserIds至少选填一个，且userIds+externalUserIds总数不能超过2000。
+        // userIds: 'qiaoyu',
+        // 参与会话的企业成员列表，格式为userid1;userid2;...，用分号隔开。'wmUXHJDgAAzDgTLZoiOZEcccZghCizRA'
+        externalUserIds: that.externalUserIds, // 参与会话的外部联系人列表，格式为userId1;userId2;…，用分号隔开。
+        groupName: '创建会话中',
+        // 必填，会话名称。单聊时该参数传入空字符串""即可。
+        success: function(res) {
+          that.textVal = '已成功创建会话'
+          that.loginShow = false;
+          // 回调
+          var u = navigator.userAgent;
+          if (u.indexOf('Android') > -1 || u.indexOf('Linux') > -1) {
+            if (window.ShowFitness !== undefined) wx.closeWindow();
+          }
+        },
+        fail: function(res) {
+          alert(JSON.stringify(res))
+          that.btnShow = true;
+          if (res.errMsg.indexOf('function not exist') > -1) {
+            alert('版本过低请升级')
+          }
+        }
+      });
     }
   }
 }

@@ -320,6 +320,7 @@ export default {
     next(true);
   },
   created() {
+    // window.location.href = '/creatlinkman?userId=wmUXHJDgAAzDgTLZoiOZEcccZghCizRA'
   },
   mounted() {
     let driverId = this.$route.query.driverId;
