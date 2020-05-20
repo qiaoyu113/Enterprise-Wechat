@@ -182,7 +182,7 @@
                 <van-tag v-for="item in matchDetail.arrivalArea" :key="item.name" round type="primary" color="#4F77AA" class="tag" size="medium">
                   {{ item.cityName + '-' + item.countyName }}
                 </van-tag>
-                <p v-if="!matchDetail.arrivalArea.length">
+                <p v-if="!matchDetail.arrivalArea.length && !arrivalArea.length">
                   暂无数据
                 </p>
               </div>
@@ -198,7 +198,7 @@
                 <van-tag v-for="item in matchDetail.deliveryArea" :key="item.name" round type="primary" color="#4F77AA" class="tag" size="medium">
                   {{ item.across ? item.cityName + '-' + item.countyName : '' }}
                 </van-tag>
-                <p v-if="!matchDetail.deliveryArea.length">
+                <p v-if="!matchDetail.deliveryArea.length && !arrivalArea.length">
                   暂无数据
                 </p>
               </div>
