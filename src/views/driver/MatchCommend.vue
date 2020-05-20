@@ -256,9 +256,11 @@ export default {
   },
   methods: {
     forEachArr(arr) {
-      for (var i = 0; i < arr.length; i++) {
-        if (arr[i].matched) {
-          return true
+      if (arr) {
+        for (var i = 0; i < arr.length; i++) {
+          if (arr[i].matched) {
+            return true
+          }
         }
       }
       return false;
