@@ -133,6 +133,7 @@ export default {
                             }
                           },
                           fail: function(res) {
+                            alert(JSON.stringify(res))
                             that.btnShow = true;
                             if (res.errMsg.indexOf('function not exist') > -1) {
                               alert('版本过低请升级')
