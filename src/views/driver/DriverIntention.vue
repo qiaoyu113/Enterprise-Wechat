@@ -38,9 +38,23 @@
           </template>
         </van-cell>
         <div v-if="areaArray.length != 0" class="types_box">
-          <van-tag v-for="(item, index) in areaArray" :key="item.code" size="medium" round :color="arrivalArea.indexOf(item.code) > -1 ? '#5376a6' : '#c8c8cb'" class="tag_margin" @click="getType(index, 'areaArray', 'arrivalArea','arrivalText')">
-            {{ item.name }}
-          </van-tag>
+          <div>
+            <van-tag v-for="(item, index) in areaArray" :key="item.code" size="medium" round :color="arrivalArea.indexOf(item.code) > -1 ? '#5376a6' : '#c8c8cb'" class="tag_margin" @click="getType(index, 'areaArray', 'arrivalArea','arrivalText')">
+              {{ item.name }}
+            </van-tag>
+          </div>
+          <div class="across_city">
+            <div class="acitybtn">
+              <van-button icon="plus" plain round size="small" :color="fullarrival ? '#5376a6' : '#969799'" @click="fullarrival ? acrossAdd('acrossArr') : cantToast()">
+                跨城添加
+              </van-button>
+            </div>
+            <div class="across_box">
+              <van-tag v-for="(item, index) in acrossArr" :key="item.code" color="#5376a6" size="medium" round class="tag_margin" @click="changeAcross('acrossArr', index)">
+                {{ item.name }}
+              </van-tag>
+            </div>
+          </div>
         </div>
         <div v-else class="loadingStatus">
           <van-loading size="24px">
@@ -55,9 +69,23 @@
           </template>
         </van-cell>
         <div v-if="areaArray.length != 0" class="types_box">
-          <van-tag v-for="(item, index) in areaArray" :key="item.code" size="medium" round :color="deliveryArea.indexOf(item.code) > -1 ? '#5376a6' : '#c8c8cb'" class="tag_margin" @click="getType(index, 'areaArray', 'deliveryArea','deliveryText')">
-            {{ item.name }}
-          </van-tag>
+          <div>
+            <van-tag v-for="(item, index) in areaArray" :key="item.code" size="medium" round :color="deliveryArea.indexOf(item.code) > -1 ? '#5376a6' : '#c8c8cb'" class="tag_margin" @click="getType(index, 'areaArray', 'deliveryArea','deliveryText')">
+              {{ item.name }}
+            </van-tag>
+          </div>
+          <div class="across_city">
+            <div class="acitybtn">
+              <van-button icon="plus" plain round size="small" :color="fulldelivery ? '#5376a6' : '#969799'" @click="fulldelivery ? acrossAdd('acrossDel') : cantToast()">
+                跨城添加
+              </van-button>
+            </div>
+            <div class="across_box">
+              <van-tag v-for="(item, index) in acrossDel" :key="item.code" color="#5376a6" size="medium" round class="tag_margin" @click="changeAcross('acrossDel', index)">
+                {{ item.name }}
+              </van-tag>
+            </div>
+          </div>
         </div>
         <div v-else class="loadingStatus">
           <van-loading size="24px">
@@ -103,12 +131,23 @@
     <van-button class="btn_bottom" type="info" block color="#2F7DCD" @click="btnSubmit">
       保存
     </van-button>
+
+    <van-popup ref="pppp" v-model="showCity" position="bottom">
+      <van-picker ref="pickers" key="pickers" show-toolbar :columns="columns" :loading="loading" @cancel="showCity = false" @confirm="cityConfirm" @change="citychange" />
+    </van-popup>
+    <van-action-sheet v-model="docity" :actions="actions" :round="false" @select="onSelect" />
   </div>
 </template>
 <script>
+// GetReginByCityCode
 import { dictionary, getCityAreaByCode } from '@/api/common'
+<<<<<<< src/views/driver/DriverIntention.vue
+import { Toast, CellGroup, Cell, Button, Tag, loading, Picker, Popup, ActionSheet } from 'vant'
+import { saveIntentionOfReceiving, judgingIntentionOfReceiving } from '@/api/driver'
+=======
 import { Toast, CellGroup, Cell, Button, Tag, loading } from 'vant'
 import { judgingIntentionOfReceiving, saveIntentionOfReceiving } from '@/api/driver'
+>>>>>>> src/views/driver/DriverIntention.vue
 import { driverDetail } from '@/api/user'
 export default {
   name: 'DriverIntention',
@@ -118,6 +157,9 @@ export default {
     [loading.name]: loading,
     [Button.name]: Button,
     [CellGroup.name]: CellGroup,
+    [Picker.name]: Picker,
+    [Popup.name]: Popup,
+    [ActionSheet.name]: ActionSheet,
     [Cell.name]: Cell
   },
   data() {
@@ -140,10 +182,65 @@ export default {
       deliveryText: '全选',
       arrivalText: '全选',
       handlingDifficultyText: '全选',
-      departureText: '全选'
+      departureText: '全选',
+      showCity: false,
+      docity: false,
+      loading: true,
+      checkedCity: [],
+      actions: [
+        { name: '重选' },
+        { name: '删除', color: '#EE0A24' }
+      ],
+      fullarrival: true,
+      fulldelivery: true,
+      cityArr: '',
+      acrossArr: [],
+      acrossDel: [],
+      cityitem1: null,
+      cityitem2: null,
+      pickhistory1: [0, 0],
+      pickhistory2: [0, 0],
+      columns: [],
+      citylist: [],
+      district: [],
+      toastNum: 0,
+      cityMoreCity1: [],
+      cityMoreCity2: []
     }
   },
   watch: {
+    acrossArr(val) {
+      let cityMoreCity1 = []
+      val.forEach(ele => {
+        cityMoreCity1.push(ele.city);
+        cityMoreCity1 = [... new Set(cityMoreCity1)];
+        if (cityMoreCity1.length >= 2) {
+          this.fullarrival = false;
+          // if (this.toastNum === 1) {
+          //   Toast('最多可选两个城市，区县不限')
+          // }
+          // this.toastNum++;
+        } else {
+          this.fullarrival = true;
+        }
+      })
+    },
+    acrossDel(val) {
+      let cityMoreCity2 = []
+      val.forEach(ele => {
+        cityMoreCity2.push(ele.city);
+        cityMoreCity2 = [... new Set(cityMoreCity2)];
+        if (cityMoreCity2.length >= 2) {
+          this.fulldelivery = false;
+          // if (this.toastNum === 1) {
+          //   Toast('最多可选两个城市，区县不限')
+          // }
+          // this.toastNum++;
+        } else {
+          this.fulldelivery = true;
+        }
+      })
+    },
     cargoType(newarr, oldarr) {
       if (newarr.length === 0) {
         this.cargoType.push('-2')
@@ -223,6 +320,7 @@ export default {
       await this.getDictionary('type_of_goods', 'dataCargoType');
       await this.getDictionary('handling_difficulty_degree', 'dataHandlingDifficultyDegree');
       await this.getDictionary('departure_time_interval', 'dataDepartureTime');
+      await this.getcity('online_city', 'citylist');
       await getCityAreaByCode({
         cityCode: that.workCity
       }).then(res => {
@@ -261,6 +359,258 @@ export default {
         message: '加载中...'
       });
       this.judgingDriver();
+    },
+    async getcity(type) {
+      await dictionary({
+        dictType: type
+      }).then(res => {
+        let arr = res.data.data;
+        let citylist = [];
+        arr.forEach(ele => {
+          let name = ele.code;
+          let code = ele.codeVal;
+          let item = { name: name, code: code }
+          if (String(code) !== String(this.workCity)) {
+            citylist.push(item)
+          }
+        })
+        this.citylist = citylist;
+        citylist.forEach(ele => {
+          this.columns.push({ text: ele.name, children: [{ text: '加载中...' }] });
+        })
+        this.getcounty(citylist[0].code);
+      }).catch(err => {
+        Toast.fail(err);
+      });
+    },
+    async getcounty(code) {
+      await getCityAreaByCode({
+        cityCode: code
+      }).then(res => {
+        this.loading = false;
+        let district = res.data.data;
+        this.district = district;
+        let children = [];
+        if (district.length !== 0) {
+          district.forEach(ele => {
+            if (ele.name !== '全区域') {
+              let text = ele.name;
+              children.push({ text: text, code: ele.code })
+            }
+          })
+          this.citylist.forEach((ele, index) => {
+            if (ele.code === code) {
+              this.$set(this.columns[index], 'children', children)
+              this.checkedCity.push(ele.name);
+            }
+          })
+        }
+      }).catch(err => {
+        Toast.fail(err);
+      });
+    },
+    // 获取市区
+    // async getGetRegin(code) {
+    //   let that = this;
+    //   await GetReginByCityCode(code).then(res => {
+    //     if (res.data.success) {
+    //       if (code.length === 2) {
+    //         this.loading = false;
+    //         let district = res.data.data;
+    //         this.district = district;
+    //         let children = [];
+    //         district.forEach(ele => {
+    //           let text = ele.name;
+    //           children.push({ text: text, code: ele.code })
+    //         })
+    //         this.citylist.forEach((ele, index) => {
+    //           if (ele.code === code[1]) {
+    //             that.$set(this.columns[index], 'children', children)
+    //             this.checkedCity.push(ele.name);
+    //           }
+    //         })
+    //       } else if (code.length === 1) {
+    //         let citylist = res.data.data;
+    //         this.citylist = citylist;
+    //         citylist.forEach(ele => {
+    //           this.columns.push({ text: ele.name });
+    //         })
+    //         this.getGetRegin(['370000', citylist[0].code])
+    //       }
+    //     } else {
+    //       Toast.fail(res.data.errorMsg);
+    //     }
+    //   })
+    // },
+    // 选中上拉菜单操作；
+    onSelect(item) {
+      // 默认情况下点击选项时不会自动收起
+      // 可以通过 close-on-click-action 属性开启自动收起
+      if (this.cityArr === 'acrossArr') {
+        if (item.name === '重选') {
+          this.docity = false;
+          this.acrossAdd('acrossArr');
+        } else {
+          this.docity = false;
+          this.delcity('acrossArr');
+        }
+      } else {
+        if (item.name === '重选') {
+          this.docity = false;
+          this.acrossAdd('acrossDel');
+        } else {
+          this.docity = false;
+          this.delcity('acrossDel');
+        }
+      }
+    },
+    cantToast() {
+      Toast('最多可选两个城市，区县不限')
+    },
+    // 打开城市选择
+    acrossAdd(val) {
+      this.cityArr = val;
+      // if (val === 'acrossArr') {
+      //   this.$refs.pickers.setIndexes(this.pickhistory1);
+      // } else {
+      //   this.$refs.pickers.setIndexes(this.pickhistory2);
+      // }
+      this.showCity = true;
+    },
+    // 选择市区按钮
+    changeAcross(cityArr, index) {
+      if (cityArr === 'acrossArr') {
+        this.cityitem1 = index;
+        this.cityArr = 'acrossArr';
+      } else {
+        this.cityitem2 = index;
+        this.cityArr = 'acrossDel'
+      }
+      this.docity = true;
+    },
+    // 更换市区或选择市区
+    cityConfirm(value) {
+      let city = value[0];
+      let area = value[1];
+      let name = city + '-' + area;
+      let code, cityCode;
+      this.citylist.forEach(ele => {
+        if (ele.name === city) {
+          cityCode = ele.code
+        }
+      })
+      this.columns.forEach((eles, indexs) => {
+        if (eles.text === city) {
+          if (eles.children.length !== 0) {
+            eles.children.forEach(ele2 => {
+              if (ele2.text === area && ele2.code !== undefined) {
+                code = ele2.code;
+              }
+            })
+          }
+        }
+      })
+      let item = { name: name, code: code, city: city, cityCode: cityCode };
+      if (this.cityArr === 'acrossArr') {
+        this.changeOtherCity('cityitem1', 'acrossArr', code, city, item)
+      } else {
+        this.changeOtherCity('cityitem2', 'acrossDel', code, city, item)
+      }
+      this.showCity = false;
+    },
+    changeOtherCity(cityitem, cityArrs, code, city, item) {
+      if (this[cityitem] !== null) {
+        this[cityArrs].splice(this[cityitem], 1, item);
+        this[cityitem] = null;
+      } else {
+        let has1
+        if (this[cityArrs].length !== 0) {
+          this[cityArrs].forEach(ele => {
+            if (ele.code === code && ele.city === city) {
+              has1 = true
+            }
+          })
+        }
+        if (has1 === undefined) {
+          this[cityArrs].push(item);
+          this.$refs.pickers.setIndexes(this.pickhistory1);
+        } else {
+          Toast('该区域已选择');
+        }
+      }
+    },
+    // 删除区市
+    delcity(type) {
+      if (type === 'acrossArr') {
+        // this.acrossArr.splice(this.cityitem1, 1);
+        this.acrossArr = this.acrossArr.filter((ele, index) => {
+          return index !== this.cityitem1
+        })
+        this.cityitem1 = null;
+      } else {
+        // this.acrossDel.splice(this.cityitem2, 1);
+        this.acrossDel = this.acrossDel.filter((ele, index) => {
+          return index !== this.cityitem2
+        })
+        this.cityitem2 = null;
+      }
+    },
+    // 滚动pickerloading请求数据
+    // async citychange(picker, value, index) {
+    //   let names = picker.getValues()[0];
+    //   let has = this.checkedCity.some(ele => {
+    //     return ele === names
+    //   })
+    //   if (!has) {
+    //     let codes
+    //     let indexCity
+    //     this.citylist.forEach((ele, index) => {
+    //       if (names === ele.name) {
+    //         codes = ele.code;
+    //         indexCity = index
+    //       }
+    //     })
+    //     this.loading = true;
+    //     await this.getGetRegin(['370000', codes]);
+    //     let arr = [];
+    //     this.columns[indexCity].children.forEach(ele => {
+    //       arr.push(ele.text)
+    //     })
+    //     picker.setColumnValues(1, arr);
+    //   }
+    // },
+    async citychange(picker, value, index) {
+      let names = value[0];
+      let has = this.checkedCity.some(ele => {
+        return ele === names
+      })
+      if (!has) {
+        this.$nextTick(() => {
+          this.loading = true;
+        })
+        let codes
+        let indexCity
+        this.citylist.forEach((ele, index) => {
+          if (names === ele.name) {
+            codes = ele.code;
+            indexCity = index
+          }
+        })
+        // await this.getGetRegin(['370000', codes]);
+        await this.getcounty(codes)
+        this.$nextTick(function() {
+          let arr = [];
+          if (this.columns[indexCity].children.length !== 0) {
+            this.columns[indexCity].children.forEach(ele => {
+              arr.push(ele.text)
+            })
+          }
+          setTimeout(() => {
+            picker.setColumnValue(1, arr[0].text)
+            picker.setColumnValues(1, arr);
+          }, 500);
+        })
+      }
     },
     checkUnlimited(eleItem, array, check_status) {
       let that = this
@@ -310,8 +660,29 @@ export default {
       }
       json.carType = this.typeCar;
       json.cargoType = this.cargoType;
-      json.arrivalArea = this.arrivalArea;
-      json.deliveryArea = this.deliveryArea;
+      let arrivalArea1 = [];
+      let arrivalArea2 = [];
+      this.arrivalArea.forEach(ele => {
+        let item = { across: false, city: this.workCity, county: ele };
+        arrivalArea1.push(item)
+      })
+      this.acrossArr.forEach(ele => {
+        let item = { across: true, city: ele.cityCode, county: ele.code };
+        arrivalArea2.push(item)
+      })
+      json.arrivalArea = [...arrivalArea1, ...arrivalArea2];
+
+      let deliveryArea1 = [];
+      let deliveryArea2 = [];
+      this.deliveryArea.forEach(ele => {
+        let item = { across: false, city: this.workCity, county: ele };
+        deliveryArea1.push(item)
+      })
+      this.acrossDel.forEach(ele => {
+        let item = { across: true, city: ele.cityCode, county: ele.code };
+        deliveryArea2.push(item)
+      })
+      json.deliveryArea = [...deliveryArea1, ...deliveryArea2];
       json.handlingDifficultyDegree = this.handlingDifficultyDegree;
       json.departureTime = this.departureTime;
       json.driverId = this.driverId;
@@ -335,6 +706,7 @@ export default {
         Toast('请选择出车时段');
         return;
       }
+
       Toast.loading({
         duration: 0, // 持续展示 toast
         forbidClick: true, // 禁用背景点击
@@ -361,55 +733,27 @@ export default {
         driverId: this.driverId
       }).then(res => {
         Toast.clear();
-        let flag = res.data.data.flag;
         that.flag = res.data.data.flag;
-        let carType = res.data.data.carType;
-        let cargoType = res.data.data.cargoType;
-        let arrivalArea = res.data.data.arrivalArea;
-        let deliveryArea = res.data.data.deliveryArea;
-        let handlingDifficultyDegree = res.data.data.handlingDifficultyDegree;
-        let departureTime = res.data.data.departureTime;
+        let { flag, carType, cargoType, arrivalArea, deliveryArea, handlingDifficultyDegree, departureTime } = res.data.data
         Toast.clear();
         if (flag) {
-          that.dataTypeCar.forEach(ele => {
-            carType.forEach(item => {
-              if (item === ele.code) {
-                that.typeCar.push(ele.codeVal)
-              }
-            })
-          });
-          that.dataCargoType.forEach(ele => {
-            cargoType.forEach(item => {
-              if (ele.code === item) {
-                that.cargoType.push(ele.codeVal)
-              }
-            })
+          that.typeCar = [...carType];
+          that.cargoType = [...cargoType];
+          that.handlingDifficultyDegree = [...handlingDifficultyDegree];
+          that.departureTime = [...departureTime];
+          arrivalArea.forEach(ele => {
+            if (ele.across) {
+              that.acrossArr.push({ cityCode: ele.city, code: ele.county, name: ele.cityName + '-' + ele.countyName, city: ele.cityName })
+            } else {
+              that.arrivalArea.push(ele.county)
+            }
           })
-          that.areaArray.forEach(ele => {
-            arrivalArea.forEach(item => {
-              if (ele.name === item) {
-                that.arrivalArea.push(ele.code)
-              }
-            })
-            deliveryArea.forEach(item => {
-              if (ele.name === item) {
-                that.deliveryArea.push(ele.code)
-              }
-            })
-          })
-          that.dataHandlingDifficultyDegree.forEach(ele => {
-            handlingDifficultyDegree.forEach(item => {
-              if (ele.code === item) {
-                that.handlingDifficultyDegree.push(ele.codeVal)
-              }
-            })
-          })
-          that.dataDepartureTime.forEach(ele => {
-            departureTime.forEach(item => {
-              if (ele.code === item) {
-                that.departureTime.push(ele.codeVal)
-              }
-            })
+          deliveryArea.forEach(ele => {
+            if (ele.across) {
+              that.acrossDel.push({ cityCode: ele.city, code: ele.county, name: ele.cityName + '-' + ele.countyName, city: ele.cityName })
+            } else {
+              that.deliveryArea.push(ele.county)
+            }
           })
         }
       }).catch(err => {
@@ -486,11 +830,31 @@ export default {
       font-size: 13px;
     }
   }
+  .across_city{
+    width: 100%;
+    .acitybtn{
+      text-align: center;
+      width: 100%;
+      .van-button{
+      width: 80%;
+      height: 0.6rem;
+      line-height: 0.6rem;
+      }
+      .tag_margin{
+      margin: 2px 11px 12px 0;
+      height: 12px;
+      min-width: 1.4rem;
+      }
+    }
+    .across_box{
+      margin-top: 12px;
+    }
+  }
   .loadingStatus{
      display: flex;
      min-height: 2.18rem;
      justify-content: center;
      align-items: center;
+    }
   }
-}
 </style>
