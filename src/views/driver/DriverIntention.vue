@@ -141,13 +141,8 @@
 <script>
 // GetReginByCityCode
 import { dictionary, getCityAreaByCode } from '@/api/common'
-<<<<<<< src/views/driver/DriverIntention.vue
 import { Toast, CellGroup, Cell, Button, Tag, loading, Picker, Popup, ActionSheet } from 'vant'
 import { saveIntentionOfReceiving, judgingIntentionOfReceiving } from '@/api/driver'
-=======
-import { Toast, CellGroup, Cell, Button, Tag, loading } from 'vant'
-import { judgingIntentionOfReceiving, saveIntentionOfReceiving } from '@/api/driver'
->>>>>>> src/views/driver/DriverIntention.vue
 import { driverDetail } from '@/api/user'
 export default {
   name: 'DriverIntention',
