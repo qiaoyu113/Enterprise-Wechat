@@ -56,6 +56,7 @@
                 基本信息
               </div>
             </div>
+            <van-cell title="司机状态" :value="detail.stateName | DataIsNull" />
             <van-cell title="姓名" :value="detail.name | DataIsNull" />
             <van-cell title="身份证号" :value="detail.idNumber | DataIsNull" />
             <van-cell title="联系电话" :value="detail.phone | DataIsNull" />
