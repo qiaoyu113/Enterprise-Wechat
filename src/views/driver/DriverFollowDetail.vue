@@ -379,7 +379,7 @@ export default {
                                 ) {
                                   Toast.fail('暂无功能权限');
                                 }
-                                that.saveForm.remark = '线路推送至司机';
+                                that.saveForm.remark = '手动推送线路';
                                 submitSave(that.saveForm)
                                   .then(({ data }) => {
                                     if (data.success) {
@@ -416,7 +416,7 @@ export default {
                                       ) {
                                         Toast.fail('暂无功能权限');
                                       }
-                                      that.saveForm.remark = '线路推送至司机';
+                                      that.saveForm.remark = '手动推送线路';
                                       submitSave(that.saveForm)
                                         .then(({ data }) => {
                                           if (data.success) {
