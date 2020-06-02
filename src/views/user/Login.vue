@@ -67,7 +67,6 @@ export default {
           this.handleLogin(code)
         }
       }
-      console.log('tag', '')
     },
     linkGetCode() {
       var local = window.location.href
