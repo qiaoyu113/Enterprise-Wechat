@@ -518,6 +518,7 @@ export default {
         id: driverId
       }).then((res) => {
         if (res.data.success) {
+          alert(res.data.data)
           if (!res.data.data) {
             this.actions.pop()
           }
