@@ -299,8 +299,8 @@ export default {
       actions: [
         { name: '激活推送', color: '#3F8AF2' },
         { name: '产品介绍', color: '#3F8AF2' },
-        { name: '推荐线路', color: '#3F8AF2' }
-        // { name: '重新匹配', color: '#D03228' }
+        { name: '推荐线路', color: '#3F8AF2' },
+        { name: '重新匹配', color: '#D03228' }
       ],
       carType: [],
       cargoType: [],
