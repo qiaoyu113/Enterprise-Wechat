@@ -407,7 +407,6 @@ export default {
               }
             })
           })
-          console.log(that.arrivalArea)
           that.deliveryArea.forEach((ele, index) => {
             arr.forEach(item => {
               if (ele.county === item.code) {
@@ -445,6 +444,10 @@ export default {
           }
           if (this.detail.accountType === 2) {
             this.detail.accountType = '农村户口'
+          }
+          let managerId = window.localStorage.getItem('managerId')
+          if (Number(this.detail.joinManagerId) !== Number(managerId)) {
+            this.actions.pop()
           }
         }
       })

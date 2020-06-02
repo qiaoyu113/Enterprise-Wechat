@@ -91,7 +91,7 @@ export default {
       }
     },
     getDeveloper(name) {
-      if (name === 'qiaoyu' || name === 'zhaowei' || name === 'liweishan') {
+      if (name === 'qiaoyu' || name === 'zhaowei' || name === 'liweishan' || name === 'yanyijie') {
         localStorage.setItem('developer', name)
       } else {
         localStorage.setItem('developer', 'qiaoyu')
@@ -107,6 +107,7 @@ export default {
           if (res.data.success) {
             // Toast.success('授权成功');
             localStorage.setItem('token', res.data.data.token)
+            localStorage.setItem('managerId', res.data.data.userId)
             let city = res.data.data.city;
             if (city && city !== '') {
               localStorage.setItem('city', city)
