@@ -514,11 +514,10 @@ export default {
       })
     },
     getManagerSame(driverId) {
-      alert(111)
       getManagerSameRequest({
         id: driverId
       }).then((res) => {
-        alert(res)
+        alert(JSON.stringify(res))
         if (res.data.success) {
           alert(res.data.data)
           if (!res.data.data) {
