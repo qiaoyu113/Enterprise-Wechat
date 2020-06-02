@@ -61,6 +61,6 @@ export function getManagerSameRequest(data) {
   return request({
     url: '/api/driver/driver/match/driver/judge/manager/same',
     method: 'get',
-    data
+    params: data
   })
 }
