@@ -251,7 +251,7 @@
 <script>
 import { Tabbar, TabbarItem, Toast, Tab, Tabs, Cell, CellGroup, Button, ActionSheet, Tag, Icon, Dialog } from 'vant'
 import { driverDetail, queryOrdersByDriverId, relatedLineInformation, getActivationStatus, getMediaIdOfActivationQrCode, getCorpSignature, getAgentSignature } from '@/api/user'
-import { judgingIntentionOfReceiving } from '@/api/driver'
+import { judgingIntentionOfReceiving, getManagerSameRequest } from '@/api/driver'
 import { dictionary, getCityAreaByCode } from '@/api/common'
 // import VoPages from 'vo-pages'
 import 'vo-pages/lib/vo-pages.css'
@@ -445,10 +445,7 @@ export default {
           if (this.detail.accountType === 2) {
             this.detail.accountType = '农村户口'
           }
-          let managerId = window.localStorage.getItem('managerId')
-          if (Number(this.detail.joinManagerId) !== Number(managerId)) {
-            this.actions.pop()
-          }
+          this.getManagerSame(driverId)
         }
       })
       queryOrdersByDriverId({
@@ -512,6 +509,17 @@ export default {
               }
             });
             this.baseData();
+          }
+        }
+      })
+    },
+    getManagerSame(driverId) {
+      getManagerSameRequest({
+        id: driverId
+      }).then((res) => {
+        if (res.data.success) {
+          if (!res.data.data) {
+            this.actions.pop()
           }
         }
       })

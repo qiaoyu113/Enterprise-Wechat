@@ -56,3 +56,11 @@ export function judgingIntentionOfReceiving(data) {
   })
 }
 
+// 司机助手-企业微信-解除绑定关系-判断当前已登录的加盟经理是否为司机的加盟经理
+export function getManagerSameRequest(data) {
+  return request({
+    url: '/api/driver/driver/match/driver/judge/manager/same',
+    method: 'get',
+    data
+  })
+}
