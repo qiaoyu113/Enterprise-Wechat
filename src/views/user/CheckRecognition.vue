@@ -133,7 +133,7 @@
 </template>
 <script>
 import { Tabbar, TabbarItem, Toast, Tab, Tabs, Cell, CellGroup, Button, Dialog } from 'vant'
-import { matchConfirm, driverDetail, clueDetail, clueLog, queryOrdersByDriverId, relatedLineInformation } from '@/api/user'
+import { matchConfirm, driverDetail, clueDetail, clueLog, queryOrdersByDriverId, relatedLineInformation, releaseConfirm } from '@/api/user'
 // import VoPages from 'vo-pages'
 import 'vo-pages/lib/vo-pages.css'
 // import wx from 'jWeixin';
@@ -165,7 +165,9 @@ export default {
       loadedAll: false,
       driverId: '',
       driverType: '1',
-      detail: ''
+      detail: '',
+      phone: false,
+      oldDriverId: ''
     }
   },
   mounted() {
@@ -173,6 +175,11 @@ export default {
     this.driverId = driverId;
     let driverType = this.$route.query.driverType;
     this.driverType = driverType;
+    let phone = this.$route.query.phone;
+    if (phone) {
+      this.phone = phone;
+      this.oldDriverId = this.$route.query.oldDriverId;
+    }
     const externalUserId = localStorage.getItem('externalUserId')
     if (driverId && externalUserId && driverType) {
       this.getDetail(driverId, externalUserId, driverType)
@@ -188,19 +195,39 @@ export default {
     checkPush() {
       let that = this;
       let externalUserIds = localStorage.getItem('externalUserId')
-      matchConfirm({
-        'driverId': that.driverId,
-        'driverType': that.driverType,
-        'externalUserId': externalUserIds
-      }).then((res) => {
-        if (res.data.success) {
-          if (that.driverType === 1) {
-            this.$router.replace({ path: '/driverdetail', query: { driverId: that.driverId }})
-          } else {
-            this.$router.replace({ path: '/cluedetail', query: { clueId: that.driverId }})
+      if (that.phone) {
+        releaseConfirm({
+          'id': that.oldDriverId,
+          'phone': that.phone,
+          'realDriver': true
+        }).then((res) => {
+          if (res.data.success) {
+            if (res.data.data) {
+              this.$destroy(true)
+              if (that.driverType === 1) {
+                this.$router.replace({ path: '/driverdetail', query: { driverId: that.driverId }})
+                // window.location.replace = '/driverdetail?driverId=' + that.driverId
+              } else {
+                this.$router.replace({ path: '/cluedetail', query: { clueId: that.driverId }})
+              }
+            }
           }
-        }
-      })
+        })
+      } else {
+        matchConfirm({
+          'driverId': that.driverId,
+          'driverType': that.driverType,
+          'externalUserId': externalUserIds
+        }).then((res) => {
+          if (res.data.success) {
+            if (that.driverType === 1) {
+              this.$router.replace({ path: '/driverdetail', query: { driverId: that.driverId }})
+            } else {
+              this.$router.replace({ path: '/cluedetail', query: { clueId: that.driverId }})
+            }
+          }
+        })
+      }
     },
     getDetail(driverId, externalUserId, driverType) {
       let that = this;

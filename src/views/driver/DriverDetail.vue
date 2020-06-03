@@ -517,7 +517,6 @@ export default {
       getManagerSameRequest({
         id: driverId
       }).then((res) => {
-        alert(JSON.stringify(res))
         if (res.data.success) {
           if (!res.data.data) {
             this.actions.pop()
@@ -576,7 +575,8 @@ export default {
           title: '提示',
           message: '是否确认进行重新匹配?'
         }).then(() => {
-          this.$router.replace({ path: '/unrecognition' })
+          this.$destroy(true)
+          this.$router.replace({ path: '/unrecognition', query: { driverId: this.driverId }})
         });
       }
     },
@@ -678,7 +678,6 @@ export default {
           mediaid: imageData // 图片的素材id
         }
       }, function(res) {
-        // alert(JSON.stringify(res))
         Toast.clear();
         if (res.err_msg === 'sendChatMessage:permission denied') {
           Toast.fail('暂无功能权限')
