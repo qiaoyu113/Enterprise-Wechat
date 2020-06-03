@@ -519,7 +519,6 @@ export default {
       }).then((res) => {
         alert(JSON.stringify(res))
         if (res.data.success) {
-          alert(res.data.data)
           if (!res.data.data) {
             this.actions.pop()
           }
