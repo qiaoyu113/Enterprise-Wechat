@@ -141,7 +141,7 @@
 <script>
 // GetReginByCityCode
 import { dictionary, getCityAreaByCode } from '@/api/common'
-import { Toast, CellGroup, Cell, Button, Tag, loading } from 'vant'
+import { Toast, CellGroup, Cell, Button, Tag, loading, Popup } from 'vant'
 import { judgingIntentionOfReceiving, saveIntentionOfReceiving } from '@/api/driver'
 import { driverDetail } from '@/api/user'
 export default {
@@ -152,6 +152,7 @@ export default {
     [loading.name]: loading,
     [Button.name]: Button,
     [CellGroup.name]: CellGroup,
+    [Popup.name]: Popup,
     [Cell.name]: Cell
   },
   data() {
