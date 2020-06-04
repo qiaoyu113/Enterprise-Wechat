@@ -86,9 +86,8 @@ export default {
               //   Toast.fail('暂未匹配到客户信息');
               // }
               that.driverId = that.$route.query.driverId
-              console.log(1, that.driverId)
-              console.log(2, driverId)
               if (that.driverId) {
+                this.$destroy(true)
                 that.$router.replace({ path: '/checkrecognition', query: { oldDriverId: that.driverId, driverId: driverId, driverType: driverType, phone: that.phone }})
               } else {
                 that.$router.replace({ path: '/checkrecognition', query: { driverId: driverId, driverType: driverType }})

@@ -251,7 +251,8 @@
 <script>
 import { Tabbar, TabbarItem, Toast, Tab, Tabs, Cell, CellGroup, Button, ActionSheet, Tag, Icon, Dialog } from 'vant'
 import { driverDetail, queryOrdersByDriverId, relatedLineInformation, getActivationStatus, getMediaIdOfActivationQrCode, getCorpSignature, getAgentSignature } from '@/api/user'
-import { judgingIntentionOfReceiving, getManagerSameRequest } from '@/api/driver'
+// import { judgingIntentionOfReceiving, getManagerSameRequest } from '@/api/driver'
+import { judgingIntentionOfReceiving } from '@/api/driver'
 import { dictionary, getCityAreaByCode } from '@/api/common'
 // import VoPages from 'vo-pages'
 import 'vo-pages/lib/vo-pages.css'
@@ -514,15 +515,15 @@ export default {
       })
     },
     getManagerSame(driverId) {
-      getManagerSameRequest({
-        id: driverId
-      }).then((res) => {
-        if (res.data.success) {
-          if (!res.data.data) {
-            this.actions.pop()
-          }
-        }
-      })
+      // getManagerSameRequest({
+      //   id: driverId
+      // }).then((res) => {
+      //   if (res.data.success) {
+      //     if (!res.data.data) {
+      // this.actions.pop()
+      //     }
+      //   }
+      // })
     },
     buryPoint(name, title) {
       this.active = Number(name);
