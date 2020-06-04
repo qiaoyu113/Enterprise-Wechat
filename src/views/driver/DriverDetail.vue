@@ -56,6 +56,7 @@
                 基本信息
               </div>
             </div>
+            <van-cell title="司机状态" :value="detail.stateName | DataIsNull" />
             <van-cell title="姓名" :value="detail.name | DataIsNull" />
             <van-cell title="身份证号" :value="detail.idNumber | DataIsNull" />
             <van-cell title="联系电话" :value="detail.phone | DataIsNull" />
@@ -250,6 +251,7 @@
 <script>
 import { Tabbar, TabbarItem, Toast, Tab, Tabs, Cell, CellGroup, Button, ActionSheet, Tag, Icon, Dialog } from 'vant'
 import { driverDetail, queryOrdersByDriverId, relatedLineInformation, getActivationStatus, getMediaIdOfActivationQrCode, getCorpSignature, getAgentSignature } from '@/api/user'
+// import { judgingIntentionOfReceiving, getManagerSameRequest } from '@/api/driver'
 import { judgingIntentionOfReceiving } from '@/api/driver'
 import { dictionary, getCityAreaByCode } from '@/api/common'
 // import VoPages from 'vo-pages'
@@ -298,8 +300,8 @@ export default {
       actions: [
         { name: '激活推送', color: '#3F8AF2' },
         { name: '产品介绍', color: '#3F8AF2' },
-        { name: '推荐线路', color: '#3F8AF2' }
-        // { name: '重新匹配', color: '#D03228' }
+        { name: '推荐线路', color: '#3F8AF2' },
+        { name: '重新匹配', color: '#D03228' }
       ],
       carType: [],
       cargoType: [],
@@ -406,7 +408,6 @@ export default {
               }
             })
           })
-          console.log(that.arrivalArea)
           that.deliveryArea.forEach((ele, index) => {
             arr.forEach(item => {
               if (ele.county === item.code) {
@@ -445,6 +446,7 @@ export default {
           if (this.detail.accountType === 2) {
             this.detail.accountType = '农村户口'
           }
+          this.getManagerSame(driverId)
         }
       })
       queryOrdersByDriverId({
@@ -512,6 +514,17 @@ export default {
         }
       })
     },
+    getManagerSame(driverId) {
+      // getManagerSameRequest({
+      //   id: driverId
+      // }).then((res) => {
+      //   if (res.data.success) {
+      //     if (!res.data.data) {
+      // this.actions.pop()
+      //     }
+      //   }
+      // })
+    },
     buryPoint(name, title) {
       this.active = Number(name);
       localStorage.setItem('active', name)
@@ -563,7 +576,8 @@ export default {
           title: '提示',
           message: '是否确认进行重新匹配?'
         }).then(() => {
-          this.$router.replace({ path: '/unrecognition' })
+          this.$destroy(true)
+          this.$router.replace({ path: '/unrecognition', query: { driverId: this.driverId }})
         });
       }
     },
@@ -665,7 +679,6 @@ export default {
           mediaid: imageData // 图片的素材id
         }
       }, function(res) {
-        // alert(JSON.stringify(res))
         Toast.clear();
         if (res.err_msg === 'sendChatMessage:permission denied') {
           Toast.fail('暂无功能权限')
