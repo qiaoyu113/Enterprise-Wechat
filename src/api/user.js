@@ -48,6 +48,14 @@ export function matchConfirm(data) {
   })
 }
 
+export function releaseConfirm(data) {
+  return request({
+    url: '/api/driver/driver/match/driver/id/release',
+    method: 'post',
+    data
+  })
+}
+
 export function driverDetail(data) {
   return request({
     url: '/api/driver/driver/detail',
