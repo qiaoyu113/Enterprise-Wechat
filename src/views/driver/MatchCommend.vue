@@ -195,7 +195,7 @@ export default {
         'departureTime': '',
         'arrivalArea': '',
         'key': '',
-        'limit': '20',
+        'limit': '10',
         'page': 1
       },
       active: 1,
@@ -256,9 +256,11 @@ export default {
   },
   methods: {
     forEachArr(arr) {
-      for (var i = 0; i < arr.length; i++) {
-        if (arr[i].matched) {
-          return true
+      if (arr) {
+        for (var i = 0; i < arr.length; i++) {
+          if (arr[i].matched) {
+            return true
+          }
         }
       }
       return false;
@@ -394,7 +396,7 @@ export default {
           'handlingDifficultyDegree': this.listQuery.handlingDifficultyDegree,
           'driverId': this.driverId,
           'key': this.listQuery.key,
-          'limit': 20,
+          'limit': 10,
           'page': this.listQuery.page
         }).then((res) => {
           if (res.data.success) {
@@ -428,7 +430,7 @@ export default {
         helpMatchIntelligent({
           'driverId': this.driverId,
           'key': '',
-          'limit': 20,
+          'limit': 10,
           'page': this.listQuery.page
         }).then((res) => {
           if (res.data.success) {

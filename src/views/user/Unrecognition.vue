@@ -44,10 +44,15 @@ export default {
       total: 0,
       page: 1,
       phone: '',
-      show: false
+      show: false,
+      driverId: false
     }
   },
   mounted() {
+    let driverId = this.$route.query.driverId;
+    if (driverId) {
+      this.driverId = driverId
+    }
   },
   methods: {
     blurInp() {
@@ -80,7 +85,13 @@ export default {
               //   // 无法识别
               //   Toast.fail('暂未匹配到客户信息');
               // }
-              that.$router.replace({ path: '/checkrecognition', query: { driverId: driverId, driverType: driverType }})
+              that.driverId = that.$route.query.driverId
+              if (that.driverId) {
+                this.$destroy(true)
+                that.$router.replace({ path: '/checkrecognition', query: { oldDriverId: that.driverId, driverId: driverId, driverType: driverType, phone: that.phone }})
+              } else {
+                that.$router.replace({ path: '/checkrecognition', query: { driverId: driverId, driverType: driverType }})
+              }
             } else {
               // 无法识别
               Toast.fail('暂未匹配到客户信息');
