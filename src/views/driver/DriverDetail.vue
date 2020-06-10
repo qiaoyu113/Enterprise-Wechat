@@ -260,7 +260,7 @@ import 'vo-pages/lib/vo-pages.css'
 const wx = window.wx;
 var startTime
 export default {
-  name: 'Clue',
+  name: 'Driverdetail',
   components: {
     [Tabbar.name]: Tabbar,
     [TabbarItem.name]: TabbarItem,

@@ -27,8 +27,10 @@
               <van-checkbox :name="item.lineId" shape="square">
                 <div class="lineListTop">
                   <div class="name">
-                    {{ item.name }}/{{ item.phone }}<van-tag plain type="primary" size="small" style="margin-left: 0.3rem;">
+                    {{ item.name }}/{{ item.phone }}<van-tag v-if="item.corpUserId && item.corpUserId !== ''" plain type="primary" size="small" style="margin-left: 0.3rem;">
                       已激活
+                    </van-tag><van-tag v-else plain type="primary" size="small" style="margin-left: 0.3rem;">
+                      未激活
                     </van-tag>
                   </div>
                   <div class="info">

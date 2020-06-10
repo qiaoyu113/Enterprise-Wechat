@@ -39,7 +39,7 @@ export default [
   }, {
 
     path: '/driverintention',
-    name: 'driverintention',
+    name: 'Driverintention',
     component: () => import('views/driver/DriverIntention.vue'),
     meta: {
       title: '司机接活意向',
@@ -48,7 +48,7 @@ export default [
   },
   {
     path: '/matchcommend',
-    name: 'matchcommend',
+    name: 'Matchcommend',
     component: resolve => require(['@/views/driver/MatchCommend'], resolve),
     meta: {
       title: '促撮推荐',
