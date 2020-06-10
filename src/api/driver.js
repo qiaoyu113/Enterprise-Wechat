@@ -17,6 +17,29 @@ export function getSelectList(data) {
     data
   })
 }
+
+/**
+ * 司机列表查询
+ */
+export function selectDriverTask(data) {
+  return request({
+    url: '/api/bss/v1/bss/temMatch/getDriver',
+    method: 'post',
+    data
+  })
+}
+
+/**
+ * 即时撮合，推送信息给司机
+ */
+export function sendMsgToDriver(data) {
+  return request({
+    url: '/api/match/tem/match/sendMsgToDriver',
+    method: 'post',
+    data
+  })
+}
+
 /**
  * 促撮列表详情
  */

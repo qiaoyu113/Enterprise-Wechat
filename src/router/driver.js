@@ -10,7 +10,7 @@ export default [
     }
   }, {
     path: '/driverdetail',
-    name: 'driverdetail',
+    name: 'Driverdetail',
     component: resolve => require(['@/views/driver/DriverDetail'], resolve),
     meta: {
       title: '司机详情',
@@ -52,6 +52,24 @@ export default [
     component: resolve => require(['@/views/driver/MatchCommend'], resolve),
     meta: {
       title: '促撮推荐',
+      keepAlive: true
+    }
+  },
+  {
+    path: '/driverchoose',
+    name: 'Driverchoose',
+    component: resolve => require(['@/views/driver/DriverChoose'], resolve),
+    meta: {
+      title: '选择司机',
+      keepAlive: true
+    }
+  }, {
+    path: '/driverdetailbatch',
+    name: 'Driverdetailbatch',
+    component: resolve => require(['@/views/driver/DriverDetailBatch'], resolve),
+    meta: {
+      title: '司机详情',
+      // auth: true,
       keepAlive: true
     }
   }

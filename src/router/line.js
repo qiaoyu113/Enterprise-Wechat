@@ -11,9 +11,21 @@ export default [
   },
   {
     path: '/linecommend',
+    // name: 'linecommend',
+    name: 'linebatch',
+    // component: resolve => require(['@/views/line/LineCommend'], resolve),
+    component: resolve => require(['@/views/line/LineBatch'], resolve),
+    // component: resolve => require(['@/views/driver/DriverChoose'], resolve),
+    meta: {
+      title: '推荐线路',
+      // auth: true,
+      keepAlive: true
+    }
+  },
+  {
+    path: '/linebatch',
     name: 'linecommend',
     component: resolve => require(['@/views/line/LineCommend'], resolve),
-
     meta: {
       title: '推荐线路',
       // auth: true,
@@ -24,6 +36,16 @@ export default [
     path: '/linedetail',
     name: 'linedetail',
     component: resolve => require(['@/views/line/LineDetail'], resolve),
+    meta: {
+      title: '线路详情',
+      // auth: true,
+      keepAlive: true
+    }
+  },
+  {
+    path: '/linedetailbatch',
+    name: 'linedetailbatch',
+    component: resolve => require(['@/views/line/LineDetailBatch'], resolve),
     meta: {
       title: '线路详情',
       // auth: true,

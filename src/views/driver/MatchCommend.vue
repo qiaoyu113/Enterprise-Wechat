@@ -159,7 +159,7 @@ import SearchItemMatch from 'components/SearchItemMatchNew'
 import 'vo-pages/lib/vo-pages.css'
 const wx = window.wx;
 export default {
-  name: 'Linecommend',
+  name: 'Matchcommend',
   components: {
     [Tabbar.name]: Tabbar,
     [TabbarItem.name]: TabbarItem,
