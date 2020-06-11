@@ -172,6 +172,7 @@ export default {
     },
     pullingUp() {
       this.listQuery.page += 1
+      console.log(this.listQuery.page)
       this.getList()
     },
     searchFunction(data) {
@@ -240,7 +241,7 @@ export default {
             this.result = [];
             this.listQuery.page = 0
             this.list = [];
-            this.pullingUp()
+            // this.pullingUp()
           } else {
             Toast.fail(res.data.errorMsg);
             this.showoverlay = false;
