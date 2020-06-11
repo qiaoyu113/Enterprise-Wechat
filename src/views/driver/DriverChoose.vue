@@ -224,7 +224,7 @@ export default {
     },
     sendLineToDriver() {
       this.showoverlay = true;
-      if (this.result.length) {
+      if (!this.result.length) {
         Toast.fail('请选择司机');
         this.showoverlay = false;
         return false;
