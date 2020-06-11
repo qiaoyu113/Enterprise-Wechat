@@ -23,7 +23,7 @@
           <div class="placeholder"></div>
           <!-- <div v-for="item in list" :key="item.type" class="lineList" @click="goDetail(item.driverId)"> -->
           <div v-for="item in list" :key="item.type" class="lineList">
-            <div :class="result.indexOf(item.lineId) !== -1 ? 'lineItem bg' : 'lineItem'">
+            <div :class="result.indexOf(item.driverId) !== -1 ? 'lineItem bg' : 'lineItem'">
               <van-checkbox :name="item.driverId" shape="square">
                 <div class="lineListTop">
                   <div class="name">
