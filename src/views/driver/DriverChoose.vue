@@ -226,7 +226,7 @@ export default {
       this.showoverlay = true;
       sendMsgToDriver({
         type: 2,
-        driverIds: this.result,
+        driverIds: this.result.toString(),
         lineId: this.listQuery.temMatchTaskId
       }).then((res) => {
         if (res.data.success) {
