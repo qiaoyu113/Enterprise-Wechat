@@ -244,7 +244,7 @@ export default {
       })
     },
     goDetail(id) {
-      this.$router.push({ path: '/driverdetailbatch', query: { id: id }})
+      this.$router.push({ path: '/driverdetailbatch', query: { driverId: id }})
     }
   }
 }
