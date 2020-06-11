@@ -120,7 +120,7 @@ export default {
   },
   mounted() {
     this.listQuery.temMatchTaskId = this.$route.query.id;
-    // this.getList()
+    this.getList()
     this.fetchData()
   },
   methods: {
