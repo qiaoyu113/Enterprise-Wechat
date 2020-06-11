@@ -224,6 +224,10 @@ export default {
     },
     sendLineToDriver() {
       this.showoverlay = true;
+      if (!this.result.length) {
+        Toast.fail('请选择司机');
+        return false;
+      }
       sendMsgToDriver({
         type: 2,
         driverIds: this.result.toString(),

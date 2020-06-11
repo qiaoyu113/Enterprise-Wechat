@@ -188,6 +188,7 @@ export default {
     }
     clearInterval(startTime);
     that.GLOBAL.buryPointFunction('customer_visit', '客户信息页面访问', eventLevelVariables)
+    that.$destroy(true);
     next(true);
   },
   created() {
