@@ -94,7 +94,8 @@ export default {
         'joinManagerId': '',
         'lineSaleId': '',
         'pageNumber': '',
-        'temMatchTaskId': ''
+        'temMatchTaskId': '',
+        'lineId': ''
       },
       arr: [],
       checked: false,
@@ -118,7 +119,7 @@ export default {
     next()
   },
   mounted() {
-    this.listQuery.temMatchTaskId = this.$route.query.id;
+    this.listQuery.lineId = this.$route.query.id;
     this.getList()
     this.fetchData()
   },
@@ -226,7 +227,7 @@ export default {
       sendMsgToDriver({
         type: 2,
         driverIds: this.result.toString(),
-        lineId: this.listQuery.temMatchTaskId
+        lineId: this.listQuery.lineId
       }).then((res) => {
         if (res.data.success) {
           Toast.success('推送成功');
