@@ -45,17 +45,16 @@
           </div>
         </van-checkbox-group>
       </vo-pages>
-      <van-button class="btn_bottom" @click="sendLineToDriver">
-        推送
-      </van-button>
-      <van-overlay :show="showoverlay" z-index="99">
-        <div class="wrapper" @click.stop>
-          <van-loading size="24px" vertical>
-            正在推送...
-          </van-loading>
-        </div>
-      </van-overlay>
     </div>
+    <van-button class="btn_bottom" @click="sendLineToDriver">
+      推送
+    </van-button><van-overlay :show="showoverlay" z-index="99">
+      <div class="wrapper" @click.stop>
+        <van-loading size="24px" vertical>
+          正在推送...
+        </van-loading>
+      </div>
+    </van-overlay>
   </div>
 </template>
 <script>
