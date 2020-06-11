@@ -247,11 +247,25 @@ export default {
 }
 </script>
 <style lang="scss" scope>
-@import '../../style/common.scss';
+// @import '../../style/common.scss';
 .driverchoose{
     background: #f7f8fa;
     height: 100%;
     width: 100%;
+    .btn_bottom{
+      width:100%;
+      height: 46px;
+      line-height: 46px;
+      position: fixed;
+      bottom: 1px;
+      left:0;
+      right:0;
+      background:#2F7DCD;
+      font-size: 16px;
+      color:#fff;
+      border:none;
+      z-index:98;
+    }
     .operateMenu{
         position: fixed;
         top:0;
