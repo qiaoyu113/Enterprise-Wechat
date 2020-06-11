@@ -112,10 +112,8 @@ export default {
     }
   },
   beforeRouteLeave(to, from, next) {
-    let fromPath = from.path // path为定义的变量，不是vue的data定义的变量，当前生命周期data还未初始化
-    alert(to.path)
-    alert(from.path)
-    if (fromPath !== '/driverdetailbatch') {
+    let path = to.path // path为定义的变量，不是vue的data定义的变量，当前生命周期data还未初始化
+    if (path !== '/driverdetailbatch') {
       this.$destroy(true);
     }
     next(true)
