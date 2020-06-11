@@ -112,13 +112,10 @@ export default {
     }
   },
   beforeRouteEnter(to, from, next) {
-    let path = to.path // path为定义的变量，不是vue的data定义的变量，当前生命周期data还未初始化
-    // if (path !== '/driverdetailbatch') {
-    //   this.$destroy(true);
-    // }
-    alert(path)
-    alert(from.path)
-    alert(next.path)
+    let path = from.path // path为定义的变量，不是vue的data定义的变量，当前生命周期data还未初始化
+    if (path !== '/driverdetailbatch') {
+      this.$destroy(true);
+    }
     next(true)
   },
   mounted() {
@@ -227,30 +224,32 @@ export default {
     },
     sendLineToDriver() {
       this.showoverlay = true;
-      if (!this.result.length) {
+      if (this.result.length) {
         Toast.fail('请选择司机');
-        return false;
-      }
-      sendMsgToDriver({
-        type: 2,
-        driverIds: this.result.toString(),
-        lineId: this.listQuery.lineId
-      }).then((res) => {
-        if (res.data.success) {
-          Toast.success('推送成功');
-          this.showoverlay = false;
-          this.result = [];
-          this.listQuery.page = 0
-          this.list = [];
-          this.pullingDown()
-        } else {
-          Toast.fail(res.data.errorMsg);
-          this.showoverlay = false;
-        }
-      }).catch((err) => {
-        Toast.fail(err);
         this.showoverlay = false;
-      })
+        return false;
+      } else {
+        sendMsgToDriver({
+          type: 2,
+          driverIds: this.result.toString(),
+          lineId: this.listQuery.lineId
+        }).then((res) => {
+          if (res.data.success) {
+            Toast.success('推送成功');
+            this.showoverlay = false;
+            this.result = [];
+            this.listQuery.page = 0
+            this.list = [];
+            this.pullingUp()
+          } else {
+            Toast.fail(res.data.errorMsg);
+            this.showoverlay = false;
+          }
+        }).catch((err) => {
+          Toast.fail(err);
+          this.showoverlay = false;
+        })
+      }
     },
     goDetail(id) {
       this.$router.push({ path: '/driverdetailbatch', query: { driverId: id }})
