@@ -111,11 +111,14 @@ export default {
       loadedAll: false
     }
   },
-  beforeRouteEnter(to, from, next) {
+  beforeRouteUpdate(to, from, next) {
     let path = to.path // path为定义的变量，不是vue的data定义的变量，当前生命周期data还未初始化
-    if (path !== '/driverdetailbatch') {
-      this.$destroy(true);
-    }
+    // if (path !== '/driverdetailbatch') {
+    //   this.$destroy(true);
+    // }
+    alert('to', path)
+    alert('from', from.path)
+    alert('next', next.path)
     next(true)
   },
   mounted() {
