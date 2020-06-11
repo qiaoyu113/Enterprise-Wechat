@@ -236,6 +236,10 @@ export default {
         if (res.data.success) {
           Toast.success('推送成功');
           this.showoverlay = false;
+          this.result = [];
+          this.listQuery.page = 0
+          this.list = [];
+          this.pullingDown()
         } else {
           Toast.fail(res.data.errorMsg);
           this.showoverlay = false;
