@@ -116,9 +116,9 @@ export default {
     // if (path !== '/driverdetailbatch') {
     //   this.$destroy(true);
     // }
-    alert('to', path)
-    alert('from', from.path)
-    alert('next', next.path)
+    alert(path)
+    alert(from.path)
+    alert(next.path)
     next(true)
   },
   mounted() {
