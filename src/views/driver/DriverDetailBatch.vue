@@ -196,11 +196,7 @@ export default {
   mounted() {
     let driverId = this.$route.query.driverId;
     this.driverId = driverId;
-    this.active = Number(localStorage.getItem('active'))
     this.loadTime()
-    if (this.active) {
-      localStorage.removeItem('active')
-    }
     this.getDetail(driverId)
   },
   methods: {
