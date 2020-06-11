@@ -36,7 +36,7 @@ export function sendMsgToDriver(data) {
   return request({
     url: '/api/match/tem/match/sendMsgToDriver',
     method: 'post',
-    data
+    params: data
   })
 }
 
