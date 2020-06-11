@@ -224,8 +224,6 @@ export default {
     },
     sendLineToDriver() {
       this.showoverlay = true;
-      alert(this.result.toString())
-      alert(this.listQuery.temMatchTaskId)
       sendMsgToDriver({
         type: 2,
         driverIds: this.result.toString(),
@@ -250,14 +248,11 @@ export default {
 }
 </script>
 <style lang="scss" scope>
+@import '../../style/common.scss';
 .driverchoose{
     background: #f7f8fa;
     height: 100%;
     width: 100%;
-    .btn_bottom{
-        text-align: center;
-        letter-spacing: 3px;
-    }
     .operateMenu{
         position: fixed;
         top:0;
