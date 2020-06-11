@@ -24,7 +24,7 @@
           <!-- <div v-for="item in list" :key="item.type" class="lineList" @click="goDetail(item.driverId)"> -->
           <div v-for="item in list" :key="item.type" class="lineList">
             <div :class="result.indexOf(item.lineId) !== -1 ? 'lineItem bg' : 'lineItem'">
-              <van-checkbox :name="item.lineId" shape="square">
+              <van-checkbox :name="item.driverId" shape="square">
                 <div class="lineListTop">
                   <div class="name">
                     {{ item.name }}/{{ item.phone }}<van-tag v-if="item.corpUserId && item.corpUserId !== ''" plain type="primary" size="small" style="margin-left: 0.3rem;">
