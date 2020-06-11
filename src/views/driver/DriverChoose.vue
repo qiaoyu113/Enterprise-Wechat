@@ -224,6 +224,8 @@ export default {
     },
     sendLineToDriver() {
       this.showoverlay = true;
+      alert(this.result.toString())
+      alert(this.listQuery.temMatchTaskId)
       sendMsgToDriver({
         type: 2,
         driverIds: this.result.toString(),
@@ -242,7 +244,6 @@ export default {
       })
     },
     goDetail(id) {
-      alert(id)
       this.$router.push({ path: '/driverdetailbatch', query: { id: id }})
     }
   }

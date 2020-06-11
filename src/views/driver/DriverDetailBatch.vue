@@ -285,6 +285,7 @@ export default {
       });
     },
     getDetail(driverId) {
+      alert(driverId)
       driverDetail({
         driverId: driverId
       }).then((res) => {
