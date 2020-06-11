@@ -116,7 +116,7 @@ export default {
     if (path !== '/driverdetailbatch') {
       this.$destroy(true);
     }
-    next(true)
+    next()
   },
   mounted() {
     this.listQuery.lineId = this.$route.query.id;
@@ -155,6 +155,16 @@ export default {
     checkAll() {
       if (!this.checked) {
         this.$refs.checkboxGroup.toggleAll(true);
+        this.list.forEach(item => {
+          if (item.isGray === 1) {
+            let i = this.result.indexOf(item.driverId)
+            this.result.splice(i, 1)
+          }
+        })
+        if (!this.result.length) {
+          this.checked = false;
+          Toast.fail('暂无可选司机');
+        }
       } else {
         this.$refs.checkboxGroup.toggleAll(false);
       }
@@ -241,7 +251,6 @@ export default {
             this.result = [];
             this.listQuery.page = 0
             this.list = [];
-            // this.pullingUp()
           } else {
             Toast.fail(res.data.errorMsg);
             this.showoverlay = false;
