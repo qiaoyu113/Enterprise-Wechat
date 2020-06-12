@@ -145,7 +145,7 @@ import { Toast, CellGroup, Cell, Button, Tag, loading, Picker, Popup, ActionShee
 import { saveIntentionOfReceiving, judgingIntentionOfReceiving } from '@/api/driver'
 import { driverDetail } from '@/api/user'
 export default {
-  name: 'DriverIntention',
+  name: 'Driverintention',
   components: {
     [Toast.name]: Toast,
     [Tag.name]: Tag,
