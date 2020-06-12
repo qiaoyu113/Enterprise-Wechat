@@ -8,8 +8,7 @@ if (url !== 'firmiana-wechat.yunniao.cn') {
     // url = 'http://firmiana-wechat.m1.yunniao.cn/'
     agentId = '1000015'
   } else {
-    // agentId = '1000013'
-    agentId = '1000021'
+    agentId = '1000013'
     // url = 'http://firmiana-open-api-d2.yunniao.cn/'
   }
 }
