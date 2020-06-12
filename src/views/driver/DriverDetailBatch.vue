@@ -89,9 +89,6 @@
           <p v-if="JSON.stringify(detail) == '{}'" class="noMore">
             暂无信息
           </p>
-          <van-button class="btn_bottom" @click="check">
-            操作
-          </van-button>
         </van-tab>
         <van-tab title="订单" class="backgroundTab">
           <van-cell-group v-if="lineList.length">
@@ -103,9 +100,6 @@
           <p v-if="!lineList.length" class="noMore">
             暂无信息
           </p>
-          <van-button class="btn_bottom" @click="check">
-            操作
-          </van-button>
         </van-tab>
         <van-tab title="线路" class="backgroundTab">
           <van-cell-group v-if="lineList.length">
@@ -117,131 +111,6 @@
           <p v-if="!lineList.length" class="noMore">
             暂无信息
           </p>
-          <van-button class="btn_bottom" @click="check">
-            操作
-          </van-button>
-        </van-tab>
-        <van-tab title="撮合" :class="matchModule ? 'backgroundTab2' : 'backgroundTab'" @click="buryPoint('撮合')">
-          <div v-if="!matchModule" class="match_box">
-            <img src="https://qizhiniao-dev.oss-cn-beijing.aliyuncs.com/img/97ee7868311c46b3be2875cbaf5e354d" alt="">
-            <p class="hint_weight">
-              未设置接活意向
-            </p>
-            <p class="text_nomarl">
-              请根据司机需求设置接活意向
-            </p>
-            <p class="text_nomarl">
-              系统会根据意向智能推荐匹配线路
-            </p>
-            <van-button type="info" class="btn2" @click="goRouter(1)">
-              设置司机接活意向
-            </van-button>
-          </div>
-          <div v-else class="match_box2">
-            <van-cell-group>
-              <!-- <h2 class="van-doc-demo-block__title">
-                撮合信息
-              </h2> -->
-            </van-cell-group>
-            <!-- <van-cell-group class="matchGroup">
-              <van-cell title="车型" :value="matchDetail.carType | DataIsNull" />
-            </van-cell-group> -->
-            <div class="matchList">
-              <div class="title_sm">
-                车型
-              </div>
-              <div class="tage_type">
-                <van-tag v-for="item in carType" :key="item.name" round type="primary" color="#4F77AA" class="tag" size="medium">
-                  {{ item.name }}
-                </van-tag>
-                <p v-if="!matchDetail.cargoType.length">
-                  暂无数据
-                </p>
-              </div>
-            </div>
-            <div class="matchList">
-              <div class="title_sm">
-                货物类型
-              </div>
-              <div class="tage_type">
-                <van-tag v-for="item in cargoType" :key="item.name" round type="primary" color="#4F77AA" class="tag" size="medium">
-                  {{ item.name }}
-                </van-tag>
-                <p v-if="!matchDetail.cargoType.length">
-                  暂无数据
-                </p>
-              </div>
-            </div>
-            <div class="matchList">
-              <div class="title_sm">
-                到仓区域
-              </div>
-              <div class="tage_type">
-                <van-tag v-for="item in arrivalArea" :key="item.name" round type="primary" color="#4F77AA" class="tag" size="medium">
-                  {{ item.name }}
-                </van-tag>
-                <van-tag v-for="item in matchDetail.arrivalArea" :key="item.name" round type="primary" color="#4F77AA" class="tag" size="medium">
-                  {{ item.cityName + '-' + item.countyName }}
-                </van-tag>
-                <p v-if="!matchDetail.arrivalArea.length && !arrivalArea.length">
-                  暂无数据
-                </p>
-              </div>
-            </div>
-            <div class="matchList">
-              <div class="title_sm">
-                配送区域
-              </div>
-              <div class="tage_type">
-                <van-tag v-for="item in deliveryArea" :key="item.name" round type="primary" color="#4F77AA" class="tag" size="medium">
-                  {{ item.name }}
-                </van-tag>
-                <van-tag v-for="item in matchDetail.deliveryArea" :key="item.name" round type="primary" color="#4F77AA" class="tag" size="medium">
-                  {{ item.across ? item.cityName + '-' + item.countyName : '' }}
-                </van-tag>
-                <p v-if="!matchDetail.deliveryArea.length && !arrivalArea.length">
-                  暂无数据
-                </p>
-              </div>
-            </div>
-            <div class="matchList">
-              <div class="title_sm">
-                装卸难度
-              </div>
-              <div class="tage_type">
-                <van-tag v-for="item in handlingDifficultyDegree" :key="item.name" round type="primary" color="#4F77AA" class="tag" size="medium">
-                  {{ item.name }}
-                </van-tag>
-                <p v-if="!matchDetail.handlingDifficultyDegree.length">
-                  暂无数据
-                </p>
-              </div>
-            </div>
-            <div class="matchList">
-              <div class="title_sm">
-                出车时段
-              </div>
-              <div class="tage_type">
-                <van-tag v-for="item in departureTime" :key="item.name" round type="primary" color="#4F77AA" class="tag" size="medium">
-                  {{ item.name }}
-                </van-tag>
-                <p v-if="!matchDetail.departureTime.length">
-                  暂无数据
-                </p>
-              </div>
-            </div>
-            <div style="margin-top:20px">
-              <van-cell-group class="menuBottom">
-                <van-cell title="接活意向" is-link value="设置智能筛选撮合线路" @click="goRouter(1)" />
-              </van-cell-group>
-              <van-cell-group class="menuBottom">
-                <van-cell title="促撮推荐" is-link value="根据接活意向推荐线路" @click="goRouter(2)" />
-              </van-cell-group>
-              <van-cell-group class="menuBottom">
-                <van-cell title="撮合跟进" is-link value="跟进撮合进度及节点" @click="goRouter(3)" />
-              </van-cell-group>
-            </div>
-          </div>
         </van-tab>
       </van-tabs>
       <van-action-sheet v-model="show" :actions="actions" @select="onSelect" />
@@ -250,7 +119,7 @@
 </template>
 <script>
 import { Tabbar, TabbarItem, Toast, Tab, Tabs, Cell, CellGroup, Button, ActionSheet, Tag, Icon, Dialog } from 'vant'
-import { driverDetail, queryOrdersByDriverId, relatedLineInformation, getActivationStatus, getMediaIdOfActivationQrCode, getCorpSignature, getAgentSignature } from '@/api/user'
+import { driverDetail, queryOrdersByDriverId, relatedLineInformation, getMediaIdOfActivationQrCode, getCorpSignature, getAgentSignature } from '@/api/user'
 // import { judgingIntentionOfReceiving, getManagerSameRequest } from '@/api/driver'
 import { judgingIntentionOfReceiving } from '@/api/driver'
 import { dictionary, getCityAreaByCode } from '@/api/common'
@@ -260,7 +129,7 @@ import 'vo-pages/lib/vo-pages.css'
 const wx = window.wx;
 var startTime
 export default {
-  name: 'Driverdetail',
+  name: 'Driverdetailbatch',
   components: {
     [Tabbar.name]: Tabbar,
     [TabbarItem.name]: TabbarItem,
@@ -319,6 +188,7 @@ export default {
     }
     clearInterval(startTime);
     that.GLOBAL.buryPointFunction('customer_visit', '客户信息页面访问', eventLevelVariables)
+    that.$destroy(true);
     next(true);
   },
   created() {
@@ -327,13 +197,8 @@ export default {
   mounted() {
     let driverId = this.$route.query.driverId;
     this.driverId = driverId;
-    this.active = Number(localStorage.getItem('active'))
     this.loadTime()
-    if (this.active) {
-      localStorage.removeItem('active')
-    }
     this.getDetail(driverId)
-    this.getActivation();
   },
   methods: {
     double(mat) {
@@ -419,19 +284,6 @@ export default {
       }).catch(err => {
         Toast.fail(err);
       });
-    },
-    getActivation() {
-      const externalUserId = localStorage.getItem('externalUserId')
-      let that = this;
-      getActivationStatus({
-        externalUserId: externalUserId
-      }).then((res) => {
-        if (res.data.success) {
-          that.isActivationPush = res.data.data.isActivationPush
-          that.isFollowWorkBench = res.data.data.isFollowWorkBench
-          that.isJoinCorpWechat = res.data.data.isJoinCorpWechat
-        }
-      })
     },
     getDetail(driverId) {
       driverDetail({
