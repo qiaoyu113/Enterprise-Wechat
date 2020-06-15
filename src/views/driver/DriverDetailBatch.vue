@@ -199,6 +199,7 @@ export default {
     this.driverId = driverId;
     this.loadTime()
     this.getDetail(driverId)
+    this.getActivation();
   },
   methods: {
     double(mat) {
