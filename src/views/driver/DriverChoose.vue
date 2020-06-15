@@ -156,7 +156,7 @@ export default {
       if (!this.checked) {
         this.$refs.checkboxGroup.toggleAll(true);
         this.list.forEach(item => {
-          if (item.isGray === 1) {
+          if (item.isGray === 1 || (!item.corpUserId && item.corpUserId === '')) {
             let i = this.result.indexOf(item.driverId)
             this.result.splice(i, 1)
           }
