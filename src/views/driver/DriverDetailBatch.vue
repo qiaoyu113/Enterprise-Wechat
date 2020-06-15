@@ -119,7 +119,7 @@
 </template>
 <script>
 import { Tabbar, TabbarItem, Toast, Tab, Tabs, Cell, CellGroup, Button, ActionSheet, Tag, Icon, Dialog } from 'vant'
-import { driverDetail, queryOrdersByDriverId, relatedLineInformation, getMediaIdOfActivationQrCode, getCorpSignature, getAgentSignature } from '@/api/user'
+import { driverDetail, queryOrdersByDriverId, relatedLineInformation, getActivationStatus, getMediaIdOfActivationQrCode, getCorpSignature, getAgentSignature } from '@/api/user'
 // import { judgingIntentionOfReceiving, getManagerSameRequest } from '@/api/driver'
 import { judgingIntentionOfReceiving } from '@/api/driver'
 import { dictionary, getCityAreaByCode } from '@/api/common'
@@ -284,6 +284,19 @@ export default {
       }).catch(err => {
         Toast.fail(err);
       });
+    },
+    getActivation() {
+      const externalUserId = localStorage.getItem('externalUserId')
+      let that = this;
+      getActivationStatus({
+        externalUserId: externalUserId
+      }).then((res) => {
+        if (res.data.success) {
+          that.isActivationPush = res.data.data.isActivationPush
+          that.isFollowWorkBench = res.data.data.isFollowWorkBench
+          that.isJoinCorpWechat = res.data.data.isJoinCorpWechat
+        }
+      })
     },
     getDetail(driverId) {
       driverDetail({
