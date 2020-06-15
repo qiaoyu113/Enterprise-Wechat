@@ -101,12 +101,7 @@ export default {
       checked: false,
       showoverlay: false,
       active: 1,
-      list: [
-        {
-          a: 123,
-          n: 223
-        }
-      ],
+      list: [],
       result: [],
       total: 0,
       page: 1,
@@ -125,8 +120,8 @@ export default {
   },
   mounted() {
     this.listQuery.lineId = this.$route.query.id;
-    // this.getList()
-    // this.fetchData()
+    this.getList()
+    this.fetchData()
   },
   methods: {
     fetchData() {
