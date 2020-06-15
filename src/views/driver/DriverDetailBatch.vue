@@ -199,7 +199,6 @@ export default {
     this.driverId = driverId;
     this.loadTime()
     this.getDetail(driverId)
-    this.getActivation();
   },
   methods: {
     double(mat) {
@@ -286,8 +285,7 @@ export default {
         Toast.fail(err);
       });
     },
-    getActivation() {
-      const externalUserId = localStorage.getItem('externalUserId')
+    getActivation(externalUserId) {
       let that = this;
       getActivationStatus({
         externalUserId: externalUserId
@@ -313,6 +311,7 @@ export default {
             this.detail.accountType = '农村户口'
           }
           this.getManagerSame(driverId)
+          this.getActivation(this.detail.externalUserId);
         }
       })
       queryOrdersByDriverId({
