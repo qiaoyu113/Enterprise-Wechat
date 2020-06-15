@@ -3,7 +3,7 @@
     <div class="operateMenu">
       <div class="list">
         <van-checkbox v-model="checked" shape="square" @click="checkAll">
-          全选
+          全选({{ result.length }})
         </van-checkbox>
       </div>
       <div class="list">
@@ -24,7 +24,7 @@
           <!-- <div v-for="item in list" :key="item.type" class="lineList" @click="goDetail(item.driverId)"> -->
           <div v-for="item in list" :key="item.type" class="lineList">
             <div :class="result.indexOf(item.driverId) !== -1 || item.isGray === 1 ? 'lineItem bg' : 'lineItem'">
-              <van-checkbox :name="item.driverId" :disabled="item.isGray === 1" shape="square">
+              <van-checkbox :name="item.driverId" :disabled="item.isGray === 1 || (!item.corpUserId && item.corpUserId === '')" shape="square">
                 <div class="lineListTop">
                   <div class="name">
                     {{ item.name }}/{{ item.phone }}<van-tag v-if="item.corpUserId && item.corpUserId !== ''" plain type="primary" size="small" style="margin-left: 0.3rem;">
@@ -37,10 +37,10 @@
                     {{ item.carTypeName }}/{{ item.address }}/{{ item.stateName }}
                   </div>
                 </div>
-                <div class="lineListBottom" @click="goDetail(item.driverId)">
-                  <van-cell title="详情" is-link />
-                </div>
               </van-checkbox>
+              <div class="lineListBottom" @click="goDetail(item.driverId)">
+                <van-cell title="详情" is-link />
+              </div>
             </div>
           </div>
         </van-checkbox-group>
@@ -101,7 +101,12 @@ export default {
       checked: false,
       showoverlay: false,
       active: 1,
-      list: [],
+      list: [
+        {
+          a: 123,
+          n: 223
+        }
+      ],
       result: [],
       total: 0,
       page: 1,
@@ -120,8 +125,8 @@ export default {
   },
   mounted() {
     this.listQuery.lineId = this.$route.query.id;
-    this.getList()
-    this.fetchData()
+    // this.getList()
+    // this.fetchData()
   },
   methods: {
     fetchData() {
@@ -325,14 +330,15 @@ export default {
         .lineItem{
             width: 100%;
             background:#fff;
-            padding-left: 0.6rem;
+            // padding-left: 0.6rem;
             border-radius: 0.2rem;
             border:1px solid #fff;
             box-sizing: border-box;
             .van-checkbox{
                 width: 100%;
                 margin: 0;
-                padding: 0;
+                padding-left: 0.6rem;
+                box-sizing: border-box;
                 .van-checkbox__label{
                     width: 100% !important;
                 }
