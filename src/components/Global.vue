@@ -2,7 +2,7 @@
 let gio = window.gio;
 let agentId = '1000016';
 let url = window.location.host
-let version = 'v1.0.6'
+let version = 'v1.0.8'
 if (url !== 'firmiana-wechat.yunniao.cn') {
   if (url !== 'firmiana-wechat.m1.yunniao.cn') {
     // url = 'http://firmiana-wechat.m1.yunniao.cn/'
