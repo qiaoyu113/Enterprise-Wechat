@@ -6,7 +6,9 @@ import JsCookie from 'js-cookie'
 
 let url = 'http://firmiana-wechat.yunniao.cn/'
 if (window.location.host !== 'firmiana-wechat.yunniao.cn') {
-  if (window.location.host !== 'firmiana-open-api-d2.yunniao.cn') {
+  if (window.location.host === 'firmiana-open-api-m2.yunniao.cn') {
+    url = 'http://firmiana-open-api-m2.yunniao.cn/'
+  } else if (window.location.host !== 'firmiana-open-api-d2.yunniao.cn') {
     url = 'http://firmiana-wechat.m1.yunniao.cn/'
   } else {
     url = 'http://firmiana-open-api-d2.yunniao.cn/'

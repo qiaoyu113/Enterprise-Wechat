@@ -56,7 +56,7 @@ module.exports = {
         }
       },
       '/api': {
-        target: 'http://firmiana-open-api-d2.yunniao.cn/',
+        target: 'http://firmiana-open-api-m2.yunniao.cn/',
         // target: 'http://firmiana-wechat.m1.yunniao.cn/',
         changeOrigin: true,
         pathRewrite: {
