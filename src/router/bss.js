@@ -19,6 +19,7 @@ export default [
         component: () => import('@/views/bss/Bss'),
         meta: {
           title: '首页',
+          showFooter: true, // 是否显示底部bar
           keepAlive: true
         }
       },
@@ -29,6 +30,7 @@ export default [
         component: () => import('@/views/bss/My'),
         meta: {
           title: '我的',
+          showFooter: true,
           keepAlive: true
         }
       }
