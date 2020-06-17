@@ -7,6 +7,7 @@
             基本信息
           </h2> -->
           <van-cell-group>
+            <span>三生三世</span>
             <van-cell title="货主" :value="detail.customerName | DataIsNull" />
             <van-cell title="城市" :value="detail.cityName | DataIsNull" />
             <van-cell title="线路名称" :value="detail.lineName | DataIsNull" />
