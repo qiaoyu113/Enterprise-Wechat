@@ -1,8 +1,11 @@
+/* Layout */
+import Layout from '@/views/layout/Layout'
+
 export default [
   {
     path: '/bss',
-    name: 'bss',
-    component: resolve => require(['@/views/layout/Layout'], resolve),
+    name: 'Bss',
+    component: Layout,
     redirect: '/bss/index',
     meta: {
       title: '首页',
@@ -11,9 +14,9 @@ export default [
     children: [
       // 首页
       {
-        path: '/bss/index',
-        name: 'bssIndex',
-        component: resolve => require(['@/views/bss/Bss'], resolve),
+        path: 'index',
+        name: 'BssIndex',
+        component: () => import('@/views/bss/Bss'),
         meta: {
           title: '首页',
           keepAlive: true
@@ -21,9 +24,9 @@ export default [
       },
       // 我的
       {
-        path: '/bss/my',
-        name: 'bssMy',
-        component: resolve => require(['@/views/bss/My'], resolve),
+        path: 'my',
+        name: 'BssMy',
+        component: () => import('@/views/bss/My'),
         meta: {
           title: '我的',
           keepAlive: true

@@ -36,7 +36,7 @@ export default {
   },
   methods: {
     goBss() {
-      this.$router.push('/bss')
+      this.$router.push('/bss/my')
     },
     wxLogin() {
       // wx.config({

@@ -1,12 +1,12 @@
 <template>
   <div>
     <router-view></router-view>
-    <bss-footer />
+    <BssFooter />
   </div>
 </template>
 
 <script>
-import BssFooter from 'components/BssFooter';
+import BssFooter from '@/components/BssFooter';
 export default {
   name: 'Layout',
   components: {
