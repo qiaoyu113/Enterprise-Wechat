@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="bss">
     <transition :name="transitionName">
       <keep-alive v-if="$route.meta.keepAlive">
         <router-view :class="showFooter ? 'padding router' : 'router'"></router-view>
@@ -11,6 +11,7 @@
 </template>
 
 <script>
+
 import defaultSetting from '@/settings'
 import BssFooter from '@/components/BssFooter';
 export default {
@@ -52,8 +53,10 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
+@import "../../style/bss.scss";
 .padding{
   padding-bottom: 50px;
+  box-sizing: border-box;
 }
 </style>

@@ -33,6 +33,17 @@ export default [
           showFooter: true,
           keepAlive: true
         }
+      },
+      // 创建线路
+      {
+        path: 'add-line',
+        name: 'BssAddLine',
+        component: () => import('@/views/bss/AddLine'),
+        meta: {
+          title: '创建货主',
+          showFooter: false,
+          keepAlive: true
+        }
       }
     ]
   }

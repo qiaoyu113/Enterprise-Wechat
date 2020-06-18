@@ -23,7 +23,7 @@ export default {
         {
           icon: '',
           title: '线索管理',
-          url: ''
+          url: '/bss/add-line'
         },
         {
           icon: '',
@@ -86,23 +86,26 @@ export default {
   height: auto;
   padding-bottom: 100%;
   position: relative;
+  margin-bottom: 50px;
   .grid{
     position: absolute;
     top: 15px;
     left: 15px;
     width: calc(100% - 30px);
     height: calc(100% - 30px);
-    display: grid;
-    grid-template-columns:repeat(3,1fr);
-    grid-template-rows: repeat(3,1fr);
-    grid-gap: 15px;
-    grid-auto-flow: row;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
   }
   .grid-item{
-    background: #4F7CFF;
-    box-shadow: 4px 5px 7px 0 rgba(56,111,178,0.40);
+    width: calc((100% - 30px) / 3);
+    height: calc((100% - 30px) / 3);
+    background-image: linear-gradient(-39deg, #5C9BDD 0%, #80D8F3 100%);
+    box-shadow: 4px 5px 7px 0 rgba(92,155,221,0.45);
     border-radius: 10px;
-    border-radius: 10px;
+    &:nth-of-type(3n){
+      margin-right: 0;
+    }
     .flex{
       display: flex;
       align-items: center;
