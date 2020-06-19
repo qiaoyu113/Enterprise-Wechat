@@ -44,6 +44,17 @@ export default [
           showFooter: false,
           keepAlive: true
         }
+      },
+      // 线路详情
+      {
+        path: 'line-detail',
+        name: 'BssLineDetail',
+        component: () => import('@/views/bss/LineDetail'),
+        meta: {
+          title: '线路详情',
+          showFooter: false,
+          keepAlive: true
+        }
       }
     ]
   }

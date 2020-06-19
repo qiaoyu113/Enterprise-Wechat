@@ -2,40 +2,38 @@
   <div class="add-line" ontouchstart>
     <van-form
       class="form"
-      :show-error="false"
-      :show-error-message="false"
       @submit="onSubmit"
     >
       <div class="form-container">
-        <van-field
-          :value="customerName"
+        <BssPicker
+          :data="customers"
           required
-          readonly
-          clickable
-          label="货主名称"
-          name="货主名称"
+          label="货主名称:"
           placeholder="请选择货主"
+          is-link
+          code="customerName"
+          code-val="customerId"
+          :value.sync="form.customerId"
           :rules="[{ required: true, message: '请选择货主' }]"
-          @click="showCustomerPicker = true"
+          :cb="setCity"
         />
         <van-field
-          v-model="form.name"
+          v-model="form.lineName"
           maxlength="20"
           minlength="1"
           required
-          label="线路名称"
-          name="线路名称"
+          label="线路名称:"
           placeholder="名称应具有识别度"
           :rules="[{ required: true, message: '请填写线路名称' }]"
         />
 
         <van-field
-          :value="form.warehouse"
+          :value="warehouse"
           required
           readonly
           clickable
-          label="仓库位置"
-          name="仓库位置"
+          is-link
+          label="仓库位置:"
           placeholder="请选择仓库位置"
           :rules="[{ required: true, message: '请选择仓库位置' }]"
           @click="showWarehousePicker = true"
@@ -45,8 +43,8 @@
           required
           readonly
           clickable
-          label="配送区域"
-          name="配送区域"
+          is-link
+          label="配送区域:"
           placeholder="请选择配送区域"
           :rules="[{ required: true, message: '请选择配送区域' }]"
           @click="showCityPicker = true"
@@ -54,75 +52,67 @@
         <van-field
           v-model="form.distance"
           required
-          label="配送公里"
-          name="配送公里"
+          label="配送公里:"
           placeholder="请输入配送公里"
           type="digit"
           :rules="[
             { required: true, message: '请输入配送公里' },
           ]"
         />
-        <van-field
-          :value="carTypeName"
+        <BssPicker
+          :data="carList"
           required
-          readonly
-          clickable
-          label="车型"
-          name="车型"
+          label="车型:"
           placeholder="请选择车型"
+          is-link
+          :value.sync="form.carType"
           :rules="[{ required: true, message: '请选择车型' }]"
-          @click="showCar = true"
         />
         <van-field
           v-model="form.deployNum"
           required
-          label="用车数量"
-          name="用车数量"
+          label="用车数量:"
           type="digit"
           placeholder="请输入用车数量"
           :rules="[
             { required: true, message: '请输入用车数量' },
-            { validator: validatorNumber(0, 99), message: '请输入0至99的整数' }
+            { validator: validatorNumber(0, 99), message: '请输入1至99的整数' }
           ]"
         />
         <van-field
           v-model="form.deliveryNum"
           required
-          label="每日平均配送点位数"
-          name="每日平均配送点位数"
+          label="每日平均配送点位数:"
           placeholder="请输入每日平均配送点位数"
+          type="digit"
           :rules="[
             { required: true, message: '请输入每日平均配送点位数' },
-            { validator: validatorNumber(0, 100), message: '请输入0至100的整数' }
+            { validator: validatorNumber(0, 100), message: '请输入1至100的整数' }
           ]"
         />
-        <van-field
-          :value="form.cargoType"
+        <BssPicker
+          :data="cargoList"
           required
-          readonly
-          clickable
-          label="货物类型"
-          name="货物类型"
+          label="货物类型:"
           placeholder="请选择货物类型"
+          is-link
+          code-val="code"
+          :value.sync="form.cargoType"
           :rules="[{ required: true, message: '请选择货物类型' }]"
-          @click="showCargo = true"
         />
-        <van-field
-          :value="goodsWeightName"
+        <BssPicker
+          :data="goodsWeightList"
           required
-          readonly
-          clickable
-          label="货物总重量（吨）"
-          name="货物总重量（吨）"
-          placeholder="请选择货物总重量"
-          :rules="[{ required: true, message: '请选择货物总重量' }]"
-          @click="showGoodsWeight = true"
+          label="货物总重量（吨）:"
+          placeholder="请选择货物总重量（吨）"
+          is-link
+          :value.sync="form.goodsWeight"
+          :rules="[{ required: true, message: '请选择货物总重量（吨）' }]"
         />
 
         <van-field
           required
-          name="radio"
-          label="是否搬运"
+          label="是否搬运:"
         >
           <template #input>
             <van-radio-group v-model="form.carry" direction="horizontal">
@@ -138,78 +128,80 @@
 
         <!-- 需要搬运显示 -->
         <template v-if="form.carry === '1'">
-          <van-field
-            :value="handlingDifficultyName"
+          <BssPicker
+            :data="handlingDifficultyList"
             required
-            readonly
-            clickable
-            label="装卸难度"
-            name="装卸难度"
+            label="装卸难度:"
             placeholder="请选择装卸难度"
+            is-link
+            :value.sync="form.handlingDifficultyDegree"
             :rules="[{ required: true, message: '请选择装卸难度' }]"
-            @click="showHandlingDifficulty = true"
           />
           <van-field
             v-model="form.volume"
             required
-            label="预计每日货物总体积(立方米)"
-            name="预计每日货物总体积(立方米)"
+            label="预计每日货物总体积(立方米):"
             type="digit"
             placeholder="请输入预计每日货物总体积"
             :rules="[
               { required: true, message: '请输入预计每日货物总体积' },
-              { validator: validatorNumber(0, 100), message: '请输入0至99的整数' }
+              { validator: validatorNumber(0, 100), message: '请输入1至99的整数' }
             ]"
           />
         </template>
 
         <van-field
-          v-model="form.username"
+          v-model="form.month"
           required
-          label="月出车天数"
-          name="月出车天数"
+          label="月出车天数:"
           placeholder="请输入月出车天数"
-          :rules="[{ required: true, message: '请输入月出车天数' }]"
+          type="digit"
+          :rules="[
+            { required: true, message: '请输入月出车天数' },
+            { validator: validatorNumber(0, 32), message: '请输入1至31的整数' }
+          ]"
         />
         <van-field
-          v-model="form.username"
           required
-          label="每日出车趟数"
-          name="每日出车趟数"
+          label="每日出车趟数:"
           placeholder="请输入每日出车趟数"
           :rules="[{ required: true, message: '请输入每日出车趟数' }]"
-        />
-        <van-field
-          v-model="form.username"
-          required
-          label="每日出车趟数"
-          name="每日出车趟数"
-          placeholder="请输入每日出车趟数"
-          :rules="[{ required: true, message: '请输入每日出车趟数' }]"
-        />
-        <van-field
-          v-model="form.username"
-          required
-          label="到仓时间"
-          name="到仓时间"
-          placeholder="请输入到仓时间"
-          :rules="[{ required: true, message: '请输入到仓时间' }]"
-        />
-        <van-field
-          v-model="form.username"
-          required
-          label="结束时间"
-          name="结束时间"
-          placeholder="请输入结束时间"
-          :rules="[{ required: true, message: '请输入结束时间' }]"
-        />
-        <van-field
-          required
-          name="radio"
-          label="收入结算方式"
         >
           <template #input>
-            <van-radio-group v-model="form.username" direction="horizontal">
+            <van-stepper v-model="form.dayNum" disable-input min="1" max="5" />
+          </template>
+        </van-field>
+        <template v-for="(item, index) in form.lineDeliveryInfoFORMS">
+          <div :key="index">
+            <BssTimePicker
+              :value.sync="item.workingTimeStart"
+              required
+              readonly
+              clickable
+              is-link
+              label="到仓时间:"
+              placeholder="请输入到仓时间"
+              :rules="[{ required: true, message: '请选择到仓时间' }]"
+            />
+            <BssTimePicker
+              :value.sync="item.workingTimeEnd"
+              required
+              readonly
+              clickable
+              is-link
+              label="结束时间:"
+              placeholder="请输入结束时间"
+              :rules="[{ required: true, message: '请输入结束时间' }]"
+            />
+          </div>
+        </template>
+
+        <van-field
+          required
+          label="收入结算方式:"
+        >
+          <template #input>
+            <van-radio-group v-model="form.incomeSettlementMethod" direction="horizontal">
               <van-radio name="1">
                 按趟
               </van-radio>
@@ -219,21 +211,63 @@
             </van-radio-group>
           </template>
         </van-field>
+        <!-- 按趟结算 -->
+        <template v-if="form.incomeSettlementMethod === '1'">
+          <van-field
+            v-model="form.lowestQuotations"
+            required
+            label="单趟运费:"
+            placeholder="请输入单趟运费"
+            type="digit"
+            :rules="[
+              { required: true, message: '请输入单趟运费' },
+              { validator: validatorNumber(0, 5001), message: '请输入1至5000的整数' }
+            ]"
+          />
+          <div v-show="false">
+            {{ shipper }}
+          </div>
+        </template>
+        <!-- 按底薪结算 -->
+        <template v-if="form.incomeSettlementMethod === '2'">
+          <van-field
+            v-model="form.everyTripGuaranteed"
+            required
+            label="每趟保底(元):"
+            type="digit"
+            placeholder="请输入每趟保底"
+            :rules="[
+              { required: true, message: '请输入每趟保底' },
+            ]"
+          />
+          <van-field
+            v-model="form.everyUnitPrice"
+            required
+            label="每趟提成单价(元):"
+            name="每趟提成单价(元)"
+            type="digit"
+            placeholder="请输入每趟提成单价"
+            :rules="[
+              { required: true, message: '请输入每趟提成单价' },
+            ]"
+          />
+          <van-field
+            v-model="form.lowestQuotations"
+            required
+            label="预计货主月报价(元):"
+            type="digit"
+            placeholder="请输入预计货主月报价"
+            :rules="[
+              { required: true, message: '请输入预计货主月报价' },
+            ]"
+          />
+        </template>
         <van-field
-          v-model="form.username"
           required
-          label="单趟运费"
-          name="单趟运费"
-          placeholder="请输入单趟运费"
-          :rules="[{ required: true, message: '请输入单趟运费' }]"
-        />
-        <van-field
-          required
-          name="radio"
-          label="是否返仓"
+          label="是否返仓:"
         >
           <template #input>
-            <van-radio-group v-model="form.username" direction="horizontal">
+            <van-radio-group v-model="form.returnWarehouse" direction="horizontal">
               <van-radio name="1">
                 是
               </van-radio>
@@ -245,11 +279,10 @@
         </van-field>
         <van-field
           required
-          name="radio"
-          label="是否回单"
+          label="是否回单:"
         >
           <template #input>
-            <van-radio-group v-model="form.username" direction="horizontal">
+            <van-radio-group v-model="form.returnBill" direction="horizontal">
               <van-radio name="1">
                 是
               </van-radio>
@@ -260,24 +293,53 @@
           </template>
         </van-field>
         <van-field
-          v-model="form.username"
+          v-model="form.waitDirveValidityDuration"
           required
-          label="线路有效期（天）"
-          name="线路有效期（天）"
+          label="线路有效期（天）:"
           placeholder="请输入线路有效期"
-          :rules="[{ required: true, message: '请输入线路有效期' }]"
+          :rules="[
+            { required: true, message: '请输入线路有效期' },
+            { validator: validatorNumber(0, 32), message: '请输入1至31的整数' }
+          ]"
         />
         <van-field
-          v-model="form.username"
           required
-          label="线路稳定性"
-          name="线路稳定性"
+          label="线路类型:"
+        >
+          <template #input>
+            <van-radio-group v-model="form.lineType" direction="horizontal">
+              <van-radio
+                v-for="(item, index) in distinguishedTypeList"
+                :key="index"
+                :name="item.codeVal"
+              >
+                {{ item.code }}
+              </van-radio>
+            </van-radio-group>
+          </template>
+        </van-field>
+        <BssPicker
+          :data="stabilityList"
+          required
+          label="线路稳定性:"
           placeholder="请输入线路稳定性"
+          is-link
+          :value.sync="form.stabilityRate"
           :rules="[{ required: true, message: '请输入线路稳定性' }]"
         />
-        <!-- <van-popup ref="pppp" v-model="showCity" position="bottom">
-          <van-picker ref="pickers" key="pickers" show-toolbar :columns="columns" :loading="loading" @cancel="showCity = false" @confirm="cityConfirm" @change="citychange" />
-        </van-popup> -->
+        <van-field
+          v-if="form.stabilityRate == '4' || form.stabilityRate == '3'"
+          :value="deliveryName"
+          required
+          is-link
+          readonly
+          label="配送时间:"
+          placeholder="请输入配送时间"
+          :rules="[
+            { required: true, message: '请输入配送时间' }
+          ]"
+          @click="showDate = true"
+        />
       </div>
       <div class="submit-btn">
         <van-button round block type="info" class="van-button-color" native-type="submit">
@@ -286,16 +348,6 @@
       </div>
     </van-form>
 
-    <!-- 货主列表 -->
-    <van-popup v-model="showCustomerPicker" position="bottom">
-      <van-picker
-        show-toolbar
-        value-key="customerName"
-        :columns="customers"
-        @cancel="showCustomerPicker = false"
-        @confirm="onCustomerConfirm"
-      />
-    </van-popup>
     <!-- 仓库位置 -->
     <van-popup v-model="showWarehousePicker" position="bottom">
       <van-picker
@@ -358,60 +410,64 @@
         show-word-limit
       />
     </van-dialog>
-    <!-- 车型 -->
-    <van-popup v-model="showCar" position="bottom">
-      <van-picker
-        show-toolbar
-        value-key="code"
-        :columns="carList"
-        @cancel="showCar = false"
-        @confirm="onCarConfirm"
-      />
-    </van-popup>
 
-    <!-- 货物类型 -->
-    <van-popup v-model="showCargo" position="bottom">
-      <van-picker
-        show-toolbar
-        value-key="code"
-        :columns="cargoList"
-        @cancel="showCargo = false"
-        @confirm="onCargoConfirm"
-      />
+    <!-- 配送时间 -->
+    <van-popup v-model="showDate" position="bottom">
+      <div class="van-picker__toolbar">
+        <button type="button" class="van-picker__cancel" @click="showDate = false">
+          取消
+        </button><button type="button" class="van-picker__confirm" @click="onConfirm">
+          确认
+        </button>
+      </div>
+      <div>
+        <van-cell-group>
+          <van-cell
+            clickable
+            :title="`全选`"
+            @click="toggle(-1)"
+          >
+            <template #right-icon>
+              <van-checkbox v-model="allChecked" />
+            </template>
+          </van-cell>
+          <van-cell
+            v-for="(item, index) in dateList"
+            :key="index"
+            clickable
+            :title="item"
+            @click="toggle(index)"
+          >
+            <template #right-icon>
+              <van-checkbox ref="checkboxes" v-model="deliveryTimeArr[index]" />
+            </template>
+          </van-cell>
+        </van-cell-group>
+      </div>
     </van-popup>
-    <!-- 货物重量 -->
-    <van-popup v-model="showGoodsWeight" position="bottom">
-      <van-picker
-        show-toolbar
-        value-key="code"
-        :columns="goodsWeightList"
-        @cancel="showGoodsWeight = false"
-        @confirm="onGoodsWeightConfirm"
-      />
-    </van-popup>
-    <!-- 装卸难度 -->
-    <van-popup v-model="showHandlingDifficulty" position="bottom">
-      <van-picker
-        show-toolbar
-        value-key="code"
-        :columns="handlingDifficultyList"
-        @cancel="showHandlingDifficulty = false"
-        @confirm="onHandlingDifficultyConfirm"
-      />
-    </van-popup>
+    <!-- 遮罩 -->
+    <van-overlay :show="loading" z-index="99">
+      <div class="wrapper" @click.stop>
+        <van-loading size="24px" vertical>
+          正在提交...
+        </van-loading>
+      </div>
+    </van-overlay>
   </div>
 </template>
 
 <script>
 import { Form } from 'vant';
 import { dictionary, GetReginByCityCode, getTownByCountryCode } from '@/api/common';
-import { getLineUser } from '@/api/carline';
-import { Field, Toast, CellGroup, Cell, Button, Dialog, Loading, Picker, Popup, ActionSheet, RadioGroup, Radio } from 'vant'
+import { getLineUser, postCreatLine } from '@/api/carline';
+import BssPicker from 'components/BssPicker';
+import BssTimePicker from 'components/BssTimePicker';
+import { Field, Toast, CellGroup, Cell, Button, Dialog, Loading, Picker, Popup, RadioGroup, Radio, Stepper, DatetimePicker, Checkbox, CheckboxGroup, Overlay } from 'vant';
 const defaultForm = {
-  customer: '', // 货主
+  customerId: '', // 货主
+  lineName: '',
   city: '', // 城市
   // 仓位置
-  warehouse: '', // 仓位置整体
   wareAreaName: '', // 区中文
   warehouseProvince: '', // 省code
   warehouseCity: '', // 市code
@@ -430,12 +486,32 @@ const defaultForm = {
   cargoType: '', // 货物类型
   goodsWeight: '', // 货物重量
   carry: '', // 是否搬运
-
-  username: ''
+  month: '', // 月出车天数
+  dayNum: '', // 每日出车躺数
+  lineDeliveryInfoFORMS: [ // 配送时间List
+    {
+      workingTimeStart: '',
+      workingTimeEnd: ''
+    }
+  ],
+  firstNeededFollow: '1',
+  monthlyFuelConsumption: 0,
+  incomeSettlementMethod: '', // 结算方式
+  lowestQuotations: '',
+  everyTripGuaranteed: '',
+  everyUnitPrice: '',
+  returnWarehouse: '', // 是否返仓
+  returnBill: '', // 是否回单
+  waitDirveValidityDuration: '', // 线路有效期
+  stabilityRate: '', // 线路稳定性
+  shipperOffer: '',
+  deliveryWeekCycle: '' // 配送时间
 }
 export default {
   name: 'BssAddLine',
   components: {
+    BssPicker,
+    BssTimePicker,
     [Form.name]: Form,
     [Field.name]: Field,
     [Toast.name]: Toast,
@@ -445,19 +521,22 @@ export default {
     [CellGroup.name]: CellGroup,
     [Picker.name]: Picker,
     [Popup.name]: Popup,
-    [ActionSheet.name]: ActionSheet,
     [Cell.name]: Cell,
     [RadioGroup.name]: RadioGroup,
-    [Radio.name]: Radio
+    [Radio.name]: Radio,
+    [Stepper.name]: Stepper,
+    [DatetimePicker.name]: DatetimePicker,
+    [Checkbox.name]: Checkbox,
+    [CheckboxGroup.name]: CheckboxGroup,
+    [Overlay.name]: Overlay
   },
   data() {
     return {
       // 货主
-      showCustomerPicker: false,
       customers: [], // 货主列表
-      customerName: '',
       // 仓位置
       warehouseList: [], // 仓列表
+      warehouse: '', // 仓位置整体
       showWarehousePicker: false,
       warehouseLoading: false,
       dialogWareHouse: false,
@@ -471,34 +550,84 @@ export default {
       allCityList: [],
       // 车型
       carList: [],
-      showCar: false,
-      carTypeName: '',
       // 货物类型
       cargoList: [],
-      showCargo: false,
       // 货物重量
       goodsWeightList: [],
-      showGoodsWeight: false,
-      goodsWeightName: '',
       // 装卸难度
       handlingDifficultyList: [],
-      showHandlingDifficulty: false,
-      handlingDifficultyName: '',
+      // 线路类型
+      distinguishedTypeList: [],
+      // 线路稳定性
+      stabilityList: [],
+      // 星期
+      showDate: false,
+      deliveryName: '',
+      deliveryTimeArr: new Array(7).fill(false), // 星期
+      dateList: ['星期一', '星期二', '星期三', '星期四', '星期五', '星期六', '星期日'],
+      allChecked: false,
 
+      loading: false,
       form: Object.assign({}, defaultForm)
+    }
+  },
+  computed: {
+    shipper() {
+      return this.form.lowestQuotations * this.form.dayNum * this.form.month
+    }
+  },
+  watch: {
+    'form.dayNum'(val) {
+      const len = this.form.lineDeliveryInfoFORMS.length;
+      if (len > val) {
+        this.form.lineDeliveryInfoFORMS.pop()
+      } else if (len < val) {
+        this.form.lineDeliveryInfoFORMS.push({
+          workingTimeStart: '',
+          workingTimeEnd: ''
+        })
+      }
+    },
+    'deliveryTimeArr'(val) {
+      let str = [];
+      val.filter((item, index) => {
+        item ? str.push(index + 1) : ''
+      });
+      this.allChecked = str.length === 7;
+      // this.form.deliveryWeekCycle = str.join(',');
     }
   },
   mounted() {
     this.fetchData();
   },
   methods: {
+    toggle(index) {
+      if (index === -1) {
+        this.allChecked = !this.allChecked;
+        this.deliveryTimeArr = new Array(7).fill(this.allChecked);
+      } else {
+        this.$refs.checkboxes[index].toggle();
+      }
+    },
+    onConfirm() {
+      const val = this.deliveryTimeArr;
+      let str = [];
+      val.filter((item, index) => {
+        item ? str.push(index + 1) : ''
+      });
+      this.form.deliveryWeekCycle = str.join(',');
+      this.deliveryName = this.dateList.filter((item, index) => {
+        return str.includes(index + 1)
+      }).join(',')
+      this.showDate = false
+    },
     fetchData() {
       // 货主列表
       getLineUser()
         .then((result) => {
           this.customers = result.data.data;
-        }).catch((err) => {
-          Toast.fail(err);
+        }).catch(({ message }) => {
+          Toast.fail(message)
         });
       // 城市
       GetReginByCityCode([]).then(res => {
@@ -515,66 +644,101 @@ export default {
         });
         this.warehouseList = [{ values: data }, { values: [] }, { values: [] }, { values: [] }];
         this.cityList = [{ values: data }, { values: [] }, { values: [] }];
-      }).catch(err => {
-        Toast.fail(err);
+      }).catch(({ message }) => {
+        Toast.fail(message)
       });
       // 车型
       dictionary({
         dictType: 'Intentional_compartment'
       }).then(res => {
         this.carList = res.data.data;
-      }).catch(err => {
-        Toast.fail(err);
+      }).catch(({ message }) => {
+        Toast.fail(message)
       });
       // 货物类型
       dictionary({
         dictType: 'type_of_goods'
       }).then(res => {
         this.cargoList = res.data.data;
-      }).catch(err => {
-        Toast.fail(err);
+      }).catch(({ message }) => {
+        Toast.fail(message)
       });
       // 货物总重量
       dictionary({
         dictType: 'goods_weight'
       }).then(res => {
         this.goodsWeightList = res.data.data;
-      }).catch(err => {
-        Toast.fail(err);
+      }).catch(({ message }) => {
+        Toast.fail(message)
       });
       // 每日配送趟数
       dictionary({
         dictType: 'line_task_daynum'
       }).then(res => {
         this.lapNumList = res.data.data;
-      }).catch(err => {
-        Toast.fail(err);
+      }).catch(({ message }) => {
+        Toast.fail(message)
       })
       // 装卸难度
       dictionary({
         dictType: 'handling_difficulty_degree'
       }).then(res => {
         this.handlingDifficultyList = res.data.data;
-      }).catch(err => {
-        Toast.fail(err);
+      }).catch(({ message }) => {
+        Toast.fail(message)
+      });
+      // 线路类型
+      dictionary({
+        dictType: 'line_type'
+      }).then(res => {
+        this.distinguishedTypeList = res.data.data;
+      }).catch(({ message }) => {
+        Toast.fail(message)
+      });
+      // 稳定性
+      dictionary({
+        dictType: 'linetask_stability_rate'
+      }).then(res => {
+        this.stabilityList = res.data.data;
+      }).catch(({ message }) => {
+        Toast.fail(message)
       })
     },
-    onSubmit(values) {
-      console.log('submit', values);
+    onSubmit() {
+      this.loading = true;
+      if (this.form.incomeSettlementMethod === '1' && this.form.lowestQuotations - this.form.monthlyFuelConsumption <= 0) {
+        Toast.fail('单趟去油净收入必须大于0');
+        this.btnPass = true
+        return false;
+      }
+      if (this.form.incomeSettlementMethod === '1') {
+        // 按趟结算
+        this.form.shipperOffer = this.shipper;
+      }
+
+      postCreatLine(this.form)
+        .then(({ data }) => {
+          if (data.success) {
+            Toast.success('创建成功')
+          } else {
+            Toast.fail(data.errorMsg || '网络错误请稍后再试')
+          }
+        }).catch(({ message }) => {
+          Toast.fail(message)
+        }).finally(() => {
+          this.loading = false;
+        });
     },
     // 货主
-    onCustomerConfirm(value) {
-      const { city, customerId, customerName } = value;
+    setCity(value) {
+      const { city } = value;
       this.form.city = city;
-      this.form.customer = customerId;
-      this.customerName = customerName;
-      this.showCustomerPicker = false;
     },
     // 仓位置
     onWarehouseConfirm(value) {
-      const list = value.filter(item => item.code)
+      const list = value.filter(item => item && item.code)
       if (list.length === 4) {
-        this.form.warehouse = list.map(item => item.name).join(''); // 仓位置整体
+        this.warehouse = list.map(item => item.name).join(''); // 仓位置整体
         this.form.wareAreaName = list[2].name; // 区中文
         this.form.warehouseProvince = list[0].code; // 省code
         this.form.warehouseCity = list[1].code; // 市code
@@ -588,15 +752,9 @@ export default {
       this.showWarehousePicker = false;
       this.dialogWareHouse = true;
     },
-    // 车型
-    onCarConfirm(value) {
-      this.form.carType = value.codeVal;
-      this.carTypeName = value.code;
-      this.showCar = false;
-    },
     // 城市
     onCityConfirm(value) {
-      const list = value.filter(item => item.code)
+      const list = value.filter(item => item && item.code)
       if (list.length === 3) {
         this.cityTextVal = list.map(item => item.name).join(''); // 仓位置整体
         this.form.provinceArea = Number(list[0].code); // 省code
@@ -610,23 +768,9 @@ export default {
       this.showCityPicker = false;
       this.dialogCity = true;
     },
-    onCargoConfirm(value) {
-      this.form.cargoType = value.code;
-      this.showCargo = false;
-    },
-    onGoodsWeightConfirm(value) {
-      this.form.goodsWeight = value.codeVal;
-      this.goodsWeightName = value.code;
-      this.showGoodsWeight = false;
-    },
-    onHandlingDifficultyConfirm(value) {
-      this.form.handlingDifficultyDegree = value.codeVal;
-      this.handlingDifficultyName = value.code;
-      this.showHandlingDifficulty = false;
-    },
     setWarehouseDistrict(action, done) {
       if (action === 'confirm') {
-        this.form.warehouse = this.form.warehouse + this.form.warehouseDistrict;
+        this.warehouse = this.warehouse + this.form.warehouseDistrict;
       }
       done();
     },
@@ -680,8 +824,8 @@ export default {
             });
             this.setCityData(codeList, list);// 存数据
             picker.setColumnValues(index + 1, list);
-          }).catch((err) => {
-            Toast.fail(err);
+          }).catch(({ message }) => {
+            Toast.fail(message)
           }).finally(() => {
             this.warehouseLoading = false;
           });
@@ -705,8 +849,8 @@ export default {
           } else {
             Toast.fail(data.errorMsg);
           }
-        }).catch((err) => {
-          console.log(err)
+        }).catch(({ message }) => {
+          Toast.fail(message);
         }).finally(() => {
           this.warehouseLoading = false;
         })
@@ -762,8 +906,8 @@ export default {
           } else {
             Toast.fail(data.errorMsg);
           }
-        }).catch((err) => {
-          console.log(err)
+        }).catch(({ message }) => {
+          Toast.fail(message);
         }).finally(() => {
           this.cityLoading = false;
         })
@@ -811,6 +955,12 @@ export default {
     width: auto;
     margin-right: 20px;
     flex: none;
+  }
+  .wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
   }
 }
 </style>

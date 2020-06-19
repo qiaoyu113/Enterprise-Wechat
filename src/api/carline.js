@@ -7,3 +7,19 @@ export function getLineUser(data) {
     params: data
   })
 }
+/* 新建线路 */
+export function postCreatLine(data) {
+  return request({
+    url: '/api/line/line/task/create',
+    method: 'post',
+    data
+  })
+}
+/* 线路详情 */
+export function getLineDetail(data) {
+  return request({
+    url: '/api/line/line/task/detail',
+    method: 'get',
+    params: data
+  })
+}
