@@ -48,36 +48,6 @@ export default [
       // auth: true,
       keepAlive: true
     }
-  },
-  {
-    path: '/linelist',
-    name: 'linelist',
-    component: resolve => require(['@/views/line/LineList'], resolve),
-    meta: {
-      title: '线路管理',
-      // auth: true,
-      keepAlive: true
-    }
-  },
-  {
-    path: '/lineSearch',
-    name: 'lineSearch',
-    component: resolve => require(['@/views/line/LineSearch'], resolve),
-    meta: {
-      title: '线路搜索',
-      // auth: true,
-      keepAlive: true
-    }
-  },
-  {
-    path: '/outside',
-    name: 'outside',
-    component: resolve => require(['@/views/line/OutSide'], resolve),
-    meta: {
-      title: '外线主导',
-      // auth: true,
-      keepAlive: true
-    }
   }
 ]
 

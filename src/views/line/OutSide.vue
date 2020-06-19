@@ -1,12 +1,12 @@
 <template>
   <div class="outside">
-    <van-nav-bar
+    <!-- <van-nav-bar
       title="外线主导"
       left-text="返回"
       left-arrow
       @click-left="onClickLeft"
-    />
-    <lineItem />
+    /> -->
+    <lineItem v-if="six" :itemdata="itemdata" :showfooter="false" />
     <div class="toastquesition">
       <div class="bordertoast">
         <span>
@@ -45,29 +45,53 @@
             <div class="type_match">
               <div class="match_item">
                 <span>所需车型</span>
-                <van-icon name="checked" size="20" color="#1d8a09" />
+                <van-icon
+                  name="checked"
+                  size="20"
+                  color="#1d8a09"
+                />
               </div>
               <div class="match_item">
                 <span>货物类型</span>
-                <van-icon name="checked" size="20" color="#1d8a09" />
+                <van-icon
+                  name="checked"
+                  size="20"
+                  color="#1d8a09"
+                />
               </div>
               <div class="match_item">
                 <span>到仓区域</span>
-                <van-icon name="checked" size="20" color="#1d8a09" />
+                <van-icon
+                  name="checked"
+                  size="20"
+                  color="#1d8a09"
+                />
               </div>
             </div>
             <div class="type_match">
               <div class="match_item">
                 <span>配送区域</span>
-                <van-icon name="warning" size="20" color="#d81e06" />
+                <van-icon
+                  name="warning"
+                  size="20"
+                  color="#d81e06"
+                />
               </div>
               <div class="match_item">
                 <span>装卸难度</span>
-                <van-icon name="warning" size="20" color="#d81e06" />
+                <van-icon
+                  name="warning"
+                  size="20"
+                  color="#d81e06"
+                />
               </div>
               <div class="match_item">
                 <span>出车时段</span>
-                <van-icon name="warning" size="20" color="#d81e06" />
+                <van-icon
+                  name="warning"
+                  size="20"
+                  color="#d81e06"
+                />
               </div>
             </div>
           </div>
@@ -78,6 +102,7 @@
 </template>
 <script>
 import lineItem from './components/LineItem';
+import { getOutside } from '@/api/line'
 import { Toast, NavBar, Icon, Dialog } from 'vant';
 export default {
   name: 'Outside',
@@ -89,7 +114,31 @@ export default {
     [Dialog.name]: Dialog
   },
   data() {
-    return {};
+    return {
+      six: true,
+      itemdata: {},
+      driverQuery: {
+        joinMgr: '',
+        query: '',
+        lineId: '',
+        page: 1,
+        limit: 100,
+        carType: '全部'
+      }
+    };
+  },
+  activated() {
+    this.itemdata = this.$route.params.item;
+    this.six = true
+  },
+  mounted() {
+    console.log(this.$route.query.item, 'outside')
+    this.itemdata = this.$route.params.item;
+    // this.six = true
+  },
+  beforeRouteLeave(to, from, next) {
+    this.$destroy(true)
+    next(true);
   },
   methods: {
     showToast() {
@@ -99,6 +148,12 @@ export default {
       }).then(() => {
         // on close
       });
+    },
+    onClickLeft() {
+      this.$router.push('/bss/index');
+    },
+    getOutside() {
+      getOutside(this).then()
     }
   }
 };
@@ -108,23 +163,20 @@ export default {
   .lineitem {
     margin: 0;
   }
-  .item_footer {
-    display: none;
-  }
   background-color: #e4e4e4;
   min-height: 100vh;
-  .van-nav-bar .van-icon,
-  .van-nav-bar__text,
-  .van-tab--active {
-    color: #333333 !important;
-  }
-  .van-nav-bar__title {
-    font-weight: bold;
-  }
-  .van-nav-bar__right {
-    top: 8px;
-    font-size: 12px;
-  }
+  // .van-nav-bar .van-icon,
+  // .van-nav-bar__text,
+  // .van-tab--active {
+  //   color: #333333 !important;
+  // }
+  // .van-nav-bar__title {
+  //   font-weight: bold;
+  // }
+  // .van-nav-bar__right {
+  //   top: 8px;
+  //   font-size: 12px;
+  // }
   .toastquesition {
     padding: 0 10px;
     box-sizing: border-box;
