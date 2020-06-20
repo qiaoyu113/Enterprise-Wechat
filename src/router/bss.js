@@ -34,17 +34,17 @@ export default [{
       }
     },
     {
-      path: '/linelist',
-      name: 'linelist',
+      path: 'lineList',
+      name: 'lineList',
       component: resolve => require(['@/views/line/LineList'], resolve),
       meta: {
         title: '线路管理',
         // auth: true,
-        keepAlive: false
+        keepAlive: true
       }
     },
     {
-      path: '/lineSearch',
+      path: 'lineSearch',
       name: 'lineSearch',
       component: resolve => require(['@/views/line/LineSearch'], resolve),
       meta: {
@@ -54,13 +54,13 @@ export default [{
       }
     },
     {
-      path: '/outSide',
+      path: 'outSide',
       name: 'outSide',
       component: resolve => require(['@/views/line/OutSide'], resolve),
       meta: {
         title: '外线主导',
         // auth: true,
-        keepAlive: false
+        keepAlive: true
       }
     }
   ]

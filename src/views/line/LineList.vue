@@ -24,8 +24,8 @@
         @pullingUp="pullingUp"
         @pullingDown="pullingDown"
       >
-        <div v-for="(itemdata, itemindex) in lineData" :key="itemindex">
-          <lineItem :itemdata="itemdata" />
+        <div v-for="(itemdata, itemindex) in lineData" :key="itemindex" class="bottom_spance">
+          <lineItem class="lineitem" :itemdata="itemdata" />
         </div>
       </vo-pages>
     </div>
@@ -98,6 +98,7 @@ export default {
       this.getList()
     },
     changelist(name) {
+      this.lineData = [];
       this.listQuery = {
         selfState: '', // 线路状态
         state: '',
@@ -108,10 +109,8 @@ export default {
       switch (name) {
         case 0:
           this.listQuery.selfState = 3;
-          this.listQuery.state = 3;
           break;
         case 1:
-          this.listQuery.state = 1;
           this.listQuery.selfState = 1;
           break;
         case 2:
@@ -119,9 +118,7 @@ export default {
           this.listQuery.selfState = 1;
           break;
         case 3:
-          this.listQuery.state = 2;
-          this.listQuery.selfState = 1;
-          this.listQuery.selfState = 4;
+          this.listQuery.soldSate = 1;
           break;
       }
       this.lineData = [];
@@ -177,7 +174,7 @@ export default {
 <style lang="scss">
 .linelist{
   overflow: hidden;
-  background-color: #e4e4e4;
+  background-color: #EEF0F2;
   height: 100vh;
   .van-search{
     padding: 17px 20px;
@@ -190,7 +187,19 @@ export default {
     color: #5C9BDD!important;
   }
   .listbox{
-    height: 100%
+    height: 100%;
+    .bottom_spance{
+      margin-bottom: 10px;
+    }
+    .bottom_spance:last-child{
+      margin-bottom: 0px;
+    }
+  }
+  .lineitem:last-child{
+    margin: 0;
+    .item_info{
+      border-bottom: none;
+    }
   }
 }
 </style>>

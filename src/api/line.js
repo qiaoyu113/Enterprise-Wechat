@@ -96,6 +96,7 @@ export function getOutside(data) {
   return request({
     url: '/api/bss/v1/bss/match/outline/selectDriverScoreListByQuery',
     method: 'post',
-    params: data
+    data
   })
 }
+

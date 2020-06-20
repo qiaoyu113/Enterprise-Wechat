@@ -1,6 +1,6 @@
 <template>
   <div class="lineitem">
-    <img class="sale" src="../../../assets/saleover.png" alt="售罄">
+    <img v-if="item.soldState === 1" class="sale" src="../../../assets/saleover.png" alt="售罄">
     <div class="itembox">
       <div class="item_title" v-text="item.busiTypeName"></div>
       <div class="item_info">
@@ -18,7 +18,7 @@
         </div>
         <div>
           <span>到仓时间:</span>
-          <span>没找到到仓时间</span>
+          <span>{{ item.workingTimeStart }}</span>
         </div>
         <div>
           <span>车型:</span>
@@ -45,7 +45,7 @@
         </div>
         <div>
           <span>是否搬运:</span>
-          <span>没有是否搬运</span>
+          <span>{{ item.carry === 1 ? '是' : '否' }}</span>
         </div>
         <div>
           <span>单趟运费:</span>
@@ -67,10 +67,10 @@
         </div>
       </div>
       <div v-if="show" class="item_footer">
-        <van-button :disabled="(item.state !== 2 && item.selfState !== 1) || (item.state !== 2 && item.selfState !== 4) || item.selfState !== 2 || item.state !== 1 " size="small" color="#5C9BDD" round type="info" @click="goRouter(0)">
+        <van-button :disabled="item.soldState !== 1 || (item.state !== 2 && item.selfState !== 1)" size="small" color="#5C9BDD" round type="info" @click="goRouter(0)">
           批量推送
         </van-button>
-        <van-button :disabled=" item.selfState === 3 || item.state === 1 " size="small" color="#5C9BDD" round type="info" @click="goRouter(1)">
+        <van-button :disabled="item.state !== 2 && item.selfState !== 1" size="small" color="#5C9BDD" round type="info" @click="goRouter(1)">
           匹配撮合
         </van-button>
         <van-button size="small" plain hairline round type="info" @click="goRouter(2)">
@@ -104,7 +104,6 @@ export default {
     };
   },
   mounted() {
-    console.log('tag', this.itemdata)
     this.item = this.itemdata;
     this.show = this.showfooter;
   },
@@ -114,16 +113,24 @@ export default {
   },
   methods: {
     goRouter(val) {
-      console.log(this.item)
       switch (val) {
         case 0:
-          this.$router.push()
+          this.$router.push({
+            name: 'linedetailbatch',
+            query: {
+              backBtn: true,
+              id: this.item.lineId,
+              timeDiff: this.item.timeDiff,
+              monthlyTransaction: this.item.monthlyTransaction
+            }
+          })
+
           break;
         case 1:
           this.$router.push({
             name: 'outSide',
             query: {
-              item: this.item.toString()
+              item: JSON.stringify(this.item)
             }
           })
           break;
@@ -142,7 +149,7 @@ export default {
     height: 60px;
     position: absolute;
     right: 16px;
-    top: 16px;
+    top: 13px;
   }
   background-color: #EEF0F2;
   position: relative;
@@ -182,70 +189,6 @@ export default {
         }
       }
   }
-  // position: relative;
-  // overflow: hidden;
-  // .overtag {
-  //   z-index: 99;
-  //   width: 80px;
-  //   height: 15px;
-  //   text-align: center;
-  //   line-height: 15px;
-  //   background-color: #d81e06;
-  //   color: white;
-  //   font-size: 6px;
-  //   position: absolute;
-  //   top: -25px;
-  //   left: -35px;
-  //   transform: rotate(-45deg);
-  //   transform-origin: 100% 100%;
-  //   -ms-transform: rotate(-45deg); /* IE 9 */
-  //   -ms-transform-origin: 100% 100%;/* IE 9 */
-
-  //   -webkit-transform: rotate(-45deg); /* Safari 和 Chrome */
-  //   -webkit-transform-origin: 100% 100%; /* Safari 和 Chrome */
-
-  //   -moz-transform: rotate(-45deg); /* Firefox */
-  //   -moz-transform-origin: 100% 100%; /* Firefox */
-
-  //   -o-transform: rotate(-45deg); /* Opera */
-  //   -o-transform-origin: 100% 100%; /* Opera */
-  // }
-  // background-color: white;
-  // margin-top: 5px;
-  // width: 100%;
-  // padding: 0 10px;
-  // box-sizing: border-box;
-  // .item_body {
-  //   display: flex;
-  // }
-  // .item_right{
-  //   padding-left: 10px;
-  //   box-sizing: border-box;
-  // }
-  // .item_left,
-  // .item_right {
-  //   width: 50%;
-  //   display: flex;
-  //   flex-direction: column;
-  //   .label_box {
-  //     min-width: 60px;
-  //     text-align: right;
-  //   }
-  //   .box_title {
-  //     width: 60px;
-  //     display: flex;
-  //     font-weight: bold;
-  //     justify-content: flex-end;
-  //     color: #ffcc66;
-  //   }
-  //   .left_box > div {
-  //     display: flex;
-  //     margin: 10px 0;
-  //     line-height: 13px;
-  //     font-size: 13px;
-  //     line-height: 16px;
-  //   }
-  // }
 }
 </style>
 

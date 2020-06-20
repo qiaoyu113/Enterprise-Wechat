@@ -33,7 +33,7 @@ export default {
         {
           icon: '',
           title: '线路管理',
-          url: '/linelist'
+          url: 'lineList'
         },
         {
           icon: '',

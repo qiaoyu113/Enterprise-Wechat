@@ -1,11 +1,11 @@
 <template>
   <div class="linesearch">
-    <van-nav-bar
+    <!-- <van-nav-bar
       left-text="返回"
       :title="tabtext"
       left-arrow
       @click-left="onClickLeft"
-    />
+    /> -->
     <van-search
       v-model="value"
       placeholder="请输入搜索关键词"
@@ -39,10 +39,6 @@ export default {
     };
   },
   methods: {
-    onClickLeft() {
-      console.log(123)
-      this.$router.go(-1)
-    }
   }
 };
 </script>
