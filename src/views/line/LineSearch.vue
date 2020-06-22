@@ -17,11 +17,11 @@
         />
       </li>
     </ul>
-    <div
-      v-else
-      class="noData"
-    >
-      抱歉,未找到相关数据!
+    <div v-else class="noData">
+      <img src="../../assets/search.png">
+      <div class="text">
+        抱歉,未找到相关数据!
+      </div>
     </div>
   </div>
 </template>
@@ -40,18 +40,10 @@ export default {
   data() {
     return {
       lists: [],
-      // listQuery: {
-      //   key: '',
-      //   page: 1,
-      //   limit: 9999
-      // },
       listQuery: {
         key: '',
-        selfState: 3, // 线路状态
-        state: '',
-        disableState: 0, // 停用状态
-        page: 1, // 当前页
-        limit: 25 // 每页大小
+        page: 1,
+        limit: 9999
       },
       historyLists: []
     };
@@ -122,10 +114,18 @@ export default {
     }
   }
   .noData {
-    margin: 50px 0px;
-    color: #333333;
-    font-size: 14px;
+    margin-top:41.5px;
     text-align: center;
+    .text {
+      margin-top: 15px;
+      font-size: 15px;
+      color: #656565;
+      text-align: center;
+    }
+    img {
+      width: 83px;
+      height:74px;
+    }
   }
 }
 </style>

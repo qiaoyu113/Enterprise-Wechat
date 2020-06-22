@@ -45,25 +45,27 @@
         </template>
       </van-tab>
     </van-tabs>
-    <vo-pages
-      :data="lineData"
-      :loaded-all="loadedAll"
-      @pullingUp="pullingUp"
-      @pullingDown="pullingDown"
-    >
-      <div class="listbox">
-        <div
-          v-for="(itemdata, itemindex) in lineData"
-          :key="itemindex"
-          class="bottom_spance"
-        >
-          <lineItem
-            class="lineitem"
-            :itemdata="itemdata"
-          />
+    <section>
+      <vo-pages
+        :data="lineData"
+        :loaded-all="loadedAll"
+        @pullingUp="pullingUp"
+        @pullingDown="pullingDown"
+      >
+        <div class="listbox">
+          <div
+            v-for="(itemdata, itemindex) in lineData"
+            :key="itemindex"
+            class="bottom_spance"
+          >
+            <lineItem
+              class="lineitem"
+              :itemdata="itemdata"
+            />
+          </div>
         </div>
-      </div>
-    </vo-pages>
+      </vo-pages>
+    </section>
   </div>
 </template>
 <script>
@@ -90,22 +92,23 @@ export default {
       beforePullDown: false,
       active: 0,
       tabarr: [
-        { name: '已失效', num: 100 },
-        { name: '待审核', num: 0 },
-        { name: '可售线路', num: 0 },
-        { name: '售罄线路', num: 0 }
+        { name: '已失效', num: 0, type: 'expiredNum' },
+        { name: '待审核', num: 0, type: 'waitApplyNum' },
+        { name: '可售线路', num: 0, type: 'canSellNum' },
+        { name: '售罄线路', num: 0, type: 'isSoldNum' }
       ],
       lineData: [],
       listQuery: {
-        selfState: 3, // 线路状态
-        state: '',
-        disableState: 0, // 停用状态
         page: 1, // 当前页
         limit: 25 // 每页大小
       }
     };
   },
+  created() {
+    this.getTitle();
+  },
   mounted() {
+    this.listQuery.selfState = 3;
     this.getList();
   },
   beforeRouteLeave(to, from, next) {
@@ -113,18 +116,30 @@ export default {
     next(true);
   },
   methods: {
+    async getTitle() {
+      try {
+        let { data: tabarr } = await selectListAll(this.listQuery);
+        if (tabarr.success) {
+          let keyArr = Object.keys(tabarr.title);
+          keyArr.forEach(ele => {
+            this.tabarr.forEach(item => {
+              if (ele === item.type) {
+                item.num = tabarr.title[ele];
+              }
+            });
+          });
+        } else {
+          Toast.fail(tabarr.errorMsg);
+        }
+      } catch (err) {
+        Toast.fail(err.errorMsg);
+      }
+    },
     handleAddClick() {
       this.$router.push({
         path: '/bss/add-line'
       });
     },
-    // onClickLeft() {
-    //   this.$router.push('/bss/index')
-    // },
-    // onClickRight() {
-    //   // this.$router.push('/bss/index')
-    //   Toast('按钮');
-    // },
     goSearch() {
       this.$router.push('lineSearch');
     },
@@ -134,15 +149,13 @@ export default {
       this.getList(false);
     },
     pullingUp() {
+      console.log('tag', 'pullingUp')
       this.listQuery.page += 1;
       this.getList();
     },
     changelist(name) {
       this.lineData = [];
       this.listQuery = {
-        selfState: '', // 线路状态
-        state: '',
-        disableState: 0, // 停用状态
         page: 1, // 当前页
         limit: 25 // 每页大小
       };
@@ -184,14 +197,17 @@ export default {
             if (!this.beforePullDown) {
               this.beforePullDown = true;
             }
+            console.log('length', this.lineData.length, this.tabarr[this.active].num)
+
             if (
-              this.lineData.length === data.page.total ||
+              this.lineData.length >= this.tabarr[this.active].num ||
               this.lineData.length < 4
             ) {
               this.loadedAll = true;
-            } else {
-              this.loadedAll = false;
             }
+            // else {
+            //   this.loadedAll = false;
+            // }
             // this.lineData = data.data;
           } else {
             Toast.clear();
@@ -219,7 +235,7 @@ export default {
     &:after {
       display: block;
       content: "";
-      height: 10px;
+      height: 8px;
       width: 100%;
       background: #f2f2f2;
     }
@@ -229,11 +245,12 @@ export default {
       font-size: 14px;
     }
   }
-  padding-bottom: 60px;
-  box-sizing: border-box;
-  overflow: hidden;
+  .tabnum {
+    color: #ffa000;
+    font-size: 12px;
+  }
   background-color: #f2f2f2;
-  height: 100vh;
+  min-height: 100vh;
   .van-search {
     padding: 17px 20px;
   }
@@ -244,8 +261,13 @@ export default {
   .van-tab--active {
     color: #5c9bdd !important;
   }
+  section {
+    height:calc(100vh - 254px);
+    overflow: hidden;
+  }
   .listbox {
-    // height: 100vh;
+    box-sizing: border-box;
+    height: auto;
     .bottom_spance {
       margin-bottom: 5px;
     }
@@ -253,7 +275,7 @@ export default {
       margin-bottom: 0px;
     }
   }
-  .wrapper-child{
+  .wrapper-child {
     top: -5px;
   }
   .lineitem:last-child {

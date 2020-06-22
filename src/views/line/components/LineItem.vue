@@ -171,7 +171,7 @@ export default {
       box-sizing: border-box;
       font-size: 15px;
       color: #595F66;
-      border-bottom: 1px solid #EEF0F2;
+      border-bottom: 2px solid #EEF0F2;
       .statename{
         font-size: 15px;
         color: #5C9BDD;

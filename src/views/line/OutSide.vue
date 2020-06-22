@@ -87,6 +87,7 @@ export default {
     let str = this.$route.query.item;
     this.itemdata = JSON.parse(str);
     this.driverQuery.lineId = this.itemdata.lineId
+    this.driverQuery.lineId = '202006091007'
   },
   mounted() {
     this.getOutside();
@@ -158,7 +159,7 @@ export default {
 </script>
 <style lang="scss">
 .outside {
-    padding-bottom: 60px;
+  padding-bottom: 50px;
   box-sizing: border-box;
   .list-wrap {
     height: 100%;
