@@ -54,6 +54,7 @@ import lineItem from './components/LineItem';
 import dirverItem from './components/dirverItem';
 import { getOutside } from '@/api/line';
 import VoPages from 'vo-pages';
+import 'vo-pages/lib/vo-pages.css'
 import { Toast, NavBar, Icon, Dialog, Button } from 'vant';
 export default {
   name: 'Outside',
@@ -86,7 +87,6 @@ export default {
     let str = this.$route.query.item;
     this.itemdata = JSON.parse(str);
     this.driverQuery.lineId = this.itemdata.lineId
-    // this.driverQuery.lineId = '201911036009';
   },
   mounted() {
     this.getOutside();
@@ -128,8 +128,8 @@ export default {
         if (res.success) {
           Toast.clear();
           let info = res.data;
-          this.dirverInfo = info;
-          this.total = res.page.total;
+          let total = res.page.total;
+          this.total = total;
           if (loadMore) {
             this.dirverInfo = this.dirverInfo.concat(info);
           } else {
@@ -158,6 +158,8 @@ export default {
 </script>
 <style lang="scss">
 .outside {
+    padding-bottom: 60px;
+  box-sizing: border-box;
   .list-wrap {
     height: 100%;
   }

@@ -39,7 +39,7 @@ export default [{
       component: resolve => require(['@/views/line/LineList'], resolve),
       meta: {
         title: '线路管理',
-        // auth: true,
+        showFooter: true,
         keepAlive: true
       }
     },
@@ -49,7 +49,7 @@ export default [{
       component: resolve => require(['@/views/line/LineSearch'], resolve),
       meta: {
         title: '线路搜索',
-        // auth: true,
+        showFooter: true,
         keepAlive: true
       }
     },
@@ -59,7 +59,57 @@ export default [{
       component: resolve => require(['@/views/line/OutSide'], resolve),
       meta: {
         title: '外线主导',
-        // auth: true,
+        showFooter: true,
+        keepAlive: true
+      }
+    },
+    {
+      path: 'consignorList',
+      name: 'consignorList',
+      component: () => import('@/views/consignor/lists/index.vue'),
+      meta: {
+        title: '货主列表',
+        showFooter: true, // 是否显示底部bar
+        keepAlive: true
+      }
+    },
+    {
+      path: 'consignorDetail',
+      name: 'consignorDetail',
+      component: () => import('@/views/consignor/detail/index.vue'),
+      meta: {
+        title: '货主详情',
+        showFooter: true, // 是否显示底部bar
+        keepAlive: true
+      }
+    },
+    {
+      path: 'consignorSearch',
+      name: 'consignorSearch',
+      component: () => import('@/views/consignor/search/index.vue'),
+      meta: {
+        title: '选择货主',
+        showFooter: true, // 是否显示底部bar
+        keepAlive: true
+      }
+    },
+    {
+      path: 'consignorAdd',
+      name: 'consignorAdd',
+      component: () => import('@/views/consignor/addOrEdit/index.vue'),
+      meta: {
+        title: '创建货主',
+        showFooter: true, // 是否显示底部bar
+        keepAlive: true
+      }
+    },
+    {
+      path: 'consignorEdit',
+      name: 'consignorEdit',
+      component: () => import('@/views/consignor/addOrEdit/index.vue'),
+      meta: {
+        title: '编辑货主',
+        showFooter: true, // 是否显示底部bar
         keepAlive: true
       }
     }

@@ -7,7 +7,7 @@
             {{ params.lineSaleName }}
           </van-tag>
           <p class="line-tit">
-            {{ params.lineName }} / {{ params.customerName }}·
+            {{ params.lineName }} / {{ params.customerName }}
           </p>
           <p class="address">
             {{ params.warehouse }}

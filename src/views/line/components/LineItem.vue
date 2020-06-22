@@ -6,11 +6,11 @@
       <div class="item_info">
         <div>
           <span>线路名称:</span>
-          <span>{{ item.lineName }}</span>
+          <span>{{ item.lineName | DataIsNull }}</span>
         </div>
         <div>
           <span>仓库位置:</span>
-          <span>{{ item.warehouseProvinceName }}{{ item.warehouseCityName }}{{ item.warehouseCountyName }}{{ item.warehouseTownName }}{{ item.warehouseDistrict }}</span>
+          <span>{{ item.warehouseProvinceName | isNull }}{{ item.warehouseCityName | isNull }}{{ item.warehouseCountyName | isNull }}{{ item.warehouseTownName | isNull }}{{ item.warehouseDistrict | isNull }}</span>
         </div>
         <div>
           <span>配送区域:</span>
@@ -18,11 +18,11 @@
         </div>
         <div>
           <span>到仓时间:</span>
-          <span>{{ item.workingTimeStart }}</span>
+          <span>{{ item.workingTimeStart | DataIsNull }}</span>
         </div>
         <div>
           <span>车型:</span>
-          <span>{{ item.carTypeName }}</span>
+          <span>{{ item.carTypeName | DataIsNull }}</span>
         </div>
         <div>
           <span>用车数量:</span>
@@ -41,7 +41,7 @@
       <div class="item_info">
         <div>
           <span>货物类型:</span>
-          <span>{{ item.cargoType }}</span>
+          <span>{{ item.cargoType | DataIsNull }}</span>
         </div>
         <div>
           <span>是否搬运:</span>
@@ -86,6 +86,12 @@ export default {
   name: 'Lineitem',
   components: {
     [Button.name]: Button
+  },
+  filters: {
+    isNull: function(value) {
+      if (value === 'null' || !value) return '';
+      return value
+    }
   },
   props: {
     itemdata: {

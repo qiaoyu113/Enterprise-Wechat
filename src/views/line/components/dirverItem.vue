@@ -13,6 +13,7 @@
           <van-button
             class="btnsend"
             color="linear-gradient(to right, #F76B1C, #FCA43C)"
+            @click="pushDriver()"
           >
             推荐
           </van-button>
@@ -81,13 +82,14 @@
   </div>
 </template>
 <script>
-import { Toast, Icon, Button } from 'vant';
+import { Toast, Icon, Button, Dialog } from 'vant';
 export default {
   name: 'Dirveritem',
   components: {
     [Toast.name]: Toast,
     [Icon.name]: Icon,
-    [Button.name]: Button
+    [Button.name]: Button,
+    [Dialog.name]: Dialog
   },
   props: {
     itemdata: {
@@ -102,6 +104,16 @@ export default {
   },
   mounted() {
     this.driver = this.itemdata
+  },
+  methods: {
+    pushDriver() {
+      Dialog.alert({
+        title: '推荐',
+        message: '推荐功能暂未开放'
+      }).then(() => {
+        // on close
+      });
+    }
   }
 };
 </script>
