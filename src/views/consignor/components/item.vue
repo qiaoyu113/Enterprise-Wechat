@@ -15,7 +15,7 @@
           </p>
         </div>
         <div class="right">
-          <van-button plain color="#5C9BDD" size="small" :to="'/bss/consignorDetail?id='+obj.customerId">
+          <van-button plain color="#5C9BDD" size="small" @click="handleItemClick">
             详情
           </van-button>
         </div>
@@ -45,6 +45,17 @@ export default {
     obj: {
       type: Object,
       default: () => {}
+    }
+  },
+  methods: {
+    handleItemClick() {
+      this.$emit('clickItem')
+      this.$router.push({
+        path: '/bss/consignorDetail',
+        query: {
+          id: this.obj.customerId
+        }
+      })
     }
   }
 }

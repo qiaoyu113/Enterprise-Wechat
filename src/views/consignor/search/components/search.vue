@@ -11,10 +11,10 @@
       @blur="onBlur"
     >
     </van-search>
-    <dl v-show="isShow" class="history">
+    <dl v-show="isShow" v-if="historyLists.length > 0" class="history">
       <dt>历史搜索</dt>
-      <dd v-for="item in historyLists" :key="item" @click="handleItemClick(item)">
-        {{ item }}
+      <dd v-for="item in historyLists" :key="item.customerId" @click="handleItemClick(item)">
+        {{ item.customerName }}
       </dd>
     </dl>
   </div>
@@ -52,8 +52,8 @@ export default {
         this.$emit('clear')
         return false
       }
-      this.$emit('search')
-    }, 200),
+      this.$emit('search', { customerName: this.form.key })
+    }, 500),
     /**
      * 清除
      */
@@ -68,8 +68,8 @@ export default {
       this.isShow = false
     },
     handleItemClick(item) {
-      this.form.key = item
-      this.onSearch()
+      this.form.key = item.customerName
+      this.$emit('search', item)
     }
   }
 }
