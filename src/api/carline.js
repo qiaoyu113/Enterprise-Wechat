@@ -23,3 +23,29 @@ export function getLineDetail(data) {
     params: data
   })
 }
+
+/* 编辑线路 */
+export function putCreatLine(data) {
+  return request({
+    url: '/api/line/line/task/edit',
+    method: 'post',
+    data
+  })
+}
+/* 标书审核 */
+export function NopassTender(data) {
+  return request({
+    url: '/api/line/line/task/inspectNotPass',
+    method: 'post',
+    data
+  })
+}
+
+/* 标书审核 */
+export function passTender(data) {
+  return request({
+    url: '/api/line/line/task/inspectPass',
+    method: 'post',
+    data
+  })
+}

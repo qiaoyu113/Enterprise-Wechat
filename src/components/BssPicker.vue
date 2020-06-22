@@ -5,8 +5,9 @@
       clickable
       v-bind="$attrs"
       :value="name"
+      :disabled="disabled"
       v-on="$listeners"
-      @click="showPicker = true"
+      @click="showPicker = !disabled"
     />
     <van-popup v-model="showPicker" position="bottom">
       <van-picker
@@ -35,8 +36,12 @@ export default {
   },
   props: {
     value: {
-      type: String,
+      type: [String, Number],
       default: ''
+    },
+    disabled: {
+      type: [Boolean],
+      default: false
     },
     data: {
       type: Array,
@@ -75,7 +80,32 @@ export default {
       }
     }
   },
+  watch: {
+    data(newVal) {
+      if (this.val && this.data && this.data.length > 0) {
+        this.setName();
+      }
+    },
+    val(newVal) {
+      if (this.val && this.data && this.data.length > 0) {
+        this.setName();
+      }
+    }
+  },
+  mounted() {
+    if (this.val && this.data && this.data.length > 0) {
+      this.setName();
+    }
+  },
   methods: {
+    setName() {
+      const item = this.data.find(item => {
+        return String(item[this.codeVal]) === String(this.val);
+      });
+      if (item) {
+        this.name = item[this.code]
+      }
+    },
     onConfirm(value) {
       this.name = value[this.code]
       this.val = value[this.codeVal]
@@ -86,6 +116,8 @@ export default {
 }
 </script>
 
-<style>
-
+<style lang="scss" scoped>
+.disabled {
+  opacity: 0.8
+}
 </style>
