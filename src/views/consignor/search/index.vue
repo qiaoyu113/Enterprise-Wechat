@@ -7,14 +7,17 @@
       </li>
     </ul>
     <div v-else class="noData">
-      抱歉,未找到相关数据!
+      <img src="./imgs/search.png">
+      <div class="text">
+        抱歉,未找到相关数据!
+      </div>
     </div>
   </div>
 </template>
 
 <script>
 import Search from './components/search'
-import Item from '../lists/components/item'
+import Item from '../components/item'
 import { fetchList } from '@/api/consignor'
 import { Toast } from 'vant'
 export default {
@@ -58,12 +61,15 @@ export default {
         if (res.success) {
           this.lists = res.data
           this.addKeyWordToHistory()
+          this.listQuery.key = ''
         } else {
           Toast.fail(res.errorMsg || res.msg)
         }
       } catch (err) {
         toast.clear()
-        Toast.fail(err)
+        if (err) {
+          Toast.fail(err)
+        }
       }
     },
     handleClearClick() {
@@ -93,10 +99,18 @@ export default {
 <style lang='scss' scoped>
 .consignorSearch {
   .noData {
-    margin: 50px 0px;
-    color:#333333;
-    font-size:14px;
+    margin-top:41.5px;
     text-align: center;
+    .text {
+      margin-top: 15px;
+      font-size: 15px;
+      color: #656565;
+      text-align: center;
+    }
+    img {
+      width: 83px;
+      height:74px;
+    }
   }
 }
 

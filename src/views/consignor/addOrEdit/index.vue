@@ -80,12 +80,12 @@
         </div>
       </van-field>
       <van-field name="radio" label="结算周期是否包含当月" label-width="180px">
-        <template #input>
+        <template slot="input">
           <van-radio-group v-model="form.currentMonth" direction="horizontal">
-            <van-radio name="1">
+            <van-radio name="1" checked-color="#5C9BDD">
               是
             </van-radio>
-            <van-radio name="2">
+            <van-radio name="2" checked-color="#5C9BDD">
               否
             </van-radio>
           </van-radio-group>
@@ -210,7 +210,7 @@
         margin:
         16px;text-align:center;"
       >
-        <van-button type="info" native-type="submit" class="btn">
+        <van-button type="info" round native-type="submit" class="btn" color="linear-gradient(270deg, #5C9BDD 0%, #80D8F3 100%)">
           提交
         </van-button>
       </div>
@@ -317,7 +317,8 @@ export default {
     onClickLeft() {
       Dialog.confirm({
         title: '提示',
-        message: '请确认不在填写信息,返回上一个页面!'
+        message: '请确认不在填写信息,返回上一个页面!',
+        confirmButtonColor: '#5C9BDD'
       }).then(() => {
         this.id = '123' // 用户点击确认，为了离开当前页面，随便赋值
         this.$router.push({
@@ -600,9 +601,19 @@ export default {
     width: 300px;
   }
   .red {
-    color:#FF9D00;
+    color:#FFA001;
     font-size: 20px;
   }
 }
 
+</style>
+
+<style scoped>
+
+  .consignorAddOrEdit >>> .van-picker__confirm {
+    color: #5C9BDD;
+  }
+  .consignorAddOrEdit >>> .van-picker__cancel {
+    color:#9B9B9B;
+  }
 </style>

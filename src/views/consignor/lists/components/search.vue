@@ -2,7 +2,7 @@
   <div class="consignorSearch">
     <van-search placeholder="请输入货主名称" background="#F2F2F2" @click="handleSearchClick" />
     <div class="add">
-      <van-icon name="add" size="40" color="#4CB0E9" @click="handleAddClick" />
+      <van-icon name="add" size="51" color="#5C9BDD " @click="handleAddClick" />
       <p @click="handleAddClick">
         新建货主
       </p>
@@ -47,7 +47,7 @@ export default {
     }
     p {
       margin: 0px 0px 6px 0px;
-      color:#4CB0E9;
+      color:#5C9BDD ;
       font-size:14px;
     }
   }

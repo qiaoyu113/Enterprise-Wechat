@@ -15,7 +15,7 @@
           </p>
         </div>
         <div class="right">
-          <van-button plain color="#4EA1E5" size="small" :to="'/bss/consignorDetail?id='+obj.customerId">
+          <van-button plain color="#5C9BDD" size="small" :to="'/bss/consignorDetail?id='+obj.customerId">
             详情
           </van-button>
         </div>

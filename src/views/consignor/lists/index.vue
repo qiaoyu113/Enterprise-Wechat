@@ -23,7 +23,7 @@
 <script>
 import { Toast } from 'vant'
 import Search from './components/search'
-import listItem from './components/item'
+import listItem from '../components/item'
 import VoPages from 'vo-pages'
 import 'vo-pages/lib/vo-pages.css'
 import { fetchList } from '@/api/consignor'
@@ -65,8 +65,12 @@ export default {
       forbidClick: true,
       loadingType: 'spinner'
     });
-    await this.getLists(false)
-    this.toast.clear()
+    try {
+      await this.getLists(false)
+      this.toast.clear()
+    } catch (err) {
+      this.toast.clear()
+    }
   },
   methods: {
     /**

@@ -86,12 +86,16 @@ export default {
     top: 44px;
     width: 351px;
     background: #ffffff;
-    box-shadow: 1px 2px 4px 0px #E6E5E5;
+    box-shadow: 0 2px 24px 0 rgba(0,0,0,0.20);
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
     z-index: 10;
     &:before {
+      margin-left:10px;
       display: block;
       content:'';
-      border-top:1px solid #C2DEF5;
+      width: 331px;
+      border-top:1px solid #5C9BDD;
     }
     dt {
       margin: 10px;
