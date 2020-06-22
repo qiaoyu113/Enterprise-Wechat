@@ -28,7 +28,7 @@ export default {
         {
           icon: '',
           title: '货主管理',
-          url: ''
+          url: '/bss/consignorList'
         },
         {
           icon: '',
