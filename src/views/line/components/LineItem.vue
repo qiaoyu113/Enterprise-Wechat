@@ -14,7 +14,11 @@
         </div>
         <div>
           <span>配送区域:</span>
-          <span>没找到配送区域</span>
+          <span>{{ item.provinceAreaName }}
+            {{ item.cityAreaName }}
+            {{ item.countyAreaName }}
+            {{ item.distance }}(公里)
+          </span>
         </div>
         <div>
           <span>到仓时间:</span>

@@ -108,7 +108,7 @@ export default {
     showToast() {
       Dialog.alert({
         title: '匹配机制',
-        message: '弹窗内容'
+        message: '根据司机接活意向与线路属性对比计算打分，100分满分。对打分规则及权重有疑问的，请联系梧桐外线纵线运营'
       }).then(() => {
         // on close
       });
