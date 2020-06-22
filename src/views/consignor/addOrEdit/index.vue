@@ -4,28 +4,25 @@
     <van-form @submit="onSubmit">
       <van-field
         v-model="form.customerName"
+        required
         name="货主简称"
         label="货主简称"
         placeholder="请输入"
         :rules="[{ required: true, message: '请填写货主简称' }]"
       >
-        <div slot="left-icon" class="red">
-          *
-        </div>
       </van-field>
       <van-field
         v-model="form.customerNameAll"
+        required
         name="货主主体"
         label="货主主体"
         placeholder="请输入"
         :rules="[{ required: true, message: '请填写货主主体' }]"
       >
-        <div slot="left-icon" class="red">
-          *
-        </div>
       </van-field>
       <van-field
         readonly
+        required
         clickable
         name="picker"
         :value="form.city"
@@ -35,9 +32,6 @@
         :rules="[{ required: true, message: '请选择城市' }]"
         @click="showCityPicker = true"
       >
-        <div slot="left-icon" class="red">
-          *
-        </div>
       </van-field>
       <van-popup v-model="showCityPicker" position="bottom">
         <van-picker
@@ -70,22 +64,20 @@
       </van-popup>
       <van-field
         v-model="form.address"
+        required
         name="详细地址"
         label="详细地址"
         placeholder="请输入"
         :rules="[{ required: true, message: '请填写详细地址' }]"
       >
-        <div slot="left-icon" class="red">
-          *
-        </div>
       </van-field>
       <van-field name="radio" label="结算周期是否包含当月" label-width="180px">
-        <template slot="input">
+        <template #input>
           <van-radio-group v-model="form.currentMonth" direction="horizontal">
-            <van-radio name="1" checked-color="#5C9BDD">
+            <van-radio name="1">
               是
             </van-radio>
-            <van-radio name="2" checked-color="#5C9BDD">
+            <van-radio name="2">
               否
             </van-radio>
           </van-radio-group>
@@ -94,40 +86,34 @@
       <van-field
         v-model="form.billingCycle"
         name="结算周期"
+        required
         label="结算周期"
         :maxlength="3"
         placeholder="请输入"
         type="number"
         :rules="[{ required: true, message: '请填写结算周期' }]"
       >
-        <div slot="left-icon" class="red">
-          *
-        </div>
       </van-field>
       <van-field
         v-model="form.bussinessName"
+        required
         label-width="110px"
         name="业务对接人姓名"
         label="业务对接人姓名"
         placeholder="请输入"
         :rules="[{ required: true, message: '请填写业务对接人姓名' }]"
       >
-        <div slot="left-icon" class="red">
-          *
-        </div>
       </van-field>
       <van-field
         v-model="form.bussinessPhone"
         label-width="110px"
+        required
         name="validator"
         type="tel"
         label="业务对接人电话"
         placeholder="请输入"
         :rules="[{ pattern:phoneRegExp, message: form.bussinessPhone ? '请填写业务对接人手机号':'请填写正确的手机号' }]"
       >
-        <div slot="left-icon" class="red">
-          *
-        </div>
       </van-field>
       <van-field
         v-model="form.bussinessCard"
@@ -151,6 +137,7 @@
       </van-field>
       <van-field
         readonly
+        required
         clickable
         name="picker"
         :value="form.primaryClassification"
@@ -159,9 +146,6 @@
         placeholder="请选择"
         @click="showlev1Picker = true"
       >
-        <div slot="left-icon" class="red">
-          *
-        </div>
       </van-field>
       <van-popup v-model="showlev1Picker" position="bottom">
         <van-picker
@@ -599,10 +583,6 @@ export default {
     display: inline-block;
     margin:50px auto;
     width: 300px;
-  }
-  .red {
-    color:#FFA001;
-    font-size: 20px;
   }
 }
 
