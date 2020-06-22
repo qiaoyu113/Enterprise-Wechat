@@ -79,7 +79,7 @@ export default {
       });
       try {
         if (this.lineSaleId) {
-          obj.lineSaleId = this.this.lineSaleId
+          obj.lineSaleId = this.lineSaleId
         }
         let { data: res } = await searchCustomerByKeyword(obj)
         toast.clear()
