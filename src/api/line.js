@@ -80,3 +80,22 @@ export function getUrlOfLineDetailByLineId(data) {
     params: data
   })
 }
+
+/* 全部线路列表(new) */
+export function selectListAll(data) {
+  let t = +new Date();
+  return request({
+    url: `/api/bss/v1/bss/line/task/selectListByConditionsQuery?t=${t}`,
+    method: 'post',
+    data
+  })
+}
+
+// 外线主导
+export function getOutside(data) {
+  return request({
+    url: '/api/bss/v1/bss/match/outline/selectDriverScoreListByQuery',
+    method: 'post',
+    params: data
+  })
+}
