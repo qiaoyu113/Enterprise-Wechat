@@ -112,35 +112,36 @@ export default [{
     },
     // 线路管理
     {
-      path: '/linelist',
-      name: 'linelist',
+      path: 'lineList',
+      name: 'lineList',
       component: resolve => require(['@/views/line/LineList'], resolve),
       meta: {
         title: '线路管理',
-        // auth: true,
-        keepAlive: false
+        showFooter: true,
+        keepAlive: true
       }
     },
     // 线路搜索
     {
-      path: '/lineSearch',
+      path: 'lineSearch',
       name: 'lineSearch',
       component: resolve => require(['@/views/line/LineSearch'], resolve),
       meta: {
         title: '线路搜索',
-        // auth: true,
+        showFooter: true,
         keepAlive: true
       }
     },
     // 外线主导
     {
-      path: '/outSide',
+      path: 'outSide',
       name: 'outSide',
       component: resolve => require(['@/views/line/OutSide'], resolve),
       meta: {
         title: '外线主导',
         // auth: true,
-        keepAlive: false
+        showFooter: true,
+        keepAlive: true
       }
     }
   ]

@@ -8,35 +8,70 @@
       @click-left="onClickLeft"
       @click-right="onClickRight"
     /> -->
-    <van-search disabled placeholder="请输入搜索关键词" @click="goSearch" />
-    <van-tabs v-model="active" sticky class="tab" animated @change="changelist">
-      <van-tab v-for="(item, index) in tabarr" :key="index">
+
+    <van-search
+      disabled
+      placeholder="请输入搜索线路名称"
+      @click="goSearch"
+    />
+    <div class="add">
+      <van-icon
+        name="add"
+        size="40"
+        color="#4CB0E9"
+        @click="handleAddClick"
+      />
+      <p @click="handleAddClick">
+        新建线路
+      </p>
+    </div>
+    <van-tabs
+      v-model="active"
+      sticky
+      class="tab"
+      animated
+      @change="changelist"
+    >
+      <van-tab
+        v-for="(item, index) in tabarr"
+        :key="index"
+      >
         <template #title>
           <span v-text="item.name"></span>
-          <span class="tabnum" v-text="`(${item.num})`"></span>
+          <span
+            class="tabnum"
+            v-text="`(${item.num})`"
+          ></span>
         </template>
       </van-tab>
     </van-tabs>
-    <div class="listbox">
-      <vo-pages
-        :data="lineData"
-        :loaded-all="loadedAll"
-        @pullingUp="pullingUp"
-        @pullingDown="pullingDown"
-      >
-        <div v-for="(itemdata, itemindex) in lineData" :key="itemindex">
-          <lineItem :itemdata="itemdata" />
+    <vo-pages
+      :data="lineData"
+      :loaded-all="loadedAll"
+      @pullingUp="pullingUp"
+      @pullingDown="pullingDown"
+    >
+      <div class="listbox">
+        <div
+          v-for="(itemdata, itemindex) in lineData"
+          :key="itemindex"
+          class="bottom_spance"
+        >
+          <lineItem
+            class="lineitem"
+            :itemdata="itemdata"
+          />
         </div>
-      </vo-pages>
-    </div>
+      </div>
+    </vo-pages>
   </div>
 </template>
 <script>
-import VoPages from 'vo-pages'
-import 'vo-pages/lib/vo-pages.css'
-import lineItem from './components/LineItem'
-import { selectListAll } from '@/api/line.js'
-import { Toast, NavBar, Icon, Search, Tab, Tabs } from 'vant'
+import VoPages from 'vo-pages';
+import 'vo-pages/lib/vo-pages.css';
+import lineItem from './components/LineItem';
+import { selectListAll } from '@/api/line.js';
+import { Toast, NavBar, Icon, Search, Tab, Tabs } from 'vant';
 export default {
   name: 'Linelist',
   components: {
@@ -68,50 +103,54 @@ export default {
         page: 1, // 当前页
         limit: 25 // 每页大小
       }
-    }
+    };
   },
   mounted() {
     this.getList();
   },
   beforeRouteLeave(to, from, next) {
-    this.$destroy(true)
+    this.$destroy(true);
     next(true);
   },
   methods: {
-    onClickLeft() {
-      this.$router.push('/bss/index')
+    handleAddClick() {
+      this.$router.push({
+        path: '/bss/add-line'
+      });
     },
-    onClickRight() {
-      // this.$router.push('/bss/index')
-      Toast('按钮');
-    },
+    // onClickLeft() {
+    //   this.$router.push('/bss/index')
+    // },
+    // onClickRight() {
+    //   // this.$router.push('/bss/index')
+    //   Toast('按钮');
+    // },
     goSearch() {
-      this.$router.push('lineSearch')
+      this.$router.push('lineSearch');
     },
     pullingDown() {
-      this.beforePullDown = false
-      this.listQuery.page = 1
-      this.getList(false)
+      this.beforePullDown = false;
+      this.listQuery.page = 1;
+      this.getList(false);
     },
     pullingUp() {
-      this.listQuery.page += 1
-      this.getList()
+      this.listQuery.page += 1;
+      this.getList();
     },
     changelist(name) {
+      this.lineData = [];
       this.listQuery = {
         selfState: '', // 线路状态
         state: '',
         disableState: 0, // 停用状态
         page: 1, // 当前页
         limit: 25 // 每页大小
-      }
+      };
       switch (name) {
         case 0:
           this.listQuery.selfState = 3;
-          this.listQuery.state = 3;
           break;
         case 1:
-          this.listQuery.state = 1;
           this.listQuery.selfState = 1;
           break;
         case 2:
@@ -119,9 +158,7 @@ export default {
           this.listQuery.selfState = 1;
           break;
         case 3:
-          this.listQuery.state = 2;
-          this.listQuery.selfState = 1;
-          this.listQuery.selfState = 4;
+          this.listQuery.soldSate = 1;
           break;
       }
       this.lineData = [];
@@ -138,19 +175,22 @@ export default {
         .then(({ data }) => {
           if (data.success) {
             Toast.clear();
-            let lists = data.data
+            let lists = data.data;
             if (loadMore) {
-              this.lineData = this.lineData.concat(lists)
+              this.lineData = this.lineData.concat(lists);
             } else {
-              this.lineData = lists
+              this.lineData = lists;
             }
             if (!this.beforePullDown) {
-              this.beforePullDown = true
+              this.beforePullDown = true;
             }
-            if (this.lineData.length === data.page.total || this.lineData.length < 4) {
-              this.loadedAll = true
+            if (
+              this.lineData.length === data.page.total ||
+              this.lineData.length < 4
+            ) {
+              this.loadedAll = true;
             } else {
-              this.loadedAll = false
+              this.loadedAll = false;
             }
             // this.lineData = data.data;
           } else {
@@ -158,39 +198,69 @@ export default {
             this.loadedAll = true;
             Toast.fail(data.errorMsg);
           }
-        }).catch((err) => {
+        })
+        .catch(err => {
           Toast.clear();
           Toast.fail(err);
           this.loadedAll = true;
-        })
-        // .finally(() => {
-        //   this.$nextTick(() => {
-        //     document.querySelector('.el-table__body-wrapper').scrollTop = 0;
-        //     document.querySelector('.el-table__body-wrapper').scrollLeft = 0;
-        //   })
-        //   this.listLoading = false;
-        // });
+        });
     }
   }
-}
+};
 </script>
 <style lang="scss">
-.linelist{
+.linelist {
+  .add {
+    background: white;
+    padding-top: 8px;
+    margin-top: 8px;
+    text-align: center;
+    overflow: hidden;
+    &:after {
+      display: block;
+      content: "";
+      height: 10px;
+      width: 100%;
+      background: #f2f2f2;
+    }
+    p {
+      margin: 0px 0px 6px 0px;
+      color: #4cb0e9;
+      font-size: 14px;
+    }
+  }
+  padding-bottom: 60px;
+  box-sizing: border-box;
   overflow: hidden;
-  background-color: #e4e4e4;
+  background-color: #f2f2f2;
   height: 100vh;
-  .van-search{
+  .van-search {
     padding: 17px 20px;
   }
-  .van-tabs__line{
-    background-color: #5C9BDD;
-    width: 40px!important;
+  .van-tabs__line {
+    background-color: #5c9bdd;
+    width: 40px !important;
   }
   .van-tab--active {
-    color: #5C9BDD!important;
+    color: #5c9bdd !important;
   }
-  .listbox{
-    height: 100%
+  .listbox {
+    // height: 100vh;
+    .bottom_spance {
+      margin-bottom: 5px;
+    }
+    .bottom_spance:last-child {
+      margin-bottom: 0px;
+    }
+  }
+  .wrapper-child{
+    top: -5px;
+  }
+  .lineitem:last-child {
+    margin: 0;
+    .item_info {
+      border-bottom: none;
+    }
   }
 }
 </style>>

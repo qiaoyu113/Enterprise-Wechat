@@ -1,79 +1,131 @@
 <template>
-  <div class="linesearch">
-    <van-nav-bar
-      left-text="返回"
-      :title="tabtext"
-      left-arrow
-      @click-left="onClickLeft"
+  <div class="lineSearch">
+    <search
+      :form="listQuery"
+      :history-lists="historyLists"
+      @search="handleSearchClick"
+      @clear="handleClearClick"
     />
-    <van-search
-      v-model="value"
-      placeholder="请输入搜索关键词"
-    />
-    <div class="searchbox">
-      <div>京东</div>
-      <div>京东</div>
-      <div>京东</div>
-    </div>
-    <div>
-      <lineItem />
+    <ul v-if="lists.length > 0">
+      <li
+        v-for="(item,index) in lists"
+        :key="index"
+      >
+        <lineItem
+          class="lineitem"
+          :itemdata="item"
+        />
+      </li>
+    </ul>
+    <div
+      v-else
+      class="noData"
+    >
+      抱歉,未找到相关数据!
     </div>
   </div>
 </template>
+
 <script>
-import lineItem from './components/LineItem'
-import { Toast, NavBar, Icon, Search } from 'vant';
+import Search from './components/search';
+import lineItem from './components/LineItem';
+import { selectListAll } from '@/api/line';
+import { Toast } from 'vant';
 export default {
-  name: 'Linesearch',
   components: {
+    Search,
     lineItem,
-    [Toast.name]: Toast,
-    [NavBar.name]: NavBar,
-    [Icon.name]: Icon,
-    [Search.name]: Search
+    [Toast.name]: Toast
   },
   data() {
     return {
-      value: '',
-      tabtext: '搜索'
+      lists: [],
+      // listQuery: {
+      //   key: '',
+      //   page: 1,
+      //   limit: 9999
+      // },
+      listQuery: {
+        key: '',
+        selfState: 3, // 线路状态
+        state: '',
+        disableState: 0, // 停用状态
+        page: 1, // 当前页
+        limit: 25 // 每页大小
+      },
+      historyLists: []
     };
   },
+  mounted() {
+    let str = localStorage.getItem('historyKeyWord');
+    if (str) {
+      this.historyLists = str.split(',').filter(item => item);
+    }
+  },
   methods: {
-    onClickLeft() {
-      console.log(123)
-      this.$router.go(-1)
+    /**
+     * 根据关键字获取列表
+     */
+    async handleSearchClick() {
+      const toast = Toast.loading({
+        message: '加载中...',
+        forbidClick: true,
+        loadingType: 'spinner'
+      });
+      try {
+        let params = { ...this.listQuery };
+        delete params.key;
+        let { data: res } = await selectListAll(params);
+        toast.clear();
+        if (res.success) {
+          this.lists = res.data;
+          this.addKeyWordToHistory();
+        } else {
+          Toast.fail(res.errorMsg || res.msg);
+        }
+      } catch (err) {
+        toast.clear();
+        Toast.fail(err);
+      }
+    },
+    handleClearClick() {
+      this.lists = [];
+      this.listQuery.key = '';
+    },
+    /**
+     * 往历史记录添加关键字
+     */
+    addKeyWordToHistory() {
+      let index = this.historyLists.findIndex(
+        item => item === this.listQuery.key
+      );
+      if (index > -1) {
+        this.historyLists.splice(index, 1);
+      }
+      this.historyLists.unshift(this.listQuery.key);
+
+      if (this.historyLists.length > 5) {
+        this.historyLists = this.historyLists.slice(0, 5);
+      }
+      localStorage.setItem('historyKeyWord', this.historyLists.join(','));
     }
   }
 };
 </script>
-<style lang="scss">
-.linesearch {
-  background-color: #e4e4e4;
-  min-height: 100vh;
-  .van-nav-bar .van-icon,
-  .van-nav-bar__text,
-  .van-tab--active {
-    color: #333333 !important;
+
+<style lang='scss' scoped>
+.lineSearch {
+  .lineitem:last-child {
+    margin: 0;
+    .item_info {
+      border-bottom: none;
+    }
   }
-  .van-nav-bar__title {
-    font-weight: bold;
-  }
-  .van-nav-bar__right {
-    top: 8px;
-    font-size: 12px;
-  }
-  .searchbox > div {
-    background-color: white;
-    height: 30px;
-    line-height: 30px;
-    padding: 0 10px;
-    border: 1px solid black;
-  }
-  .searchbox > div:first-child {
-    border-bottom: none;
-  }
-  .searchbox > div:last-child {
-    border-top: none;
+  .noData {
+    margin: 50px 0px;
+    color: #333333;
+    font-size: 14px;
+    text-align: center;
   }
 }
-</style>>
+</style>

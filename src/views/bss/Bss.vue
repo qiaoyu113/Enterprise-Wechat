@@ -23,7 +23,7 @@ export default {
         {
           icon: '',
           title: '线索管理',
-          url: '/bss/add-line'
+          url: ''
         },
         {
           icon: '',
@@ -33,7 +33,7 @@ export default {
         {
           icon: '',
           title: '线路管理',
-          url: '/linelist'
+          url: '/bss/lineList'
         },
         {
           icon: '',

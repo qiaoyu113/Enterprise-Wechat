@@ -6,141 +6,105 @@
       left-arrow
       @click-left="onClickLeft"
     /> -->
-    <lineItem v-if="six" :itemdata="itemdata" :showfooter="false" />
-    <div class="toastquesition">
-      <div class="bordertoast">
-        <span>
-          <span>
-            匹配司机数量
-          </span>
-          <span>5个</span>
-        </span>
-        <van-icon
-          name="question"
-          size="20"
-          @click="showToast"
+    <div class="list-wrap">
+      <vo-pages
+        :data="dirverInfo"
+        :loaded-all="loadedAll"
+        @pullingUp="pullingUp"
+        @pullingDown="pullingDown"
+      >
+        <lineItem
+          :itemdata="itemdata"
+          :showfooter="false"
         />
-      </div>
-    </div>
-    <div class="matchlist">
-      <div class="matchbox">
-        <div class="matchnum">
-          <div class="matchtitle">
-            <span>张司机</span>
-            <span>/</span>
-            <span>共享司机</span>
-          </div>
-          <div class="numbox">
-            <span class="PPtext">
-              匹配度:
+        <div v-if="dirverInfo.length !== 0" class="toastquesition">
+          <div class="toastquesition_left">
+            <van-icon
+              name="friends-o"
+              size="20"
+              color="#5C9BDD"
+            />
+            <span class="drivernum">
+              匹配司机数量:
             </span>
-            <span class="num">75%</span>
+            <span v-text="total+'个'"></span>
+          </div>
+          <van-icon
+            name="question"
+            size="20"
+            color="#BCCCDE"
+            @click="showToast"
+          />
+        </div>
+        <div class="matchlist">
+          <div
+            v-for="(item, index) in dirverInfo"
+            :key="index"
+            class="listbox"
+          >
+            <dirverItem :itemdata="item" />
           </div>
         </div>
-        <div class="matchinfo">
-          <div class="matchtitle">
-            司机信息...
-          </div>
-          <div class="matchtype">
-            <div class="type_match">
-              <div class="match_item">
-                <span>所需车型</span>
-                <van-icon
-                  name="checked"
-                  size="20"
-                  color="#1d8a09"
-                />
-              </div>
-              <div class="match_item">
-                <span>货物类型</span>
-                <van-icon
-                  name="checked"
-                  size="20"
-                  color="#1d8a09"
-                />
-              </div>
-              <div class="match_item">
-                <span>到仓区域</span>
-                <van-icon
-                  name="checked"
-                  size="20"
-                  color="#1d8a09"
-                />
-              </div>
-            </div>
-            <div class="type_match">
-              <div class="match_item">
-                <span>配送区域</span>
-                <van-icon
-                  name="warning"
-                  size="20"
-                  color="#d81e06"
-                />
-              </div>
-              <div class="match_item">
-                <span>装卸难度</span>
-                <van-icon
-                  name="warning"
-                  size="20"
-                  color="#d81e06"
-                />
-              </div>
-              <div class="match_item">
-                <span>出车时段</span>
-                <van-icon
-                  name="warning"
-                  size="20"
-                  color="#d81e06"
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+      </vo-pages>
     </div>
   </div>
 </template>
 <script>
 import lineItem from './components/LineItem';
-import { getOutside } from '@/api/line'
-import { Toast, NavBar, Icon, Dialog } from 'vant';
+import dirverItem from './components/dirverItem';
+import { getOutside } from '@/api/line';
+import VoPages from 'vo-pages';
+import 'vo-pages/lib/vo-pages.css'
+import { Toast, NavBar, Icon, Dialog, Button } from 'vant';
 export default {
   name: 'Outside',
   components: {
+    VoPages,
     lineItem,
+    dirverItem,
     [Toast.name]: Toast,
     [NavBar.name]: NavBar,
     [Icon.name]: Icon,
-    [Dialog.name]: Dialog
+    [Dialog.name]: Dialog,
+    [Button.name]: Button
   },
   data() {
     return {
-      six: true,
+      beforePullDown: false,
+      loadedAll: false,
+      total: '',
       itemdata: {},
+      dirverInfo: [],
       driverQuery: {
-        joinMgr: '',
-        query: '',
         lineId: '',
         page: 1,
-        limit: 100,
+        limit: 25,
         carType: '全部'
       }
     };
   },
-  activated() {
-    this.itemdata = this.$route.params.item;
-    this.six = true
+  created() {
+    let str = this.$route.query.item;
+    this.itemdata = JSON.parse(str);
+    this.driverQuery.lineId = this.itemdata.lineId
   },
   mounted() {
-    console.log(this.$route.query.item, 'outside')
-    this.itemdata = this.$route.params.item;
-    // this.six = true
+    this.getOutside();
   },
   beforeRouteLeave(to, from, next) {
-    this.$destroy(true)
+    this.$destroy(true);
     next(true);
   },
   methods: {
+    pullingDown() {
+      this.beforePullDown = false;
+      this.driverQuery.page = 1;
+      this.getOutside(false);
+    },
+    pullingUp() {
+      this.driverQuery.page += 1;
+      this.getOutside();
+    },
     showToast() {
       Dialog.alert({
         title: '匹配机制',
@@ -152,18 +116,71 @@ export default {
     onClickLeft() {
       this.$router.push('/bss/index');
     },
-    getOutside() {
-      getOutside(this).then()
+    async getOutside(loadMore = true) {
+      Toast.loading({
+        duration: 0, // 持续展示 toast
+        forbidClick: true, // 禁用背景点击
+        loadingType: 'spinner',
+        message: '加载中...'
+      });
+      try {
+        let { data: res } = await getOutside(this.driverQuery);
+        if (res.success) {
+          Toast.clear();
+          let info = res.data;
+          let total = res.page.total;
+          this.total = total;
+          if (loadMore) {
+            this.dirverInfo = this.dirverInfo.concat(info);
+          } else {
+            this.dirverInfo = info;
+          }
+          if (!this.beforePullDown) {
+            this.beforePullDown = true;
+          }
+          if (
+            this.dirverInfo.length === this.total ||
+            this.dirverInfo.length < 4
+          ) {
+            this.loadedAll = true;
+          } else {
+            this.loadedAll = false;
+          }
+        } else {
+          Toast.fail(res.errorMsg);
+        }
+      } catch (err) {
+        Toast.fail(err.errorMsg);
+      }
     }
   }
 };
 </script>
 <style lang="scss">
 .outside {
+    padding-bottom: 60px;
+  box-sizing: border-box;
+  .list-wrap {
+    height: 100%;
+  }
   .lineitem {
     margin: 0;
   }
-  background-color: #e4e4e4;
+  .lineitem {
+    margin: 0;
+    .item_info {
+      border-bottom: none;
+    }
+  }
+  .matchlist {
+    .listbox {
+      margin-bottom: 10px;
+    }
+    .listbox:last-child {
+      margin: 0;
+    }
+  }
+  background-color: #eef0f2;
   min-height: 100vh;
   // .van-nav-bar .van-icon,
   // .van-nav-bar__text,
@@ -178,59 +195,21 @@ export default {
   //   font-size: 12px;
   // }
   .toastquesition {
-    padding: 0 10px;
-    box-sizing: border-box;
-    height: 25px;
-    .bordertoast {
-      height: 100%;
-      line-height: 25px;
-      font-weight: bold;
-      border-top: 1px solid black;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-  }
-  .matchbox {
-    display: flex;
+    margin-top: 10px;
+    padding: 10px 20px;
     background-color: white;
-    padding: 10px;
     box-sizing: border-box;
-    .matchtitle {
-      height: 40px;
-    }
-    .matchnum {
-      width: 120px;
-      .numbox {
-        display: flex;
-        justify-content: space-around;
-        align-items: center;
-        .PPtext {
-          -webkit-writing-mode: vertical-rl;
-          writing-mode: vertical-rl;
-          letter-spacing: 2px;
-        }
-        .num {
-          font-weight: bold;
-        }
-      }
-    }
-    .matchinfo {
-      flex: 1;
-      padding-left: 20px;
-      box-sizing: border-box;
-    }
-    .matchtype {
-      .type_match {
-        display: flex;
-        align-items: center;
-        justify-content: space-around;
-        .match_item {
-          display: flex;
-          flex-direction: column;
-          justify-content: center;
-          align-items: center;
-        }
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    .toastquesition_left {
+      display: flex;
+      align-items: center;
+      font-size: 15px;
+      color: #595f66;
+      font-weight: bold;
+      .drivernum {
+        margin: 0 10px;
       }
     }
   }
