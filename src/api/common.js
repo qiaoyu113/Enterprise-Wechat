@@ -51,3 +51,11 @@ export function productIntroduce(data) {
     params: data
   })
 }
+// 通过token 获取用户信息
+export function getUserInfo(data) {
+  return request({
+    url: '/api/base/user/bss/getUserInfoByToken',
+    method: 'get',
+    params: data
+  })
+}

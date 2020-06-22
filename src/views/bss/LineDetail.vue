@@ -1,7 +1,7 @@
 <template>
   <div class="line-detail">
     <div class="detail-top">
-      线路状态：启用（待审核）
+      线路状态：{{ details.selfStateName }}（{{ details.stateName }}）
     </div>
     <div class="detail-content">
       <van-row type="flex" class="detail-row">
@@ -144,8 +144,12 @@
       align="center"
     >
       <van-col>复制</van-col>
-      <van-col>编辑</van-col>
-      <van-col>审核</van-col>
+      <van-col v-if="(details.selfState === 1 || details.selfState === 2) && (details.stateName === '待审核' || details.stateName === '审核未通过')">
+        编辑
+      </van-col>
+      <van-col v-if="isAudit">
+        审核
+      </van-col>
     </van-row>
     <van-overlay :show="loading" z-index="99">
       <div class="wrapper" @click.stop>
@@ -159,7 +163,8 @@
 
 <script>
 import { Col, Row, Loading, Toast, Overlay } from 'vant';
-import { getLineDetail } from '@/api/carline'
+import { getLineDetail } from '@/api/carline';
+import { getUserInfo } from '@/api/common'
 export default {
   name: 'LineDetail',
   components: {
@@ -180,11 +185,21 @@ export default {
       loading: false,
       dateList: ['星期一', '星期二', '星期三', '星期四', '星期五', '星期六', '星期日'],
       deliveryName: '',
-      details: {}
+      details: {},
+      userInfo: {}
     }
   },
-  mounted() {
+  computed: {
+    isAudit() {
+      const { stateName } = this.details;
+      const roleNames = this.userInfo.roleNames;
+      return stateName === '待审核' && roleNames && roleNames.includes('wutongwaixianbgl');
+    }
+  },
+  async mounted() {
     this.lineId = this.$route.query.id;
+    const { data: { data }} = await getUserInfo();
+    this.userInfo = data;
     this.getDetail();
   },
   methods: {
@@ -258,12 +273,12 @@ export default {
       position: relative;
       flex: 1;
       text-align: center;
-      &:nth-of-type(n+1){
+      &:nth-of-type(n+2){
         // flex: 1;
         &::before{
           content:"";
           position: absolute;
-          right: 0;
+          left: 0;
           top: 50%;
           height: 30px;
           margin-top: -15px;
