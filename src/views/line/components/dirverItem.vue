@@ -1,13 +1,13 @@
 <template>
   <div class="driverItem">
-    <div v-if="Object.keys(driver).length !== 0" class="matchbox">
+    <div v-if="Object.keys(itemdata).length !== 0" class="matchbox">
       <div class="matchnum">
         <div class="matchdirver">
-          <span v-text="driver.title"></span>
+          <span v-text="itemdata.title"></span>
         </div>
         <div class="numbox">
           <div class="PPtext">
-            <span class="num">{{ driver.match.score }}%</span>
+            <span class="num">{{ itemdata.match.score }}%</span>
             <span class="numtext">匹配度</span>
           </div>
           <van-button
@@ -20,35 +20,35 @@
         </div>
       </div>
       <div class="matchinfo">
-        <div v-if="driver.mgr !== null" class="matchtitle">
+        <div v-if="itemdata.mgr !== null" class="matchtitle">
           <span>加盟经理:</span>
-          <span>{{ driver.mgr }}</span>
-          <!-- <span>{{ driver.mgr }}</span> -->
+          <span>{{ itemdata.mgr }}</span>
+          <!-- <span>{{ itemdata.mgr }}</span> -->
         </div>
         <div class="matchtype">
           <div class="type_match">
             <div class="match_item">
               <span>所需车型</span>
               <van-icon
-                :name="driver.match.carType ? 'checked' : 'warning'"
+                :name="itemdata.match.carType ? 'checked' : 'warning'"
                 size="21"
-                :color="driver.match.carType ? '#3ACB8D' : '#DA525E'"
+                :color="itemdata.match.carType ? '#3ACB8D' : '#DA525E'"
               />
             </div>
             <div class="match_item">
               <span>货物类型</span>
               <van-icon
-                :name="driver.match.proType ? 'checked' : 'warning'"
+                :name="itemdata.match.proType ? 'checked' : 'warning'"
                 size="21"
-                :color="driver.match.proType ? '#3ACB8D' : '#DA525E'"
+                :color="itemdata.match.proType ? '#3ACB8D' : '#DA525E'"
               />
             </div>
             <div class="match_item">
               <span>到仓区域</span>
               <van-icon
-                :name="driver.match.arriveArea ? 'checked' : 'warning'"
+                :name="itemdata.match.arriveArea ? 'checked' : 'warning'"
                 size="21"
-                :color="driver.match.arriveArea ? '#3ACB8D' : '#DA525E'"
+                :color="itemdata.match.arriveArea ? '#3ACB8D' : '#DA525E'"
               />
             </div>
           </div>
@@ -56,25 +56,25 @@
             <div class="match_item">
               <span>配送区域</span>
               <van-icon
-                :name="driver.match.disArea ? 'checked' : 'warning'"
+                :name="itemdata.match.disArea ? 'checked' : 'warning'"
                 size="21"
-                :color="driver.match.disArea ? '#3ACB8D' : '#DA525E'"
+                :color="itemdata.match.disArea ? '#3ACB8D' : '#DA525E'"
               />
             </div>
             <div class="match_item">
               <span>装卸难度</span>
               <van-icon
-                :name="driver.match.handleDiff ? 'checked' : 'warning'"
+                :name="itemdata.match.handleDiff ? 'checked' : 'warning'"
                 size="21"
-                :color="driver.match.handleDiff ? '#3ACB8D' : '#DA525E'"
+                :color="itemdata.match.handleDiff ? '#3ACB8D' : '#DA525E'"
               />
             </div>
             <div class="match_item">
               <span>出车时段</span>
               <van-icon
-                :name="driver.match.driveTime ? 'checked' : 'warning'"
+                :name="itemdata.match.driveTime ? 'checked' : 'warning'"
                 size="21"
-                :color="driver.match.driveTime ? '#3ACB8D' : '#DA525E'"
+                :color="itemdata.match.driveTime ? '#3ACB8D' : '#DA525E'"
               />
             </div>
           </div>
@@ -98,14 +98,6 @@ export default {
       type: Object,
       default: () => {}
     }
-  },
-  data() {
-    return {
-      driver: {}
-    }
-  },
-  mounted() {
-    this.driver = this.itemdata
   },
   methods: {
     pushDriver() {

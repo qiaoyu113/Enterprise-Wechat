@@ -84,13 +84,11 @@ export default {
     };
   },
   created() {
-    let str = this.$route.query.item;
+    let str = this.$route.query.itemdata;
     this.itemdata = JSON.parse(str);
     this.driverQuery.lineId = this.itemdata.lineId
   },
-  mounted() {
-    this.getOutside();
-  },
+
   activated() {
     this.getOutside();
   },

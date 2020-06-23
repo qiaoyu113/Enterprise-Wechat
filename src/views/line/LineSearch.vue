@@ -6,8 +6,8 @@
       @clear="handleClearClick"
       @getVal="search"
     />
-    <div v-if="lists.length > 0" ref="list" class="list">
-      <ul>
+    <div ref="list" class="list">
+      <ul v-if="lists.length > 0">
         <li
           v-for="(item,index) in lists"
           :key="index"
@@ -20,11 +20,11 @@
           />
         </li>
       </ul>
-    </div>
-    <div v-else class="noData">
-      <img src="../../assets/search.png">
-      <div class="text">
-        抱歉,未找到相关数据!
+      <div v-else class="noData">
+        <img src="../../assets/search.png">
+        <div class="text">
+          抱歉,未找到相关数据!
+        </div>
       </div>
     </div>
   </div>
