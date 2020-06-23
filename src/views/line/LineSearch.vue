@@ -104,13 +104,14 @@ export default {
         if (res.success) {
           toast.clear();
           this.lists = res.data
-          this.addKeyWordToHistory();
         } else {
+          console.log(1)
           Toast.fail(res.errorMsg || res.msg);
         }
       } catch (err) {
-        Toast.fail(err);
+        console.log(err)
         toast.clear();
+        Toast.fail(err);
       }
     },
     handleClearClick() {
