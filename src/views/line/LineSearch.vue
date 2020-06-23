@@ -3,20 +3,24 @@
     <search
       :form="listQuery"
       :history-lists="historyLists"
-      @search="handleSearchClick"
       @clear="handleClearClick"
+      @getVal="search"
     />
-    <ul v-if="lists.length > 0">
-      <li
-        v-for="(item,index) in lists"
-        :key="index"
-      >
-        <lineItem
-          class="lineitem"
-          :itemdata="item"
-        />
-      </li>
-    </ul>
+    <div v-if="lists.length > 0" ref="list" class="list">
+      <ul>
+        <li
+          v-for="(item,index) in lists"
+          :key="index"
+          class="bottom_spance"
+        >
+          <lineItem
+            class="lineitem"
+            :itemdata="item"
+            @clickItem="handleItemClick(item)"
+          />
+        </li>
+      </ul>
+    </div>
     <div v-else class="noData">
       <img src="../../assets/search.png">
       <div class="text">
@@ -29,7 +33,8 @@
 <script>
 import Search from './components/search';
 import lineItem from './components/LineItem';
-import { selectListAll } from '@/api/line';
+import { getUserInfo } from '@/api/common';
+import { searchList } from '@/api/line';
 import { Toast } from 'vant';
 export default {
   components: {
@@ -39,45 +44,72 @@ export default {
   },
   data() {
     return {
+      scroll: '',
       lists: [],
       listQuery: {
         key: '',
         page: 1,
-        limit: 9999
+        limit: 9999,
+        cityCode: []
       },
       historyLists: []
     };
   },
-  mounted() {
-    let str = localStorage.getItem('historyKeyWord');
+  activated() {
+    this.getUserCity();
+    let str = localStorage.getItem('historyKeyWordLine');
     if (str) {
-      this.historyLists = str.split(',').filter(item => item);
+      this.historyLists = JSON.parse(str)
+    }
+  },
+  beforeRouteLeave(to, from, next) {
+    this.listQuery.key = ''
+    this.lists = []
+    next()
+  },
+  mounted() {
+    this.getUserCity();
+    let str = localStorage.getItem('historyKeyWordLine');
+    if (str) {
+      this.historyLists = JSON.parse(str)
     }
   },
   methods: {
-    /**
-     * 根据关键字获取列表
-     */
-    async handleSearchClick() {
+    async getUserCity() {
+      let { data: res, data: { data: { onlineCityList }}} = await getUserInfo();
+      try {
+        if (res.success) {
+          onlineCityList.map(ele => this.listQuery.cityCode.push(+ele.value))
+        } else {
+          Toast.fail(res.errorMsg || res.msg);
+        }
+      } catch (err) {
+        Toast.fail(err);
+      }
+    },
+    search(val) {
+      this.listQuery.key = val.keys;
+      this.lists = [];
+      this.getUser()
+    },
+    async getUser() {
       const toast = Toast.loading({
         message: '加载中...',
         forbidClick: true,
         loadingType: 'spinner'
       });
       try {
-        let params = { ...this.listQuery };
-        delete params.key;
-        let { data: res } = await selectListAll(params);
-        toast.clear();
+        let { data: res } = await searchList(this.listQuery)
         if (res.success) {
-          this.lists = res.data;
+          toast.clear();
+          this.lists = res.data
           this.addKeyWordToHistory();
         } else {
           Toast.fail(res.errorMsg || res.msg);
         }
       } catch (err) {
-        toast.clear();
         Toast.fail(err);
+        toast.clear();
       }
     },
     handleClearClick() {
@@ -87,19 +119,20 @@ export default {
     /**
      * 往历史记录添加关键字
      */
-    addKeyWordToHistory() {
-      let index = this.historyLists.findIndex(
-        item => item === this.listQuery.key
-      );
+    handleItemClick(obj) {
+      let index = this.historyLists.findIndex(item => item.lineId === obj.lineId)
       if (index > -1) {
-        this.historyLists.splice(index, 1);
+        this.historyLists.splice(index, 1)
       }
-      this.historyLists.unshift(this.listQuery.key);
+      this.historyLists.unshift({
+        lineId: obj.lineId,
+        keys: this.listQuery.key
+      })
 
       if (this.historyLists.length > 5) {
-        this.historyLists = this.historyLists.slice(0, 5);
+        this.historyLists = this.historyLists.slice(0, 5)
       }
-      localStorage.setItem('historyKeyWord', this.historyLists.join(','));
+      localStorage.setItem('historyKeyWordLine', JSON.stringify(this.historyLists))
     }
   }
 };
@@ -107,14 +140,23 @@ export default {
 
 <style lang='scss' scoped>
 .lineSearch {
-  .lineitem:last-child {
-    margin: 0;
-    .item_info {
-      border-bottom: none;
-    }
+  overflow: hidden;
+  .list {
+    height:calc(100vh - 54px);
+    overflow-y: auto;
+  }
+   background-color: #f2f2f2;
+    .bottom_spance {
+    margin-bottom: 5px;
+  }
+    .bottom_spance:last-child {
+    margin-bottom: 5px;
   }
   .noData {
-    margin-top:41.5px;
+    height:calc(100vh - 54px);
+    padding-top: 41.5px;
+    box-sizing: border-box;
+    background-color: white;
     text-align: center;
     .text {
       margin-top: 15px;

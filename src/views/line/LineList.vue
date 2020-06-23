@@ -107,6 +107,10 @@ export default {
   created() {
     this.getTitle();
   },
+  activated() {
+    this.listQuery.selfState = 3;
+    this.getList();
+  },
   mounted() {
     this.listQuery.selfState = 3;
     this.getList();
@@ -118,7 +122,7 @@ export default {
   methods: {
     async getTitle() {
       try {
-        let { data: tabarr } = await selectListAll(this.listQuery);
+        let { data: tabarr } = await selectListAll({ page: 1, limit: 25 })
         if (tabarr.success) {
           let keyArr = Object.keys(tabarr.title);
           keyArr.forEach(ele => {
@@ -149,7 +153,6 @@ export default {
       this.getList(false);
     },
     pullingUp() {
-      console.log('tag', 'pullingUp')
       this.listQuery.page += 1;
       this.getList();
     },
@@ -197,8 +200,6 @@ export default {
             if (!this.beforePullDown) {
               this.beforePullDown = true;
             }
-            console.log('length', this.lineData.length, this.tabarr[this.active].num)
-
             if (
               this.lineData.length >= this.tabarr[this.active].num ||
               this.lineData.length < 4
@@ -254,6 +255,9 @@ export default {
   .van-search {
     padding: 17px 20px;
   }
+  .van-tab {
+    padding: 0px;
+  }
   .van-tabs__line {
     background-color: #5c9bdd;
     width: 40px !important;
@@ -268,21 +272,15 @@ export default {
   .listbox {
     box-sizing: border-box;
     height: auto;
-    .bottom_spance {
-      margin-bottom: 5px;
-    }
-    .bottom_spance:last-child {
-      margin-bottom: 0px;
-    }
   }
   .wrapper-child {
     top: -5px;
   }
-  .lineitem:last-child {
-    margin: 0;
-    .item_info {
-      border-bottom: none;
-    }
+  .bottom_spance {
+    margin-bottom: 5px;
+  }
+    .bottom_spance:last-child {
+    margin-bottom: 5px;
   }
 }
 </style>>

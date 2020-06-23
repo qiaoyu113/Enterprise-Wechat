@@ -13,19 +13,27 @@
       >
       </van-search>
     </van-sticky>
-
-    <dl v-show="isShow" class="history">
-      <dt>历史搜索</dt>
-      <dd v-for="item in historyLists" :key="item" @click="handleItemClick(item)">
-        {{ item }}
-      </dd>
-    </dl>
+    <div v-if="historyLists.length> 0">
+      <dl
+        v-show="isShow"
+        class="history"
+      >
+        <dt>历史搜索</dt>
+        <dd
+          v-for="item in historyLists"
+          :key="item.lineId"
+          @click="handleItemClick(item)"
+        >
+          {{ item.keys }}
+        </dd>
+      </dl>
+    </div>
   </div>
 </template>
 
 <script>
 import { Search, Sticky } from 'vant';
-import { debounce } from '@/utils/index'
+import { debounce } from '@/utils/index';
 export default {
   components: {
     [Search.name]: Search,
@@ -44,7 +52,13 @@ export default {
   data() {
     return {
       isShow: false
-    }
+    };
+  },
+  mounted() {
+    this.$parent.$refs.list.addEventListener('scroll', this.onBlur, false);
+  },
+  beforeDestroy() {
+    this.$parent.$refs.list.removeEventListener('scroll', this.onBlur, false);
   },
 
   methods: {
@@ -53,31 +67,30 @@ export default {
      */
     onSearch: debounce(function() {
       if (!this.form.key) {
-        this.$emit('clear')
-        return false
+        this.$emit('clear');
+        return false;
       }
-      this.$emit('search')
-    }, 200),
+      this.$emit('getVal', { keys: this.form.key });
+    }, 500),
+
     /**
      * 清除
      */
     onClear() {
-      this.form.key = ''
-      this.$emit('clear')
+      this.form.key = '';
+      this.$emit('clear');
     },
     onFocus() {
-      this.isShow = true
+      this.isShow = true;
     },
     onBlur() {
-      this.isShow = false
+      this.isShow = false;
     },
     handleItemClick(item) {
-      this.form.key = item
-      this.onSearch()
+      this.$emit('getVal', item);
     }
   }
-}
-
+};
 </script>
 
 <style lang='scss' scoped>
@@ -90,41 +103,38 @@ export default {
     top: 44px;
     width: 351px;
     background: #ffffff;
-    box-shadow: 1px 2px 4px 0px #E6E5E5;
+    box-shadow: 1px 2px 4px 0px #e6e5e5;
     z-index: 10;
     &:before {
       display: block;
-      content:'';
-      border-top:1px solid #C2DEF5;
+      content: "";
+      border-top: 1px solid #c2def5;
     }
     dt {
       margin: 10px;
-      font-size:14px;
-      color:#686F75;
+      font-size: 14px;
+      color: #686f75;
       font-weight: bold;
     }
     dd {
       margin-left: 0px;
       padding: 0px 20px;
       width: calc(100% - 40px);
-      text-overflow:ellipsis;
+      text-overflow: ellipsis;
       overflow: hidden;
       white-space: nowrap;
-      height:30px;
+      height: 30px;
       line-height: 30px;
-      color:#94999D;
-      font-size:14px;
-
+      color: #94999d;
+      font-size: 14px;
     }
   }
 }
-
 </style>
 
 <style scoped>
-  .searchContainer >>> .van-search__content {
-    background: #ffffff;
-  }
-
+.searchContainer >>> .van-search__content {
+  background: #ffffff;
+}
 </style>
 

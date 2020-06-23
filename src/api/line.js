@@ -91,6 +91,16 @@ export function selectListAll(data) {
   })
 }
 
+/* 全部线路列表(new) */
+export function searchList(data) {
+  let t = +new Date();
+  return request({
+    url: `/api/bss/v1/bss/line/task/fuzzy/checkNames?t=${t}`,
+    method: 'post',
+    data
+  })
+}
+
 // 外线主导
 export function getOutside(data) {
   return request({

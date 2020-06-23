@@ -87,9 +87,11 @@ export default {
     let str = this.$route.query.item;
     this.itemdata = JSON.parse(str);
     this.driverQuery.lineId = this.itemdata.lineId
-    this.driverQuery.lineId = '202006091007'
   },
   mounted() {
+    this.getOutside();
+  },
+  activated() {
     this.getOutside();
   },
   beforeRouteLeave(to, from, next) {
