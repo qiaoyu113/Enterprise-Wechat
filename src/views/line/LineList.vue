@@ -173,7 +173,6 @@ export default {
       this.getList();
     },
     changelist(name) {
-      this.lineData = [];
       this.listQuery = {
         page: 1, // 当前页
         limit: 25, // 每页大小
@@ -194,8 +193,7 @@ export default {
           this.listQuery.soldSate = 1;
           break;
       }
-      this.lineData = [];
-      this.getList();
+      this.getList(false);
     },
     async getList(loadMore = true) {
       Toast.loading({
@@ -223,10 +221,6 @@ export default {
             ) {
               this.loadedAll = true;
             }
-            // else {
-            //   this.loadedAll = false;
-            // }
-            // this.lineData = data.data;
           } else {
             Toast.clear();
             this.loadedAll = true;

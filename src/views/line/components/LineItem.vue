@@ -1,80 +1,80 @@
 <template>
   <div class="lineitem">
-    <img v-if="item.soldState === 1" class="sale" src="../../../assets/saleover.png" alt="售罄">
+    <img v-if="itemdata.soldState === 1" class="sale" src="../../../assets/saleover.png" alt="售罄">
     <div class="itembox">
-      <div class="item_title" v-text="item.busiTypeName"></div>
+      <div class="item_title" v-text="itemdata.busiTypeName"></div>
       <div class="item_info">
         <div>
           <span>线路名称:</span>
-          <span>{{ item.lineName | DataIsNull }}</span>
+          <span>{{ itemdata.lineName | DataIsNull }}</span>
         </div>
         <div>
           <span>仓库位置:</span>
-          <span>{{ item.warehouseProvinceName | isNull }}{{ item.warehouseCityName | isNull }}{{ item.warehouseCountyName | isNull }}{{ item.warehouseTownName | isNull }}{{ item.warehouseDistrict | isNull }}</span>
+          <span>{{ itemdata.warehouseProvinceName | isNull }}{{ itemdata.warehouseCityName | isNull }}{{ itemdata.warehouseCountyName | isNull }}{{ itemdata.warehouseTownName | isNull }}{{ itemdata.warehouseDistrict | isNull }}</span>
         </div>
         <div>
           <span>配送区域:</span>
-          <span>{{ item.provinceAreaName }}
-            {{ item.cityAreaName }}
-            {{ item.countyAreaName }}
-            {{ item.distance }}(公里)
+          <span>{{ itemdata.provinceAreaName }}
+            {{ itemdata.cityAreaName }}
+            {{ itemdata.countyAreaName }}
+            {{ itemdata.distance }}(公里)
           </span>
         </div>
         <div>
           <span>到仓时间:</span>
-          <span>{{ item.workingTimeStart | DataIsNull }}</span>
+          <span>{{ itemdata.workingTimeStart | DataIsNull }}</span>
         </div>
         <div>
           <span>车型:</span>
-          <span>{{ item.carTypeName | DataIsNull }}</span>
+          <span>{{ itemdata.carTypeName | DataIsNull }}</span>
         </div>
         <div>
           <span>用车数量:</span>
-          <span>{{ item.deployNum }}/辆</span>
+          <span>{{ itemdata.deployNum }}/辆</span>
         </div>
         <div>
           <span>已上车:</span>
-          <span>{{ item.publishedBidsNum }}/辆</span>
+          <span>{{ itemdata.publishedBidsNum }}/辆</span>
         </div>
       </div>
       <div class="item_title">
         <span>线路状态:</span>
-        <span>{{ item.selfState === 0 ? '失效' : item.selfStateName }}</span>
-        <span class="statename">({{ item.lineStateName }})</span>
+        <span>{{ itemdata.selfState === 0 ? '失效' : itemdata.selfStateName }}</span>
+        <span class="statename">({{ itemdata.lineStateName }})</span>
       </div>
       <div class="item_info">
         <div>
           <span>货物类型:</span>
-          <span>{{ item.cargoType | DataIsNull }}</span>
+          <span>{{ itemdata.cargoType | DataIsNull }}</span>
         </div>
         <div>
           <span>是否搬运:</span>
-          <span>{{ item.carry === 1 ? '是' : '否' }}</span>
+          <span>{{ itemdata.carry === 1 ? '是' : '否' }}</span>
         </div>
         <div>
           <span>单趟运费:</span>
-          <span>{{ item.incomeSettlementMethod === 1 ? item.preLowestQuotations : item.everyTripGuaranteed }}/趟</span>
+          <span>{{ itemdata.incomeSettlementMethod === 1 ? itemdata.preLowestQuotations : itemdata.everyTripGuaranteed }}/趟</span>
         </div>
         <div>
           <span>项目收入:</span>
-          <span>{{ item.incomeSettlementMethod === 1 ? item.shipperOffer : item.preLowestQuotations }}/月</span>
+          <span>{{ itemdata.incomeSettlementMethod === 1 ? itemdata.shipperOffer : itemdata.preLowestQuotations }}/月</span>
         </div>
         <div>
           <span>上岗时间:</span>
-          <span>{{ item.createDate| Timestamp }}</span>
+          <span>{{ itemdata.createDate| Timestamp }}</span>
           <span>~</span>
-          <span>{{ item.waitDirveValidity| Timestamp }}</span>
+          <span>{{ itemdata.waitDirveValidity| Timestamp }}</span>
         </div>
         <div>
           <span>创建时间:</span>
-          <span>{{ item.createDate| Timestamp }}</span>
+          <span>{{ itemdata.createDate| Timestamp }}</span>
         </div>
       </div>
       <div v-if="show" class="item_footer">
-        <van-button :disabled="item.soldState !== 1 || (item.state !== 2 && item.selfState !== 1)" size="small" color="#5C9BDD" round type="info" @click="goRouter(0)">
+        <van-button :disabled="itemdata.soldState !== 1 || (itemdata.state !== 2 && itemdata.selfState !== 1)" size="small" color="#5C9BDD" round type="info" @click="goRouter(0)">
           批量推送
         </van-button>
-        <van-button :disabled="item.state !== 2 && item.selfState !== 1" size="small" color="#5C9BDD" round type="info" @click="goRouter(1)">
+        <van-button :disabled="itemdata.state !== 2 && itemdata.selfState !== 1" size="small" color="#5C9BDD" round type="info" @click="goRouter(1)">
           匹配撮合
         </van-button>
         <van-button size="small" plain hairline round type="info" @click="goRouter(2)">
@@ -109,12 +109,10 @@ export default {
   },
   data() {
     return {
-      item: {},
       show: true
     };
   },
   mounted() {
-    this.item = this.itemdata;
     this.show = this.showfooter;
   },
   beforeRouteLeave(to, from, next) {
@@ -130,9 +128,9 @@ export default {
             name: 'linedetailbatch',
             query: {
               backBtn: true,
-              id: this.item.lineId,
-              timeDiff: this.item.timeDiff,
-              monthlyTransaction: this.item.monthlyTransaction
+              id: this.itemdata.lineId,
+              timeDiff: this.itemdata.timeDiff,
+              monthlyTransaction: this.itemdata.monthlyTransaction
             }
           })
           break;
@@ -140,7 +138,7 @@ export default {
           this.$router.push({
             name: 'outSide',
             query: {
-              item: JSON.stringify(this.item)
+              itemdata: JSON.stringify(this.itemdata)
             }
           })
           break;
@@ -148,7 +146,7 @@ export default {
           this.$router.push({
             name: 'BssLineDetail',
             query: {
-              id: this.item.lineId
+              id: this.itemdata.lineId
             }
           })
           break;
