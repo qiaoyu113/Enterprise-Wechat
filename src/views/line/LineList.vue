@@ -45,6 +45,7 @@
         </template>
       </van-tab>
     </van-tabs>
+
     <section>
       <vo-pages
         :data="lineData"
@@ -72,6 +73,7 @@
 import VoPages from 'vo-pages';
 import 'vo-pages/lib/vo-pages.css';
 import lineItem from './components/LineItem';
+import { getUserInfo } from '@/api/common';
 import { selectListAll } from '@/api/line.js';
 import { Toast, NavBar, Icon, Search, Tab, Tabs } from 'vant';
 export default {
@@ -98,31 +100,45 @@ export default {
         { name: '售罄线路', num: 0, type: 'isSoldNum' }
       ],
       lineData: [],
+      citys: [],
       listQuery: {
         page: 1, // 当前页
         limit: 25 // 每页大小
       }
     };
   },
-  created() {
-    this.getTitle();
-  },
-  activated() {
+  async activated() {
+    await this.getUserCity();
+    await this.getTitle();
     this.listQuery.selfState = 3;
-    this.getList();
+    await this.getList();
   },
-  mounted() {
-    this.listQuery.selfState = 3;
-    this.getList();
-  },
+  // async mounted() {
+  //   await this.getUserCity();
+  //   await this.getTitle();
+  //   this.listQuery.selfState = 3;
+  //   await this.getList();
+  // },
   beforeRouteLeave(to, from, next) {
     this.$destroy(true);
     next(true);
   },
   methods: {
+    async getUserCity() {
+      let { data: res, data: { data: { onlineCityList }}} = await getUserInfo();
+      try {
+        if (res.success) {
+          onlineCityList.map(ele => this.citys.push(+ele.value))
+        } else {
+          Toast.fail(res.errorMsg || res.msg);
+        }
+      } catch (err) {
+        Toast.fail(err);
+      }
+    },
     async getTitle() {
       try {
-        let { data: tabarr } = await selectListAll({ page: 1, limit: 25 })
+        let { data: tabarr } = await selectListAll({ ...this.listQuery, citys: this.citys })
         if (tabarr.success) {
           let keyArr = Object.keys(tabarr.title);
           keyArr.forEach(ele => {
@@ -160,7 +176,8 @@ export default {
       this.lineData = [];
       this.listQuery = {
         page: 1, // 当前页
-        limit: 25 // 每页大小
+        limit: 25, // 每页大小
+        citys: this.citys
       };
       switch (name) {
         case 0:
@@ -180,14 +197,14 @@ export default {
       this.lineData = [];
       this.getList();
     },
-    getList(loadMore = true) {
+    async getList(loadMore = true) {
       Toast.loading({
         duration: 0, // 持续展示 toast
         forbidClick: true, // 禁用背景点击
         loadingType: 'spinner',
         message: '加载中...'
       });
-      selectListAll(this.listQuery)
+      await selectListAll({ ...this.listQuery, citys: this.citys })
         .then(({ data }) => {
           if (data.success) {
             Toast.clear();
@@ -271,7 +288,7 @@ export default {
   }
   .listbox {
     box-sizing: border-box;
-    height: auto;
+    height: 100%;
   }
   .wrapper-child {
     top: -5px;
