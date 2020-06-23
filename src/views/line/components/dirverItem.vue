@@ -20,8 +20,10 @@
         </div>
       </div>
       <div class="matchinfo">
-        <div class="matchtitle">
-          司机信息...
+        <div v-if="driver.mgr !== null" class="matchtitle">
+          <span>加盟经理:</span>
+          <span>{{ driver.mgr }}</span>
+          <!-- <span>{{ driver.mgr }}</span> -->
         </div>
         <div class="matchtype">
           <div class="type_match">

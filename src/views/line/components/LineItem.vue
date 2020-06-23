@@ -14,7 +14,11 @@
         </div>
         <div>
           <span>配送区域:</span>
-          <span>没找到配送区域</span>
+          <span>{{ item.provinceAreaName }}
+            {{ item.cityAreaName }}
+            {{ item.countyAreaName }}
+            {{ item.distance }}(公里)
+          </span>
         </div>
         <div>
           <span>到仓时间:</span>
@@ -119,6 +123,7 @@ export default {
   },
   methods: {
     goRouter(val) {
+      this.$emit('clickItem')
       switch (val) {
         case 0:
           this.$router.push({
@@ -130,7 +135,6 @@ export default {
               monthlyTransaction: this.item.monthlyTransaction
             }
           })
-
           break;
         case 1:
           this.$router.push({
@@ -141,7 +145,12 @@ export default {
           })
           break;
         case 2:
-          this.$router.push()
+          this.$router.push({
+            name: 'BssLineDetail',
+            query: {
+              id: this.item.lineId
+            }
+          })
           break;
       }
     }
@@ -167,7 +176,7 @@ export default {
       box-sizing: border-box;
       font-size: 15px;
       color: #595F66;
-      border-bottom: 1px solid #EEF0F2;
+      border-bottom: 2px solid #EEF0F2;
       .statename{
         font-size: 15px;
         color: #5C9BDD;
@@ -180,7 +189,7 @@ export default {
       font-size: 13px;
       color: rgba(89,95,102,0.72);
       line-height: 22.5px;
-      border-bottom: 4px solid #EEF0F2;
+      border-bottom: 1px solid #EEF0F2;
     }
       .item_footer {
         width: 100%;
