@@ -26,7 +26,8 @@ import Search from './components/search'
 import listItem from '../components/item'
 import VoPages from 'vo-pages'
 import 'vo-pages/lib/vo-pages.css'
-import { fetchList } from '@/api/consignor'
+import { fetchList, getSaleLine } from '@/api/consignor'
+import { getUserInfo } from '@/api/common'
 export default {
   components: {
     [Toast.name]: Toast,
@@ -40,23 +41,12 @@ export default {
       beforePullDown: false,
       loadedAll: false,
       listQuery: {
-        key: '',
         page: 1,
-        limit: 50,
-        total: 0,
-        endDate: '',
-        appletSource: '',
-        startDate: '',
-        expandManager: '',
-        clueType: '',
-        carType: '',
-        isSettledIn: '',
-        workCity: '',
-        sourceType: '',
-        isPayDeposit: '',
-        state: ''
+        limit: 50
       },
-      toast: ''
+      toast: '',
+      lineSaleId: '',
+      citys: []
     }
   },
   async activated() {
@@ -66,6 +56,8 @@ export default {
       loadingType: 'spinner'
     });
     try {
+      await this.getCity()
+      await this.getSaleLine()
       await this.getLists(false)
       this.toast.clear()
     } catch (err) {
@@ -73,11 +65,44 @@ export default {
     }
   },
   methods: {
+    async getCity() {
+      try {
+        let { data: res } = await getUserInfo()
+        if (res.success) {
+          this.citys = res.data.onlineCityList.map(item => +item.value)
+        }
+      } catch (err) {
+        Toast.fail(err)
+      }
+    },
+    async getSaleLine() {
+      const toast = Toast.loading({
+        message: '加载中...',
+        forbidClick: true,
+        loadingType: 'spinner'
+      });
+      try {
+        let { data: res } = await getSaleLine()
+        toast.clear()
+        if (res.success && res.data.length === 1) {
+          this.lineSaleId = res.data[0].userId
+        }
+      } catch (err) {
+        toast.clear()
+        if (err) {
+          Toast.fail(err)
+        }
+      }
+    },
     /**
      * 获取列表
      */
     async getLists(loadMore = true) {
       try {
+        this.listQuery.citys = this.citys
+        if (this.lineSaleId) {
+          this.listQuery.lineSaleId = this.lineSaleId
+        }
         let { data: res } = await fetchList(this.listQuery)
         if (res.success) {
           this.listQuery.total = res.page.total
@@ -124,6 +149,8 @@ export default {
 .consignorLists {
   .item-list {
     height: calc(100vh - 150px);
+    padding-bottom: 50px;
+    box-sizing: border-box;
     overflow: hidden;
     .consignor-list {
       width: 100%;

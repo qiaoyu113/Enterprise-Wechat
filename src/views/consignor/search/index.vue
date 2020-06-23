@@ -1,15 +1,17 @@
 <template>
   <div class="consignorSearch">
     <search :form="listQuery" :history-lists="historyLists" @search="handleSearchClick" @clear="handleClearClick" />
-    <ul v-if="lists.length > 0">
-      <li v-for="(item,idx) in lists" :key="item.id">
-        <Item :obj="item" :index="idx" @clickItem="handleItemClick(item)" />
-      </li>
-    </ul>
-    <div v-else class="noData">
-      <img src="./imgs/search.png">
-      <div class="text">
-        抱歉,未找到相关数据!
+    <div ref="list" class="list">
+      <ul v-if="lists.length > 0">
+        <li v-for="(item,idx) in lists" :key="item.id">
+          <Item :obj="item" :index="idx" @clickItem="handleItemClick(item)" />
+        </li>
+      </ul>
+      <div v-else class="noData">
+        <img src="./imgs/search.png">
+        <div class="text">
+          抱歉,未找到相关数据!
+        </div>
       </div>
     </div>
   </div>
@@ -19,6 +21,7 @@
 import Search from './components/search'
 import Item from '../components/item'
 import { searchCustomerByKeyword, getSaleLine } from '@/api/consignor'
+import { getUserInfo } from '@/api/common'
 import { Toast } from 'vant'
 export default {
   components: {
@@ -33,11 +36,13 @@ export default {
         key: ''
       },
       historyLists: [],
-      lineSaleId: ''
+      lineSaleId: '',
+      citys: []
     }
   },
   activated() {
     this.getSaleLine()
+    this.getCity()
     let str = localStorage.getItem('historyKeyWord')
     if (str) {
       this.historyLists = JSON.parse(str)
@@ -49,6 +54,16 @@ export default {
     next()
   },
   methods: {
+    async getCity() {
+      try {
+        let { data: res } = await getUserInfo()
+        if (res.success) {
+          this.citys = res.data.onlineCityList.map(item => +item.value)
+        }
+      } catch (err) {
+        Toast.fail(err)
+      }
+    },
     async getSaleLine() {
       const toast = Toast.loading({
         message: '加载中...',
@@ -78,6 +93,7 @@ export default {
         loadingType: 'spinner'
       });
       try {
+        obj.citys = this.citys
         if (this.lineSaleId) {
           obj.lineSaleId = this.lineSaleId
         }
@@ -136,6 +152,10 @@ export default {
       width: 83px;
       height:74px;
     }
+  }
+  .list {
+    height:calc(100vh - 54px);
+    overflow-y: auto;
   }
 }
 
