@@ -46,11 +46,11 @@ export default {
     return {
       scroll: '',
       lists: [],
+      citys: [],
       listQuery: {
         key: '',
         page: 1,
-        limit: 9999,
-        cityCode: []
+        limit: 9999
       },
       historyLists: []
     };
@@ -65,6 +65,7 @@ export default {
   beforeRouteLeave(to, from, next) {
     this.listQuery.key = ''
     this.lists = []
+    this.citys = []
     next()
   },
   mounted() {
@@ -79,7 +80,7 @@ export default {
       let { data: res, data: { data: { onlineCityList }}} = await getUserInfo();
       try {
         if (res.success) {
-          onlineCityList.map(ele => this.listQuery.cityCode.push(+ele.value))
+          onlineCityList.map(ele => this.citys.push(+ele.value))
         } else {
           Toast.fail(res.errorMsg || res.msg);
         }
@@ -99,7 +100,7 @@ export default {
         loadingType: 'spinner'
       });
       try {
-        let { data: res } = await searchList(this.listQuery)
+        let { data: res } = await searchList({ ...this.listQuery, citys: this.citys })
         if (res.success) {
           toast.clear();
           this.lists = res.data
