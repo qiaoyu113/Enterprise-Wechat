@@ -109,7 +109,6 @@ export default {
           Toast.fail(res.errorMsg || res.msg);
         }
       } catch (err) {
-        console.log(err)
         toast.clear();
         Toast.fail(err);
       }

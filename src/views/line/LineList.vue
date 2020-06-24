@@ -54,6 +54,7 @@
         @pullingDown="pullingDown"
       >
         <div class="listbox">
+          <!--          :id="itemindex === 0 ? 'listbox' : ''" -->
           <div
             v-for="(itemdata, itemindex) in lineData"
             :key="itemindex"
@@ -108,9 +109,11 @@ export default {
     };
   },
   async activated() {
+    window.vue = this
     await this.getUserCity();
     await this.getTitle();
     this.listQuery.selfState = 3;
+    this.listQuery.state = 3;
     await this.getList();
   },
   // async mounted() {
@@ -178,19 +181,24 @@ export default {
         limit: 25, // 每页大小
         citys: this.citys
       };
+      this.loadedAll = false;
+      this.beforePullDown = false;
       switch (name) {
         case 0:
           this.listQuery.selfState = 3;
+          this.listQuery.state = 3;
           break;
         case 1:
+          this.listQuery.state = 1;
           this.listQuery.selfState = 1;
           break;
         case 2:
           this.listQuery.state = 2;
           this.listQuery.selfState = 1;
+          this.listQuery.soldState = 0;
           break;
         case 3:
-          this.listQuery.soldSate = 1;
+          this.listQuery.soldState = 1;
           break;
       }
       this.getList(false);
@@ -202,36 +210,42 @@ export default {
         loadingType: 'spinner',
         message: '加载中...'
       });
-      await selectListAll({ ...this.listQuery, citys: this.citys })
-        .then(({ data }) => {
-          if (data.success) {
-            Toast.clear();
-            let lists = data.data;
-            if (loadMore) {
-              this.lineData = this.lineData.concat(lists);
-            } else {
-              this.lineData = lists;
-            }
-            if (!this.beforePullDown) {
-              this.beforePullDown = true;
-            }
-            if (
-              this.lineData.length >= this.tabarr[this.active].num ||
-              this.lineData.length < 4
-            ) {
-              this.loadedAll = true;
-            }
-          } else {
-            Toast.clear();
-            this.loadedAll = true;
-            Toast.fail(data.errorMsg);
-          }
-        })
-        .catch(err => {
+      try {
+        let { data } = await selectListAll({ ...this.listQuery, citys: this.citys })
+        if (data.success) {
           Toast.clear();
-          Toast.fail(err);
+          let lists = data.data;
+          if (loadMore) {
+            this.lineData = this.lineData.concat(lists);
+          } else {
+            this.lineData = lists;
+            // document.querySelector('#listbox').scrollIntoView()
+            // if (this.listQuery.page !== 1) {
+            // setTimeout(() => {
+            //   console.log('tag', this.$refs.listbox[0])
+            //   this.$refs.listbox[0].scrollIntoView()
+            // }, 20)
+            // }
+          }
+          if (!this.beforePullDown) {
+            this.beforePullDown = true;
+          }
+          if (
+            this.lineData.length >= this.tabarr[this.active].num ||
+              this.lineData.length < 4
+          ) {
+            this.loadedAll = true;
+          }
+        } else {
+          Toast.clear();
           this.loadedAll = true;
-        });
+          Toast.fail(data.errorMsg);
+        }
+      } catch (err) {
+        Toast.clear();
+        Toast.fail(err);
+        this.loadedAll = true;
+      }
     }
   }
 };
