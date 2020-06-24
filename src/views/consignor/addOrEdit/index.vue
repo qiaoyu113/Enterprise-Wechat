@@ -6,6 +6,7 @@
         v-model="form.customerName"
         required
         name="货主简称"
+        :maxlength="25"
         label="货主简称"
         placeholder="请输入"
         :rules="[{ required: true, message: '请填写货主简称' }]"
@@ -15,6 +16,7 @@
         v-model="form.customerNameAll"
         required
         name="货主主体"
+        :maxlength="25"
         label="货主主体"
         placeholder="请输入"
         :rules="[{ required: true, message: '请填写货主主体' }]"
@@ -66,6 +68,7 @@
         v-model="form.address"
         required
         name="详细地址"
+        :maxlength="50"
         label="详细地址"
         placeholder="请输入"
         :rules="[{ required: true, message: '请填写详细地址' }]"
@@ -99,6 +102,7 @@
         required
         label-width="110px"
         name="业务对接人姓名"
+        :maxlength="20"
         label="业务对接人姓名"
         placeholder="请输入"
         :rules="[{ required: true, message: '请填写业务对接人姓名' }]"
@@ -144,6 +148,7 @@
         label="一级分类"
         is-link
         placeholder="请选择"
+        :rules="[{ required: true, message: '请填选择一级分类' }]"
         @click="showlev1Picker = true"
       >
       </van-field>
@@ -161,16 +166,18 @@
         <van-field
           readonly
           clickable
+          required
           name="picker"
           :value="form.secondaryClassification"
           label="二级分类"
           is-link
           placeholder="请选择"
+          :rules="[{ required: true, message: '请填选择二级分类' }]"
           @click="showlev2Picker = true"
         />
         <van-popup v-model="showlev2Picker" position="bottom">
           <van-picker
-            title="一级分类"
+            title="二级分类"
             show-toolbar
             :columns="getLineCustomerTwo.map(item => item.name)"
             @confirm="onLev2Confirm"
@@ -184,8 +191,10 @@
         <van-field
           v-model="form.customerIdOpposite"
           name="第三方编号"
-          type="digit"
+          required
+          :maxlength="28"
           label="第三方编号"
+          :rules="[{ required: true, message: '请输入第三方编号' }]"
           placeholder="请输入"
         />
       </template>
