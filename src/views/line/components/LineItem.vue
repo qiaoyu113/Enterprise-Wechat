@@ -71,10 +71,10 @@
         </div>
       </div>
       <div v-if="show" class="item_footer">
-        <van-button :disabled="itemdata.soldState !== 1 || (itemdata.state !== 2 && itemdata.selfState !== 1)" size="small" color="#5C9BDD" round type="info" @click="goRouter(0)">
+        <van-button :disabled="!((itemdata.state === 2 && itemdata.selfState === 1 && itemdata.soldState === 0) || itemdata.soldState === 1)" size="small" color="#5C9BDD" round type="info" @click="goRouter(0)">
           批量推送
         </van-button>
-        <van-button :disabled="itemdata.state !== 2 && itemdata.selfState !== 1" size="small" color="#5C9BDD" round type="info" @click="goRouter(1)">
+        <van-button :disabled="!(itemdata.state === 2 && itemdata.selfState === 1 && itemdata.soldState === 0)" size="small" color="#5C9BDD" round type="info" @click="goRouter(1)">
           匹配撮合
         </van-button>
         <van-button size="small" plain hairline round type="info" @click="goRouter(2)">
