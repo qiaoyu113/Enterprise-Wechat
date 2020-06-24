@@ -144,6 +144,7 @@
         label="一级分类"
         is-link
         placeholder="请选择"
+        :rules="[{ required: true, message: '请填选择一级分类' }]"
         @click="showlev1Picker = true"
       >
       </van-field>
@@ -161,16 +162,18 @@
         <van-field
           readonly
           clickable
+          required
           name="picker"
           :value="form.secondaryClassification"
           label="二级分类"
           is-link
           placeholder="请选择"
+          :rules="[{ required: true, message: '请填选择二级分类' }]"
           @click="showlev2Picker = true"
         />
         <van-popup v-model="showlev2Picker" position="bottom">
           <van-picker
-            title="一级分类"
+            title="二级分类"
             show-toolbar
             :columns="getLineCustomerTwo.map(item => item.name)"
             @confirm="onLev2Confirm"
@@ -184,8 +187,10 @@
         <van-field
           v-model="form.customerIdOpposite"
           name="第三方编号"
+          required
           type="digit"
           label="第三方编号"
+          :rules="[{ required: true, message: '请输入第三方编号' }]"
           placeholder="请输入"
         />
       </template>
