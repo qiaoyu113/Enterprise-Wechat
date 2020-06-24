@@ -6,6 +6,7 @@
         v-model="form.customerName"
         required
         name="货主简称"
+        :maxlength="25"
         label="货主简称"
         placeholder="请输入"
         :rules="[{ required: true, message: '请填写货主简称' }]"
@@ -15,6 +16,7 @@
         v-model="form.customerNameAll"
         required
         name="货主主体"
+        :maxlength="25"
         label="货主主体"
         placeholder="请输入"
         :rules="[{ required: true, message: '请填写货主主体' }]"
@@ -66,6 +68,7 @@
         v-model="form.address"
         required
         name="详细地址"
+        :maxlength="50"
         label="详细地址"
         placeholder="请输入"
         :rules="[{ required: true, message: '请填写详细地址' }]"
@@ -99,6 +102,7 @@
         required
         label-width="110px"
         name="业务对接人姓名"
+        :maxlength="20"
         label="业务对接人姓名"
         placeholder="请输入"
         :rules="[{ required: true, message: '请填写业务对接人姓名' }]"
@@ -188,7 +192,7 @@
           v-model="form.customerIdOpposite"
           name="第三方编号"
           required
-          type="digit"
+          :maxlength="28"
           label="第三方编号"
           :rules="[{ required: true, message: '请输入第三方编号' }]"
           placeholder="请输入"
