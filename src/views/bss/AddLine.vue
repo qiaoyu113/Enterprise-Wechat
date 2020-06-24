@@ -5,18 +5,17 @@
       @submit="onSubmit"
     >
       <div class="form-container">
-        <BssPicker
-          :data="customers"
-          :disabled="isCopy"
+        <van-field
+          v-model="customerItem.customerName"
           required
+          readonly
+          is-link
+          v-bind="$attrs"
+          :disabled="isCopy"
           label="货主名称:"
           placeholder="请选择货主"
-          is-link
-          code="customerName"
-          code-val="customerId"
-          :value.sync="form.customerId"
           :rules="[{ required: true, message: '请选择货主' }]"
-          :cb="setCity"
+          @click="showPicker = !isCopy"
         />
         <van-field
           v-model="form.lineName"
@@ -453,16 +452,56 @@
         </van-loading>
       </div>
     </van-overlay>
+    <!-- 货主列表 -->
+    <van-popup
+      v-model="showPicker"
+      position="bottom"
+      style="height: 100%;"
+    >
+      <van-sticky>
+        <van-search
+          v-model="searchVal"
+          show-action
+          placeholder="请输入货主名称"
+          background="#F2F2F2"
+          @input="onSearch"
+          @search="onSearch"
+          @cancel="onCancel"
+        >
+        </van-search>
+      </van-sticky>
+      <div v-if="customers.length > 0" class="picker-content">
+        <van-cell
+          v-for="(item, index) in customers"
+          :key="index"
+          :title="item.customerName"
+          @click="onConfirmSearch(item)"
+        >
+          <template #right-icon>
+            <van-icon v-show="item.customerId === form.customerId" name="success" style="" />
+          </template>
+        </van-cell>
+      </div>
+      <div v-else class="noData">
+        <img src="../../assets/search.png">
+        <div class="text">
+          抱歉,未找到相关数据!
+        </div>
+      </div>
+      <div class="picker-bottom"></div>
+    </van-popup>
   </div>
 </template>
 
 <script>
-import { Form } from 'vant';
+
 import { dictionary, GetReginByCityCode, getTownByCountryCode } from '@/api/common';
 import { getLineUser, postCreatLine, getLineDetail, putCreatLine } from '@/api/carline';
 import BssPicker from 'components/BssPicker';
 import BssTimePicker from 'components/BssTimePicker';
-import { Field, Toast, CellGroup, Cell, Button, Dialog, Loading, Picker, Popup, RadioGroup, Radio, Stepper, DatetimePicker, Checkbox, CheckboxGroup, Overlay } from 'vant';
+import { Form, Field, Toast, CellGroup, Cell, Button, Dialog, Loading, Picker, Popup, RadioGroup, Radio, Stepper, DatetimePicker, Checkbox, CheckboxGroup, Overlay, Search, Sticky, Icon } from 'vant';
+import { debounce } from '@/utils/index';
+
 const defaultForm = {
   customerId: '', // 货主
   lineName: '',
@@ -532,14 +571,20 @@ export default {
     [DatetimePicker.name]: DatetimePicker,
     [Checkbox.name]: Checkbox,
     [CheckboxGroup.name]: CheckboxGroup,
-    [Overlay.name]: Overlay
+    [Overlay.name]: Overlay,
+    [Search.name]: Search,
+    [Sticky.name]: Sticky,
+    [Icon.name]: Icon
   },
   data() {
     return {
       lineId: '',
       isCopy: '',
       // 货主
+      searchVal: '',
+      customerItem: {},
       customers: [], // 货主列表
+      showPicker: false,
       // 仓位置
       warehouseList: [], // 仓列表
       warehouse: '', // 仓位置整体
@@ -665,13 +710,6 @@ export default {
       this.showDate = false
     },
     fetchData() {
-      // 货主列表
-      getLineUser()
-        .then((result) => {
-          this.customers = result.data.data;
-        }).catch(({ message }) => {
-          Toast.fail(message)
-        });
       // 城市
       GetReginByCityCode([]).then(res => {
         const data = res.data.data;
@@ -788,9 +826,34 @@ export default {
         });
     },
     // 货主
-    setCity(value) {
-      const { city } = value;
-      this.form.city = city;
+    onSearch: debounce(function() {
+      if (!this.searchVal) {
+        return
+      }
+      const toast = Toast.loading({
+        message: '加载中...',
+        forbidClick: true,
+        loadingType: 'spinner'
+      });
+      getLineUser({
+        q: this.searchVal
+      })
+        .then((result) => {
+          this.customers = result.data.data;
+        }).catch(({ message }) => {
+          Toast.fail(message)
+        }).finally(() => {
+          toast.clear()
+        })
+    }, 500),
+    onConfirmSearch(item) {
+      this.customerItem = item;
+      this.form.customerId = item.customerId;
+      this.form.city = item.city;
+      this.showPicker = false;
+    },
+    onCancel() {
+      this.showPicker = false;
     },
     // 仓位置
     onWarehouseConfirm(value) {
@@ -995,6 +1058,10 @@ export default {
       }).then((res) => {
         const data = res.data.data;
         if (res.data.success) {
+          this.customerItem = {
+            customerId: Number(data.customerId),
+            customerName: data.customerName
+          }
           this.form.lineId = data.lineId;
           this.form.warehouseProvince = data.warehouseProvince;
           this.form.warehouseCity = data.warehouseCity;
@@ -1111,6 +1178,23 @@ export default {
     align-items: center;
     justify-content: center;
     height: 100%;
+  }
+  .noData {
+    height:calc(100vh - 54px);
+    padding-top: 41.5px;
+    box-sizing: border-box;
+    background-color: white;
+    text-align: center;
+    .text {
+      margin-top: 15px;
+      font-size: 15px;
+      color: #656565;
+      text-align: center;
+    }
+    img {
+      width: 83px;
+      height:74px;
+    }
   }
 }
 </style>

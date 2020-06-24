@@ -201,7 +201,8 @@ export default {
           this.listQuery.soldState = 1;
           break;
       }
-      this.getList(false);
+      this.lineData = [];// 情况数组触发 pullingUp page 需要重置为0
+      this.listQuery.page = 0; // /
     },
     async getList(loadMore = true) {
       Toast.loading({
@@ -219,13 +220,6 @@ export default {
             this.lineData = this.lineData.concat(lists);
           } else {
             this.lineData = lists;
-            // document.querySelector('#listbox').scrollIntoView()
-            // if (this.listQuery.page !== 1) {
-            // setTimeout(() => {
-            //   console.log('tag', this.$refs.listbox[0])
-            //   this.$refs.listbox[0].scrollIntoView()
-            // }, 20)
-            // }
           }
           if (!this.beforePullDown) {
             this.beforePullDown = true;
