@@ -1,11 +1,11 @@
 <template>
   <div class="consignorSearch">
-    <van-search placeholder="请输入货主名称" background="#F2F2F2" @click="handleSearchClick" />
+    <van-search class="search-left" placeholder="请输入货主名称" background="#F2F2F2" @click="handleSearchClick" />
     <div class="add">
-      <van-icon name="add" size="51" color="#5C9BDD " @click="handleAddClick" />
-      <p @click="handleAddClick">
+      <van-icon name="add" size="40" color="#5C9BDD " @click="handleAddClick" />
+      <!-- <p @click="handleAddClick">
         新建货主
-      </p>
+      </p> -->
     </div>
   </div>
 </template>
@@ -35,20 +35,15 @@ export default {
 
 <style lang='scss' scoped>
 .consignorSearch {
+  display: flex;
+  .search-left{
+    flex: 1;
+  }
   .add {
-    margin-top: 8px;
-    text-align: center;
-    &:after {
-      display: block;
-      content:'';
-      height:10px;
-      width: 100%;
-      background: #F2F2F2;
-    }
-    p {
-      margin: 0px 0px 6px 0px;
-      color:#5C9BDD ;
-      font-size:14px;
+    display: flex;
+    align-items: center;
+    .van-icon{
+      padding: 0 5px;
     }
   }
 }

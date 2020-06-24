@@ -148,7 +148,7 @@ export default {
 
 .consignorLists {
   .item-list {
-    height: calc(100vh - 150px);
+    height: calc(100vh - 50px);
     padding-bottom: 50px;
     box-sizing: border-box;
     overflow: hidden;
