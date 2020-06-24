@@ -42,7 +42,12 @@ export default {
       isShow: false
     }
   },
-
+  mounted() {
+    this.$parent.$refs.list.addEventListener('scroll', this.onBlur, false)
+  },
+  beforeDestroy() {
+    this.$parent.$refs.list.removeEventListener('scroll', this.onBlur, false)
+  },
   methods: {
     /**
      * 搜索

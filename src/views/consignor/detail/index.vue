@@ -18,10 +18,8 @@ export default {
       customerId: ''
     }
   },
-  mounted() {
-    this.customerId = this.$route.query.id
-  },
   activated() {
+    this.customerId = this.$route.query.id
     this.getDetail()
   },
   methods: {
