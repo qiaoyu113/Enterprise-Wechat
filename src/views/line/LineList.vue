@@ -54,9 +54,9 @@
         @pullingDown="pullingDown"
       >
         <div class="listbox">
+          <!--          :id="itemindex === 0 ? 'listbox' : ''" -->
           <div
             v-for="(itemdata, itemindex) in lineData"
-            :id="itemindex === 0 ? 'listbox' : ''"
             :key="itemindex"
             class="bottom_spance"
           >
@@ -181,6 +181,8 @@ export default {
         limit: 25, // 每页大小
         citys: this.citys
       };
+      this.loadedAll = false;
+      this.beforePullDown = false;
       switch (name) {
         case 0:
           this.listQuery.selfState = 3;
