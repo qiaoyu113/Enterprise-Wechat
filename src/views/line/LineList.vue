@@ -54,7 +54,6 @@
         @pullingDown="pullingDown"
       >
         <div class="listbox">
-          <!--          :id="itemindex === 0 ? 'listbox' : ''" -->
           <div
             v-for="(itemdata, itemindex) in lineData"
             :key="itemindex"
@@ -201,6 +200,7 @@ export default {
           this.listQuery.soldState = 1;
           break;
       }
+
       this.getList(false);
     },
     async getList(loadMore = true) {
@@ -218,14 +218,10 @@ export default {
           if (loadMore) {
             this.lineData = this.lineData.concat(lists);
           } else {
-            this.lineData = lists;
-            // document.querySelector('#listbox').scrollIntoView()
-            // if (this.listQuery.page !== 1) {
-            // setTimeout(() => {
-            //   console.log('tag', this.$refs.listbox[0])
-            //   this.$refs.listbox[0].scrollIntoView()
-            // }, 20)
-            // }
+            this.lineData = []
+            setTimeout(() => {
+              this.lineData = lists;
+            }, 20)
           }
           if (!this.beforePullDown) {
             this.beforePullDown = true;
@@ -295,8 +291,8 @@ export default {
     overflow: hidden;
   }
   .listbox {
-    box-sizing: border-box;
     height: 100%;
+    // overflow-y: auto;
   }
   .wrapper-child {
     top: -5px;
