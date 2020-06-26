@@ -5,6 +5,10 @@
     </div>
     <div class="detail-content">
       <van-row type="flex" class="detail-row">
+        <van-col>线路编号：</van-col>
+        <van-col>{{ details.lineId }}</van-col>
+      </van-row>
+      <van-row type="flex" class="detail-row">
         <van-col>货主名称：</van-col>
         <van-col>{{ details.customerName }}</van-col>
       </van-row>
@@ -140,6 +144,7 @@
         <van-col>{{ details.createDate }}</van-col>
       </van-row>
     </div>
+    <div class="hr-46"></div>
     <van-row
       type="flex"
       class="detail-footer"
@@ -391,6 +396,9 @@ export default {
         flex: 1;
       }
     }
+  }
+  .hr-46{
+    height: 46px;
   }
   .detail-footer{
     position: fixed;

@@ -68,8 +68,8 @@ export default [{
       component: () => import('@/views/bss/LineDetail'),
       meta: {
         title: '线路详情',
-        showFooter: false,
-        keepAlive: true
+        showFooter: false
+        // keepAlive: true
       }
     },
     // 货主列表

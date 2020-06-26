@@ -8,23 +8,18 @@
       @click-left="onClickLeft"
       @click-right="onClickRight"
     /> -->
-
-    <van-search
-      disabled
-      placeholder="请输入搜索线路名称"
-      @click="goSearch"
-    />
-    <div class="add">
-      <van-icon
-        name="add"
-        size="40"
-        color="#4CB0E9"
-        @click="handleAddClick"
+    <div class="flex">
+      <van-search
+        disabled
+        background="#F2F2F2"
+        placeholder="请输入搜索线路名称"
+        @click="goSearch"
       />
-      <p @click="handleAddClick">
-        新建线路
-      </p>
+      <div class="add">
+        <van-icon name="add" size="40" color="#5C9BDD " @click="handleAddClick" />
+      </div>
     </div>
+
     <van-tabs
       v-model="active"
       sticky
@@ -245,23 +240,21 @@ export default {
 </script>
 <style lang="scss">
 .linelist {
+  .van-search .van-search__content{
+    background: #fff;
+  }
+  .flex{
+    display: flex;
+    background-color: #fff;
+  }
+  .van-search{
+    flex: 1;
+  }
   .add {
-    background: white;
-    padding-top: 8px;
-    margin-top: 8px;
-    text-align: center;
-    overflow: hidden;
-    &:after {
-      display: block;
-      content: "";
-      height: 8px;
-      width: 100%;
-      background: #f2f2f2;
-    }
-    p {
-      margin: 0px 0px 6px 0px;
-      color: #4cb0e9;
-      font-size: 14px;
+    display: flex;
+    align-items: center;
+    .van-icon{
+      padding: 0 5px;
     }
   }
   .tabnum {
@@ -270,9 +263,9 @@ export default {
   }
   background-color: #f2f2f2;
   min-height: 100vh;
-  .van-search {
-    padding: 17px 20px;
-  }
+  // .van-search {
+  //   padding: 17px 20px;
+  // }
   .van-tab {
     padding: 0px;
   }
@@ -284,7 +277,7 @@ export default {
     color: #5c9bdd !important;
   }
   section {
-    height:calc(100vh - 254px);
+    height:calc(100vh - 148px);
     overflow: hidden;
   }
   .listbox {
@@ -301,4 +294,4 @@ export default {
     margin-bottom: 5px;
   }
 }
-</style>>
+</style>

@@ -5,6 +5,10 @@
       <div class="item_title" v-text="itemdata.busiTypeName"></div>
       <div class="item_info">
         <div>
+          <span>线路编号:</span>
+          <span>{{ itemdata.lineId | DataIsNull }}</span>
+        </div>
+        <div>
           <span>线路名称:</span>
           <span>{{ itemdata.lineName | DataIsNull }}</span>
         </div>
@@ -36,13 +40,15 @@
           <span>已上车:</span>
           <span>{{ itemdata.publishedBidsNum }}/辆</span>
         </div>
-      </div>
-      <div class="item_title">
+        <div>
+          <span>线路状态:</span>
+          <span>{{ itemdata.selfState === 0 ? '失效' : itemdata.selfStateName }}({{ itemdata.lineStateName }})</span>
+        </div>
+        <!-- <div class="item_title">
         <span>线路状态:</span>
         <span>{{ itemdata.selfState === 0 ? '失效' : itemdata.selfStateName }}</span>
         <span class="statename">({{ itemdata.lineStateName }})</span>
-      </div>
-      <div class="item_info">
+      </div> -->
         <div>
           <span>货物类型:</span>
           <span>{{ itemdata.cargoType | DataIsNull }}</span>

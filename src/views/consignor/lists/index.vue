@@ -56,8 +56,7 @@ export default {
       loadingType: 'spinner'
     });
     try {
-      await this.getCity()
-      await this.getSaleLine()
+      await this.getBaseData()
       await this.getLists(false)
       this.toast.clear()
     } catch (err) {
@@ -65,35 +64,21 @@ export default {
     }
   },
   methods: {
-    async getCity() {
+    async getBaseData() {
       try {
-        let { data: res } = await getUserInfo()
-        if (res.success) {
-          this.citys = res.data.onlineCityList.map(item => +item.value)
+        let requestArr = [getSaleLine(), getUserInfo()]
+        let res = await Promise.all(requestArr)
+        if (res.length === requestArr.length) {
+          this.lineSaleId = res[0].data.data[0].userId
+          this.citys = res[1].data.data.onlineCityList.map(item => +item.value)
+        } else {
+          this.toast.clear()
         }
       } catch (err) {
-        Toast.fail(err)
+        this.toast.clear()
       }
     },
-    async getSaleLine() {
-      const toast = Toast.loading({
-        message: '加载中...',
-        forbidClick: true,
-        loadingType: 'spinner'
-      });
-      try {
-        let { data: res } = await getSaleLine()
-        toast.clear()
-        if (res.success && res.data.length === 1) {
-          this.lineSaleId = res.data[0].userId
-        }
-      } catch (err) {
-        toast.clear()
-        if (err) {
-          Toast.fail(err)
-        }
-      }
-    },
+
     /**
      * 获取列表
      */
@@ -117,9 +102,11 @@ export default {
           }
           this.loadedAll = this.listQuery.total <= this.lists.length
         } else {
+          this.toast.clear()
           Toast.fail(res.errorMsg || res.msg)
         }
       } catch (err) {
+        this.toast.clear()
         Toast.fail(err)
       }
     },
@@ -148,7 +135,7 @@ export default {
 
 .consignorLists {
   .item-list {
-    height: calc(100vh - 150px);
+    height: calc(100vh - 50px);
     padding-bottom: 50px;
     box-sizing: border-box;
     overflow: hidden;
