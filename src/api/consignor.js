@@ -78,3 +78,21 @@ export function editClientDetail(data) {
     params: data
   })
 }
+
+/* 编辑时获取货主详情 */
+export function searchCustomerByKeyword(data) {
+  return request({
+    url: '/api/bss/v1/bss/line/customer/fuzzy/checkNames',
+    method: 'post',
+    data
+  })
+}
+
+/* 获取当前用户销售线路 */
+export function getSaleLine() {
+  return request({
+    url: '/api/base/user/bss/getLineSaleUserManager',
+    method: 'get'
+
+  })
+}

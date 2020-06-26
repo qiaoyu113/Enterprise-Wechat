@@ -15,7 +15,7 @@
           </p>
         </div>
         <div class="right">
-          <van-button plain color="#5C9BDD" size="small" :to="'/bss/consignorDetail?id='+obj.customerId">
+          <van-button plain color="#5C9BDD" size="small" @click="handleItemClick">
             详情
           </van-button>
         </div>
@@ -29,7 +29,7 @@
         <span class="label">联系人</span>:{{ obj.lineSaleName | DataIsNull }}
       </p>
       <p class="text">
-        <span class="label">合同止期</span>:{{ obj.contractEnd }}
+        <span class="label">合同止期</span>:{{ _dayjs(obj.contractEnd) }}
       </p>
     </div>
   </div>
@@ -37,6 +37,7 @@
 
 <script>
 import { Button } from 'vant';
+import dayjs from 'dayjs'
 export default {
   components: {
     [Button.name]: Button
@@ -45,6 +46,20 @@ export default {
     obj: {
       type: Object,
       default: () => {}
+    }
+  },
+  methods: {
+    _dayjs(date) {
+      return dayjs(date).format('YYYY-MM-DD')
+    },
+    handleItemClick() {
+      this.$emit('clickItem')
+      this.$router.push({
+        path: '/bss/consignorDetail',
+        query: {
+          id: this.obj.customerId
+        }
+      })
     }
   }
 }

@@ -51,6 +51,11 @@ export default {
       }
     }
   },
+  watch: {
+    value(newVal) {
+      this.name = newVal;
+    }
+  },
   methods: {
     onConfirm(value) {
       this.name = value;

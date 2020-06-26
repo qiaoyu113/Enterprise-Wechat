@@ -5,17 +5,17 @@
       @submit="onSubmit"
     >
       <div class="form-container">
-        <BssPicker
-          :data="customers"
+        <van-field
+          v-model="customerItem.customerName"
           required
+          readonly
+          is-link
+          v-bind="$attrs"
+          :disabled="isCopy"
           label="货主名称:"
           placeholder="请选择货主"
-          is-link
-          code="customerName"
-          code-val="customerId"
-          :value.sync="form.customerId"
           :rules="[{ required: true, message: '请选择货主' }]"
-          :cb="setCity"
+          @click="showPicker = !isCopy"
         />
         <van-field
           v-model="form.lineName"
@@ -127,7 +127,7 @@
         </van-field>
 
         <!-- 需要搬运显示 -->
-        <template v-if="form.carry === '1'">
+        <div v-if="form.carry === '1'">
           <BssPicker
             :data="handlingDifficultyList"
             required
@@ -148,7 +148,7 @@
               { validator: validatorNumber(0, 100), message: '请输入1至99的整数' }
             ]"
           />
-        </template>
+        </div>
 
         <van-field
           v-model="form.month"
@@ -165,14 +165,13 @@
           required
           label="每日出车趟数:"
           placeholder="请输入每日出车趟数"
-          :rules="[{ required: true, message: '请输入每日出车趟数' }]"
         >
           <template #input>
             <van-stepper v-model="form.dayNum" disable-input min="1" max="5" />
           </template>
         </van-field>
-        <template v-for="(item, index) in form.lineDeliveryInfoFORMS">
-          <div :key="index">
+        <div v-for="(item, index) in form.lineDeliveryInfoFORMS" :key="index">
+          <div>
             <BssTimePicker
               :value.sync="item.workingTimeStart"
               required
@@ -194,7 +193,7 @@
               :rules="[{ required: true, message: '请输入结束时间' }]"
             />
           </div>
-        </template>
+        </div>
 
         <van-field
           required
@@ -212,7 +211,7 @@
           </template>
         </van-field>
         <!-- 按趟结算 -->
-        <template v-if="form.incomeSettlementMethod === '1'">
+        <div v-if="form.incomeSettlementMethod === '1'">
           <van-field
             v-model="form.lowestQuotations"
             required
@@ -227,9 +226,9 @@
           <div v-show="false">
             {{ shipper }}
           </div>
-        </template>
+        </div>
         <!-- 按底薪结算 -->
-        <template v-if="form.incomeSettlementMethod === '2'">
+        <div v-if="form.incomeSettlementMethod === '2'">
           <van-field
             v-model="form.everyTripGuaranteed"
             required
@@ -261,7 +260,7 @@
               { required: true, message: '请输入预计货主月报价' },
             ]"
           />
-        </template>
+        </div>
         <van-field
           required
           label="是否返仓:"
@@ -383,7 +382,7 @@
     <van-popup v-model="showCityPicker" position="bottom">
       <van-picker
         show-toolbar
-        title="选择仓位置"
+        title="选择线路区域"
         value-key="name"
         :loading="cityLoading"
         :columns="cityList"
@@ -449,20 +448,60 @@
     <van-overlay :show="loading" z-index="99">
       <div class="wrapper" @click.stop>
         <van-loading size="24px" vertical>
-          正在提交...
+          {{ loadingText }}...
         </van-loading>
       </div>
     </van-overlay>
+    <!-- 货主列表 -->
+    <van-popup
+      v-model="showPicker"
+      position="bottom"
+      style="height: 100%;"
+    >
+      <van-sticky>
+        <van-search
+          v-model="searchVal"
+          show-action
+          placeholder="请输入货主名称"
+          background="#F2F2F2"
+          @input="onSearch"
+          @search="onSearch"
+          @cancel="onCancel"
+        >
+        </van-search>
+      </van-sticky>
+      <div v-if="customers.length > 0" class="picker-content">
+        <van-cell
+          v-for="(item, index) in customers"
+          :key="index"
+          :title="item.customerName"
+          @click="onConfirmSearch(item)"
+        >
+          <template #right-icon>
+            <van-icon v-show="item.customerId === form.customerId" name="success" style="" />
+          </template>
+        </van-cell>
+      </div>
+      <div v-else class="noData">
+        <img src="../../assets/search.png">
+        <div class="text">
+          抱歉,未找到相关数据!
+        </div>
+      </div>
+      <div class="picker-bottom"></div>
+    </van-popup>
   </div>
 </template>
 
 <script>
-import { Form } from 'vant';
+
 import { dictionary, GetReginByCityCode, getTownByCountryCode } from '@/api/common';
-import { getLineUser, postCreatLine } from '@/api/carline';
+import { getLineUser, postCreatLine, getLineDetail, putCreatLine } from '@/api/carline';
 import BssPicker from 'components/BssPicker';
 import BssTimePicker from 'components/BssTimePicker';
-import { Field, Toast, CellGroup, Cell, Button, Dialog, Loading, Picker, Popup, RadioGroup, Radio, Stepper, DatetimePicker, Checkbox, CheckboxGroup, Overlay } from 'vant';
+import { Form, Field, Toast, CellGroup, Cell, Button, Dialog, Loading, Picker, Popup, RadioGroup, Radio, Stepper, DatetimePicker, Checkbox, CheckboxGroup, Overlay, Search, Sticky, Icon } from 'vant';
+import { debounce } from '@/utils/index';
+
 const defaultForm = {
   customerId: '', // 货主
   lineName: '',
@@ -505,6 +544,10 @@ const defaultForm = {
   waitDirveValidityDuration: '', // 线路有效期
   stabilityRate: '', // 线路稳定性
   shipperOffer: '',
+  lineType: '', // 线路类型
+  carType: '', // 车型
+  volume: '',
+  handlingDifficultyDegree: '',
   deliveryWeekCycle: '' // 配送时间
 }
 export default {
@@ -528,12 +571,20 @@ export default {
     [DatetimePicker.name]: DatetimePicker,
     [Checkbox.name]: Checkbox,
     [CheckboxGroup.name]: CheckboxGroup,
-    [Overlay.name]: Overlay
+    [Overlay.name]: Overlay,
+    [Search.name]: Search,
+    [Sticky.name]: Sticky,
+    [Icon.name]: Icon
   },
   data() {
     return {
+      lineId: '',
+      isCopy: '',
       // 货主
+      searchVal: '',
+      customerItem: {},
       customers: [], // 货主列表
+      showPicker: false,
       // 仓位置
       warehouseList: [], // 仓列表
       warehouse: '', // 仓位置整体
@@ -568,6 +619,7 @@ export default {
       allChecked: false,
 
       loading: false,
+      loadingText: '正在提交',
       form: Object.assign({}, defaultForm)
     }
   },
@@ -598,7 +650,20 @@ export default {
     }
   },
   mounted() {
+    this.lineId = this.$route.query.id;
+    this.isCopy = !!this.$route.query.iscopy;
     this.fetchData();
+    if (this.lineId) {
+      // 请求详情
+      this.getDetail();
+    }
+  },
+  beforeRouteLeave(to, from, next) {
+    if (!this.leave && !this.isComplete()) {
+      return this.onClickLeft(next)
+    } else {
+      next()
+    }
   },
   methods: {
     toggle(index) {
@@ -608,6 +673,29 @@ export default {
       } else {
         this.$refs.checkboxes[index].toggle();
       }
+    },
+    isComplete() {
+      for (const key in this.form) {
+        if (this.form.hasOwnProperty(key)) {
+          const item = this.form[key];
+          if (item !== '') {
+            return false;
+          }
+        }
+      }
+      return true
+    },
+    onClickLeft(next) {
+      Dialog.confirm({
+        title: '提示',
+        message: '请确认不在填写信息,返回上一个页面!',
+        confirmButtonColor: '#5C9BDD'
+      }).then(() => {
+        this.leave = true; // 用户点击确认，为了离开当前页面，随便赋值
+        next();
+      }).catch(() => {
+        next(false)
+      });
     },
     onConfirm() {
       const val = this.deliveryTimeArr;
@@ -622,13 +710,6 @@ export default {
       this.showDate = false
     },
     fetchData() {
-      // 货主列表
-      getLineUser()
-        .then((result) => {
-          this.customers = result.data.data;
-        }).catch(({ message }) => {
-          Toast.fail(message)
-        });
       // 城市
       GetReginByCityCode([]).then(res => {
         const data = res.data.data;
@@ -705,7 +786,6 @@ export default {
       })
     },
     onSubmit() {
-      this.loading = true;
       if (this.form.incomeSettlementMethod === '1' && this.form.lowestQuotations - this.form.monthlyFuelConsumption <= 0) {
         Toast.fail('单趟去油净收入必须大于0');
         this.btnPass = true
@@ -715,11 +795,27 @@ export default {
         // 按趟结算
         this.form.shipperOffer = this.shipper;
       }
-
-      postCreatLine(this.form)
+      if (this.lineId && !this.isCopy) {
+        // 编辑
+        this.editForm();
+        return;
+      }
+      this.loading = true;
+      this.loadingText = '正在提交';
+      const postData = {
+        ...this.form
+      }
+      if (this.isCopy) {
+        delete postData.lineId;
+      }
+      postCreatLine(postData)
         .then(({ data }) => {
           if (data.success) {
-            Toast.success('创建成功')
+            this.leave = true;
+            Toast.success('创建成功');
+            setTimeout(() => {
+              this.$router.push('/bss/lineList')
+            }, 800)
           } else {
             Toast.fail(data.errorMsg || '网络错误请稍后再试')
           }
@@ -730,9 +826,34 @@ export default {
         });
     },
     // 货主
-    setCity(value) {
-      const { city } = value;
-      this.form.city = city;
+    onSearch: debounce(function() {
+      if (!this.searchVal) {
+        return
+      }
+      const toast = Toast.loading({
+        message: '加载中...',
+        forbidClick: true,
+        loadingType: 'spinner'
+      });
+      getLineUser({
+        q: this.searchVal
+      })
+        .then((result) => {
+          this.customers = result.data.data;
+        }).catch(({ message }) => {
+          Toast.fail(message)
+        }).finally(() => {
+          toast.clear()
+        })
+    }, 500),
+    onConfirmSearch(item) {
+      this.customerItem = item;
+      this.form.customerId = item.customerId;
+      this.form.city = item.city;
+      this.showPicker = false;
+    },
+    onCancel() {
+      this.showPicker = false;
     },
     // 仓位置
     onWarehouseConfirm(value) {
@@ -928,8 +1049,104 @@ export default {
         let value = Number(val);
         return value > min && value < max;
       }
-    }
+    },
+    getDetail() {
+      this.loading = true;
+      this.loadingText = '数据加载中'
+      getLineDetail({
+        lineId: this.lineId
+      }).then((res) => {
+        const data = res.data.data;
+        if (res.data.success) {
+          this.customerItem = {
+            customerId: Number(data.customerId),
+            customerName: data.customerName
+          }
+          this.form.lineId = data.lineId;
+          this.form.warehouseProvince = data.warehouseProvince;
+          this.form.warehouseCity = data.warehouseCity;
+          this.form.warehouseCounty = data.warehouseCounty;
+          this.form.warehouseDistrict = data.warehouseDistrict;
+          this.form.warehouseTown = data.warehouseTown;
+          this.form.wareAreaName = data.warehouseCountyName;
+          this.form.everyTripGuaranteed = Number(data.everyTripGuaranteed);
+          this.form.everyUnitPrice = Number(data.everyUnitPrice);
+          this.form.goodsWeight = String(data.goodsWeight);
 
+          this.form.customerId = Number(data.customerId);
+          this.form.lineName = data.lineName;
+          this.form.deliveryWeekCycle = data.deliveryWeekCycle;
+
+          if (data.deliveryWeekCycle && data.deliveryWeekCycle.split(',').length > 0) {
+            const arr = data.deliveryWeekCycle.split(',')
+            this.deliveryTimeArr = this.deliveryTimeArr.map((item, index) => {
+              return arr.includes(String(index + 1));
+            })
+          }
+
+          this.form.city = String(data.city);
+          this.form.carType = String(data.carType);
+          this.form.cargoType = data.cargoType;
+          this.warehouse = data.warehouse;
+          this.form.carry = String(data.carry);
+          this.form.returnWarehouse = String(data.returnWarehouse);
+          this.form.lowestQuotations = data.preLowestQuotations;
+          this.form.deliveryNum = data.deliveryNum;
+          this.form.distance = data.distance;
+          this.form.month = data.month;
+          this.form.lineDeliveryInfoFORMS = data.lineDeliveryInfoFORMS;
+          // this.form.endTime = data.workingTimeEnd;
+          this.form.volume = data.volume;
+          this.form.dayNum = String(data.dayNum);
+          this.form.districtArea = data.districtArea;
+          this.form.remark = data.remark;
+          this.form.returnBill = String(data.returnBill);
+          this.form.cityArea = data.cityArea;
+          this.form.provinceArea = data.provinceArea;
+          this.form.countyArea = data.countyArea;
+          this.form.deployNum = data.deployNum;
+          this.form.firstNeededFollow = data.firstNeededFollow.toString();
+          this.form.lineType = String(data.lineType);
+          this.form.incomeSettlementMethod = String(data.incomeSettlementMethod);
+          this.form.monthlyFuelConsumption = data.monthlyFuelConsumption;
+          this.form.waitDirveValidityDuration = data.waitDirveValidityDuration;
+          this.form.stabilityRate = String(data.stabilityRate);
+          this.form.handlingDifficultyDegree = String(data.handlingDifficultyDegree);
+          this.cityTextVal = String(data.provinceAreaName) + String(data.cityAreaName) + String(data.countyAreaName) + String(data.districtArea);
+          this.form.singleCargoWeight = String(data.singleCargoWeight);
+
+          this.$nextTick(() => {
+            this.onConfirm()
+          })
+        } else {
+          Toast.fail(data.errorMsg)
+        }
+      }).catch(({ message }) => {
+        Toast.fail(message);
+      }).finally(() => {
+        this.loading = false;
+      })
+    },
+    editForm() {
+      this.loading = true;
+      this.loadingText = '正在提交';
+      putCreatLine(this.form)
+        .then(({ data }) => {
+          if (data.success) {
+            this.leave = true;
+            Toast.success('提交成功');
+            setTimeout(() => {
+              this.$router.push('/bss/lineList')
+            }, 800)
+          } else {
+            Toast.fail(data.errorMsg || '网络错误请稍后再试')
+          }
+        }).catch(({ message }) => {
+          Toast.fail(message)
+        }).finally(() => {
+          this.loading = false;
+        });
+    }
   }
 }
 </script>
@@ -961,6 +1178,23 @@ export default {
     align-items: center;
     justify-content: center;
     height: 100%;
+  }
+  .noData {
+    height:calc(100vh - 54px);
+    padding-top: 41.5px;
+    box-sizing: border-box;
+    background-color: white;
+    text-align: center;
+    .text {
+      margin-top: 15px;
+      font-size: 15px;
+      color: #656565;
+      text-align: center;
+    }
+    img {
+      width: 83px;
+      height:74px;
+    }
   }
 }
 </style>

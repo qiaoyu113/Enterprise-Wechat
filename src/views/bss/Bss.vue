@@ -3,7 +3,7 @@
     <div class="grid">
       <div v-for="(item, index) in list" :key="index" class="grid-item" @click="goRouter(item.url)">
         <div class="flex">
-          <div v-if="item.icon" class="icon"></div>
+          <svg-icon v-if="item.icon" :icon-class="item.icon" :style="{color: item.color}" />
           <h3 class="title">
             {{ item.title }}
           </h3>
@@ -21,19 +21,20 @@ export default {
     return {
       list: [
         {
-          icon: '',
+          icon: 'bss_icon3',
           title: '线索管理',
           url: ''
         },
         {
-          icon: '',
+          icon: 'bss_icon1',
           title: '货主管理',
           url: '/bss/consignorList'
         },
         {
-          icon: '',
+          icon: 'bss_icon2',
           title: '线路管理',
-          url: '/bss/lineList'
+          url: '/bss/lineList',
+          color: '#fff'
         },
         {
           icon: '',
@@ -97,6 +98,12 @@ export default {
     justify-content: space-between;
     flex-wrap: wrap;
   }
+  .svg-icon{
+    margin-bottom: 14px;
+    display: block;
+    font-size: 28px;
+    color: rgba(0,0,0,0);
+  }
   .grid-item{
     width: calc((100% - 30px) / 3);
     height: calc((100% - 30px) / 3);
@@ -109,12 +116,10 @@ export default {
     .flex{
       display: flex;
       align-items: center;
-      justify-items: center;
+      flex-direction: column;
+      justify-content: center;
       width: 100%;
       height: 100%;
-    }
-    .icon{
-
     }
     .title{
       margin: 0;

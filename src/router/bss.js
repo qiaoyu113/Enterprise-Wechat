@@ -39,9 +39,26 @@ export default [{
       name: 'BssAddLine',
       component: () => import('@/views/bss/AddLine'),
       meta: {
-        title: '创建货主',
-        showFooter: false,
-        keepAlive: true
+        title: '创建线路',
+        showFooter: false
+      }
+    },
+    {
+      path: 'copy-line',
+      name: 'BssCopyLine',
+      component: () => import('@/views/bss/AddLine'),
+      meta: {
+        title: '复制线路',
+        showFooter: false
+      }
+    },
+    {
+      path: 'edit-line',
+      name: 'BssEditLine',
+      component: () => import('@/views/bss/AddLine'),
+      meta: {
+        title: '编辑线路',
+        showFooter: false
       }
     },
     // 线路详情

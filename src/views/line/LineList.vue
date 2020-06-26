@@ -200,8 +200,8 @@ export default {
           this.listQuery.soldState = 1;
           break;
       }
-
-      this.getList(false);
+      this.lineData = [];// 情况数组触发 pullingUp page 需要重置为0
+      this.listQuery.page = 0; // /
     },
     async getList(loadMore = true) {
       Toast.loading({
@@ -218,10 +218,7 @@ export default {
           if (loadMore) {
             this.lineData = this.lineData.concat(lists);
           } else {
-            this.lineData = []
-            setTimeout(() => {
-              this.lineData = lists;
-            }, 20)
+            this.lineData = lists;
           }
           if (!this.beforePullDown) {
             this.beforePullDown = true;

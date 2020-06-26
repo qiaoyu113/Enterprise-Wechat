@@ -4,14 +4,14 @@
     :safe-area-inset-bottom="true"
   >
     <van-tabbar-item
-      icon="aim"
+      icon="wap-home"
       replace
       to="/bss/index"
     >
       首页
     </van-tabbar-item>
     <van-tabbar-item
-      icon="manager-o"
+      icon="manager"
       replace
       to="/bss/my"
     >
@@ -29,3 +29,14 @@ export default {
   }
 }
 </script>
+<style scoped>
+.van-tabbar-item.van-tabbar-item--active{
+  color: #4F7CFF;
+}
+.van-tabbar-item{
+  color: #CFD5EF;
+}
+.van-tabbar-item >>> .van-tabbar-item__icon{
+  font-size: 25px;
+}
+</style>

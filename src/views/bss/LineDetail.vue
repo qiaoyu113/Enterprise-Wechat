@@ -34,6 +34,8 @@
         <van-col>已上车数量：</van-col>
         <van-col>{{ details.publishedBidsNum || 0 }}</van-col>
       </van-row>
+      <!-- 分割线 -->
+      <div class="detail-divider"></div>
       <van-row type="flex" class="detail-row">
         <van-col>每日平均配送点位数：</van-col>
         <van-col>{{ details.deliveryNum }}</van-col>
@@ -81,6 +83,7 @@
         <van-col>结束时间：</van-col>
         <van-col>{{ item.workingTimeEnd }}</van-col>
       </van-row>
+      <div class="detail-divider"></div>
       <van-row type="flex" class="detail-row">
         <van-col>收入结算方式：</van-col>
         <van-col>{{ details.incomeSettlementMethodName }}</van-col>
@@ -143,11 +146,21 @@
       justify="center"
       align="center"
     >
-      <van-col>复制</van-col>
-      <van-col v-if="(details.selfState === 1 || details.selfState === 2) && (details.stateName === '待审核' || details.stateName === '审核未通过')">
+      <van-col
+        @click="goCopy"
+      >
+        复制
+      </van-col>
+      <van-col
+        v-if="(details.selfState === 1 || details.selfState === 2) && (details.stateName === '待审核' || details.stateName === '审核未通过')"
+        @click="goEdit"
+      >
         编辑
       </van-col>
-      <van-col v-if="isAudit">
+      <van-col
+        v-if="isAudit"
+        @click="showPicker = true"
+      >
         审核
       </van-col>
     </van-row>
@@ -158,12 +171,39 @@
         </van-loading>
       </div>
     </van-overlay>
+    <!-- 审核 -->
+    <van-popup v-model="showPicker" position="bottom">
+      <van-picker
+        show-toolbar
+        :columns="data"
+        @cancel="showPicker = false"
+        @confirm="onConfirm"
+      />
+    </van-popup>
+    <van-dialog
+      v-model="dialog"
+      class-name="driver-dialog"
+      title="备注"
+      show-cancel-button
+      :before-close="setReason"
+    >
+      <van-field
+        v-model="reason"
+        rows="2"
+        autosize
+        label="备注"
+        type="textarea"
+        maxlength="20"
+        placeholder="请输入备注"
+        show-word-limit
+      />
+    </van-dialog>
   </div>
 </template>
 
 <script>
-import { Col, Row, Loading, Toast, Overlay } from 'vant';
-import { getLineDetail } from '@/api/carline';
+import { Col, Row, Loading, Toast, Overlay, Picker, Popup, Dialog, Field } from 'vant';
+import { getLineDetail, NopassTender, passTender } from '@/api/carline';
 import { getUserInfo } from '@/api/common'
 export default {
   name: 'LineDetail',
@@ -172,6 +212,10 @@ export default {
     [Row.name]: Row,
     [Loading.name]: Loading,
     [Overlay.name]: Overlay,
+    [Picker.name]: Picker,
+    [Popup.name]: Popup,
+    [Dialog.Component.name]: Dialog.Component,
+    [Field.name]: Field,
     [Toast.name]: Toast
   },
   filters: {
@@ -186,14 +230,26 @@ export default {
       dateList: ['星期一', '星期二', '星期三', '星期四', '星期五', '星期六', '星期日'],
       deliveryName: '',
       details: {},
-      userInfo: {}
+      userInfo: {},
+      // 审核功能
+      showPicker: false,
+      data: [
+        { text: '审核通过', value: '1' },
+        { text: '拒绝通过', value: '2' }
+      ],
+      // dialog
+      dialog: false,
+      reason: ''
     }
   },
   computed: {
     isAudit() {
       const { stateName } = this.details;
       const roleNames = this.userInfo.roleNames;
-      return stateName === '待审核' && roleNames && roleNames.includes('wutongwaixianbgl');
+      // return stateName === '待审核' && roleNames && roleNames.includes('wutongwaixianbgl');
+      return stateName === '待审核' && roleNames && roleNames.includes('wutongzhuanchebgl'); // 方便测试
+
+      // return stateName === '待审核'
     }
   },
   async mounted() {
@@ -225,6 +281,80 @@ export default {
       }).finally(() => {
         this.loading = false;
       })
+    },
+    setReason(action, done) {
+      if (action === 'confirm') {
+        this.noPassBtn();
+      } else {
+        this.reason = '';
+      }
+      done();
+    },
+    onConfirm({ value }) {
+      if (value === '1') {
+        // 通过审核
+        this.passBtn();
+      } else if (value === '2') {
+        // 拒绝通过
+        this.dialog = true;
+      }
+      this.showPicker = false;
+    },
+    passBtn() {
+      let { lineId } = this.details;
+      this.loading = true;
+      passTender({
+        lineId,
+        'reason': ''
+      }).then(res => {
+        if (res.data.success) {
+          Toast.success('审核已通过')
+          setTimeout(() => {
+            this.$router.push('/bss/lineList')
+          }, 500)
+        } else {
+          Toast.fail(res.data.errorMsg);
+        }
+      }).catch(({ message }) => {
+        Toast.fail(message);
+      }).finally(() => {
+        this.loading = false;
+      })
+    },
+    noPassBtn() {
+      if (this.reason === '') {
+        Toast.fail('请输入拒绝理由')
+        return
+      }
+      const { lineId } = this.details;
+      const reason = this.reason;
+      NopassTender({
+        lineId,
+        reason
+      }).then(res => {
+        if (res.data.success) {
+          Toast.success('审核已拒绝')
+          setTimeout(() => {
+            this.$router.push('/bss/lineList')
+          }, 500)
+        } else {
+          Toast.fail(res.data.errorMsg);
+        }
+      }).catch(({ message }) => {
+        Toast.fail(message);
+      }).finally(() => {
+        this.loading = false;
+      })
+    },
+    goCopy() {
+      const id = this.details.lineId;
+      // 进入复制页面
+      this.$router.push({ name: 'BssCopyLine', query: { id: id, iscopy: '1' }})
+    },
+    goEdit() {
+      const id = this.details.lineId;
+      // 进入编辑页面
+      this.$router.push({ name: 'BssEditLine', query: { id: id }})
     }
   }
 }
@@ -247,6 +377,9 @@ export default {
   .detail-content{
     margin-top: 25px;
     padding: 8px 12px 20px;
+  }
+  .detail-divider{
+    border-bottom: 2px solid #EEF0F2;
   }
   .detail-row{
     padding: 0 12px;
@@ -286,6 +419,14 @@ export default {
         }
       }
     }
+  }
+  .driver-dialog .van-dialog__content {
+    padding: 0 10px;
+  }
+  .driver-dialog .van-field__label {
+    width: auto;
+    margin-right: 20px;
+    flex: none;
   }
   .wrapper {
     display: flex;

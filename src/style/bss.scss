@@ -25,6 +25,13 @@
     }
     .van-cell__value,
     .van-field__control{
+      &:disabled{
+        color: #c8c9cc;
+        background-color: transparent;
+        cursor: not-allowed;
+        opacity: 1;
+        -webkit-text-fill-color: currentColor;
+      }
       color: #353535;
     }
     // radio
