@@ -159,10 +159,12 @@ export default {
 </script>
 <style lang="scss">
 .outside {
+  min-height: 100vh;
   padding-bottom: 50px;
   box-sizing: border-box;
   .list-wrap {
     height: 100%;
+    overflow: hidden;
   }
   .lineitem {
     margin: 0;

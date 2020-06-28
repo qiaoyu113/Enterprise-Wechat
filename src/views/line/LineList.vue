@@ -49,7 +49,6 @@
         @pullingDown="pullingDown"
       >
         <div class="listbox">
-          <!--          :id="itemindex === 0 ? 'listbox' : ''" -->
           <div
             v-for="(itemdata, itemindex) in lineData"
             :key="itemindex"
@@ -184,7 +183,8 @@ export default {
           this.listQuery.state = 3;
           break;
         case 1:
-          this.listQuery.state = 1;
+          // this.listQuery.state = 1;
+          this.listQuery.states = [1, 3];
           this.listQuery.selfState = 1;
           break;
         case 2:
@@ -219,10 +219,7 @@ export default {
           if (!this.beforePullDown) {
             this.beforePullDown = true;
           }
-          if (
-            this.lineData.length >= this.tabarr[this.active].num ||
-              this.lineData.length < 4
-          ) {
+          if (this.lineData.length >= this.tabarr[this.active].num || this.lineData.length < 4) {
             this.loadedAll = true;
           }
         } else {
@@ -282,11 +279,8 @@ export default {
     overflow: hidden;
   }
   .listbox {
-    box-sizing: border-box;
     height: 100%;
-  }
-  .wrapper-child {
-    top: -5px;
+    overflow-y: auto;
   }
   .bottom_spance {
     margin-bottom: 5px;
