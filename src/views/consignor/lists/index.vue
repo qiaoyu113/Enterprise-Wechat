@@ -69,7 +69,9 @@ export default {
         let requestArr = [getSaleLine(), getUserInfo()]
         let res = await Promise.all(requestArr)
         if (res.length === requestArr.length) {
-          this.lineSaleId = res[0].data.data[0].userId
+          if (res[0].data.data.length === 1) {
+            this.lineSaleId = res[0].data.data[0].userId
+          }
           this.citys = res[1].data.data.onlineCityList.map(item => +item.value)
         } else {
           this.toast.clear()
@@ -87,6 +89,8 @@ export default {
         this.listQuery.citys = this.citys
         if (this.lineSaleId) {
           this.listQuery.lineSaleId = this.lineSaleId
+        } else {
+          this.listQuery.lineSaleId = null
         }
         let { data: res } = await fetchList(this.listQuery)
         if (res.success) {

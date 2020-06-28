@@ -19,7 +19,7 @@
       <van-cell title="线路销售" :value="obj.lineSaleName" />
     </van-cell-group>
     <div class="btnGroup">
-      <van-button type="info" block :to="`/bss/add-line?customerId=${obj.customerId}&city=${obj.city}`" class="btn" round color="linear-gradient(270deg, #5C9BDD 0%, #80D8F3 100%)">
+      <van-button type="info" block class="btn" round color="linear-gradient(270deg, #5C9BDD 0%, #80D8F3 100%)" @click="handleCreateLine">
         创建线路
       </van-button>
       <van-button type="primary" round :to="'/bss/consignorEdit?id='+obj.customerId" block class="btn">
@@ -30,19 +30,47 @@
 </template>
 
 <script>
-import { Grid, GridItem, Button, Cell, CellGroup } from 'vant';
+import { Grid, GridItem, Button, Cell, CellGroup, Dialog } from 'vant';
+import dayjs from 'dayjs'
 export default {
   components: {
     [Grid.name]: Grid,
     [GridItem.name]: GridItem,
     [Button.name]: Button,
     [Cell.name]: Cell,
-    [CellGroup.name]: CellGroup
+    [CellGroup.name]: CellGroup,
+    [Dialog.name]: Dialog
   },
   props: {
     obj: {
       type: Object,
       default: () => {}
+    }
+  },
+  methods: {
+    handleCreateLine() {
+      let date = this.obj.contractEnd
+      let year = dayjs(date).format('YYYY')
+      let month = dayjs(date).format('MM')
+      let day = dayjs(date).format('DD')
+      if (new Date(date).getTime() < new Date().getTime()) {
+        Dialog.alert({
+          title: '合同截止日期过期',
+          closeOnPopstate: true,
+          message: `此货主合同截止日期为${year}年${month}月${day}日，已超期，不可再创建线路，请及时和客户沟通，并在货主列表进行编辑维护。`,
+          confirmButtonColor: '#5c9bdd'
+        }).then(() => {
+          // on close
+        });
+      } else {
+        this.$router.push({
+          path: '/bss/add-line',
+          query: {
+            customerId: this.obj.customerId,
+            city: this.obj.city
+          }
+        })
+      }
     }
   }
 }
