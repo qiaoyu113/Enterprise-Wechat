@@ -12,7 +12,7 @@
       <van-search
         disabled
         background="#F2F2F2"
-        placeholder="请输入搜索线路名称"
+        placeholder="请输入货主名称或所属销售"
         @click="goSearch"
       />
       <div class="add">
