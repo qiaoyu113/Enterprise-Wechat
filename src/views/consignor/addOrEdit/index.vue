@@ -136,7 +136,13 @@
       />
       <van-field name="uploader" label="营业执照">
         <template #input>
-          <van-uploader v-model="fileList" multiple :max-count="2" accept="image/*" :after-read="afterRead" />
+          <van-uploader
+            v-model="fileList"
+            multiple
+            :max-count="2"
+            accept="image/*"
+            :after-read="afterRead"
+          />
         </template>
       </van-field>
       <van-field
@@ -489,6 +495,14 @@ export default {
      * 上传图片
      */
     async afterRead(file) {
+      if (file.file.size > 1024 * 1024 * 5) {
+        if (this.fileList.length > 1) {
+          this.fileList.pop()
+        } else if (this.fileList.length > 0) {
+          this.fileList = []
+        }
+        return Toast.fail('上传的文件不能超过5M')
+      }
       let formdata = new FormData();
       formdata.append('file', file.file);
       let { data: res } = await uploadFile(formdata)
