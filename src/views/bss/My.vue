@@ -96,6 +96,7 @@ export default {
       border-top: 1px solid #FFD976;
     }
     .right{
+      padding-right: 20px;
       flex: 1;
       justify-content: left
     }

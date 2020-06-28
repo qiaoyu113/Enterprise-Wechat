@@ -251,8 +251,7 @@ export default {
     isAudit() {
       const { stateName } = this.details;
       const roleNames = this.userInfo.roleNames;
-      // return stateName === '待审核' && roleNames && roleNames.includes('wutongwaixianbgl');
-      return stateName === '待审核' && roleNames && roleNames.includes('wutongzhuanchebgl'); // 方便测试
+      return stateName === '待审核' && roleNames && roleNames.includes('wutongwaixianbgl');
 
       // return stateName === '待审核'
     }

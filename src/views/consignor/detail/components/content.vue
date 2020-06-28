@@ -19,7 +19,7 @@
       <van-cell title="线路销售" :value="obj.lineSaleName" />
     </van-cell-group>
     <div class="btnGroup">
-      <van-button type="info" block to="/bss/add-line" class="btn" round color="linear-gradient(270deg, #5C9BDD 0%, #80D8F3 100%)">
+      <van-button type="info" block :to="`/bss/add-line?customerId=${obj.customerId}&city=${obj.city}`" class="btn" round color="linear-gradient(270deg, #5C9BDD 0%, #80D8F3 100%)">
         创建线路
       </van-button>
       <van-button type="primary" round :to="'/bss/consignorEdit?id='+obj.customerId" block class="btn">

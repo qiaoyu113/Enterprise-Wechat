@@ -11,11 +11,11 @@
           readonly
           is-link
           v-bind="$attrs"
-          :disabled="isCopy"
+          :disabled="!!(isCopy || isCustomer)"
           label="货主名称:"
           placeholder="请选择货主"
           :rules="[{ required: true, message: '请选择货主' }]"
-          @click="showPicker = !isCopy"
+          @click="showPicker = !(isCopy || isCustomer)"
         />
         <van-field
           v-model="form.lineName"
@@ -497,6 +497,7 @@
 
 import { dictionary, GetReginByCityCode, getTownByCountryCode } from '@/api/common';
 import { getLineUser, postCreatLine, getLineDetail, putCreatLine } from '@/api/carline';
+import { getClientDetail } from '@/api/consignor'
 import BssPicker from 'components/BssPicker';
 import BssTimePicker from 'components/BssTimePicker';
 import { Form, Field, Toast, CellGroup, Cell, Button, Dialog, Loading, Picker, Popup, RadioGroup, Radio, Stepper, DatetimePicker, Checkbox, CheckboxGroup, Overlay, Search, Sticky, Icon } from 'vant';
@@ -578,6 +579,9 @@ export default {
   },
   data() {
     return {
+      // 货主进入创建线路锁定货主名称
+      isCustomer: false,
+
       lineId: '',
       isCopy: '',
       // 货主
@@ -652,11 +656,17 @@ export default {
   mounted() {
     this.lineId = this.$route.query.id;
     this.isCopy = !!this.$route.query.iscopy;
-    this.fetchData();
+    const { customerId, city } = this.$route.query;
+    this.isCustomer = !!(customerId && city);
+    if (this.isCustomer) {
+      this.form.customerId = customerId;
+      this.form.city = city;
+    }
     if (this.lineId) {
       // 请求详情
       this.getDetail();
     }
+    this.fetchData();
   },
   beforeRouteLeave(to, from, next) {
     if (!this.leave && !this.isComplete()) {
@@ -783,7 +793,19 @@ export default {
         this.stabilityList = res.data.data;
       }).catch(({ message }) => {
         Toast.fail(message)
-      })
+      });
+      // 如果有货主
+      if (this.isCustomer) {
+        getClientDetail({
+          customerId: this.form.customerId
+        })
+          .then((result) => {
+            const data = result.data.data;
+            this.onConfirmSearch(data);
+          }).catch(({ message }) => {
+            Toast.fail(message)
+          })
+      }
     },
     onSubmit() {
       if (this.form.incomeSettlementMethod === '1' && this.form.lowestQuotations - this.form.monthlyFuelConsumption <= 0) {
@@ -1165,6 +1187,23 @@ export default {
 </style>
 <style lang="scss" >
 .add-line{
+  // 扩大输入框点击范围
+  .van-field__body{
+    position: relative;
+    // height: 100%;
+    &::before{
+      content:"";
+      display: block;
+      height: 24px;
+    }
+    >input{
+      position: absolute;
+      top: -10px;
+      bottom: -10px;
+      right: 0;
+      left: 0;
+    }
+  }
   .driver-dialog .van-dialog__content {
     padding: 0 10px;
   }
