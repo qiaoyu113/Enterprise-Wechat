@@ -130,10 +130,10 @@ export default {
       }
     },
     search(val) {
-      this.listQuery.page = 0;
+      this.listQuery.page = 1;
       this.listQuery.key = val.keys;
       this.lists = [];
-      // this.getUser();
+      this.getUser(false);
     },
     async getUser(loadMore = true) {
       if (this.listQuery.key === '') {
