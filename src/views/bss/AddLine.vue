@@ -464,6 +464,7 @@
           show-action
           placeholder="请输入货主名称"
           background="#F2F2F2"
+          :clearable="false"
           @input="onSearch"
           @search="onSearch"
           @cancel="onCancel"

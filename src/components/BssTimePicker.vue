@@ -52,9 +52,15 @@ export default {
     }
   },
   watch: {
-    value(newVal) {
-      this.name = newVal;
+    value: {
+      handler(newVal) {
+        this.name = newVal;
+      },
+      deep: true
     }
+  },
+  updated() {
+    this.name = this.value;
   },
   methods: {
     onConfirm(value) {
@@ -72,6 +78,8 @@ export default {
 }
 </script>
 
-<style>
-
+<style scoped>
+.time-picker .van-cell::after{
+  display:block;
+}
 </style>

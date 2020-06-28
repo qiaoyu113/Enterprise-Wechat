@@ -92,13 +92,13 @@
         <van-col>收入结算方式：</van-col>
         <van-col>{{ details.incomeSettlementMethodName }}</van-col>
       </van-row>
-      <template v-if="details.incomeSettlementMethod === '1'">
+      <template v-if="details.incomeSettlementMethod === 1">
         <van-row type="flex" class="detail-row">
           <van-col>单趟运费：</van-col>
-          <van-col>{{ details.lowestQuotations }}</van-col>
+          <van-col>{{ details.preLowestQuotations }}</van-col>
         </van-row>
       </template>
-      <template v-if="details.incomeSettlementMethod === '2'">
+      <template v-if="details.incomeSettlementMethod === 2">
         <van-row type="flex" class="detail-row">
           <van-col>每趟保底(元)：</van-col>
           <van-col>{{ details.everyTripGuaranteed }}</van-col>
@@ -109,7 +109,7 @@
         </van-row>
         <van-row type="flex" class="detail-row">
           <van-col>预计货主月报价(元)：</van-col>
-          <van-col>{{ details.lowestQuotations }}</van-col>
+          <van-col>{{ details.preLowestQuotations }}</van-col>
         </van-row>
       </template>
       <van-row type="flex" class="detail-row">
