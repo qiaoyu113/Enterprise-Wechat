@@ -43,13 +43,13 @@ export default {
     /*
       微信授权方法
     */
-    // this.getCode()
+    this.getCode()
     /*
     d2环境或微信授权不通时
     */
-    window.localStorage.setItem('token', 'eyJhbGciOiJIUzI1NiJ9.eyJwcm9maWxlIjoibTIiLCJ1c2VySWQiOiIxIiwidXNlcm5hbWUiOiJhZG1pbiIsInR5cGUiOiIzIiwiYnVzaVBlcm1pc3Npb24iOiIwIiwiZXhwIjoxNTk1Mzk2MjE4fQ.KxHYUEObeodj_7j2lU1Q3xII94lYdNV4yqcZs1lRsSU')
-    window.localStorage.setItem('code', '1234')
-    window.localStorage.setItem('SetUserData', 'token')
+    // window.localStorage.setItem('token', 'eyJhbGciOiJIUzI1NiJ9.eyJwcm9maWxlIjoibTIiLCJ1c2VySWQiOiIxIiwidXNlcm5hbWUiOiJhZG1pbiIsInR5cGUiOiIzIiwiYnVzaVBlcm1pc3Npb24iOiIwIiwiZXhwIjoxNTk1Mzk2MjE4fQ.KxHYUEObeodj_7j2lU1Q3xII94lYdNV4yqcZs1lRsSU')
+    // window.localStorage.setItem('code', '1234')
+    // window.localStorage.setItem('SetUserData', 'token')
   },
   mounted() {},
   methods: {
