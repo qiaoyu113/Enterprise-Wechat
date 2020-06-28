@@ -3,13 +3,12 @@
     <van-sticky>
       <van-search
         v-model="form.key"
-        placeholder="请输入线路名称"
+        placeholder="请输入货主名称或所属销售"
         background="#F2F2F2"
         @input="onSearch"
         @search="onSearch"
         @clear="onClear"
         @focus="onFocus"
-        @blur="onBlur"
       >
       </van-search>
     </van-sticky>
@@ -79,6 +78,7 @@ export default {
     onClear() {
       this.form.key = '';
       this.$emit('clear');
+      this.onBlur();
     },
     onFocus() {
       this.isShow = true;
@@ -87,6 +87,7 @@ export default {
       this.isShow = false;
     },
     handleItemClick(item) {
+      this.onBlur();
       this.$emit('getVal', item);
     }
   }

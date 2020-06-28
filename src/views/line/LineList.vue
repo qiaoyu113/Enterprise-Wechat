@@ -183,7 +183,8 @@ export default {
           this.listQuery.state = 3;
           break;
         case 1:
-          this.listQuery.state = 1;
+          // this.listQuery.state = 1;
+          this.listQuery.states = [1, 3];
           this.listQuery.selfState = 1;
           break;
         case 2:
@@ -218,10 +219,7 @@ export default {
           if (!this.beforePullDown) {
             this.beforePullDown = true;
           }
-          if (
-            this.lineData.length >= this.tabarr[this.active].num ||
-              this.lineData.length < 4
-          ) {
+          if (this.lineData.length >= this.tabarr[this.active].num || this.lineData.length < 4) {
             this.loadedAll = true;
           }
         } else {
@@ -282,10 +280,7 @@ export default {
   }
   .listbox {
     height: 100%;
-    // overflow-y: auto;
-  }
-  .wrapper-child {
-    top: -5px;
+    overflow-y: auto;
   }
   .bottom_spance {
     margin-bottom: 5px;
