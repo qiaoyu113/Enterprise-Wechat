@@ -26,7 +26,14 @@ export function GetReginByCityCode(data) {
     data
   })
 }
-
+/* 获取乡镇 */
+export function getTownByCountryCode(data) {
+  return request({
+    url: '/api/base/user/area/getTownByCountryCode',
+    method: 'get',
+    params: data
+  })
+}
 /* 字典 */
 export function dictionary(data) {
   return request({
@@ -40,6 +47,14 @@ export function dictionary(data) {
 export function productIntroduce(data) {
   return request({
     url: '/api/product/product/enterprise-weChat/patcher/product-introduce',
+    method: 'get',
+    params: data
+  })
+}
+// 通过token 获取用户信息
+export function getUserInfo(data) {
+  return request({
+    url: '/api/base/user/bss/getUserInfoByToken',
     method: 'get',
     params: data
   })

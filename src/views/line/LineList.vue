@@ -1,0 +1,309 @@
+<template>
+  <div class="linelist">
+    <!-- <van-nav-bar
+      title="线路管理"
+      left-text="返回"
+      right-text="+新建"
+      left-arrow
+      @click-left="onClickLeft"
+      @click-right="onClickRight"
+    /> -->
+    <div class="flex">
+      <van-search
+        disabled
+        background="#F2F2F2"
+        placeholder="请输入货主名称或所属销售"
+        @click="goSearch"
+      />
+      <div class="add">
+        <van-icon name="add" size="40" color="#5C9BDD " @click="handleAddClick" />
+      </div>
+    </div>
+
+    <van-tabs
+      v-model="active"
+      sticky
+      class="tab"
+      animated
+      @change="changelist"
+    >
+      <van-tab
+        v-for="(item, index) in tabarr"
+        :key="index"
+      >
+        <template #title>
+          <span v-text="item.name"></span>
+          <span
+            class="tabnum"
+            v-text="`(${item.num})`"
+          ></span>
+        </template>
+      </van-tab>
+    </van-tabs>
+
+    <section>
+      <vo-pages
+        :data="lineData"
+        :loaded-all="loadedAll"
+        @pullingUp="pullingUp"
+        @pullingDown="pullingDown"
+      >
+        <div class="listbox">
+          <div
+            v-for="(itemdata, itemindex) in lineData"
+            :key="itemindex"
+            class="bottom_spance"
+          >
+            <lineItem
+              class="lineitem"
+              :itemdata="itemdata"
+            />
+          </div>
+        </div>
+      </vo-pages>
+    </section>
+  </div>
+</template>
+<script>
+import VoPages from 'vo-pages';
+import 'vo-pages/lib/vo-pages.css';
+import lineItem from './components/LineItem';
+import { getUserInfo } from '@/api/common';
+import { selectListAll } from '@/api/line.js';
+import { getSaleLine } from '@/api/consignor'
+import { Toast, NavBar, Icon, Search, Tab, Tabs } from 'vant';
+export default {
+  name: 'Linelist',
+  components: {
+    lineItem,
+    [Toast.name]: Toast,
+    [NavBar.name]: NavBar,
+    [Icon.name]: Icon,
+    [Search.name]: Search,
+    [Tab.name]: Tab,
+    [Tabs.name]: Tabs,
+    VoPages
+  },
+  data() {
+    return {
+      loadedAll: false,
+      beforePullDown: false,
+      active: 0,
+      tabarr: [
+        { name: '已失效', num: 0, type: 'expiredNum' },
+        { name: '待审核', num: 0, type: 'waitApplyNum' },
+        { name: '可售线路', num: 0, type: 'canSellNum' },
+        { name: '售罄线路', num: 0, type: 'isSoldNum' }
+      ],
+      lineData: [],
+      lineSaleId: '',
+      citys: [],
+      listQuery: {
+        page: 1, // 当前页
+        limit: 25 // 每页大小
+      }
+    };
+  },
+  async activated() {
+    window.vue = this
+    await this.getBaseData()
+    await this.getTitle();
+    this.listQuery.selfState = 3;
+    this.listQuery.state = 3;
+    await this.getList();
+  },
+  // async mounted() {
+  //   await this.getUserCity();
+  //   await this.getTitle();
+  //   this.listQuery.selfState = 3;
+  //   await this.getList();
+  // },
+  beforeRouteLeave(to, from, next) {
+    this.$destroy(true);
+    next(true);
+  },
+  methods: {
+    async getBaseData() {
+      try {
+        let requestArr = [getSaleLine(), getUserInfo()]
+        let res = await Promise.all(requestArr)
+        if (res.length === requestArr.length) {
+          if (res[0].data.data.length === 1) {
+            this.lineSaleId = res[0].data.data[0].userId;
+          }
+          this.citys = res[1].data.data.onlineCityList.map(item => +item.value);
+        } else {
+          this.toast.clear()
+        }
+      } catch (err) {
+        this.toast.clear()
+      }
+    },
+    async getTitle() {
+      try {
+        if (this.lineSaleId) {
+          this.listQuery.lineSaleId = this.lineSaleId
+        } else {
+          this.listQuery.lineSaleId = null
+        }
+        this.listQuery.citys = this.citys
+        let { data: tabarr } = await selectListAll(this.listQuery)
+        if (tabarr.success) {
+          let keyArr = Object.keys(tabarr.title);
+          keyArr.forEach(ele => {
+            this.tabarr.forEach(item => {
+              if (ele === item.type) {
+                item.num = tabarr.title[ele];
+              }
+            });
+          });
+        } else {
+          Toast.fail(tabarr.errorMsg);
+        }
+      } catch (err) {
+        Toast.fail(err.errorMsg);
+      }
+    },
+    handleAddClick() {
+      this.$router.push({
+        path: '/bss/add-line'
+      });
+    },
+    goSearch() {
+      this.$router.push('lineSearch');
+    },
+    pullingDown() {
+      this.beforePullDown = false;
+      this.listQuery.page = 1;
+      this.getList(false);
+    },
+    pullingUp() {
+      this.listQuery.page += 1;
+      this.getList();
+    },
+    changelist(name) {
+      this.listQuery = {
+        page: 1, // 当前页
+        limit: 25, // 每页大小
+        citys: this.citys
+      };
+      if (this.lineSaleId) {
+        this.listQuery.lineSaleId = this.lineSaleId
+      } else {
+        this.listQuery.lineSaleId = null
+      }
+      this.loadedAll = false;
+      this.beforePullDown = false;
+      switch (name) {
+        case 0:
+          this.listQuery.selfState = 3;
+          this.listQuery.state = 3;
+          break;
+        case 1:
+          // this.listQuery.state = 1;
+          this.listQuery.states = [1, 3];
+          this.listQuery.selfState = 1;
+          break;
+        case 2:
+          this.listQuery.state = 2;
+          this.listQuery.selfState = 1;
+          this.listQuery.soldState = 0;
+          break;
+        case 3:
+          this.listQuery.soldState = 1;
+          break;
+      }
+      this.lineData = [];// 情况数组触发 pullingUp page 需要重置为0
+      this.listQuery.page = 0; // /
+    },
+    async getList(loadMore = true) {
+      Toast.loading({
+        duration: 0, // 持续展示 toast
+        forbidClick: true, // 禁用背景点击
+        loadingType: 'spinner',
+        message: '加载中...'
+      });
+      try {
+        let { data } = await selectListAll(this.listQuery)
+        if (data.success) {
+          Toast.clear();
+          let lists = data.data;
+          if (loadMore) {
+            this.lineData = this.lineData.concat(lists);
+          } else {
+            this.lineData = lists;
+          }
+          if (!this.beforePullDown) {
+            this.beforePullDown = true;
+          }
+          if (this.lineData.length >= this.tabarr[this.active].num || this.lineData.length < 4) {
+            this.loadedAll = true;
+          }
+        } else {
+          Toast.clear();
+          this.loadedAll = true;
+          Toast.fail(data.errorMsg);
+        }
+      } catch (err) {
+        Toast.clear();
+        Toast.fail(err);
+        this.loadedAll = true;
+      }
+    }
+  }
+};
+</script>
+<style lang="scss">
+.linelist {
+  .van-search .van-search__content{
+    background: #fff;
+  }
+  .flex{
+    display: flex;
+    background-color: #fff;
+  }
+  .van-search{
+    flex: 1;
+  }
+  .add {
+    display: flex;
+    align-items: center;
+    .van-icon{
+      padding: 0 5px;
+    }
+  }
+  .tabnum {
+    color: #ffa000;
+    font-size: 12px;
+  }
+  background-color: #f2f2f2;
+  min-height: 100vh;
+  // .van-search {
+  //   padding: 17px 20px;
+  // }
+  .van-tab {
+    padding: 0px;
+  }
+  .van-tabs__line {
+    background-color: #5c9bdd;
+    width: 40px !important;
+  }
+  .van-tab--active {
+    color: #5c9bdd !important;
+  }
+  section {
+    height:calc(100vh - 148px);
+    overflow: hidden;
+  }
+  .listbox {
+    height: 100%;
+    overflow-y: auto;
+  }
+  .bottom_spance {
+    margin-bottom: 5px;
+  }
+    .bottom_spance:last-child {
+    margin-bottom: 5px;
+  }
+}
+</style>

@@ -204,11 +204,10 @@ export default {
       selectDriverTask(this.listQuery).then((res) => {
         if (res.data.success) {
           Toast.clear();
-          let lists = res.data.data
-          this.total = res.data.page.total
-          // const newList = lists.map(item => {
-          //   return item
-          // })
+          let lists = res.data.data;
+          if (res.data.page !== null) {
+            this.total = res.data.page.total
+          }
           if (loadMore) {
             this.list = this.list.concat(lists)
           } else {
