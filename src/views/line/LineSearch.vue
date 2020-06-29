@@ -47,6 +47,7 @@ import VoPages from 'vo-pages';
 import 'vo-pages/lib/vo-pages.css';
 import Search from './components/search';
 import lineItem from './components/LineItem';
+import { getSaleLine } from '@/api/consignor'
 import { getUserInfo } from '@/api/common';
 import { searchList } from '@/api/line';
 import { Toast } from 'vant';
@@ -62,12 +63,13 @@ export default {
       showlist: false,
       lists: [],
       citys: [],
+      lineSaleId: '',
       beforePullDown: false,
       loadedAll: false,
       listQuery: {
         key: '',
         page: 1,
-        limit: 50
+        limit: 10
       },
       historyLists: []
     };
@@ -81,8 +83,9 @@ export default {
       }
     }
   },
-  activated() {
-    this.getUserCity();
+  async activated() {
+    // this.getUserCity();
+    await this.getBaseData()
     let str = localStorage.getItem('historyKeyWordLine');
     if (str) {
       this.historyLists = JSON.parse(str);
@@ -93,6 +96,7 @@ export default {
     this.listQuery.key = '';
     this.lists = [];
     this.citys = [];
+    this.lineSaleId = '';
     next();
   },
   // mounted() {
@@ -112,21 +116,20 @@ export default {
       this.listQuery.page += 1;
       this.getUser();
     },
-    async getUserCity() {
-      let {
-        data: res,
-        data: {
-          data: { onlineCityList }
-        }
-      } = await getUserInfo();
+    async getBaseData() {
       try {
-        if (res.success) {
-          onlineCityList.map(ele => this.citys.push(+ele.value));
+        let requestArr = [getSaleLine(), getUserInfo()]
+        let res = await Promise.all(requestArr)
+        if (res.length === requestArr.length) {
+          if (res[0].data.data.length === 1) {
+            this.lineSaleId = res[0].data.data[0].userId;
+          }
+          this.citys = res[1].data.data.onlineCityList.map(item => +item.value);
         } else {
-          Toast.fail(res.errorMsg || res.msg);
+          this.toast.clear()
         }
       } catch (err) {
-        Toast.fail(err);
+        this.toast.clear()
       }
     },
     search(val) {
@@ -145,6 +148,11 @@ export default {
         loadingType: 'spinner'
       });
       try {
+        if (this.lineSaleId) {
+          this.listQuery.lineSaleId = this.lineSaleId
+        } else {
+          this.listQuery.lineSaleId = null
+        }
         let { data: res } = await searchList({
           ...this.listQuery,
           citys: this.citys

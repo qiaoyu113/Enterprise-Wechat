@@ -70,6 +70,7 @@ import 'vo-pages/lib/vo-pages.css';
 import lineItem from './components/LineItem';
 import { getUserInfo } from '@/api/common';
 import { selectListAll } from '@/api/line.js';
+import { getSaleLine } from '@/api/consignor'
 import { Toast, NavBar, Icon, Search, Tab, Tabs } from 'vant';
 export default {
   name: 'Linelist',
@@ -95,6 +96,7 @@ export default {
         { name: '售罄线路', num: 0, type: 'isSoldNum' }
       ],
       lineData: [],
+      lineSaleId: '',
       citys: [],
       listQuery: {
         page: 1, // 当前页
@@ -104,7 +106,7 @@ export default {
   },
   async activated() {
     window.vue = this
-    await this.getUserCity();
+    await this.getBaseData()
     await this.getTitle();
     this.listQuery.selfState = 3;
     this.listQuery.state = 3;
@@ -121,21 +123,31 @@ export default {
     next(true);
   },
   methods: {
-    async getUserCity() {
-      let { data: res, data: { data: { onlineCityList }}} = await getUserInfo();
+    async getBaseData() {
       try {
-        if (res.success) {
-          onlineCityList.map(ele => this.citys.push(+ele.value))
+        let requestArr = [getSaleLine(), getUserInfo()]
+        let res = await Promise.all(requestArr)
+        if (res.length === requestArr.length) {
+          if (res[0].data.data.length === 1) {
+            this.lineSaleId = res[0].data.data[0].userId;
+          }
+          this.citys = res[1].data.data.onlineCityList.map(item => +item.value);
         } else {
-          Toast.fail(res.errorMsg || res.msg);
+          this.toast.clear()
         }
       } catch (err) {
-        Toast.fail(err);
+        this.toast.clear()
       }
     },
     async getTitle() {
       try {
-        let { data: tabarr } = await selectListAll({ ...this.listQuery, citys: this.citys })
+        if (this.lineSaleId) {
+          this.listQuery.lineSaleId = this.lineSaleId
+        } else {
+          this.listQuery.lineSaleId = null
+        }
+        this.listQuery.citys = this.citys
+        let { data: tabarr } = await selectListAll(this.listQuery)
         if (tabarr.success) {
           let keyArr = Object.keys(tabarr.title);
           keyArr.forEach(ele => {
@@ -175,6 +187,11 @@ export default {
         limit: 25, // 每页大小
         citys: this.citys
       };
+      if (this.lineSaleId) {
+        this.listQuery.lineSaleId = this.lineSaleId
+      } else {
+        this.listQuery.lineSaleId = null
+      }
       this.loadedAll = false;
       this.beforePullDown = false;
       switch (name) {
@@ -207,7 +224,7 @@ export default {
         message: '加载中...'
       });
       try {
-        let { data } = await selectListAll({ ...this.listQuery, citys: this.citys })
+        let { data } = await selectListAll(this.listQuery)
         if (data.success) {
           Toast.clear();
           let lists = data.data;
