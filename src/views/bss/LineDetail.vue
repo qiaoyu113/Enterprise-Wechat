@@ -268,6 +268,7 @@ export default {
       getLineDetail({
         lineId: this.lineId
       }).then((res) => {
+        this.loading = false;
         const data = res.data.data;
         if (res.data.success) {
           this.details = data;
@@ -281,6 +282,7 @@ export default {
           Toast.fail(data.errorMsg)
         }
       }).catch(({ message }) => {
+        this.loading = false;
         Toast.fail(message);
       }).finally(() => {
         this.loading = false;
@@ -311,6 +313,7 @@ export default {
         lineId,
         'reason': ''
       }).then(res => {
+        this.loading = false;
         if (res.data.success) {
           Toast.success('审核已通过')
           setTimeout(() => {
@@ -320,6 +323,7 @@ export default {
           Toast.fail(res.data.errorMsg);
         }
       }).catch(({ message }) => {
+        this.loading = false;
         Toast.fail(message);
       }).finally(() => {
         this.loading = false;
