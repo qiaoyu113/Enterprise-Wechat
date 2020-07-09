@@ -833,6 +833,7 @@ export default {
       }
       postCreatLine(postData)
         .then(({ data }) => {
+          this.loading = false;
           if (data.success) {
             this.leave = true;
             Toast.success('创建成功');
@@ -843,6 +844,7 @@ export default {
             Toast.fail(data.errorMsg || '网络错误请稍后再试')
           }
         }).catch(({ message }) => {
+          this.loading = false;
           Toast.fail(message)
         }).finally(() => {
           this.loading = false;
@@ -862,8 +864,10 @@ export default {
         q: this.searchVal
       })
         .then((result) => {
+          toast.clear()
           this.customers = result.data.data;
         }).catch(({ message }) => {
+          toast.clear()
           Toast.fail(message)
         }).finally(() => {
           toast.clear()
@@ -961,6 +965,7 @@ export default {
         // 选择乡道
         getTownByCountryCode({ countryCode: codeList[2] })
           .then(({ data }) => {
+            this.warehouseLoading = false;
             const list = data.data.map(item => {
               return {
                 ...item
@@ -969,6 +974,7 @@ export default {
             this.setCityData(codeList, list);// 存数据
             picker.setColumnValues(index + 1, list);
           }).catch(({ message }) => {
+            this.warehouseLoading = false;
             Toast.fail(message)
           }).finally(() => {
             this.warehouseLoading = false;
@@ -977,6 +983,7 @@ export default {
       }
       GetReginByCityCode(codeList)
         .then(({ data }) => {
+          this.warehouseLoading = false;
           if (data.success) {
             const list = data.data.map(item => {
               return {
@@ -994,6 +1001,7 @@ export default {
             Toast.fail(data.errorMsg);
           }
         }).catch(({ message }) => {
+          this.warehouseLoading = false;
           Toast.fail(message);
         }).finally(() => {
           this.warehouseLoading = false;
@@ -1034,6 +1042,7 @@ export default {
 
       GetReginByCityCode(codeList)
         .then(({ data }) => {
+          this.cityLoading = false;
           if (data.success) {
             const list = data.data.map(item => {
               return {
@@ -1051,6 +1060,7 @@ export default {
             Toast.fail(data.errorMsg);
           }
         }).catch(({ message }) => {
+          this.cityLoading = false;
           Toast.fail(message);
         }).finally(() => {
           this.cityLoading = false;
@@ -1079,6 +1089,7 @@ export default {
       getLineDetail({
         lineId: this.lineId
       }).then((res) => {
+        this.loading = false;
         const data = res.data.data;
         if (res.data.success) {
           this.customerItem = {
@@ -1145,6 +1156,7 @@ export default {
           Toast.fail(data.errorMsg)
         }
       }).catch(({ message }) => {
+        this.loading = false;
         Toast.fail(message);
       }).finally(() => {
         this.loading = false;
@@ -1155,6 +1167,7 @@ export default {
       this.loadingText = '正在提交';
       putCreatLine(this.form)
         .then(({ data }) => {
+          this.loading = false;
           if (data.success) {
             this.leave = true;
             Toast.success('提交成功');
@@ -1165,6 +1178,7 @@ export default {
             Toast.fail(data.errorMsg || '网络错误请稍后再试')
           }
         }).catch(({ message }) => {
+          this.loading = false;
           Toast.fail(message)
         }).finally(() => {
           this.loading = false;
